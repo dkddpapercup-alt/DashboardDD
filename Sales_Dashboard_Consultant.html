@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DD Paper Cup – Sales Dashboard 2023–2026 [Consultant Version]</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --primary: #1e3a5f;
+    --accent: #e67e22;
+    --success: #27ae60;
+    --danger: #e74c3c;
+    --warning: #f39c12;
+    --light: #f8f9fa;
+    --border: #dee2e6;
+    --text: #2c3e50;
+    --muted: #7f8c8d;
+    --card-bg: #ffffff;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: var(--text); font-size: 14px; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--primary) 0%, #2980b9 100%);
+    color: white; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+  .header-left h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+  .header-left p { font-size: 12px; opacity: 0.85; margin-top: 3px; }
+  .header-right { text-align: right; font-size: 12px; opacity: 0.85; }
+  .header-right strong { font-size: 14px; display: block; }
+
+  /* TABS */
+  .tabs { background: white; padding: 0 32px; border-bottom: 2px solid var(--border); display: flex; gap: 0; }
+  .tab-btn {
+    padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--muted);
+    border: none; background: none; cursor: pointer; border-bottom: 3px solid transparent;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--primary); }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--accent); }
+  .tab-content { display: none; padding: 24px 32px; }
+  .tab-content.active { display: block; }
+
+  /* KPI CARDS */
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .kpi-card {
+    background: var(--card-bg); border-radius: 12px; padding: 20px 24px;
+    box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+    background: var(--accent);
+  }
+  .kpi-card.blue::before { background: #2980b9; }
+  .kpi-card.green::before { background: var(--success); }
+  .kpi-card.orange::before { background: var(--accent); }
+  .kpi-card.red::before { background: var(--danger); }
+  .kpi-card .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 8px; }
+  .kpi-card .kpi-value { font-size: 26px; font-weight: 700; color: var(--text); }
+  .kpi-card .kpi-sub { font-size: 12px; margin-top: 6px; }
+  .kpi-card .kpi-sub .up { color: var(--success); }
+  .kpi-card .kpi-sub .down { color: var(--danger); }
+  .kpi-card .kpi-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 36px; opacity: 0.12; }
+
+  /* SECTION CARD */
+  .card { background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden; }
+  .card-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .card-header h3 { font-size: 15px; font-weight: 700; color: var(--text); }
+  .card-header .card-subtitle { font-size: 12px; color: var(--muted); }
+  .card-body { padding: 20px 24px; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+  /* YEAR SELECTOR */
+  .year-selector { display: flex; gap: 8px; align-items: center; }
+  .year-btn {
+    padding: 6px 14px; border-radius: 20px; border: 2px solid var(--border);
+    background: white; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted);
+    transition: all 0.2s;
+  }
+  .year-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .year-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { background: #f8f9fa; padding: 10px 14px; text-align: left; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); border-bottom: 2px solid var(--border); }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+  .data-table tr:hover td { background: #fafbfc; }
+  .data-table .rank { font-weight: 700; color: var(--muted); font-size: 12px; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .badge-blue { background: #ebf5fb; color: #2980b9; }
+  .badge-green { background: #eafaf1; color: var(--success); }
+  .badge-orange { background: #fef9e7; color: var(--warning); }
+  .badge-red { background: #fdedec; color: var(--danger); }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap { background: #f0f2f5; border-radius: 4px; height: 8px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+
+  /* FORECAST SCENARIO */
+  .scenario-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .scenario-card { border-radius: 12px; padding: 20px; text-align: center; border: 2px solid; }
+  .scenario-conservative { border-color: var(--danger); background: #fff8f8; }
+  .scenario-base { border-color: var(--accent); background: #fffbf5; }
+  .scenario-optimistic { border-color: var(--success); background: #f9fff9; }
+  .scenario-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .scenario-conservative .scenario-label { color: var(--danger); }
+  .scenario-base .scenario-label { color: var(--accent); }
+  .scenario-optimistic .scenario-label { color: var(--success); }
+  .scenario-value { font-size: 28px; font-weight: 800; }
+  .scenario-conservative .scenario-value { color: var(--danger); }
+  .scenario-base .scenario-value { color: var(--accent); }
+  .scenario-optimistic .scenario-value { color: var(--success); }
+  .scenario-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  /* INSIGHT BOX */
+  .insight-box { background: #f0f7ff; border-left: 4px solid #2980b9; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 16px; }
+  .insight-box h4 { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+  .insight-box ul { padding-left: 16px; font-size: 12px; color: var(--text); line-height: 1.8; }
+
+  /* LOYALTY TABLE */
+  .trend-arrow { font-size: 16px; }
+  .up-trend { color: var(--success); }
+  .down-trend { color: var(--danger); }
+  .neutral-trend { color: var(--muted); }
+
+  /* CHANNEL BARS */
+  .channel-item { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .channel-name { width: 160px; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .channel-bar-wrap { flex: 1; background: #f0f2f5; border-radius: 6px; height: 28px; overflow: hidden; }
+  .channel-bar { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 10px; color: white; font-size: 12px; font-weight: 700; transition: width 0.5s; }
+  .channel-pct { width: 60px; text-align: right; font-size: 13px; font-weight: 700; }
+
+  /* HEATMAP */
+  .heatmap-grid { display: grid; grid-template-columns: auto repeat(12, 1fr); gap: 2px; font-size: 12px; }
+  .heatmap-cell { padding: 8px 4px; text-align: center; border-radius: 4px; font-weight: 600; min-width: 0; }
+  .heatmap-label { padding: 8px 8px; display: flex; align-items: center; font-weight: 700; color: var(--muted); font-size: 11px; }
+  .heatmap-header { font-size: 11px; font-weight: 700; color: var(--muted); text-align: center; padding: 4px 0; }
+
+  /* TOOLTIP OVERRIDE */
+  canvas { max-height: 320px; }
+
+  /* ANNOTATIONS */
+  .note { font-size: 11px; color: var(--muted); margin-top: 8px; }
+
+  /* DRILL-DOWN MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:2000; align-items:flex-start; justify-content:center; padding:40px 16px; overflow-y:auto; }
+  .modal-overlay.open { display:flex; }
+  .modal-box { background:#fff; border-radius:16px; padding:28px 32px; max-width:860px; width:100%; box-shadow:0 12px 48px rgba(0,0,0,0.28); }
+  .modal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; border-bottom:2px solid var(--border); padding-bottom:14px; }
+  .modal-header h2 { font-size:18px; font-weight:800; color:var(--text); }
+  .modal-close { font-size:20px; cursor:pointer; color:var(--muted); border:none; background:none; padding:4px 10px; border-radius:8px; line-height:1; }
+  .modal-close:hover { background:#f0f2f5; color:var(--text); }
+  .modal-section { margin-bottom:24px; }
+  .modal-section h4 { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; color:var(--muted); margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid #f0f0f0; }
+  .modal-tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+  .modal-tab-btn { padding:7px 16px; border-radius:20px; border:2px solid var(--border); background:white; cursor:pointer; font-size:13px; font-weight:600; color:var(--muted); transition:all 0.2s; }
+  .modal-tab-btn.active { background:var(--primary); color:white; border-color:var(--primary); }
+  .modal-section-content { display:none; }
+  .modal-section-content.active { display:block; }
+  .clickable-card { cursor:pointer; transition:transform 0.15s, box-shadow 0.15s; }
+  .clickable-card:hover { transform:translateY(-3px); box-shadow:0 6px 20px rgba(0,0,0,0.14); }
+  .clickable-card::after { content:'🔍 คลิกดูรายละเอียด'; position:absolute; bottom:8px; right:12px; font-size:10px; color:var(--muted); opacity:0; transition:opacity 0.2s; }
+  .clickable-card:hover::after { opacity:1; }
+
+  @media (max-width: 900px) {
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .scenario-row { grid-template-columns: 1fr; }
+    .header { flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div style="background:linear-gradient(90deg,#8e44ad,#2980b9);color:white;padding:10px 32px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:12px;"><span style="font-size:18px;">🔒</span><span>เวอร์ชันสำหรับที่ปรึกษา (Consultant Version) — ชื่อลูกค้าและพนักงานขายถูกปกปิด | ข้อมูลเชิงตัวเลขและแนวโน้มเป็นข้อมูลจริง</span><span style="margin-left:auto;opacity:0.8;font-size:11px;">DD Paper Cup | Confidential</span></div>
+<div class="header">
+  <div class="header-left">
+    <h1>☕ DD Paper Cup – Sales Dashboard</h1>
+    <p>วิเคราะห์ยอดขาย ย้อนหลัง 3 ปี | ติดตาม 2026 Actual vs Forecast | Customer Intelligence</p>
+  </div>
+  <div class="header-right">
+    <strong>ข้อมูล: ม.ค. 2023 – ก.พ. 2026</strong>
+    <span>อัปเดต: มีนาคม 2026 | 🟢 2026 Actual: 2 เดือน</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('overview')">📊 ภาพรวม</button>
+  <button class="tab-btn" onclick="showTab('monthly')">📅 รายเดือน</button>
+  <button class="tab-btn" onclick="showTab('customers')">👥 ลูกค้า</button>
+  <button class="tab-btn" onclick="showTab('team')">🏆 ทีมขาย</button>
+  <button class="tab-btn" onclick="showTab('forecast')">🎯 Forecast 2026</button>
+  <button class="tab-btn" onclick="showTab('progress2026')" style="color:#27ae60;font-weight:800;">🟢 2026 Progress</button>
+  <button class="tab-btn" onclick="showTab('central')" style="color:#8e44ad;font-weight:800;">🏬 Central Group</button>
+  <button class="tab-btn" onclick="showTab('risk')" style="color:#e74c3c;font-weight:800;">⚠️ ความเสี่ยง</button>
+</div>
+
+<!-- ============================== TAB: RISK & INSIGHTS ============================== -->
+<div class="tab-content" id="tab-risk">
+
+  <!-- ALERT BANNER -->
+  <div style="margin-top:24px;background:linear-gradient(135deg,#c0392b,#e74c3c);color:white;border-radius:12px;padding:18px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
+    <div style="font-size:36px;">🚨</div>
+    <div>
+      <div style="font-size:16px;font-weight:800;margin-bottom:4px;">สัญญาณเตือน: ปี 2025 ลูกค้าหายไป 2,241 ราย | ยอดที่เสียไป ฿18.5M</div>
+      <div style="font-size:13px;opacity:0.9;">การกระจุกตัวของรายได้แย่ลงทุกปี — Top 10 ลูกค้าคิดเป็น 29.1% ของยอดรวม (จาก 19.9% ในปี 2023)</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: CHURN -->
+  <div style="font-size:16px;font-weight:800;color:#e74c3c;margin-bottom:12px;">🔴 1. ลูกค้าที่หายไป (Churn Analysis)</div>
+  <div class="kpi-row" style="margin-bottom:20px;">
+    <div class="kpi-card" style="border-left:4px solid #e74c3c;">
+      <div class="kpi-label">ลูกค้าหาย 2024→2025</div>
+      <div class="kpi-value" style="color:#e74c3c;">2,241 ราย</div>
+      <div class="kpi-sub">ซื้อปี 2024 แต่ไม่ซื้อปี 2025</div>
+      <div class="kpi-icon">👤</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #c0392b;">
+      <div class="kpi-label">ยอดที่หายไป (ยอด 2024 ของคนหาย)</div>
+      <div class="kpi-value" style="color:#c0392b;">18.5M</div>
+      <div class="kpi-sub">฿18,509,690 | 26.9% ของยอดปี 2024</div>
+      <div class="kpi-icon">💸</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #27ae60;">
+      <div class="kpi-label">ลูกค้าใหม่ 2025 ชดเชย</div>
+      <div class="kpi-value" style="color:#27ae60;">1,413 ราย</div>
+      <div class="kpi-sub">ยอด ฿19.6M — ชดเชยได้ แต่จำนวนลดลง</div>
+      <div class="kpi-icon">🆕</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #e67e22;">
+      <div class="kpi-label">Net Customer Change 2025</div>
+      <div class="kpi-value" style="color:#e74c3c;">−828 ราย</div>
+      <div class="kpi-sub">ฐานลูกค้าหดตัว 29.6% จาก 2,793→1,965</div>
+      <div class="kpi-icon">📉</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Churn vs New Chart -->
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 ลูกค้าใหม่ vs หาย vs กลับมา (รายปี)</h3>
+        <span class="card-subtitle">จำนวนราย</span>
+      </div>
+      <div class="card-body">
+        <canvas id="churnChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+    <!-- Revenue Churn vs New -->
+    <div class="card">
+      <div class="card-header">
+        <h3>💰 ยอดขาย: ลูกค้าใหม่ vs หาย (฿M)</h3>
+        <span class="card-subtitle">เทียบยอดที่ได้-เสีย</span>
+      </div>
+      <div class="card-body">
+        <canvas id="churnRevenueChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Churned Table -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📋 รายชื่อลูกค้าที่หายไป 2024→2025 — ต้องโทรหาด่วน!</h3>
+      <span class="card-subtitle" style="color:#e74c3c;">เรียงตามยอดที่เสียไปมากสุด | ยอดที่แสดงคือยอดปี 2024</span>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead>
+          <tr><th>#</th><th>ชื่อลูกค้า</th><th>ยอดปี 2024</th><th>ก่อน VAT</th><th>ลำดับความสำคัญ</th></tr>
+        </thead>
+        <tbody id="churnTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 2: NEW vs RETURNING -->
+  <div style="font-size:16px;font-weight:800;color:#2980b9;margin:24px 0 12px;">🔵 2. ลูกค้าใหม่ vs ลูกค้าเก่า — ธุรกิจโต "จริง" ไหม?</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>🧩 โครงสร้างลูกค้าแต่ละปี</h3>
+        <span class="card-subtitle">สัดส่วนลูกค้าใหม่ vs ลูกค้าเก่า</span>
+      </div>
+      <div class="card-body">
+        <canvas id="custMixChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>💵 ยอดขายจาก: ลูกค้าใหม่ vs เก่า (฿M)</h3>
+        <span class="card-subtitle">รายได้แยกตามประเภทลูกค้า</span>
+      </div>
+      <div class="card-body">
+        <canvas id="custRevMixChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box" style="border-left-color:#2980b9;">
+    <h4>💡 วิเคราะห์: ธุรกิจโต "จริง" ไหม?</h4>
+    <ul>
+      <li><strong>2024:</strong> ลูกค้าเก่ากลับมา 617 ราย (฿55.6M) + ลูกค้าใหม่ 2,176 ราย (฿13.3M) → ยอดรวมเติบโต +8.3% ✅</li>
+      <li><strong>2025:</strong> ลูกค้าเก่ากลับมาเพียง 552 ราย (฿38.9M) ลดลงมาก + ลูกค้าใหม่ 1,413 ราย (฿19.6M) → ยอดรวมหด -13.2% ⚠️</li>
+      <li><strong>สัญญาณเตือน:</strong> ลูกค้าเก่าที่กลับมาลดลงทุกปี แสดงว่า Retention ยังเป็นจุดอ่อน ต้องสร้าง Loyalty Program เพิ่มเติม</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 3: CONCENTRATION -->
+  <div style="font-size:16px;font-weight:800;color:#e67e22;margin:24px 0 12px;">🟠 3. ความเสี่ยงจากการกระจุกตัว (Revenue Concentration)</div>
+  <div class="kpi-row" style="margin-bottom:20px;">
+    <div class="kpi-card" style="border-left:4px solid #2980b9;">
+      <div class="kpi-label">Top 10 คิดเป็น % — ปี 2023</div>
+      <div class="kpi-value" style="color:#2980b9;">19.9%</div>
+      <div class="kpi-sub">301 ลูกค้า = 80% ของยอดรวม</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #e67e22;">
+      <div class="kpi-label">Top 10 คิดเป็น % — ปี 2024</div>
+      <div class="kpi-value" style="color:#e67e22;">21.4%</div>
+      <div class="kpi-sub">297 ลูกค้า = 80% ของยอดรวม</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #e74c3c;">
+      <div class="kpi-label">Top 10 คิดเป็น % — ปี 2025 ⚠️</div>
+      <div class="kpi-value" style="color:#e74c3c;">29.1%</div>
+      <div class="kpi-sub">270 ลูกค้า = 80% ของยอดรวม</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #c0392b;">
+      <div class="kpi-label">ความเสี่ยงสูงสุด (2025)</div>
+      <div class="kpi-value" style="color:#c0392b;">Bigtree+แพ็คเวิร์คส์</div>
+      <div class="kpi-sub">2 รายนี้รวมกัน = 13.9% ของยอดปี 2025</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📈 ความกระจุกตัวเพิ่มขึ้นทุกปี</h3>
+        <span class="card-subtitle">% ยอดรวมของ Top 1/5/10/20 ลูกค้า</span>
+      </div>
+      <div class="card-body">
+        <canvas id="concentrationChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🐳 Top 10 ลูกค้า ปี 2025</h3>
+        <span class="card-subtitle">รายชื่อและสัดส่วน — กลุ่มเสี่ยงสูง</span>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอด 2025</th><th>% ยอดรวม</th></tr></thead>
+          <tbody id="concentrationTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box" style="border-left-color:#e74c3c;background:#fff8f8;">
+    <h4>🚨 ความเสี่ยงที่ต้องแก้ไข</h4>
+    <ul>
+      <li><strong>Bigtree + แพ็คเวิร์คส์</strong> รวมกัน 13.9% ของยอดปี 2025 — ถ้าหายไปรายใดรายหนึ่ง ยอดจะหด ~7% ทันที</li>
+      <li>ยิ่งลูกค้ากระจุกตัวมากขึ้น ความเสี่ยงธุรกิจยิ่งสูง — ควรขยายฐานลูกค้าใหม่ในกลุ่มที่หลากหลายกว่านี้</li>
+      <li>แนะนำ: ตั้งเป้า Top 10 ลูกค้าไม่เกิน 20% ของยอดรวม ภายในปี 2026</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 4: PARETO -->
+  <div style="font-size:16px;font-weight:800;color:#8e44ad;margin:28px 0 12px;">🟣 4. Pareto 80/20 — ลูกค้ากี่ % ทำยอด 80%?</div>
+  <div class="kpi-row" style="margin-bottom:20px;">
+    <div class="kpi-card" style="border-left:4px solid #2980b9;">
+      <div class="kpi-label">2023 — 80% จาก</div>
+      <div class="kpi-value" style="color:#2980b9;">301 ราย</div>
+      <div class="kpi-sub">11.6% ของลูกค้าทั้งหมด (2,602 ราย)</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #e67e22;">
+      <div class="kpi-label">2024 — 80% จาก</div>
+      <div class="kpi-value" style="color:#e67e22;">297 ราย</div>
+      <div class="kpi-sub">10.6% ของลูกค้าทั้งหมด (2,795 ราย)</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #e74c3c;">
+      <div class="kpi-label">2025 — 80% จาก ⚠️</div>
+      <div class="kpi-value" style="color:#e74c3c;">270 ราย</div>
+      <div class="kpi-sub">13.6% ของลูกค้าทั้งหมด (1,991 ราย)</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #8e44ad;">
+      <div class="kpi-label">50% มาจากเพียง</div>
+      <div class="kpi-value" style="color:#8e44ad;">2.4%</div>
+      <div class="kpi-sub">ปี 2025: แค่ 48 ราย ทำยอด 50% ทั้งปี</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📐 % ลูกค้าที่ทำยอดสะสม 50/70/80/90%</h3>
+        <span class="card-subtitle">เทียบ 3 ปี — ยิ่งน้อย = ยิ่งกระจุกตัว</span>
+      </div>
+      <div class="card-body">
+        <canvas id="paretoChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🎯 สรุป Pareto ต่อปี</h3>
+        <span class="card-subtitle">จำนวนลูกค้าที่ทำแต่ละระดับรายได้</span>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead><tr><th>ระดับยอด</th><th>ปี 2023</th><th>ปี 2024</th><th>ปี 2025</th></tr></thead>
+          <tbody>
+            <tr><td><strong>50% ของรายได้</strong></td><td>77 ราย (3.0%)</td><td>69 ราย (2.5%)</td><td style="color:#e74c3c;font-weight:700">48 ราย (2.4%)</td></tr>
+            <tr><td><strong>70% ของรายได้</strong></td><td>195 ราย (7.5%)</td><td>185 ราย (6.6%)</td><td style="color:#e74c3c;font-weight:700">159 ราย (8.0%)</td></tr>
+            <tr><td><strong>80% ของรายได้</strong></td><td>301 ราย (11.6%)</td><td>297 ราย (10.6%)</td><td style="color:#e74c3c;font-weight:700">270 ราย (13.6%)</td></tr>
+            <tr><td><strong>90% ของรายได้</strong></td><td>481 ราย (18.5%)</td><td>489 ราย (17.5%)</td><td style="color:#e74c3c;font-weight:700">465 ราย (23.4%)</td></tr>
+            <tr style="background:#f0f4f8;font-weight:700"><td><strong>ลูกค้าทั้งหมด</strong></td><td>2,602 ราย</td><td>2,795 ราย</td><td>1,991 ราย</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: ORDER FREQUENCY -->
+  <div style="font-size:16px;font-weight:800;color:#1abc9c;margin:28px 0 12px;">🟢 5. Order Frequency — ลูกค้าซื้อบ่อยแค่ไหน?</div>
+  <div class="kpi-row" style="margin-bottom:20px;">
+    <div class="kpi-card" style="border-left:4px solid #2980b9;">
+      <div class="kpi-label">เฉลี่ยต่อลูกค้า ปี 2023</div>
+      <div class="kpi-value" style="color:#2980b9;">2.9 ครั้ง</div>
+      <div class="kpi-sub">Median: 1 ครั้ง | ซื้อครั้งเดียว 68.8%</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #e67e22;">
+      <div class="kpi-label">เฉลี่ยต่อลูกค้า ปี 2024</div>
+      <div class="kpi-value" style="color:#e67e22;">3.0 ครั้ง</div>
+      <div class="kpi-sub">Median: 1 ครั้ง | ซื้อครั้งเดียว 68.2%</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #27ae60;">
+      <div class="kpi-label">เฉลี่ยต่อลูกค้า ปี 2025</div>
+      <div class="kpi-value" style="color:#27ae60;">3.3 ครั้ง</div>
+      <div class="kpi-sub">Median: 1 ครั้ง | ซื้อครั้งเดียว 58.5% ✅</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #e74c3c;">
+      <div class="kpi-label">ลูกค้าซื้อ >12 ครั้ง (2025)</div>
+      <div class="kpi-value" style="color:#e74c3c;">49 ราย</div>
+      <div class="kpi-sub">ลดลงจาก 102→111→49 ราย ⚠️ VIP หาย</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>🔁 สัดส่วนความถี่การซื้อ (% ลูกค้า)</h3>
+        <span class="card-subtitle">กี่รายซื้อกี่ครั้งต่อปี</span>
+      </div>
+      <div class="card-body">
+        <canvas id="freqChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🏅 ลูกค้า VIP ความถี่สูง ปี 2025 (≥10 orders)</h3>
+        <span class="card-subtitle">กลุ่มที่ต้องรักษาไว้ทุกราคา</span>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>ลูกค้า</th><th>จำนวนออเดอร์</th><th>ยอดรวม</th></tr></thead>
+          <tbody id="freqTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-box" style="border-left-color:#1abc9c;background:#f0fff9;margin-top:4px;">
+    <h4>💡 อ่านข้อมูลนี้ยังไง?</h4>
+    <ul>
+      <li><strong>ดีขึ้น:</strong> ปี 2025 ลูกค้าซื้อครั้งเดียวลดลงจาก 68% → 58% แสดงว่าลูกค้าที่เหลือมี Loyalty สูงกว่า</li>
+      <li><strong>น่าเป็นห่วง:</strong> ลูกค้าที่ซื้อ >12 ครั้ง/ปี ลดฮวบจาก 111 ราย (2024) → 49 ราย (2025) — กลุ่ม VIP หดตัวมาก</li>
+      <li><strong>กลยุทธ์:</strong> ดึงลูกค้า "ซื้อครั้งเดียว" ให้ซื้อซ้ำได้ จะเพิ่มยอดได้มหาศาลโดยไม่ต้องหาลูกค้าใหม่</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ============================== TAB: CENTRAL GROUP ============================== -->
+<div class="tab-content" id="tab-central">
+
+  <!-- KPI CARDS -->
+  <div class="kpi-row" style="margin-top:24px;">
+    <div class="kpi-card" style="border-left:4px solid #8e44ad;">
+      <div class="kpi-label">ยอดรวม Central Group (รวม VAT)</div>
+      <div class="kpi-value" style="color:#8e44ad;">16.5M</div>
+      <div class="kpi-sub">฿16,485,346 | ทุกปี 2023–2026 YTD</div>
+      <div class="kpi-icon">🏬</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #2980b9;">
+      <div class="kpi-label">ยอดก่อน VAT (รวมทุกปี)</div>
+      <div class="kpi-value" style="color:#2980b9;">15.4M</div>
+      <div class="kpi-sub">฿15,406,619 | VAT: ฿1,078,908</div>
+      <div class="kpi-icon">📋</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #e74c3c;">
+      <div class="kpi-label">ยอดขาย 2025</div>
+      <div class="kpi-value" style="color:#e74c3c;">5.1M</div>
+      <div class="kpi-sub">฿5,078,506 | <span class="down">▼ -9.3%</span> จากปี 2024</div>
+      <div class="kpi-icon">📉</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #e67e22;">
+      <div class="kpi-label">2026 YTD (ม.ค.–ก.พ.)</div>
+      <div class="kpi-value" style="color:#e67e22;">1.0M</div>
+      <div class="kpi-sub">฿1,033,607 | 2 เดือนแรก 2026</div>
+      <div class="kpi-icon">🟢</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 ยอดขาย Central Group รายปี</h3>
+        <span class="card-subtitle">แยกก่อน VAT และ VAT 7%</span>
+      </div>
+      <div class="card-body">
+        <canvas id="centralAnnualChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🍩 สัดส่วนตามกลุ่มย่อย</h3>
+        <span class="card-subtitle">รวมทุกปี 2023–2026</span>
+      </div>
+      <div class="card-body">
+        <canvas id="centralDonutChart" style="max-height:280px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBGROUP TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📋 สรุปยอดขายตามกลุ่มย่อย Central Group</h3>
+      <span class="card-subtitle">รวมทุกปี 2023–2026 (Jan–Feb YTD) | รวม VAT</span>
+    </div>
+    <div class="card-body">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>กลุ่ม / สาขา</th>
+            <th>ก่อน VAT</th>
+            <th>VAT 7%</th>
+            <th>รวม VAT</th>
+            <th>สัดส่วน</th>
+          </tr>
+        </thead>
+        <tbody id="centralTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="insight-box" style="margin-top:8px;">
+    <h4>💡 หมายเหตุ</h4>
+    <ul>
+      <li>รวมชื่อบิลที่มีคีย์เวิร์ด: <strong>เซ็นทรัล / Central / เซนทรัล / ซีพีเอ็น / CPN</strong> ทุกรูปแบบ</li>
+      <li>2026 เป็นข้อมูลเฉพาะ ม.ค.–ก.พ. (YTD 2 เดือน)</li>
+      <li>กลุ่ม "เซ็นทรัลพัฒนา สาขา" ครอบคลุมสาขาห้างทั่วประเทศ เช่น ลาดพร้าว, แจ้งวัฒนะ, รามอินทรา ฯลฯ</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ============================== TAB: OVERVIEW ============================== -->
+<div class="tab-content active" id="tab-overview">
+
+  <!-- KPI CARDS -->
+  <div class="kpi-row" style="margin-top:24px;">
+    <div class="kpi-card blue clickable-card" onclick="openYearModal(2023)" title="คลิกดูรายละเอียดปี 2023">
+      <div class="kpi-label">ยอดขายรวม 2023 🔍</div>
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
+        <div class="kpi-value">62.2M</div>
+        <div style="font-size:13px;color:#7f8c8d;font-weight:600;">ก่อน VAT: <span style="color:#2980b9;font-weight:700;">58.1M</span></div>
+      </div>
+      <div class="kpi-sub">รวม VAT ฿62,158,502 | ก่อน VAT ฿58,091,123 | 7,366 รายการ</div>
+      <div class="kpi-icon">📦</div>
+    </div>
+    <div class="kpi-card green clickable-card" onclick="openYearModal(2024)" title="คลิกดูรายละเอียดปี 2024">
+      <div class="kpi-label">ยอดขายรวม 2024 🔍</div>
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
+        <div class="kpi-value">67.3M</div>
+        <div style="font-size:13px;color:#7f8c8d;font-weight:600;">ก่อน VAT: <span style="color:#27ae60;font-weight:700;">62.9M</span></div>
+      </div>
+      <div class="kpi-sub"><span class="up">▲ +8.3%</span> จากปี 2023 | ก่อน VAT ฿62,945,061 | 8,210 รายการ</div>
+      <div class="kpi-icon">📈</div>
+    </div>
+    <div class="kpi-card red clickable-card" onclick="openYearModal(2025)" title="คลิกดูรายละเอียดปี 2025">
+      <div class="kpi-label">ยอดขายรวม 2025 🔍</div>
+      <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
+        <div class="kpi-value">58.4M</div>
+        <div style="font-size:13px;color:#7f8c8d;font-weight:600;">ก่อน VAT: <span style="color:#e74c3c;font-weight:700;">54.6M</span></div>
+      </div>
+      <div class="kpi-sub"><span class="down">▼ -13.2%</span> จากปี 2024 | ก่อน VAT ฿54,589,930 | 6,480 รายการ</div>
+      <div class="kpi-icon">📉</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">Forecast 2026 (Base)</div>
+      <div class="kpi-value">63.1M</div>
+      <div class="kpi-sub"><span class="up">▲ +8.0%</span> เป้าหมายหลัก</div>
+      <div class="kpi-icon">🎯</div>
+    </div>
+  </div>
+
+  <!-- SECOND KPI ROW -->
+  <div class="kpi-row">
+    <div class="kpi-card blue">
+      <div class="kpi-label">ลูกค้า 2023</div>
+      <div class="kpi-value">2,575</div>
+      <div class="kpi-sub">Avg Order: ฿8,440</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">ลูกค้า 2024</div>
+      <div class="kpi-value">2,784</div>
+      <div class="kpi-sub"><span class="up">▲ +8.1%</span> | Avg Order: ฿8,200</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">ลูกค้า 2025</div>
+      <div class="kpi-value">1,975</div>
+      <div class="kpi-sub"><span class="down">▼ -29.1%</span> | Avg Order: ฿9,016</div>
+    </div>
+    <div class="kpi-card orange clickable-card" onclick="openLoyalModal()" title="คลิกดูรายละเอียดลูกค้าซื่อสัตย์">
+      <div class="kpi-label">ลูกค้าซื่อสัตย์ (3 ปี) 🔍</div>
+      <div class="kpi-value">337</div>
+      <div class="kpi-sub">Retention Rate 2024→2025: 19.3%</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 1 -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📈 แนวโน้มยอดขายรายปี 2023–2025</h3>
+        <span class="card-subtitle">รวม Forecast 2026</span>
+      </div>
+      <div class="card-body">
+        <canvas id="annualTrendChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🥧 สัดส่วนกลุ่มลูกค้า 2025</h3>
+        <span class="card-subtitle">แบ่งตามประเภทธุรกิจ</span>
+      </div>
+      <div class="card-body">
+        <canvas id="segmentChart2025"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 2 -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>🌡️ Heatmap ยอดขายรายเดือน (M฿)</h3>
+        <span class="card-subtitle">สีเข้ม = ยอดสูง</span>
+      </div>
+      <div class="card-body">
+        <div id="heatmapContainer"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🔄 Customer Retention</h3>
+        <span class="card-subtitle">การรักษาฐานลูกค้า</span>
+      </div>
+      <div class="card-body">
+        <canvas id="retentionChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHT BOX -->
+  <div class="insight-box">
+    <h4>💡 Key Insights – สิ่งที่ต้องระวังและโอกาส</h4>
+    <ul>
+      <li><strong>ยอดขาย 2025 ลดลง -13.2%</strong> จาก 67.3M → 58.4M หลักๆ เกิดจากการสูญเสียฐานลูกค้า (-29%) และ Kanyarath ลดยอดจาก 15.7M → 1.5M</li>
+      <li><strong>ลูกค้า Bigtree กำลังโต</strong> จาก 365K (2023) → 888K (2024) → 4.1M (2025) = เพิ่มขึ้น 11x ใน 3 ปี → เป็น Key Account สำคัญที่สุด</li>
+      <li><strong>Packworks</strong> คือลูกค้าที่ซื่อสัตย์และมียอดสูงสุดตลอด 3 ปี รวม 9.4M → ต้องรักษาไว้ให้ดี</li>
+      <li><strong>Customer Retention Rate ต่ำมาก</strong> 23% (2023→2024) และ 19.3% (2024→2025) → ต้องสร้างโปรแกรม Loyalty</li>
+      <li><strong>Avg Order Value สูงขึ้น</strong> จาก 8,440 → 9,016 บาท แสดงว่าลูกค้าที่เหลือซื้อมากขึ้นต่อครั้ง</li>
+      <li><strong>E-commerce (Shopee/Lazada/TikTok)</strong> ยังคิดเป็นสัดส่วนน้อยมาก (<2%) แต่มีแนวโน้มเติบโต → โอกาสขยาย</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================== TAB: MONTHLY ============================== -->
+<div class="tab-content" id="tab-monthly">
+  <div style="margin: 24px 0 20px; display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="font-size:18px;">📅 วิเคราะห์ยอดขายรายเดือน</h2>
+    <div class="year-selector">
+      <span style="font-size:12px;color:var(--muted);font-weight:600;">เลือกปี:</span>
+      <button class="year-btn active" onclick="filterMonthly('all', this)">ทั้งหมด</button>
+      <button class="year-btn" onclick="filterMonthly(2023, this)">2023</button>
+      <button class="year-btn" onclick="filterMonthly(2024, this)">2024</button>
+      <button class="year-btn" onclick="filterMonthly(2025, this)">2025</button>
+      <button class="year-btn" onclick="filterMonthly(2026, this)">Forecast 2026</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>ยอดขายรายเดือน (M฿)</h3>
+      <span class="card-subtitle">Grouped Bar Chart เปรียบเทียบรายปี</span>
+    </div>
+    <div class="card-body">
+      <canvas id="monthlyChart" style="max-height:360px;"></canvas>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><h3>ตารางสรุปยอดรายเดือน (M฿)</h3></div>
+      <div class="card-body" style="padding: 0;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>เดือน</th>
+              <th>2023</th>
+              <th>2024</th>
+              <th>2025</th>
+              <th>Forecast 2026</th>
+            </tr>
+          </thead>
+          <tbody id="monthlyTableBody"></tbody>
+          <tfoot id="monthlyTableFoot"></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h3>📊 เดือนที่ขายดีสุด vs ต่ำสุด</h3></div>
+      <div class="card-body">
+        <canvas id="seasonalityChart"></canvas>
+        <p class="note">* ค่าเฉลี่ยรายเดือนจากทั้ง 3 ปี (2023-2025) | Seasonal Index สำหรับวางแผน 2026</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== TAB: CUSTOMERS ============================== -->
+<div class="tab-content" id="tab-customers">
+  <div style="margin: 24px 0 20px; display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="font-size:18px;">👥 วิเคราะห์ฐานลูกค้า</h2>
+    <div class="year-selector">
+      <span style="font-size:12px;color:var(--muted);font-weight:600;">ปี:</span>
+      <button class="year-btn active" onclick="filterCust(2023, this)">2023</button>
+      <button class="year-btn" onclick="filterCust(2024, this)">2024</button>
+      <button class="year-btn" onclick="filterCust(2025, this)">2025</button>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><h3>🥧 กลุ่มลูกค้าตามประเภทธุรกิจ</h3></div>
+      <div class="card-body">
+        <canvas id="segmentChartDynamic"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>📡 ช่องทางการขาย (Channel)</h3></div>
+      <div class="card-body" id="channelBars"></div>
+    </div>
+  </div>
+
+  <!-- TOP CUSTOMERS TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <h3>🏅 Top 15 ลูกค้าตามยอดขาย</h3>
+      <span class="card-subtitle" id="topCustYear">ปี 2023</span>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead>
+          <tr><th>#</th><th>ชื่อลูกค้า</th><th>ยอดขาย (฿)</th><th>สัดส่วน</th><th>กลุ่ม</th></tr>
+        </thead>
+        <tbody id="topCustBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- LOYAL CUSTOMERS -->
+  <div class="card">
+    <div class="card-header"><h3>🌟 ลูกค้าซื่อสัตย์ – ซื้อครบทั้ง 3 ปี (Top 15)</h3></div>
+    <div class="card-body">
+      <canvas id="loyalChart" style="max-height:360px;"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>📋 ตารางลูกค้า Loyal (ครบ 3 ปี)</h3></div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead>
+          <tr><th>#</th><th>ชื่อลูกค้า</th><th>2023</th><th>2024</th><th>2025</th><th>รวม 3 ปี</th><th>Trend</th></tr>
+        </thead>
+        <tbody id="loyalTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== TAB: TEAM ============================== -->
+<div class="tab-content" id="tab-team">
+  <div style="margin: 24px 0 20px; display: flex; justify-content: space-between; align-items: center;">
+    <h2 style="font-size:18px;">🏆 ประสิทธิภาพทีมขาย</h2>
+    <div class="year-selector">
+      <span style="font-size:12px;color:var(--muted);font-weight:600;">ปี:</span>
+      <button class="year-btn active" onclick="filterTeam(2023, this)">2023</button>
+      <button class="year-btn" onclick="filterTeam(2024, this)">2024</button>
+      <button class="year-btn" onclick="filterTeam(2025, this)">2025</button>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><h3>💼 ยอดขายแต่ละ Salesperson</h3></div>
+      <div class="card-body">
+        <canvas id="teamChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>📊 สัดส่วนทีมขาย</h3></div>
+      <div class="card-body">
+        <canvas id="teamPieChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>📋 ตารางประสิทธิภาพทีมขาย</h3></div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead>
+          <tr><th>#</th><th>พนักงานขาย</th><th>ยอดขาย (฿)</th><th>สัดส่วน</th><th>Performance Bar</th></tr>
+        </thead>
+        <tbody id="teamTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>📈 เปรียบเทียบทีมขายตลอด 3 ปี (Top 6)</h3></div>
+    <div class="card-body">
+      <canvas id="teamTrendChart" style="max-height:360px;"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== TAB: FORECAST ============================== -->
+<div class="tab-content" id="tab-forecast">
+  <div style="margin: 24px 0 20px;">
+    <h2 style="font-size:18px;">🎯 Forecast ยอดขายปี 2026</h2>
+    <p style="font-size:13px; color:var(--muted); margin-top:6px;">คำนวณจาก Weighted Seasonal Index (น้ำหนัก: 2023=20%, 2024=30%, 2025=50%)</p>
+  </div>
+
+  <!-- SCENARIO CARDS -->
+  <div class="scenario-row">
+    <div class="scenario-card scenario-conservative">
+      <div class="scenario-label">⚠️ Conservative (ระมัดระวัง)</div>
+      <div class="scenario-value">55.5M</div>
+      <div class="scenario-sub">฿55,490,115 | -5% จากปี 2025</div>
+      <div class="scenario-sub">สมมติว่าตลาดยังคงซบเซา</div>
+    </div>
+    <div class="scenario-card scenario-base">
+      <div class="scenario-label">🎯 Base Case (เป้าหมายหลัก)</div>
+      <div class="scenario-value">63.1M</div>
+      <div class="scenario-sub">฿63,084,124 | +8% จากปี 2025</div>
+      <div class="scenario-sub">ฟื้นตัวกลับมาใกล้ระดับ 2023</div>
+    </div>
+    <div class="scenario-card scenario-optimistic">
+      <div class="scenario-label">🚀 Optimistic (โอกาสสูง)</div>
+      <div class="scenario-value">67.2M</div>
+      <div class="scenario-sub">฿67,172,910 | +15% จากปี 2025</div>
+      <div class="scenario-sub">กลับสู่ระดับสูงสุดปี 2024</div>
+    </div>
+  </div>
+
+  <!-- FORECAST CHART -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📊 Forecast เปรียบเทียบ 3 Scenarios (รายเดือน 2026)</h3>
+      <div class="year-selector">
+        <button class="year-btn active" onclick="switchForecastView('monthly', this)">รายเดือน</button>
+        <button class="year-btn" onclick="switchForecastView('cumulative', this)">สะสม</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <canvas id="forecastChart" style="max-height:380px;"></canvas>
+    </div>
+  </div>
+
+  <!-- MONTHLY FORECAST TABLE -->
+  <div class="card">
+    <div class="card-header"><h3>📋 ตาราง Forecast รายเดือน 2026 (M฿)</h3></div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>เดือน</th>
+            <th>2025 (Actual)</th>
+            <th>Conservative (-5%)</th>
+            <th>Base Case (+8%)</th>
+            <th>Optimistic (+15%)</th>
+            <th>Seasonal Index</th>
+          </tr>
+        </thead>
+        <tbody id="forecastTableBody"></tbody>
+        <tfoot id="forecastTableFoot"></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- ASSUMPTIONS -->
+  <div class="card">
+    <div class="card-header"><h3>⚙️ สมมติฐานและกลยุทธ์เพื่อบรรลุเป้า Base Case 63.1M</h3></div>
+    <div class="card-body">
+      <div class="grid-3">
+        <div class="insight-box" style="margin:0;">
+          <h4>👥 เพิ่มฐานลูกค้า</h4>
+          <ul>
+            <li>เป้า: เพิ่มลูกค้าใหม่ 800+ รายในปี 2026</li>
+            <li>สร้างโปรแกรม Referral จากลูกค้าเดิม</li>
+            <li>ขยาย Segment Hotel/Hospitality (ยังต่ำ)</li>
+            <li>เพิ่ม Retention Rate จาก 19% → 30%+</li>
+          </ul>
+        </div>
+        <div class="insight-box" style="margin:0;">
+          <h4>💰 เพิ่มยอดขายต่อลูกค้า</h4>
+          <ul>
+            <li>เป้า Avg Order Value: ≥ ฿9,500</li>
+            <li>Cross-sell สินค้าหลายประเภท</li>
+            <li>Volume Discount สำหรับ Key Accounts</li>
+            <li>ดูแล Top 10 ลูกค้าให้ซื้อสม่ำเสมอ</li>
+          </ul>
+        </div>
+        <div class="insight-box" style="margin:0;">
+          <h4>📡 ขยายช่องทาง</h4>
+          <ul>
+            <li>ลงทุนเพิ่มใน Shopee/TikTok Shop</li>
+            <li>เป้า E-commerce: 5% ของยอดขายรวม</li>
+            <li>สร้าง Online catalog และ B2B portal</li>
+            <li>ทดสอบ Line OA / LINE Shopping</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <h4 style="font-size:14px; font-weight:700; margin-bottom:12px;">🗓️ Monthly Target 2026 (Base Case) vs 2025 Actual</h4>
+        <canvas id="targetVsActualChart" style="max-height:280px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- RISK FACTORS -->
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+    <div class="card">
+      <div class="card-header"><h3>⚠️ Risk Factors ที่ต้องระวัง</h3></div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>ความเสี่ยง</th><th>ผลกระทบ</th><th>โอกาสเกิด</th></tr></thead>
+          <tbody>
+            <tr><td>สูญเสียลูกค้า Bigtree (4.1M)</td><td><span class="badge badge-red">สูงมาก</span></td><td><span class="badge badge-orange">ปานกลาง</span></td></tr>
+            <tr><td>สูญเสียลูกค้า Packworks (4.0M)</td><td><span class="badge badge-red">สูงมาก</span></td><td><span class="badge badge-orange">ปานกลาง</span></td></tr>
+            <tr><td>Salesperson ลาออก</td><td><span class="badge badge-orange">สูง</span></td><td><span class="badge badge-orange">ปานกลาง</span></td></tr>
+            <tr><td>ภาวะเศรษฐกิจชะลอตัว</td><td><span class="badge badge-orange">สูง</span></td><td><span class="badge badge-blue">ต่ำ</span></td></tr>
+            <tr><td>Retention Rate ยังต่ำ (19%)</td><td><span class="badge badge-orange">สูง</span></td><td><span class="badge badge-red">สูง</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>🚀 Growth Opportunities</h3></div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead><tr><th>โอกาส</th><th>Potential Value</th><th>Priority</th></tr></thead>
+          <tbody>
+            <tr><td>ขยาย Bigtree account</td><td>+1M-2M</td><td><span class="badge badge-red">สูงสุด</span></td></tr>
+            <tr><td>Win-back ลูกค้าที่หายไป 2024</td><td>+3M-5M</td><td><span class="badge badge-red">สูงสุด</span></td></tr>
+            <tr><td>E-commerce growth</td><td>+1M-2M</td><td><span class="badge badge-orange">สูง</span></td></tr>
+            <tr><td>Hotel/Resort segment</td><td>+500K-1M</td><td><span class="badge badge-orange">สูง</span></td></tr>
+            <tr><td>เพิ่ม Salesperson</td><td>+2M-4M</td><td><span class="badge badge-blue">ปานกลาง</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== TAB: 2026 PROGRESS ============================== -->
+<div class="tab-content" id="tab-progress2026">
+  <div style="margin: 24px 0 16px; display:flex; align-items:center; gap:12px;">
+    <h2 style="font-size:18px;">🟢 2026 Progress – Actual vs Forecast</h2>
+    <span class="badge badge-green" style="font-size:12px; padding:5px 14px;">อัพเดต: ม.ค.–ก.พ. 2026</span>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-row">
+    <div class="kpi-card blue">
+      <div class="kpi-label">ยอดขายจริง มกราคม 2026</div>
+      <div class="kpi-value">4.89M</div>
+      <div class="kpi-sub"><span class="down">▼ -5.5%</span> vs Forecast 5.17M</div>
+      <div class="kpi-icon">📦</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">ยอดขายจริง กุมภาพันธ์ 2026</div>
+      <div class="kpi-value">5.24M</div>
+      <div class="kpi-sub"><span class="down">▼ -3.7%</span> vs Forecast 5.44M | ดีขึ้น!</div>
+      <div class="kpi-icon">📈</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">YTD Actual (ม.ค.–ก.พ.)</div>
+      <div class="kpi-value">10.13M</div>
+      <div class="kpi-sub"><span class="down">▼ -485K</span> vs Forecast 10.61M (-4.6%)</div>
+      <div class="kpi-icon">📊</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">เป้าที่ต้องทำอีก (มี.ค.–ธ.ค.)</div>
+      <div class="kpi-value">52.96M</div>
+      <div class="kpi-sub">เพื่อให้ถึง Base Case 63.1M ต่อปี</div>
+      <div class="kpi-icon">🎯</div>
+    </div>
+  </div>
+
+  <!-- ACTUAL vs FORECAST CHART -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📊 Actual vs Forecast 2026 รายเดือน</h3>
+      <span class="card-subtitle" style="color:#27ae60;">🟩 สีเขียว = ข้อมูลจริง | 🟠 สีส้ม = Forecast</span>
+    </div>
+    <div class="card-body">
+      <canvas id="actualVsForecastChart" style="max-height:380px;"></canvas>
+    </div>
+  </div>
+
+  <!-- PROGRESS GRID -->
+  <div class="grid-2">
+    <!-- SALESPERSON JAN-FEB -->
+    <div class="card">
+      <div class="card-header"><h3>🏆 ทีมขาย: ม.ค. vs ก.พ. 2026</h3></div>
+      <div class="card-body">
+        <canvas id="sp2026Chart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+
+    <!-- MONTHLY STATUS TABLE -->
+    <div class="card">
+      <div class="card-header"><h3>📋 ตาราง Actual vs Forecast 2026</h3></div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>เดือน</th>
+              <th>Actual (฿)</th>
+              <th>Forecast (฿)</th>
+              <th>vs Forecast</th>
+              <th>สถานะ</th>
+            </tr>
+          </thead>
+          <tbody id="actualForecastTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP CUSTOMERS JAN-FEB -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><h3>🏅 Top Customers – มกราคม 2026</h3></div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอดขาย (฿)</th></tr></thead>
+          <tbody>
+            <tr><td class="rank">1</td><td>ลูกค้า 1</td><td style="font-weight:700">฿468,000</td></tr>
+            <tr><td class="rank">2</td><td>ลูกค้า 2</td><td style="font-weight:700">฿343,596</td></tr>
+            <tr><td class="rank">3</td><td>ลูกค้า 3</td><td style="font-weight:700">฿275,739</td></tr>
+            <tr><td class="rank">4</td><td>ลูกค้า 4</td><td style="font-weight:700">฿169,649</td></tr>
+            <tr><td class="rank">5</td><td>ลูกค้า 5</td><td style="font-weight:700">฿138,351</td></tr>
+            <tr><td class="rank">6</td><td>ลูกค้า 6</td><td style="font-weight:700">฿125,030</td></tr>
+            <tr><td class="rank">7</td><td>ลูกค้า 7</td><td style="font-weight:700">฿124,147</td></tr>
+            <tr><td class="rank">8</td><td>ลูกค้า 8</td><td style="font-weight:700">฿109,044</td></tr>
+            <tr><td class="rank">9</td><td>Online Platform</td><td style="font-weight:700">฿102,945</td></tr>
+            <tr><td class="rank">10</td><td>ลูกค้า 10</td><td style="font-weight:700">฿100,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>🏅 Top Customers – กุมภาพันธ์ 2026</h3></div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอดขาย (฿)</th></tr></thead>
+          <tbody>
+            <tr><td class="rank">1</td><td>ลูกค้า 1</td><td style="font-weight:700;color:#e74c3c">฿912,175</td></tr>
+            <tr><td class="rank">2</td><td>ลูกค้า 2</td><td style="font-weight:700">฿246,154</td></tr>
+            <tr><td class="rank">3</td><td>ลูกค้า 3</td><td style="font-weight:700">฿230,762</td></tr>
+            <tr><td class="rank">4</td><td>ลูกค้า 4</td><td style="font-weight:700">฿188,641</td></tr>
+            <tr><td class="rank">5</td><td>ลูกค้า 5</td><td style="font-weight:700">฿166,481</td></tr>
+            <tr><td class="rank">6</td><td>ลูกค้า 6</td><td style="font-weight:700">฿160,286</td></tr>
+            <tr><td class="rank">7</td><td>ลูกค้า 7</td><td style="font-weight:700">฿149,800</td></tr>
+            <tr><td class="rank">8</td><td>Online Platform</td><td style="font-weight:700">฿103,320</td></tr>
+            <tr><td class="rank">9</td><td>ลูกค้า 9</td><td style="font-weight:700">฿96,407</td></tr>
+            <tr><td class="rank">10</td><td>ลูกค้า 10</td><td style="font-weight:700">฿96,033</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHT BOX 2026 -->
+  <div class="insight-box">
+    <h4>💡 2026 Insights – มกราคม–กุมภาพันธ์</h4>
+    <ul>
+      <li><strong>ยอดขายต่ำกว่า Forecast เล็กน้อย:</strong> ม.ค. -5.5% | ก.พ. -3.7% → แนวโน้มดีขึ้นเดือนละ ~2% ถือว่าเป็นสัญญาณบวก</li>
+      <li><strong>ลูกค้ารายใหญ่ยังคงเป็น Key Account สูงสุด</strong> — ก.พ. 912K เดือนเดียว ต้องดูแลเป็นพิเศษ อย่าให้หลุด</li>
+      <li><strong>ลูกค้าใหม่ปรากฏ:</strong> New Account 2 ราย (รวม ~327K) — ต้องติดตามศักยภาพ</li>
+      <li><strong>ทีมขายแข็งแกร่ง:</strong> ทีมขาย A (#1 ม.ค.) + ทีมขาย B (#1 ก.พ.) — ทั้งสองคนแข่งกันดีมาก รวม ~2.7M ต่อคนต่อเดือน</li>
+      <li><strong>ยอด YTD ต่ำกว่า Forecast -485K</strong> — ยังต้องเพิ่มยอดเฉลี่ย 48,552 บาท/เดือนในช่วงที่เหลือเพื่อชดเชย</li>
+      <li><strong>Shopee ยังทำได้สม่ำเสมอ</strong> ~100-147K/เดือน — ควรลงทุนเพิ่มเพื่อขยาย E-commerce ตามเป้า</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================== DRILL-DOWN MODAL ============================== -->
+<div class="modal-overlay" id="drillModal" onclick="handleModalClick(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="modalTitle">รายละเอียด</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-tabs" id="modalTabs"></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ============================================================ SCRIPTS ============================================================ -->
+<script>
+// ==================== DATA ====================
+const MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+
+const monthly = {
+  2023: [4555893, 4367113, 5852357, 4219952, 4590348, 5340263, 4929022, 6459508, 4656343, 5196486, 6102081, 5889136],
+  2024: [4962495, 6079239, 6002648, 6459124, 5154938, 6119355, 5950876, 5099180, 4974910, 5884963, 5191105, 5442382],
+  2025: [5340694, 5269849, 3882755, 4812425, 4283557, 4186835, 5138709, 5015114, 5263403, 5543165, 4800238, 4874483],
+};
+
+// Weighted seasonal index (2023=20%, 2024=30%, 2025=50%)
+const weightedMonthly = MONTHS.map((_, i) =>
+  0.2 * monthly[2023][i] + 0.3 * monthly[2024][i] + 0.5 * monthly[2025][i]
+);
+const weightedTotal = weightedMonthly.reduce((a, b) => a + b, 0);
+const seasonalIndex = weightedMonthly.map(v => v / weightedTotal);
+
+const forecast = {
+  conservative: seasonalIndex.map(idx => Math.round(55490115 * idx)),
+  base: seasonalIndex.map(idx => Math.round(63084124 * idx)),
+  optimistic: seasonalIndex.map(idx => Math.round(67172910 * idx)),
+};
+
+const annualRevenue = { 2023: 62158502, 2024: 67321215, 2025: 58411226 };
+
+const segments = {
+  2023: { 'บริษัท/องค์กร': 50837482, 'อื่นๆ': 4663878, 'ร้านค้าปลีก': 3391224, 'บุคคลธรรมดา': 3142252, 'โรงแรม': 67220, 'การศึกษา': 37683, 'การแพทย์': 13610 },
+  2024: { 'บริษัท/องค์กร': 56207312, 'อื่นๆ': 4810229, 'ร้านค้าปลีก': 3112565, 'บุคคลธรรมดา': 2955675, 'โรงแรม': 117405, 'การแพทย์': 55134, 'การศึกษา': 53737 },
+  2025: { 'บริษัท/องค์กร': 47640118, 'อื่นๆ': 4466762, 'บุคคลธรรมดา': 3555938, 'ร้านค้าปลีก': 2599493, 'โรงแรม': 71112, 'การศึกษา': 39023, 'การแพทย์': 35800 },
+};
+
+const channels = {
+  2023: { 'Direct Sales': 123617413, 'Shopee': 1476217, 'Lazada': 92036, 'TikTok': 0 },
+  2024: { 'Direct Sales': 65602671, 'Shopee': 1692182, 'Lazada': 26362, 'TikTok': 0 },
+  2025: { 'Direct Sales': 57718487, 'Shopee': 681476, 'Lazada': 4470, 'TikTok': 6793 },
+};
+
+const topCustomers = {
+  2023: [
+    {name: 'ลูกค้าอันดับ 1', val: 2335842, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 2', val: 2081728, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 3', val: 1996994, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 4', val: 1257648, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 5', val: 900000, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 6', val: 865893, seg: 'อื่นๆ'},
+    {name: 'ลูกค้าอันดับ 7', val: 841973, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 8', val: 841159, seg: 'องค์กรรัฐ'},
+    {name: 'ลูกค้าอันดับ 9', val: 784257, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 10', val: 581101, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 11', val: 553778, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 12', val: 551585, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 13', val: 548910, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 14', val: 532967, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 15', val: 530653, seg: 'อื่นๆ'},
+  ],
+  2024: [
+    {name: 'ลูกค้าอันดับ 1', val: 3387094, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 2', val: 3190248, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 3', val: 1416701, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 4', val: 1332000, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 5', val: 891995, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 6', val: 887854, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 7', val: 833294, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 8', val: 800000, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 9', val: 793234, seg: 'อื่นๆ'},
+    {name: 'ลูกค้าอันดับ 10', val: 745790, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 11', val: 676571, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 12', val: 637196, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 13', val: 571032, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 14', val: 551499, seg: 'โรงแรม'},
+    {name: 'ลูกค้าอันดับ 15', val: 548277, seg: 'บริษัท'},
+  ],
+  2025: [
+    {name: 'ลูกค้าอันดับ 1', val: 4097993, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 2', val: 4025468, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 3', val: 1404000, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 4', val: 1354004, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 5', val: 1285579, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 6', val: 1122986, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 7', val: 1107193, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 8', val: 980135, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 9', val: 835691, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 10', val: 760214, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 11', val: 582722, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 12', val: 552669, seg: 'E-commerce'},
+    {name: 'ลูกค้าอันดับ 13', val: 500225, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 14', val: 496614, seg: 'บริษัท'},
+    {name: 'ลูกค้าอันดับ 15', val: 495036, seg: 'บริษัท'},
+  ],
+};
+
+const salesperson = {
+  2023: [
+    {name: 'ทีมขาย A', val: 12452753},
+    {name: 'ทีมขาย B', val: 11905551},
+    {name: 'ทีมขาย C', val: 11702545},
+    {name: 'ทีมขาย D', val: 6649550},
+    {name: 'ทีมขาย E', val: 6492891},
+    {name: 'ทีมขาย F', val: 5012933},
+    {name: 'ทีมขาย G', val: 3894296},
+    {name: 'ทีมขาย H', val: 1570692},
+    {name: 'Online Channel', val: 1568253},
+    {name: 'ทีมขาย I', val: 382956},
+    {name: 'อื่นๆ', val: 526035},
+  ],
+  2024: [
+    {name: 'ทีมขาย A', val: 15682681},
+    {name: 'ทีมขาย B', val: 14525392},
+    {name: 'ทีมขาย C', val: 13866774},
+    {name: 'ทีมขาย D', val: 8571496},
+    {name: 'ทีมขาย E', val: 6146192},
+    {name: 'ทีมขาย F', val: 3135765},
+    {name: 'ทีมขาย G', val: 2391670},
+    {name: 'Online Channel', val: 1718544},
+    {name: 'ทีมขาย H', val: 832303},
+    {name: 'ทีมขาย I', val: 403220},
+    {name: 'อื่นๆ', val: 147178},
+  ],
+  2025: [
+    {name: 'ทีมขาย A', val: 15596216},
+    {name: 'ทีมขาย B', val: 14123235},
+    {name: 'ทีมขาย C', val: 12872020},
+    {name: 'ทีมขาย D', val: 8103733},
+    {name: 'ทีมขาย E', val: 4802255},
+    {name: 'ทีมขาย F', val: 1462862},
+    {name: 'Online Channel', val: 692734},
+    {name: 'ทีมขาย G', val: 445382},
+    {name: 'ทีมขาย H', val: 168921},
+    {name: 'อื่นๆ', val: 143868},
+  ],
+};
+
+const loyalCustomers = [
+  {name: 'ลูกค้าประจำ A', y23: 1996994, y24: 3387094, y25: 4025468},
+  {name: 'ลูกค้าประจำ B', y23: 2335842, y24: 3190248, y25: 1107193},
+  {name: 'ลูกค้าประจำ C', y23: 365098, y24: 887854, y25: 4097993},
+  {name: 'ลูกค้าประจำ D', y23: 2081728, y24: 1416701, y25: 760214},
+  {name: 'ลูกค้าประจำ E', y23: 900000, y24: 1332000, y25: 1404000},
+  {name: 'ลูกค้าประจำ F', y23: 194560, y24: 423170, y25: 1354004},
+  {name: 'ลูกค้าประจำ G', y23: 841159, y24: 511503, y25: 389576},
+  {name: 'ลูกค้าประจำ H', y23: 841973, y24: 833294, y25: 19057},
+  {name: 'ลูกค้าประจำ I', y23: 865893, y24: 793234, y25: 29739},
+  {name: 'ลูกค้าประจำ J', y23: 532967, y24: 500760, y25: 582722},
+  {name: 'ลูกค้าประจำ K', y23: 551585, y24: 571032, y25: 440599},
+  {name: 'ลูกค้าประจำ L', y23: 553779, y24: 543232, y25: 455884},
+  {name: 'ลูกค้าประจำ M', y23: 445773, y24: 551499, y25: 481457},
+  {name: 'ลูกค้าประจำ N', y23: 252880, y24: 676571, y25: 349643},
+  {name: 'ลูกค้าประจำ O', y23: 202889, y24: 637196, y25: 425593},
+];
+
+// ==================== HELPERS ====================
+const fmt = (v) => (v/1e6).toFixed(2) + 'M';
+const fmtK = (v) => v >= 1e6 ? (v/1e6).toFixed(2)+'M' : v >= 1e3 ? (v/1e3).toFixed(0)+'K' : v.toFixed(0);
+const fmtFull = (v) => '฿' + Math.round(v).toLocaleString('th-TH');
+const COLORS = ['#2980b9','#e67e22','#27ae60','#e74c3c','#9b59b6','#1abc9c','#f39c12','#34495e','#16a085','#8e44ad'];
+const chartDefaults = { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { font: { family: 'Segoe UI', size: 12 } } } } };
+
+// ==================== CHART REFS ====================
+let charts = {};
+function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+// ==================== OVERVIEW CHARTS ====================
+
+// Annual trend
+charts.annualTrend = new Chart(document.getElementById('annualTrendChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2023', '2024', '2025', '2026 Forecast\n(Base)'],
+    datasets: [
+      {
+        label: 'ยอดขายจริง',
+        data: [62158502/1e6, 67321215/1e6, 58411226/1e6, null],
+        backgroundColor: ['#2980b9','#27ae60','#e74c3c','transparent'],
+        borderRadius: 6,
+        order: 2,
+      },
+      {
+        label: 'Forecast 2026',
+        data: [null, null, null, 63084124/1e6],
+        backgroundColor: '#e67e22',
+        borderRadius: 6,
+        order: 2,
+      },
+      {
+        label: 'เส้นแนวโน้ม',
+        data: [62158502/1e6, 67321215/1e6, 58411226/1e6, 63084124/1e6],
+        type: 'line',
+        borderColor: '#e67e22',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [5, 5],
+        pointRadius: 5,
+        pointBackgroundColor: '#e67e22',
+        order: 1,
+      }
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      y: { beginAtZero: false, min: 50, ticks: { callback: v => v.toFixed(0)+'M' }, grid: { color: '#f0f2f5' } },
+      x: { grid: { display: false } }
+    },
+    plugins: {
+      ...chartDefaults.plugins,
+      tooltip: { callbacks: { label: ctx => ' ฿' + (ctx.raw * 1e6).toLocaleString('th-TH') } }
+    }
+  }
+});
+
+// Segment donut 2025
+const seg25 = segments[2025];
+charts.segment2025 = new Chart(document.getElementById('segmentChart2025'), {
+  type: 'doughnut',
+  data: {
+    labels: Object.keys(seg25),
+    datasets: [{ data: Object.values(seg25), backgroundColor: COLORS, borderWidth: 2, borderColor: '#fff' }]
+  },
+  options: {
+    ...chartDefaults,
+    cutout: '60%',
+    plugins: {
+      ...chartDefaults.plugins,
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + fmtFull(ctx.raw) + ' (' + (ctx.raw/58411226*100).toFixed(1) + '%)' } }
+    }
+  }
+});
+
+// Retention chart
+charts.retention = new Chart(document.getElementById('retentionChart'), {
+  type: 'bar',
+  data: {
+    labels: ['ลูกค้า\n2023', 'Retained\nใน 2024', 'New\n2024', 'ลูกค้า\n2024', 'Retained\nใน 2025', 'New\n2025', 'ลูกค้า\n2025'],
+    datasets: [{
+      label: 'จำนวนลูกค้า',
+      data: [2575, 593, 2191, 2784, 536, 1439, 1975],
+      backgroundColor: ['#2980b9','#27ae60','#f39c12','#27ae60','#27ae60','#f39c12','#e74c3c'],
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    ...chartDefaults,
+    scales: { y: { beginAtZero: true, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+    plugins: { ...chartDefaults.plugins, legend: { display: false } }
+  }
+});
+
+// Heatmap
+function buildHeatmap() {
+  const container = document.getElementById('heatmapContainer');
+  const allVals = [...monthly[2023], ...monthly[2024], ...monthly[2025]];
+  const minV = Math.min(...allVals), maxV = Math.max(...allVals);
+
+  let html = '<div class="heatmap-grid">';
+  html += '<div></div>';
+  MONTHS.forEach(m => html += `<div class="heatmap-header">${m}</div>`);
+
+  [2023, 2024, 2025].forEach(yr => {
+    html += `<div class="heatmap-label">${yr}</div>`;
+    monthly[yr].forEach(v => {
+      const pct = (v - minV) / (maxV - minV);
+      const r = Math.round(255 - pct * (255 - 30));
+      const g = Math.round(255 - pct * (255 - 90));
+      const b = Math.round(255 - pct * (255 - 200));
+      const bg = `rgb(${Math.round(41 + pct*169)}, ${Math.round(128 + pct*(-40))}, ${Math.round(185 + pct*(-85))})`;
+      const color = pct > 0.5 ? '#fff' : '#333';
+      html += `<div class="heatmap-cell" style="background:${bg};color:${color}" title="${(v/1e6).toFixed(2)}M">${(v/1e6).toFixed(1)}</div>`;
+    });
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+buildHeatmap();
+
+// ==================== MONTHLY TAB ====================
+let monthlyChart;
+function buildMonthlyChart(filter) {
+  destroyChart('monthly');
+  let datasets = [];
+  const colors = { 2023: '#2980b9', 2024: '#27ae60', 2025: '#e74c3c', 2026: '#e67e22' };
+
+  if (filter === 'all' || filter == 2023) datasets.push({ label: '2023', data: monthly[2023].map(v=>v/1e6), backgroundColor: colors[2023]+'99', borderColor: colors[2023], borderWidth: 1, borderRadius: 4 });
+  if (filter === 'all' || filter == 2024) datasets.push({ label: '2024', data: monthly[2024].map(v=>v/1e6), backgroundColor: colors[2024]+'99', borderColor: colors[2024], borderWidth: 1, borderRadius: 4 });
+  if (filter === 'all' || filter == 2025) datasets.push({ label: '2025', data: monthly[2025].map(v=>v/1e6), backgroundColor: colors[2025]+'99', borderColor: colors[2025], borderWidth: 1, borderRadius: 4 });
+  if (filter == 2026) datasets.push({ label: 'Forecast 2026 (Base)', data: forecast.base.map(v=>v/1e6), backgroundColor: colors[2026]+'99', borderColor: colors[2026], borderWidth: 1, borderRadius: 4 });
+
+  charts.monthly = new Chart(document.getElementById('monthlyChart'), {
+    type: 'bar',
+    data: { labels: MONTHS, datasets },
+    options: {
+      ...chartDefaults,
+      scales: { y: { beginAtZero: false, ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+      plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } } }
+    }
+  });
+}
+buildMonthlyChart('all');
+
+function filterMonthly(yr, btn) {
+  document.querySelectorAll('#tab-monthly .year-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildMonthlyChart(yr);
+}
+
+// Monthly table
+function buildMonthlyTable() {
+  const tbody = document.getElementById('monthlyTableBody');
+  const tfoot = document.getElementById('monthlyTableFoot');
+  let rows = '', totals = [0,0,0,0];
+  MONTHS.forEach((m, i) => {
+    const v23 = monthly[2023][i], v24 = monthly[2024][i], v25 = monthly[2025][i], vfc = forecast.base[i];
+    totals[0]+=v23; totals[1]+=v24; totals[2]+=v25; totals[3]+=vfc;
+    const best = Math.max(v23,v24,v25);
+    rows += `<tr>
+      <td><strong>${m}</strong></td>
+      <td style="color:#2980b9">${fmt(v23)}</td>
+      <td style="color:#27ae60">${fmt(v24)}</td>
+      <td style="color:${v25==best?'#27ae60':'#e74c3c'}">${fmt(v25)}</td>
+      <td style="color:#e67e22;font-weight:700">${fmt(vfc)}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = rows;
+  tfoot.innerHTML = `<tr style="font-weight:700;background:#f8f9fa">
+    <td>รวม</td>
+    <td style="color:#2980b9">${fmt(totals[0])}</td>
+    <td style="color:#27ae60">${fmt(totals[1])}</td>
+    <td style="color:#e74c3c">${fmt(totals[2])}</td>
+    <td style="color:#e67e22">${fmt(totals[3])}</td>
+  </tr>`;
+}
+buildMonthlyTable();
+
+// Seasonality chart
+const avgMonthly = MONTHS.map((_, i) => (monthly[2023][i] + monthly[2024][i] + monthly[2025][i]) / 3);
+charts.seasonality = new Chart(document.getElementById('seasonalityChart'), {
+  type: 'bar',
+  data: {
+    labels: MONTHS,
+    datasets: [{
+      label: 'ค่าเฉลี่ยรายเดือน (3 ปี)',
+      data: avgMonthly.map(v => v/1e6),
+      backgroundColor: avgMonthly.map(v => v === Math.max(...avgMonthly) ? '#27ae60' : v === Math.min(...avgMonthly) ? '#e74c3c' : '#2980b9aa'),
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    ...chartDefaults,
+    scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+    plugins: { ...chartDefaults.plugins, legend: { display: false }, tooltip: { callbacks: { label: ctx => 'เฉลี่ย: ฿' + (ctx.raw*1e6).toLocaleString('th-TH') + ' (' + (seasonalIndex[MONTHS.indexOf(ctx.label)]*100).toFixed(1) + '%)' } } }
+  }
+});
+
+// ==================== CUSTOMERS TAB ====================
+let segChartDynamic;
+function buildCustView(yr) {
+  // Segment chart
+  destroyChart('segDynamic');
+  const seg = segments[yr];
+  charts.segDynamic = new Chart(document.getElementById('segmentChartDynamic'), {
+    type: 'doughnut',
+    data: { labels: Object.keys(seg), datasets: [{ data: Object.values(seg), backgroundColor: COLORS, borderWidth: 2, borderColor: '#fff' }] },
+    options: { ...chartDefaults, cutout: '60%', plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.label + ': ' + fmtFull(ctx.raw) + ' (' + (ctx.raw/annualRevenue[yr]*100).toFixed(1) + '%)' } } } }
+  });
+
+  // Channel bars
+  const ch = channels[yr];
+  const total = Object.values(ch).reduce((a,b)=>a+b,0);
+  const chColors = {'Direct Sales':'#2980b9','Shopee':'#e74c3c','Lazada':'#e67e22','TikTok':'#9b59b6'};
+  let html = '';
+  Object.entries(ch).forEach(([name, val]) => {
+    if (val <= 0) return;
+    const pct = (val/total*100).toFixed(1);
+    const w = Math.max(pct, 1);
+    html += `<div class="channel-item">
+      <div class="channel-name">${name}</div>
+      <div class="channel-bar-wrap"><div class="channel-bar" style="width:${w}%;background:${chColors[name]||'#7f8c8d'}">${pct}%</div></div>
+      <div class="channel-pct">${fmtK(val)}</div>
+    </div>`;
+  });
+  document.getElementById('channelBars').innerHTML = html;
+
+  // Top customers
+  const custs = topCustomers[yr];
+  const custTotal = custs.reduce((a,c) => a+c.val, 0);
+  document.getElementById('topCustYear').textContent = 'ปี ' + yr;
+  let tbody = '';
+  custs.forEach((c, i) => {
+    const pct = (c.val/annualRevenue[yr]*100).toFixed(1);
+    tbody += `<tr>
+      <td class="rank">${i+1}</td>
+      <td>${c.name}</td>
+      <td style="font-weight:700">${fmtFull(c.val)}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="progress-bar-wrap" style="width:100px"><div class="progress-bar-fill" style="width:${pct}%;background:#2980b9"></div></div>
+          <span>${pct}%</span>
+        </div>
+      </td>
+      <td><span class="badge badge-blue">${c.seg}</span></td>
+    </tr>`;
+  });
+  document.getElementById('topCustBody').innerHTML = tbody;
+}
+buildCustView(2023);
+
+function filterCust(yr, btn) {
+  document.querySelectorAll('#tab-customers .year-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildCustView(yr);
+}
+
+// Loyal chart
+charts.loyal = new Chart(document.getElementById('loyalChart'), {
+  type: 'bar',
+  data: {
+    labels: loyalCustomers.map(c => c.name),
+    datasets: [
+      { label: '2023', data: loyalCustomers.map(c => c.y23/1e6), backgroundColor: '#2980b9aa', borderRadius: 4 },
+      { label: '2024', data: loyalCustomers.map(c => c.y24/1e6), backgroundColor: '#27ae60aa', borderRadius: 4 },
+      { label: '2025', data: loyalCustomers.map(c => c.y25/1e6), backgroundColor: '#e74c3caa', borderRadius: 4 },
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    indexAxis: 'y',
+    scales: { x: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, y: { grid: { display: false } } },
+    plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtFull(ctx.raw*1e6) } } }
+  }
+});
+
+// Loyal table
+function buildLoyalTable() {
+  let html = '';
+  loyalCustomers.forEach((c, i) => {
+    const total = c.y23+c.y24+c.y25;
+    const trend = c.y25 > c.y24 ? '<span class="up-trend">▲ Growing</span>' : c.y25 < c.y24*0.5 ? '<span class="down-trend">▼ Declining</span>' : '<span class="neutral-trend">→ Stable</span>';
+    html += `<tr>
+      <td class="rank">${i+1}</td>
+      <td>${c.name}</td>
+      <td style="color:#2980b9">${fmtFull(c.y23)}</td>
+      <td style="color:#27ae60">${fmtFull(c.y24)}</td>
+      <td style="color:#e74c3c">${fmtFull(c.y25)}</td>
+      <td style="font-weight:700">${fmtFull(total)}</td>
+      <td>${trend}</td>
+    </tr>`;
+  });
+  document.getElementById('loyalTableBody').innerHTML = html;
+}
+buildLoyalTable();
+
+// ==================== TEAM TAB ====================
+function buildTeamView(yr) {
+  const sp = salesperson[yr];
+  const total = sp.reduce((a,s)=>a+s.val,0);
+
+  destroyChart('team');
+  charts.team = new Chart(document.getElementById('teamChart'), {
+    type: 'bar',
+    data: {
+      labels: sp.map(s => s.name),
+      datasets: [{ label: 'ยอดขาย', data: sp.map(s => s.val/1e6), backgroundColor: COLORS.map(c => c+'bb'), borderRadius: 4 }]
+    },
+    options: {
+      ...chartDefaults,
+      indexAxis: 'y',
+      scales: { x: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, y: { grid: { display: false } } },
+      plugins: { ...chartDefaults.plugins, legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtFull(ctx.raw*1e6) + ' (' + (ctx.raw/total*1e6/1e4).toFixed(1) + '%)' } } }
+    }
+  });
+
+  destroyChart('teamPie');
+  charts.teamPie = new Chart(document.getElementById('teamPieChart'), {
+    type: 'doughnut',
+    data: { labels: sp.map(s => s.name), datasets: [{ data: sp.map(s => s.val), backgroundColor: COLORS, borderWidth: 2, borderColor: '#fff' }] },
+    options: { ...chartDefaults, cutout: '55%', plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.label + ': ' + fmtFull(ctx.raw) + ' (' + (ctx.raw/total*100).toFixed(1) + '%)' } } } }
+  });
+
+  let html = '';
+  sp.forEach((s, i) => {
+    const pct = (s.val/total*100).toFixed(1);
+    html += `<tr>
+      <td class="rank">${i+1}</td>
+      <td><strong>${s.name}</strong></td>
+      <td style="font-weight:700">${fmtFull(s.val)}</td>
+      <td>${pct}%</td>
+      <td style="min-width:150px"><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%;background:${COLORS[i]||'#2980b9'}"></div></div></td>
+    </tr>`;
+  });
+  document.getElementById('teamTableBody').innerHTML = html;
+}
+buildTeamView(2023);
+
+function filterTeam(yr, btn) {
+  document.querySelectorAll('#tab-team .year-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildTeamView(yr);
+}
+
+// Team trend (top 6 across years)
+const top6 = ['ทีมขาย B','ทีมขาย A','ทีมขาย C','ทีมขาย D','ทีมขาย E','ทีมขาย F'];
+const top6Colors = ['#2980b9','#27ae60','#e74c3c','#9b59b6','#f39c12','#1abc9c'];
+function getSpVal(yr, name) {
+  const sp = salesperson[yr];
+  const found = sp.find(s => s.name === name);
+  return found ? found.val/1e6 : 0;
+}
+// Map anonymized top6 to salesperson data
+const top6ToSp = {'ทีมขาย A':'ทีมขาย A','ทีมขาย B':'ทีมขาย B','ทีมขาย C':'ทีมขาย C','ทีมขาย D':'ทีมขาย D','ทีมขาย E':'ทีมขาย E','ทีมขาย F':'ทีมขาย F'};
+charts.teamTrend = new Chart(document.getElementById('teamTrendChart'), {
+  type: 'line',
+  data: {
+    labels: ['2023','2024','2025'],
+    datasets: top6.map((name, i) => ({
+      label: name, data: [2023,2024,2025].map(yr => getSpVal(yr, name)),
+      borderColor: top6Colors[i], backgroundColor: top6Colors[i]+'20',
+      borderWidth: 2.5, pointRadius: 5, fill: false, tension: 0.3,
+    }))
+  },
+  options: {
+    ...chartDefaults,
+    scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+    plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtFull(ctx.raw*1e6) } } }
+  }
+});
+
+// ==================== FORECAST TAB ====================
+let forecastViewMode = 'monthly';
+function buildForecastChart(mode) {
+  destroyChart('forecast');
+  let data25, dataCons, dataBase, dataOpt;
+  if (mode === 'monthly') {
+    data25 = monthly[2025].map(v => v/1e6);
+    dataCons = forecast.conservative.map(v => v/1e6);
+    dataBase = forecast.base.map(v => v/1e6);
+    dataOpt = forecast.optimistic.map(v => v/1e6);
+  } else {
+    // cumulative
+    let cum25=0, cumC=0, cumB=0, cumO=0;
+    data25 = monthly[2025].map(v => { cum25+=v; return cum25/1e6; });
+    dataCons = forecast.conservative.map(v => { cumC+=v; return cumC/1e6; });
+    dataBase = forecast.base.map(v => { cumB+=v; return cumB/1e6; });
+    dataOpt = forecast.optimistic.map(v => { cumO+=v; return cumO/1e6; });
+  }
+  charts.forecast = new Chart(document.getElementById('forecastChart'), {
+    type: 'line',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: '2025 Actual', data: data25, borderColor: '#95a5a6', backgroundColor: '#95a5a699', borderWidth: 2, pointRadius: 4, fill: mode==='cumulative', borderDash: [5,5] },
+        { label: 'Conservative (-5%)', data: dataCons, borderColor: '#e74c3c', backgroundColor: '#e74c3c15', borderWidth: 2, pointRadius: 4, fill: mode==='cumulative' },
+        { label: 'Base Case (+8%)', data: dataBase, borderColor: '#e67e22', backgroundColor: '#e67e2215', borderWidth: 3, pointRadius: 5, fill: mode==='cumulative' },
+        { label: 'Optimistic (+15%)', data: dataOpt, borderColor: '#27ae60', backgroundColor: '#27ae6015', borderWidth: 2, pointRadius: 4, fill: mode==='cumulative' },
+      ]
+    },
+    options: {
+      ...chartDefaults,
+      scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+      plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } } }
+    }
+  });
+}
+buildForecastChart('monthly');
+
+function switchForecastView(mode, btn) {
+  document.querySelectorAll('#tab-forecast .year-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  forecastViewMode = mode;
+  buildForecastChart(mode);
+}
+
+// Forecast table
+function buildForecastTable() {
+  let html = '';
+  let totals = [0,0,0,0];
+  MONTHS.forEach((m, i) => {
+    const v25 = monthly[2025][i], vc = forecast.conservative[i], vb = forecast.base[i], vo = forecast.optimistic[i];
+    const idx = (seasonalIndex[i]*100).toFixed(2);
+    totals[0]+=v25; totals[1]+=vc; totals[2]+=vb; totals[3]+=vo;
+    html += `<tr>
+      <td><strong>${m}</strong></td>
+      <td style="color:#7f8c8d">${fmt(v25)}</td>
+      <td style="color:#e74c3c">${fmt(vc)}</td>
+      <td style="color:#e67e22;font-weight:700">${fmt(vb)}</td>
+      <td style="color:#27ae60">${fmt(vo)}</td>
+      <td><span class="badge badge-blue">${idx}%</span></td>
+    </tr>`;
+  });
+  document.getElementById('forecastTableBody').innerHTML = html;
+  document.getElementById('forecastTableFoot').innerHTML = `<tr style="font-weight:700;background:#f8f9fa">
+    <td>รวม</td>
+    <td style="color:#7f8c8d">${fmt(totals[0])}</td>
+    <td style="color:#e74c3c">${fmt(totals[1])}</td>
+    <td style="color:#e67e22">${fmt(totals[2])}</td>
+    <td style="color:#27ae60">${fmt(totals[3])}</td>
+    <td>100.00%</td>
+  </tr>`;
+}
+buildForecastTable();
+
+// Target vs Actual chart
+charts.targetVsActual = new Chart(document.getElementById('targetVsActualChart'), {
+  type: 'bar',
+  data: {
+    labels: MONTHS,
+    datasets: [
+      { label: '2025 Actual', data: monthly[2025].map(v=>v/1e6), backgroundColor: '#95a5a6aa', borderRadius: 4 },
+      { label: 'Target 2026 (Base)', data: forecast.base.map(v=>v/1e6), backgroundColor: '#e67e22aa', borderRadius: 4 },
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+    plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } } }
+  }
+});
+
+// ==================== 2026 PROGRESS DATA ====================
+const actual2026 = {
+  1: 4889375,
+  2: 5235852,
+};
+const months2026HasData = [1, 2]; // months with actual data
+
+// Seasonal index (same as before)
+const seasonalIdx = [0.0820, 0.0862, 0.0794, 0.0839, 0.0745, 0.0808, 0.0864, 0.0862, 0.0818, 0.0902, 0.0837, 0.0849];
+const target2026base = 63084124;
+const fc2026base = seasonalIdx.map(s => Math.round(target2026base * s));
+// [5172898, 5437851, 5008990, 5295178, 4699781, 5097024, 5449029, 5431673, 5158817, 5688133, 5282404, 5362513]
+
+// Actual vs Forecast chart
+const avfActualData = MONTHS.map((_, i) => actual2026[i+1] != null ? actual2026[i+1]/1e6 : null);
+const avfForecastData = fc2026base.map(v => v/1e6);
+const avfActualDataPoints = MONTHS.map((_, i) => actual2026[i+1] != null ? actual2026[i+1]/1e6 : null);
+
+charts.actualVsForecast = new Chart(document.getElementById('actualVsForecastChart'), {
+  type: 'bar',
+  data: {
+    labels: MONTHS,
+    datasets: [
+      {
+        label: 'Actual 2026',
+        data: avfActualData,
+        backgroundColor: '#27ae60cc',
+        borderColor: '#27ae60',
+        borderWidth: 1,
+        borderRadius: 6,
+        order: 2,
+      },
+      {
+        label: 'Forecast (Base Case)',
+        data: avfForecastData,
+        backgroundColor: '#e67e2244',
+        borderColor: '#e67e22',
+        borderWidth: 2,
+        borderRadius: 6,
+        borderDash: [0],
+        type: 'bar',
+        order: 3,
+      },
+      {
+        label: 'Gap (Actual vs Forecast)',
+        data: MONTHS.map((_, i) => actual2026[i+1] != null ? (actual2026[i+1] - fc2026base[i])/1e6 : null),
+        type: 'line',
+        borderColor: '#e74c3c',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 6,
+        pointBackgroundColor: MONTHS.map((_, i) => actual2026[i+1] != null ? (actual2026[i+1] >= fc2026base[i] ? '#27ae60' : '#e74c3c') : 'transparent'),
+        yAxisID: 'y2',
+        order: 1,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    scales: {
+      y: { beginAtZero: false, min: 3.5, ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' }, title: { display: true, text: 'ยอดขาย (M฿)' } },
+      y2: { position: 'right', ticks: { callback: v => (v>=0?'+':'')+v.toFixed(2)+'M' }, grid: { display: false }, title: { display: true, text: 'Gap (M฿)' } },
+      x: { grid: { display: false } }
+    },
+    plugins: {
+      legend: { labels: { font: { family: 'Segoe UI', size: 12 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } }
+    }
+  }
+});
+
+// Salesperson Jan vs Feb 2026
+const sp2026Names = ['ทีมขาย A', 'ทีมขาย B', 'ทีมขาย C', 'ทีมขาย D', 'ทีมขาย E', 'ทีมขาย F', 'Online'];
+const sp2026Jan  = [1434615, 1151971, 950250, 819351, 474338, 58850, 0];
+const sp2026Feb  = [1383488, 1266227, 1050785, 1006588, 321766, 59529, 147468];
+
+charts.sp2026 = new Chart(document.getElementById('sp2026Chart'), {
+  type: 'bar',
+  data: {
+    labels: sp2026Names,
+    datasets: [
+      { label: 'ม.ค. 2026', data: sp2026Jan.map(v=>v/1e6), backgroundColor: '#2980b9aa', borderRadius: 4 },
+      { label: 'ก.พ. 2026', data: sp2026Feb.map(v=>v/1e6), backgroundColor: '#27ae60aa', borderRadius: 4 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    scales: { y: { ticks: { callback: v => v.toFixed(2)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+    plugins: { legend: { labels: { font: { family:'Segoe UI', size:12 } } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } } }
+  }
+});
+
+// Actual vs Forecast table
+function buildActualForecastTable() {
+  const monthNames = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  let html = '';
+  let ytdA = 0, ytdF = 0;
+  monthNames.forEach((m, i) => {
+    const fc = fc2026base[i];
+    const act = actual2026[i+1];
+    ytdF += fc;
+    if (act != null) {
+      ytdA += act;
+      const diff = act - fc;
+      const pct = (diff/fc*100).toFixed(1);
+      const color = diff >= 0 ? '#27ae60' : '#e74c3c';
+      const badge = diff >= 0 ? '<span class="badge badge-green">✅ เกินเป้า</span>' : '<span class="badge badge-red">⚠️ ต่ำกว่าเป้า</span>';
+      html += `<tr>
+        <td><strong>${m}</strong></td>
+        <td style="color:#27ae60;font-weight:700">฿${act.toLocaleString('th-TH')}</td>
+        <td style="color:#e67e22">฿${fc.toLocaleString('th-TH')}</td>
+        <td style="color:${color};font-weight:700">${diff>=0?'+':''}฿${diff.toLocaleString('th-TH')} (${pct}%)</td>
+        <td>${badge}</td>
+      </tr>`;
+    } else {
+      html += `<tr>
+        <td><strong>${m}</strong></td>
+        <td style="color:#aaa;font-style:italic">รอข้อมูล...</td>
+        <td style="color:#e67e22">฿${fc.toLocaleString('th-TH')}</td>
+        <td>–</td>
+        <td><span class="badge badge-blue">📅 Forecast</span></td>
+      </tr>`;
+    }
+  });
+  // YTD row
+  const ytdDiff = ytdA - (fc2026base[0]+fc2026base[1]);
+  html += `<tr style="font-weight:700;background:#f8f9fa;border-top:2px solid #dee2e6">
+    <td>YTD (ม.ค.–ก.พ.)</td>
+    <td style="color:#27ae60">฿${ytdA.toLocaleString('th-TH')}</td>
+    <td style="color:#e67e22">฿${(fc2026base[0]+fc2026base[1]).toLocaleString('th-TH')}</td>
+    <td style="color:${ytdDiff>=0?'#27ae60':'#e74c3c'}">${ytdDiff>=0?'+':''}฿${ytdDiff.toLocaleString('th-TH')} (${(ytdDiff/(fc2026base[0]+fc2026base[1])*100).toFixed(1)}%)</td>
+    <td><span class="badge badge-orange">📊 YTD</span></td>
+  </tr>`;
+  document.getElementById('actualForecastTableBody').innerHTML = html;
+}
+buildActualForecastTable();
+
+// ==================== CENTRAL GROUP TAB ====================
+const centralAnnual = {
+  pretax: [4461117, 5233494, 4746268, 965988],
+  vat:    [312278,  366345,  332666,  67619],
+  total:  [4773395, 5599838, 5078506, 1033607],
+};
+const centralLabels = ['2023', '2024', '2025', '2026 (ม.ค.–ก.พ.)'];
+charts.centralAnnual = new Chart(document.getElementById('centralAnnualChart'), {
+  type: 'bar',
+  data: {
+    labels: centralLabels,
+    datasets: [
+      { label: 'ก่อน VAT', data: centralAnnual.pretax.map(v=>v/1e6), backgroundColor: '#8e44adbb', borderRadius: 4 },
+      { label: 'VAT 7%',   data: centralAnnual.vat.map(v=>v/1e6),    backgroundColor: '#d7bde2bb', borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }
+    },
+    plugins: {
+      legend: { labels: { font: { family:'Segoe UI', size:12 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } }
+    }
+  }
+});
+
+const centralSubgroups = [
+  { name: 'เซ็นทรัลพัฒนา สาขา',           total: 10491112, pretax: 9804778, vat: 686628 },
+  { name: 'ซีพีเอ็น (CPN) กรุ๊ป',          total:  2563443, pretax: 2395741, vat: 167836 },
+  { name: 'Central Food',                    total:  1073189, pretax: 1002980, vat:  70209 },
+  { name: 'เซ็นทรัล พระราม',               total:   757715, pretax:  708145, vat:  49570 },
+  { name: 'Central Group อื่นๆ',            total:   720877, pretax:  673717, vat:  47160 },
+  { name: 'เซ็นทรัล เวิลด์',               total:   603801, pretax:  564300, vat:  39501 },
+  { name: 'เซ็นทรัลพัฒนา (มหาชน) สนง.ใหญ่', total: 224844, pretax:  210135, vat:  14709 },
+  { name: 'เซ็นทรัล บางนา',                total:    50365, pretax:   47070, vat:   3295 },
+];
+const grandCentral = centralSubgroups.reduce((a,s)=>a+s.total, 0);
+const donutColors = ['#8e44ad','#2980b9','#27ae60','#e67e22','#e74c3c','#1abc9c','#f39c12','#34495e'];
+
+charts.centralDonut = new Chart(document.getElementById('centralDonutChart'), {
+  type: 'doughnut',
+  data: {
+    labels: centralSubgroups.map(s => s.name),
+    datasets: [{ data: centralSubgroups.map(s=>s.total), backgroundColor: donutColors, borderWidth: 2, borderColor: '#fff' }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true, cutout: '55%',
+    plugins: {
+      legend: { position: 'right', labels: { font: { family:'Segoe UI', size:11 }, boxWidth: 14 } },
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ฿' + ctx.raw.toLocaleString('th-TH') + ' (' + (ctx.raw/grandCentral*100).toFixed(1) + '%)' } }
+    }
+  }
+});
+
+// Build subgroup table
+(function buildCentralTable() {
+  const totalPretax = centralSubgroups.reduce((a,s)=>a+s.pretax, 0);
+  const totalVat    = centralSubgroups.reduce((a,s)=>a+s.vat, 0);
+  let html = '';
+  centralSubgroups.forEach((s,i) => {
+    const pct = (s.total/grandCentral*100).toFixed(1);
+    html += `<tr>
+      <td class="rank">${i+1}</td>
+      <td><strong>${s.name}</strong></td>
+      <td style="color:#8e44ad;font-weight:600">฿${s.pretax.toLocaleString('th-TH')}</td>
+      <td style="color:#7f8c8d">฿${s.vat.toLocaleString('th-TH')}</td>
+      <td style="font-weight:700">฿${s.total.toLocaleString('th-TH')}</td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar-wrap" style="width:80px;height:6px"><div class="progress-bar-fill" style="width:${pct}%;background:${donutColors[i]||'#8e44ad'}"></div></div><span>${pct}%</span></div></td>
+    </tr>`;
+  });
+  html += `<tr style="font-weight:800;background:#f5eef8;border-top:2px solid #8e44ad">
+    <td></td>
+    <td><strong>รวมทั้งหมด</strong></td>
+    <td style="color:#8e44ad;font-weight:800">฿${totalPretax.toLocaleString('th-TH')}</td>
+    <td style="color:#7f8c8d;font-weight:800">฿${totalVat.toLocaleString('th-TH')}</td>
+    <td style="font-weight:800">฿${grandCentral.toLocaleString('th-TH')}</td>
+    <td>100.0%</td>
+  </tr>`;
+  document.getElementById('centralTableBody').innerHTML = html;
+})();
+
+// ==================== TAB NAVIGATION ====================
+function showTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ==================== DRILL-DOWN MODAL ====================
+function handleModalClick(e) { if (e.target.id === 'drillModal') closeModal(); }
+function closeModal() { document.getElementById('drillModal').classList.remove('open'); }
+
+const MONTH_NAMES_TH = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+const DRILL_COLORS = ['#1e3a5f','#2980b9','#27ae60','#8e44ad','#e67e22','#e74c3c','#1abc9c','#f39c12','#34495e','#c0392b','#16a085'];
+
+function switchModalTab(id) {
+  document.querySelectorAll('.modal-section-content').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('ms-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function openYearModal(yr) {
+  const mon   = monthly[yr];
+  const topC  = topCustomers[yr];
+  const sp    = salesperson[yr];
+  const seg   = segments[yr];
+  const total = annualRevenue[yr];
+  const pretaxTotal = Math.round(total / 1.07);
+  const vatTotal = total - pretaxTotal;
+  const maxMon = Math.max(...mon);
+  const pctYoY = yr > 2023 ? ((total - annualRevenue[yr-1]) / annualRevenue[yr-1] * 100).toFixed(1) : null;
+
+  // ---- Section 1: Monthly ----
+  let s1 = `<div class="modal-section-content active" id="ms-monthly">`;
+  s1 += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+    <div style="background:#f0f7ff;border-radius:10px;padding:14px 16px;">
+      <div style="font-size:11px;color:#7f8c8d;font-weight:600;text-transform:uppercase;margin-bottom:4px;">ยอดรวมทั้งปี (VAT)</div>
+      <div style="font-size:20px;font-weight:800;color:#1e3a5f;">฿${(total/1e6).toFixed(2)}M</div>
+    </div>
+    <div style="background:#f9fff9;border-radius:10px;padding:14px 16px;">
+      <div style="font-size:11px;color:#7f8c8d;font-weight:600;text-transform:uppercase;margin-bottom:4px;">ก่อน VAT</div>
+      <div style="font-size:20px;font-weight:800;color:#27ae60;">฿${(pretaxTotal/1e6).toFixed(2)}M</div>
+    </div>
+    <div style="background:#fff8f0;border-radius:10px;padding:14px 16px;">
+      <div style="font-size:11px;color:#7f8c8d;font-weight:600;text-transform:uppercase;margin-bottom:4px;">${pctYoY ? 'เทียบปีก่อน' : 'จำนวนรายการ'}</div>
+      <div style="font-size:20px;font-weight:800;color:${pctYoY ? (parseFloat(pctYoY)>=0?'#27ae60':'#e74c3c') : '#e67e22'};">${pctYoY ? (parseFloat(pctYoY)>=0?'▲ +':'▼ ')+pctYoY+'%' : '7,000+ รายการ'}</div>
+    </div>
+  </div>`;
+  s1 += `<table class="data-table"><thead><tr><th>เดือน</th><th>ยอด (รวม VAT)</th><th>ก่อน VAT</th><th>% ปี</th><th style="width:120px">สัดส่วน</th></tr></thead><tbody>`;
+  mon.forEach((v, i) => {
+    const pct = (v/total*100).toFixed(1);
+    const barW = (v/maxMon*100).toFixed(0);
+    const isBest = v === maxMon;
+    s1 += `<tr${isBest ? ' style="background:#fffbf0;"' : ''}>
+      <td><strong>${MONTH_NAMES_TH[i]}</strong>${isBest ? ' <span class="badge badge-orange">🔥 สูงสุด</span>' : ''}</td>
+      <td style="font-weight:700;color:#2980b9">฿${v.toLocaleString('th-TH')}</td>
+      <td style="color:#27ae60;">฿${Math.round(v/1.07).toLocaleString('th-TH')}</td>
+      <td>${pct}%</td>
+      <td><div class="progress-bar-wrap" style="height:6px"><div class="progress-bar-fill" style="width:${barW}%;background:#2980b9"></div></div></td>
+    </tr>`;
+  });
+  s1 += `<tr style="font-weight:800;background:#f0f4f8;border-top:2px solid #dee2e6">
+    <td><strong>รวมทั้งปี</strong></td>
+    <td style="color:#1e3a5f;font-weight:800">฿${total.toLocaleString('th-TH')}</td>
+    <td style="color:#27ae60;font-weight:800">฿${pretaxTotal.toLocaleString('th-TH')}</td>
+    <td>100%</td><td></td>
+  </tr></tbody></table></div>`;
+
+  // ---- Section 2: Top Customers ----
+  let s2 = `<div class="modal-section-content" id="ms-customers">`;
+  s2 += `<table class="data-table"><thead><tr><th>#</th><th>ลูกค้า</th><th>กลุ่ม</th><th>ยอดขาย (VAT)</th><th>ก่อน VAT</th><th>% ยอดรวม</th></tr></thead><tbody>`;
+  topC.forEach((c, i) => {
+    const pct = (c.val/total*100).toFixed(2);
+    s2 += `<tr>
+      <td class="rank">${i+1}</td>
+      <td><strong>${c.name}</strong></td>
+      <td><span class="badge badge-blue">${c.seg}</span></td>
+      <td style="font-weight:700;color:#2980b9">฿${c.val.toLocaleString('th-TH')}</td>
+      <td style="color:#27ae60">฿${Math.round(c.val/1.07).toLocaleString('th-TH')}</td>
+      <td>${pct}%</td>
+    </tr>`;
+  });
+  const top15Total = topC.reduce((a,c)=>a+c.val,0);
+  s2 += `<tr style="font-weight:800;background:#f0f4f8;border-top:2px solid #dee2e6">
+    <td></td><td><strong>รวม Top 15</strong></td><td></td>
+    <td style="font-weight:800;color:#1e3a5f">฿${top15Total.toLocaleString('th-TH')}</td>
+    <td style="color:#27ae60;font-weight:800">฿${Math.round(top15Total/1.07).toLocaleString('th-TH')}</td>
+    <td>${(top15Total/total*100).toFixed(1)}%</td>
+  </tr></tbody></table></div>`;
+
+  // ---- Section 3: Segments ----
+  const segTotal = Object.values(seg).reduce((a,b)=>a+b,0);
+  let s3 = `<div class="modal-section-content" id="ms-segments">`;
+  s3 += `<table class="data-table"><thead><tr><th>กลุ่มลูกค้า</th><th>ยอดขาย (VAT)</th><th>ก่อน VAT</th><th>สัดส่วน</th><th style="width:140px"></th></tr></thead><tbody>`;
+  Object.entries(seg).sort((a,b)=>b[1]-a[1]).forEach(([k,v], i) => {
+    const pct = (v/segTotal*100).toFixed(1);
+    s3 += `<tr>
+      <td><strong>${k}</strong></td>
+      <td style="font-weight:700;color:#2980b9">฿${v.toLocaleString('th-TH')}</td>
+      <td style="color:#27ae60">฿${Math.round(v/1.07).toLocaleString('th-TH')}</td>
+      <td>${pct}%</td>
+      <td><div class="progress-bar-wrap" style="height:6px"><div class="progress-bar-fill" style="width:${pct}%;background:${DRILL_COLORS[i]||'#888'}"></div></div></td>
+    </tr>`;
+  });
+  s3 += `</tbody></table></div>`;
+
+  // ---- Section 4: Salesperson ----
+  const spTotal = sp.reduce((a,s)=>a+s.val,0);
+  let s4 = `<div class="modal-section-content" id="ms-team">`;
+  s4 += `<table class="data-table"><thead><tr><th>#</th><th>พนักงานขาย</th><th>ยอดขาย</th><th>ก่อน VAT</th><th>สัดส่วน</th><th style="width:120px"></th></tr></thead><tbody>`;
+  sp.forEach((s, i) => {
+    const pct = (s.val/spTotal*100).toFixed(1);
+    s4 += `<tr>
+      <td class="rank">${i+1}</td>
+      <td><strong>${s.name}</strong></td>
+      <td style="font-weight:700;color:#2980b9">฿${s.val.toLocaleString('th-TH')}</td>
+      <td style="color:#27ae60">฿${Math.round(s.val/1.07).toLocaleString('th-TH')}</td>
+      <td>${pct}%</td>
+      <td><div class="progress-bar-wrap" style="height:6px"><div class="progress-bar-fill" style="width:${pct}%;background:${DRILL_COLORS[i]||'#888'}"></div></div></td>
+    </tr>`;
+  });
+  s4 += `</tbody></table></div>`;
+
+  // Assemble
+  document.getElementById('modalTitle').innerHTML = `📅 รายละเอียดยอดขาย ปี ${yr} <span style="font-size:14px;color:#7f8c8d;font-weight:400;">รวม VAT: ฿${(total/1e6).toFixed(2)}M | ก่อน VAT: ฿${(pretaxTotal/1e6).toFixed(2)}M</span>`;
+  document.getElementById('modalTabs').innerHTML = `
+    <button class="modal-tab-btn active" onclick="switchModalTab('monthly')">📅 รายเดือน</button>
+    <button class="modal-tab-btn" onclick="switchModalTab('customers')">🏅 Top ลูกค้า</button>
+    <button class="modal-tab-btn" onclick="switchModalTab('segments')">🎯 กลุ่มลูกค้า</button>
+    <button class="modal-tab-btn" onclick="switchModalTab('team')">🏆 ทีมขาย</button>`;
+  document.getElementById('modalBody').innerHTML = s1 + s2 + s3 + s4;
+  document.getElementById('drillModal').classList.add('open');
+}
+
+// ==================== TAB NAVIGATION ====================
+function showTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function openLoyalModal() {
+  const shown = loyalCustomers.length;
+
+  function getTrend(c) {
+    if (c.y25 > c.y24 && c.y24 > c.y23) return { label:'🚀 เติบโตต่อเนื่อง', color:'#27ae60' };
+    if (c.y25 > c.y24) return { label:'📈 ฟื้นตัวปี 2025', color:'#1abc9c' };
+    if (c.y25 < c.y24 && c.y24 > c.y23) return { label:'📉 ลดลงปี 2025', color:'#e74c3c' };
+    if (c.y25 < c.y23) return { label:'⚠️ ต่ำกว่าปี 2023', color:'#e67e22' };
+    return { label:'➡️ ทรงตัว', color:'#7f8c8d' };
+  }
+
+  const sorted = [...loyalCustomers].sort((a,b) => (b.y23+b.y24+b.y25)-(a.y23+a.y24+a.y25));
+  const grandTotal = sorted.reduce((s,c) => s+c.y23+c.y24+c.y25, 0);
+  const growing    = loyalCustomers.filter(c => c.y25 > c.y24).length;
+  const declining  = loyalCustomers.filter(c => c.y25 < c.y24).length;
+
+  // Mini KPI cards
+  let kpiHtml = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+    <div style="background:#f0f7ff;border-radius:10px;padding:14px 16px;text-align:center;">
+      <div style="font-size:10px;color:#7f8c8d;font-weight:700;text-transform:uppercase;margin-bottom:4px;">ลูกค้าซื่อสัตย์ทั้งหมด</div>
+      <div style="font-size:24px;font-weight:800;color:#1e3a5f;">337</div>
+      <div style="font-size:11px;color:#7f8c8d;">ซื้อทุกปี 2023–2025</div>
+    </div>
+    <div style="background:#f9fff9;border-radius:10px;padding:14px 16px;text-align:center;">
+      <div style="font-size:10px;color:#7f8c8d;font-weight:700;text-transform:uppercase;margin-bottom:4px;">ยอดรวม Top 15 (3 ปี)</div>
+      <div style="font-size:24px;font-weight:800;color:#27ae60;">฿${(grandTotal/1e6).toFixed(1)}M</div>
+      <div style="font-size:11px;color:#7f8c8d;">ก่อน VAT: ฿${(grandTotal/1.07/1e6).toFixed(1)}M</div>
+    </div>
+    <div style="background:#f9fff9;border-radius:10px;padding:14px 16px;text-align:center;">
+      <div style="font-size:10px;color:#7f8c8d;font-weight:700;text-transform:uppercase;margin-bottom:4px;">เติบโต/ฟื้นตัว</div>
+      <div style="font-size:24px;font-weight:800;color:#27ae60;">${growing} ราย</div>
+      <div style="font-size:11px;color:#7f8c8d;">2025 มากกว่า 2024</div>
+    </div>
+    <div style="background:#fff8f8;border-radius:10px;padding:14px 16px;text-align:center;">
+      <div style="font-size:10px;color:#7f8c8d;font-weight:700;text-transform:uppercase;margin-bottom:4px;">ต้องเฝ้าระวัง</div>
+      <div style="font-size:24px;font-weight:800;color:#e74c3c;">${declining} ราย</div>
+      <div style="font-size:11px;color:#7f8c8d;">2025 น้อยกว่า 2024</div>
+    </div>
+  </div>`;
+
+  // Table section
+  let s1 = `<div class="modal-section-content active" id="ms-loyal-table">
+  <table class="data-table"><thead><tr><th>#</th><th>ลูกค้า</th><th>2023</th><th>2024</th><th>2025</th><th>รวม 3 ปี</th><th>แนวโน้ม</th></tr></thead><tbody>`;
+  sorted.forEach((c,i) => {
+    const total3 = c.y23+c.y24+c.y25;
+    const trend = getTrend(c);
+    const pct = ((c.y25-c.y24)/c.y24*100).toFixed(0);
+    s1 += `<tr>
+      <td class="rank">${i+1}</td>
+      <td><strong>${c.name}</strong></td>
+      <td style="color:#2980b9">฿${c.y23.toLocaleString('th-TH')}</td>
+      <td style="color:#27ae60">฿${c.y24.toLocaleString('th-TH')}</td>
+      <td style="color:${c.y25>=c.y24?'#27ae60':'#e74c3c'};font-weight:700">
+        ฿${c.y25.toLocaleString('th-TH')} <span style="font-size:11px">(${pct>=0?'+':''}${pct}%)</span>
+      </td>
+      <td style="font-weight:700;color:#1e3a5f">฿${total3.toLocaleString('th-TH')}</td>
+      <td><span style="font-size:12px;font-weight:600;color:${trend.color}">${trend.label}</span></td>
+    </tr>`;
+  });
+  const t23=sorted.reduce((s,c)=>s+c.y23,0), t24=sorted.reduce((s,c)=>s+c.y24,0), t25=sorted.reduce((s,c)=>s+c.y25,0);
+  s1 += `<tr style="font-weight:800;background:#f0f4f8;border-top:2px solid #dee2e6">
+    <td></td><td><strong>รวม Top 15</strong></td>
+    <td style="color:#2980b9;font-weight:800">฿${t23.toLocaleString('th-TH')}</td>
+    <td style="color:#27ae60;font-weight:800">฿${t24.toLocaleString('th-TH')}</td>
+    <td style="font-weight:800">฿${t25.toLocaleString('th-TH')}</td>
+    <td style="font-weight:800">฿${grandTotal.toLocaleString('th-TH')}</td><td></td>
+  </tr></tbody></table></div>`;
+
+  // Growth vs Watch section
+  const growList = [...loyalCustomers].filter(c=>c.y25>c.y24).sort((a,b)=>(b.y25-b.y24)-(a.y25-a.y24));
+  const declList = [...loyalCustomers].filter(c=>c.y25<c.y24).sort((a,b)=>(a.y25-a.y24)-(b.y25-b.y24));
+  let s2 = `<div class="modal-section-content" id="ms-loyal-watch">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <div>
+      <h4 style="font-size:12px;font-weight:700;text-transform:uppercase;color:#27ae60;margin-bottom:10px;">📈 เติบโต/ฟื้นตัว (${growList.length} ราย)</h4>
+      <table class="data-table"><thead><tr><th>ลูกค้า</th><th>2024</th><th>2025</th><th>เพิ่มขึ้น</th></tr></thead><tbody>`;
+  growList.forEach(c => {
+    const diff = c.y25-c.y24;
+    s2 += `<tr><td><strong>${c.name}</strong></td>
+      <td>฿${(c.y24/1e3).toFixed(0)}K</td>
+      <td style="color:#27ae60;font-weight:700">฿${(c.y25/1e3).toFixed(0)}K</td>
+      <td style="color:#27ae60;font-weight:600">+฿${(diff/1e3).toFixed(0)}K</td></tr>`;
+  });
+  s2 += `</tbody></table></div><div>
+      <h4 style="font-size:12px;font-weight:700;text-transform:uppercase;color:#e74c3c;margin-bottom:10px;">⚠️ ต้องดูแลพิเศษ (${declList.length} ราย)</h4>
+      <table class="data-table"><thead><tr><th>ลูกค้า</th><th>2024</th><th>2025</th><th>ลดลง</th></tr></thead><tbody>`;
+  declList.forEach(c => {
+    const diff = c.y25-c.y24;
+    s2 += `<tr><td><strong>${c.name}</strong></td>
+      <td>฿${(c.y24/1e3).toFixed(0)}K</td>
+      <td style="color:#e74c3c;font-weight:700">฿${(c.y25/1e3).toFixed(0)}K</td>
+      <td style="color:#e74c3c;font-weight:600">฿${(diff/1e3).toFixed(0)}K</td></tr>`;
+  });
+  s2 += `</tbody></table></div></div></div>`;
+
+  document.getElementById('modalTitle').innerHTML = `🤝 ลูกค้าซื่อสัตย์ 3 ปี (2023–2025) <span style="font-size:14px;color:#7f8c8d;font-weight:400;">Top 15 จาก 337 ราย | รวม 3 ปี: ฿${(grandTotal/1e6).toFixed(1)}M</span>`;
+  document.getElementById('modalTabs').innerHTML = `
+    <button class="modal-tab-btn active" onclick="switchModalTab('loyal-table')">📋 ตาราง 3 ปี</button>
+    <button class="modal-tab-btn" onclick="switchModalTab('loyal-watch')">📊 เติบโต vs เฝ้าระวัง</button>`;
+  document.getElementById('modalBody').innerHTML = kpiHtml + s1 + s2;
+  document.getElementById('drillModal').classList.add('open');
+}
+
+// ==================== RISK TAB CHARTS & DATA ====================
+// Churn data
+const churnData = {
+  counts: {
+    new:       { 2024: 2176, 2025: 1413 },
+    returning: { 2024: 617,  2025: 552  },
+    churned:   { 2024: 1983, 2025: 2241 },
+  },
+  revenue: {
+    new:       { 2024: 13.28, 2025: 19.57 },
+    returning: { 2024: 55.58, 2025: 38.91 },
+    churned:   { 2024: 11.88, 2025: 18.51 },
+  }
+};
+
+// Churn count chart
+charts.churn = new Chart(document.getElementById('churnChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2024','2025'],
+    datasets: [
+      { label: '🆕 ลูกค้าใหม่',    data: [2176, 1413], backgroundColor: '#27ae60bb', borderRadius: 4 },
+      { label: '🔄 ลูกค้าเก่ากลับมา', data: [617, 552],   backgroundColor: '#2980b9bb', borderRadius: 4 },
+      { label: '❌ ลูกค้าหายไป',   data: [-1983,-2241], backgroundColor: '#e74c3cbb', borderRadius: 4 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    scales: {
+      x: { stacked: false, grid: { display: false } },
+      y: { ticks: { callback: v => Math.abs(v).toLocaleString() + ' ราย' }, grid: { color: '#f0f2f5' } }
+    },
+    plugins: {
+      legend: { labels: { font: { family:'Segoe UI', size:12 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + Math.abs(ctx.raw).toLocaleString() + ' ราย' } }
+    }
+  }
+});
+
+// Churn revenue chart
+charts.churnRevenue = new Chart(document.getElementById('churnRevenueChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2024','2025'],
+    datasets: [
+      { label: '🆕 ยอดลูกค้าใหม่ (฿M)',      data: [13.28, 19.57], backgroundColor: '#27ae60bb', borderRadius: 4 },
+      { label: '🔄 ยอดลูกค้าเก่ากลับมา (฿M)', data: [55.58, 38.91], backgroundColor: '#2980b9bb', borderRadius: 4 },
+      { label: '❌ ยอดที่เสียไป (฿M)',          data: [-11.88,-18.51], backgroundColor: '#e74c3cbb', borderRadius: 4 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    scales: {
+      x: { grid: { display: false } },
+      y: { ticks: { callback: v => (v>=0?'+':'')+v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }
+    },
+    plugins: {
+      legend: { labels: { font: { family:'Segoe UI', size:12 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + Math.abs(ctx.raw).toFixed(2) + 'M' } }
+    }
+  }
+});
+
+// Customer mix chart (stacked %)
+charts.custMix = new Chart(document.getElementById('custMixChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2024','2025'],
+    datasets: [
+      { label: '🆕 ลูกค้าใหม่',       data: [2176, 1413], backgroundColor: '#27ae60bb', borderRadius: 4 },
+      { label: '🔄 ลูกค้าเก่ากลับมา', data: [617,  552],  backgroundColor: '#2980b9bb', borderRadius: 4 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, ticks: { callback: v => v.toLocaleString() + ' ราย' }, grid: { color: '#f0f2f5' } }
+    },
+    plugins: {
+      legend: { labels: { font: { family:'Segoe UI', size:12 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw.toLocaleString() + ' ราย' } }
+    }
+  }
+});
+
+// Customer revenue mix chart
+charts.custRevMix = new Chart(document.getElementById('custRevMixChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2024','2025'],
+    datasets: [
+      { label: '🆕 ยอดลูกค้าใหม่ (฿M)',       data: [13.28, 19.57], backgroundColor: '#27ae60bb', borderRadius: 4 },
+      { label: '🔄 ยอดลูกค้าเก่ากลับมา (฿M)', data: [55.58, 38.91], backgroundColor: '#2980b9bb', borderRadius: 4 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, ticks: { callback: v => v.toFixed(0)+'M' }, grid: { color: '#f0f2f5' } }
+    },
+    plugins: {
+      legend: { labels: { font: { family:'Segoe UI', size:12 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + ctx.raw.toFixed(2) + 'M' } }
+    }
+  }
+});
+
+// Concentration chart
+charts.concentration = new Chart(document.getElementById('concentrationChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2023','2024','2025'],
+    datasets: [
+      { label: 'Top 1',  data: [3.8, 4.9, 7.0],  backgroundColor: '#c0392bcc', borderRadius: 3 },
+      { label: 'Top 5',  data: [13.7,15.3,20.9],  backgroundColor: '#e74c3ccc', borderRadius: 3 },
+      { label: 'Top 10', data: [19.9,21.4,29.1],  backgroundColor: '#e67e22cc', borderRadius: 3 },
+      { label: 'Top 20', data: [28.1,29.7,37.4],  backgroundColor: '#f39c12cc', borderRadius: 3 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    scales: {
+      x: { grid: { display: false } },
+      y: { ticks: { callback: v => v+'%' }, max: 45, grid: { color: '#f0f2f5' } }
+    },
+    plugins: {
+      legend: { labels: { font: { family:'Segoe UI', size:12 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw + '%' } }
+    }
+  }
+});
+
+// Build churn table
+(function buildChurnTable() {
+  const churned = [
+    {name:'ลูกค้ากลุ่มเสี่ยง 1',    val:1118685},
+    {name:'ลูกค้ากลุ่มเสี่ยง 2',              val:800000},
+    {name:'ลูกค้ากลุ่มเสี่ยง 3',           val:284491},
+    {name:'ลูกค้ากลุ่มเสี่ยง 4',         val:267141},
+    {name:'ลูกค้ากลุ่มเสี่ยง 5',            val:192260},
+    {name:'ลูกค้ากลุ่มเสี่ยง 6',              val:187525},
+    {name:'ลูกค้ากลุ่มเสี่ยง 7',                val:180206},
+    {name:'ลูกค้ากลุ่มเสี่ยง 8',                    val:173720},
+    {name:'ลูกค้ากลุ่มเสี่ยง 9',      val:164202},
+    {name:'ลูกค้ากลุ่มเสี่ยง 10',               val:160862},
+    {name:'ลูกค้ากลุ่มเสี่ยง 11',               val:157504},
+    {name:'ลูกค้ากลุ่มเสี่ยง 12',            val:152646},
+    {name:'ลูกค้ากลุ่มเสี่ยง 13',            val:151672},
+    {name:'ลูกค้ากลุ่มเสี่ยง 14',     val:142096},
+    {name:'ลูกค้ากลุ่มเสี่ยง 15',     val:141026},
+  ];
+  const total19M = 18509690;
+  let html = '';
+  churned.forEach((c,i) => {
+    const priority = i < 3 ? '<span class="badge badge-red">🔴 ด่วนมาก</span>' :
+                     i < 8 ? '<span class="badge badge-orange">🟠 ด่วน</span>' :
+                              '<span class="badge badge-blue">🔵 ติดตาม</span>';
+    html += `<tr>
+      <td class="rank">${i+1}</td>
+      <td><strong>${c.name}</strong></td>
+      <td style="color:#e74c3c;font-weight:700">฿${c.val.toLocaleString('th-TH')}</td>
+      <td style="color:#7f8c8d">฿${Math.round(c.val/1.07).toLocaleString('th-TH')}</td>
+      <td>${priority}</td>
+    </tr>`;
+  });
+  document.getElementById('churnTableBody').innerHTML = html;
+})();
+
+// ==================== PARETO CHART ====================
+charts.pareto = new Chart(document.getElementById('paretoChart'), {
+  type: 'bar',
+  data: {
+    labels: ['50% รายได้','70% รายได้','80% รายได้','90% รายได้'],
+    datasets: [
+      { label: '2023', data: [3.0, 7.5, 11.6, 18.5], backgroundColor: '#2980b9bb', borderRadius: 4 },
+      { label: '2024', data: [2.5, 6.6, 10.6, 17.5], backgroundColor: '#27ae60bb', borderRadius: 4 },
+      { label: '2025', data: [2.4, 8.0, 13.6, 23.4], backgroundColor: '#e74c3cbb', borderRadius: 4 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    scales: {
+      x: { grid: { display: false } },
+      y: { ticks: { callback: v => v+'%' }, title: { display: true, text: '% ของลูกค้าทั้งหมด' }, grid: { color: '#f0f2f5' } }
+    },
+    plugins: {
+      legend: { labels: { font: { family:'Segoe UI', size:12 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw + '% ของลูกค้า' } }
+    }
+  }
+});
+
+// ==================== ORDER FREQUENCY CHART ====================
+charts.freq = new Chart(document.getElementById('freqChart'), {
+  type: 'bar',
+  data: {
+    labels: ['ซื้อ 1 ครั้ง','ซื้อ 2–5 ครั้ง','ซื้อ 6–12 ครั้ง','ซื้อ >12 ครั้ง'],
+    datasets: [
+      { label: '2023', data: [68.8, 20.8, 6.5, 3.9], backgroundColor: '#2980b9bb', borderRadius: 4 },
+      { label: '2024', data: [68.2, 21.5, 6.3, 4.0], backgroundColor: '#27ae60bb', borderRadius: 4 },
+      { label: '2025', data: [58.5, 30.5, 8.6, 2.5], backgroundColor: '#e74c3cbb', borderRadius: 4 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    scales: {
+      x: { grid: { display: false } },
+      y: { ticks: { callback: v => v+'%' }, title: { display: true, text: '% ของลูกค้า' }, grid: { color: '#f0f2f5' } }
+    },
+    plugins: {
+      legend: { labels: { font: { family:'Segoe UI', size:12 } } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.raw + '% (' + (ctx.dataset.label==='2023'?[1789,542,169,102]:ctx.dataset.label==='2024'?[1907,602,175,111]:[1164,607,171,49])[ctx.dataIndex].toLocaleString() + ' ราย)' } }
+    }
+  }
+});
+
+// Build high-frequency table (2025)
+(function buildFreqTable() {
+  const vip2025 = [
+    {name:'ลูกค้าหลัก A',                   orders:221, revenue:4025468},
+    {name:'ลูกค้าหลัก B',                           orders:55,  revenue:4097993},
+    {name:'ลูกค้าหลัก C',       orders:57,  revenue:1285408},
+    {name:'ลูกค้าหลัก D',            orders:109, revenue:1092909},
+    {name:'ลูกค้าหลัก E',   orders:25,  revenue:1121783},
+    {name:'ลูกค้าหลัก F',              orders:15,  revenue:980135},
+    {name:'ลูกค้าหลัก G',                 orders:15,  revenue:835691},
+    {name:'ลูกค้าหลัก H',       orders:15,  revenue:760214},
+    {name:'ลูกค้าหลัก I',                   orders:24,  revenue:582722},
+    {name:'ลูกค้าหลัก J',                orders:13,  revenue:1354004},
+  ].sort((a,b)=>b.revenue-a.revenue);
+  let html='';
+  vip2025.forEach((c,i)=>{
+    const star = c.orders >= 50 ? '🔥' : c.orders >= 20 ? '⭐' : '✅';
+    html += `<tr>
+      <td class="rank">${i+1}</td>
+      <td><strong>${c.name}</strong></td>
+      <td style="text-align:center;font-weight:700;color:#8e44ad">${star} ${c.orders} ครั้ง</td>
+      <td style="font-weight:700;color:#27ae60">฿${c.revenue.toLocaleString('th-TH')}</td>
+    </tr>`;
+  });
+  document.getElementById('freqTableBody').innerHTML = html;
+})();
+
+// Build concentration table
+(function buildConcentrationTable() {
+  const top10_2025 = [
+    {name:'ลูกค้าอันดับ 1',                    val:4097993},
+    {name:'ลูกค้าอันดับ 2',               val:4025468},
+    {name:'ลูกค้าอันดับ 3',        val:1404000},
+    {name:'ลูกค้าอันดับ 4',          val:1354004},
+    {name:'ลูกค้าอันดับ 5',  val:1285408},
+    {name:'ลูกค้าอันดับ 6', val:1121783},
+    {name:'ลูกค้าอันดับ 7',      val:1092909},
+    {name:'ลูกค้าอันดับ 8',        val:980135},
+    {name:'ลูกค้าอันดับ 9',            val:835691},
+    {name:'ลูกค้าอันดับ 10', val:760214},
+  ];
+  const total2025 = 58411226;
+  let html = '';
+  top10_2025.forEach((c,i) => {
+    const pct = (c.val/total2025*100).toFixed(1);
+    const risk = i < 2 ? 'color:#e74c3c;font-weight:800' : i < 5 ? 'color:#e67e22;font-weight:700' : 'color:#2980b9';
+    html += `<tr>
+      <td class="rank">${i+1}</td>
+      <td><strong>${c.name}</strong></td>
+      <td style="font-weight:700">฿${c.val.toLocaleString('th-TH')}</td>
+      <td style="${risk}">${pct}% ${i<2?'⚠️':''}</td>
+    </tr>`;
+  });
+  document.getElementById('concentrationTableBody').innerHTML = html;
+})();
+</script>
+</body>
+</html>

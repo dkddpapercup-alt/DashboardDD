@@ -1,0 +1,33 @@
+# ไฟล์ที่ไม่ต้อง push ขึ้น GitHub
+
+# Excel & raw data (ข้อมูลภายใน)
+*.xlsx
+*.xlsm
+*.xls
+*.csv
+
+# ไฟล์ชั่วคราวของ Excel
+~$*
+
+# ไฟล์ config ส่วนตัว
+.github_pat
+.sync_log
+*.env
+
+# Scripts (ไม่จำเป็นต้อง public)
+setup_cron.sh
+sync_to_github.sh
+
+# โฟลเดอร์ข้อมูลภายใน
+ค่าใช้จ่าย/
+Sale Report 2026/
+
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# ไฟล์อื่นๆ
+*.log
+*.tmp

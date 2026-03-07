@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DD Paper Cup – Finance Dashboard 2025 (P&L & Cost Analysis)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --profit: #27ae60; --loss: #e74c3c; --cogs: #e67e22; --salary: #9b59b6;
+    --opex: #3498db; --revenue: #2c3e50; --bg: #f4f6f9; --card: #fff;
+    --border: #e8ecf0; --text: #2c3e50; --muted: #7f8c8d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%); color: #fff; padding: 20px 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .header h1 { font-size: 20px; font-weight: 700; }
+  .header-meta { font-size: 12px; opacity: 0.75; margin-top: 4px; }
+  .header-right { display: flex; gap: 10px; align-items: center; }
+  .nav-link { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 7px 14px; border-radius: 8px; text-decoration: none; font-size: 12px; transition: background 0.2s; }
+  .nav-link:hover { background: rgba(255,255,255,0.25); }
+  .badge-year { background: #e74c3c; color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+
+  /* TABS */
+  .tab-bar { background: #fff; border-bottom: 2px solid var(--border); padding: 0 24px; display: flex; gap: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .tab-btn { padding: 14px 20px; border: none; background: none; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; white-space: nowrap; }
+  .tab-btn.active { color: var(--revenue); border-bottom-color: var(--revenue); }
+  .tab-btn:hover:not(.active) { color: var(--text); background: #f8f9fa; }
+  .tab-content { display: none; padding: 24px; max-width: 1400px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  /* CARDS */
+  .card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .card-header h3 { font-size: 14px; font-weight: 700; }
+  .card-body { padding: 20px; }
+  .card-subtitle { font-size: 11px; color: var(--muted); }
+
+  /* KPI GRID */
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .kpi-card { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); border-left: 4px solid #ccc; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .kpi-card.green { border-left-color: var(--profit); }
+  .kpi-card.red { border-left-color: var(--loss); }
+  .kpi-card.orange { border-left-color: var(--cogs); }
+  .kpi-card.purple { border-left-color: var(--salary); }
+  .kpi-card.blue { border-left-color: var(--opex); }
+  .kpi-card.dark { border-left-color: var(--revenue); }
+  .kpi-label { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .kpi-value { font-size: 26px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+  .kpi-sub { font-size: 11px; color: var(--muted); }
+  .kpi-icon { position: absolute; top: 16px; right: 16px; font-size: 24px; opacity: 0.3; }
+
+  /* GRIDS */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px; margin-bottom: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px; }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { background: #f8f9fa; padding: 10px 12px; text-align: left; font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--border); }
+  .data-table td { padding: 10px 12px; border-bottom: 1px solid #f0f2f5; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #f8f9fa; }
+  .rank { font-weight: 800; color: var(--muted); width: 36px; }
+  .text-right { text-align: right; }
+  .text-center { text-align: center; }
+  .profit-pos { color: var(--profit); font-weight: 700; }
+  .profit-neg { color: var(--loss); font-weight: 700; }
+
+  /* INSIGHT BOX */
+  .insight-box { background: linear-gradient(135deg, #1a252f08, #2c3e5012); border: 1px solid #bdc3c7; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+  .insight-box h4 { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--revenue); }
+  .insight-box ul { padding-left: 18px; }
+  .insight-box li { margin-bottom: 8px; font-size: 13px; line-height: 1.5; }
+
+  /* ALERT BOX */
+  .alert-box { background: #fff5f5; border: 1px solid #ffc8c8; border-left: 4px solid var(--loss); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; }
+  .alert-box.warning { background: #fffbeb; border-color: #ffd700; border-left-color: #f39c12; }
+  .alert-box.info { background: #f0f9ff; border-color: #b3d9ff; border-left-color: var(--opex); }
+
+  /* WATERFALL */
+  .waterfall-bar { display: flex; align-items: stretch; gap: 0; height: 60px; border-radius: 8px; overflow: hidden; margin-top: 12px; }
+  .wf-segment { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; transition: opacity 0.2s; }
+  .wf-segment:hover { opacity: 0.85; }
+
+  /* MARGIN PILL */
+  .pill { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .pill-green { background: #d5f5e3; color: #1a6b3a; }
+  .pill-red { background: #fde8e8; color: #c0392b; }
+  .pill-orange { background: #fef5e7; color: #d35400; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { background: #f0f2f5; border-radius: 20px; height: 8px; overflow: hidden; margin-top: 4px; }
+  .progress-fill { height: 100%; border-radius: 20px; transition: width 0.6s; }
+
+  /* STICKY SECTION HEADER */
+  .section-title { font-size: 16px; font-weight: 800; color: var(--revenue); margin: 8px 0 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* SUPPLIER CONCENTRATION */
+  .supplier-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+  .supplier-name { flex: 1; font-size: 12px; }
+  .supplier-bar { flex: 2; }
+  .supplier-amt { font-size: 12px; font-weight: 700; min-width: 90px; text-align: right; }
+  .supplier-pct { font-size: 11px; color: var(--muted); min-width: 38px; text-align: right; }
+
+  /* UP/DOWN ARROW */
+  .up { color: var(--profit); }
+  .down { color: var(--loss); }
+
+  /* EXPENSE DETAIL */
+  .exp-bar-wrap { background: #f0f2f5; border-radius: 4px; height: 8px; min-width: 120px; overflow: hidden; }
+  .exp-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s; }
+  .flag-badge { display:inline-block; font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px; white-space:nowrap; }
+  .flag-high { background:#fff0f0; color:#e74c3c; border:1px solid #ffd5d5; }
+  .flag-low  { background:#e8f5e9; color:#27ae60; border:1px solid #c8e6c9; }
+  .flag-new  { background:#fff8e1; color:#f39c12; border:1px solid #ffe082; }
+  .flag-gone { background:#f3e5f5; color:#9b59b6; border:1px solid #e1bee7; }
+  .flag-note { background:#e3f2fd; color:#1976d2; border:1px solid #bbdefb; }
+  .remark-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+  .remark-item { display:flex; align-items:center; gap:6px; background:#fafafa; border:1px solid #eee; border-radius:8px; padding:6px 10px; font-size:12px; max-width:100%; }
+  .grp-tag { display:inline-block; font-size:10px; font-weight:700; padding:2px 6px; border-radius:6px; white-space:nowrap; }
+  .grp-cogs { background:#fff3e0; color:#e67e22; }
+  .grp-salary { background:#f3e5f5; color:#9b59b6; }
+  .grp-interest { background:#fce4ec; color:#e74c3c; }
+  .grp-car_lease { background:#e8f5e9; color:#27ae60; }
+  .grp-opex { background:#e3f2fd; color:#1976d2; }
+
+  @media (max-width: 768px) {
+    .tab-btn { padding: 12px 10px; font-size: 11px; }
+    .kpi-value { font-size: 20px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <h1>📊 DD Paper Cup – Finance Dashboard 2025–2026</h1>
+    <div class="header-meta">P&L Analysis | Cost Structure | Margin Tracking | 2025 Full Year + 2026 YTD (ม.ค.–ก.พ.)</div>
+  </div>
+  <div class="header-right">
+    <span class="badge-year">2025 Full + 2026 YTD</span>
+    <a href="index.html" class="nav-link">📈 Sales Dashboard →</a>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('overview')">🏠 P&L Overview</button>
+  <button class="tab-btn" onclick="showTab('monthly')">📅 รายเดือน</button>
+  <button class="tab-btn" onclick="showTab('cogs')">🏭 ต้นทุนสินค้า</button>
+  <button class="tab-btn" onclick="showTab('opex')">💼 ค่าใช้จ่าย OpEx</button>
+  <button class="tab-btn" onclick="showTab('salary')">👥 เงินเดือน</button>
+  <button class="tab-btn" onclick="showTab('finance')">💳 ค่าใช้จ่ายการเงิน</button>
+  <button class="tab-btn" onclick="showTab('ytd2026')" style="color:#e74c3c;font-weight:800;">🆕 2026 YTD</button>
+</div>
+
+<!-- ==================== TAB: OVERVIEW ==================== -->
+<div class="tab-content active" id="tab-overview">
+
+  <div class="alert-box info">
+    📋 <strong>ข้อมูลจากงบทดลองบัญชีปี 2568 (ยืนยันโดยบัญชี)</strong> — เพิ่มค่าใช้จ่ายทางการเงิน: ดอกเบี้ย ฿1.89M | ค่าธรรมเนียมธนาคาร ฿154K | ค่าเสื่อมราคา ฿1.24M | ค่าเบี้ยประกัน ฿285K | ค่าเช่าซื้อรถ ฿432K | ค่าภาษีและค่าธรรมเนียม ฿101K
+  </div>
+
+  <!-- KPI HEADLINE -->
+  <div class="kpi-row">
+    <div class="kpi-card dark">
+      <div class="kpi-label">ยอดขายรวม 2025</div>
+      <div class="kpi-value" style="color:#2c3e50">฿58.4M</div>
+      <div class="kpi-sub">฿58,411,227 | 12 เดือน (รวม VAT)</div>
+      <div class="kpi-icon">💰</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">ต้นทุนสินค้า (COGS)</div>
+      <div class="kpi-value" style="color:#e67e22">฿35.2M</div>
+      <div class="kpi-sub">60.3% ของยอดขาย | ฿35,197,752</div>
+      <div class="kpi-icon">🏭</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Gross Profit</div>
+      <div class="kpi-value" style="color:#27ae60">฿23.2M</div>
+      <div class="kpi-sub">Gross Margin 39.7% | ฿23,213,475</div>
+      <div class="kpi-icon">📈</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">ต้นทุนเงินเดือน</div>
+      <div class="kpi-value" style="color:#9b59b6">฿8.6M</div>
+      <div class="kpi-sub">14.8% ของยอดขาย | ฿8,628,541</div>
+      <div class="kpi-icon">👥</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">ค่าใช้จ่ายดำเนินงาน (OpEx)</div>
+      <div class="kpi-value" style="color:#3498db">฿9.8M</div>
+      <div class="kpi-sub">16.8% ของยอดขาย | ฿9,838,454</div>
+      <div class="kpi-icon">💼</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">ค่าใช้จ่ายการเงิน+บัญชี 🆕</div>
+      <div class="kpi-value" style="color:#e74c3c">฿4.1M</div>
+      <div class="kpi-sub">ดอกเบี้ย ฿1.89M | เสื่อมราคา ฿1.24M | อื่นๆ ฿0.97M</div>
+      <div class="kpi-icon">💳</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">กำไรสุทธิ (งบทดลองบัญชี) ✅</div>
+      <div class="kpi-value" style="color:#27ae60">฿1.30M</div>
+      <div class="kpi-sub">Net Margin ~2.4% (บัญชีรายได้ ฿54.5M ก่อน VAT)</div>
+      <div class="kpi-icon">🎯</div>
+    </div>
+  </div>
+
+  <!-- COMPARISON ALERT -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+    <div class="alert-box warning" style="margin:0">
+      📊 <strong>ก่อนรวมงบทดลอง (ประมาณการเดิม):</strong><br>
+      Net Profit ฿4.75M = 8.1% margin<br>
+      <small style="color:#7f8c8d">ขาดค่าใช้จ่ายทางการเงิน-บัญชี ฿4.1M</small>
+    </div>
+    <div class="alert-box info" style="margin:0">
+      ✅ <strong>หลังรวมงบทดลองบัญชี (ยืนยันแล้ว):</strong><br>
+      Pre-Tax Profit ฿1.30M = ~2.4% margin<br>
+      <small style="color:#7f8c8d">รายได้สุทธิ ฿54.5M (หัก VAT+รายการคืน)</small>
+    </div>
+  </div>
+
+  <!-- COST WATERFALL -->
+  <div class="card">
+    <div class="card-header">
+      <h3>🌊 Cost Waterfall — ยอดขาย → กำไรสุทธิ ปี 2025</h3>
+      <span class="card-subtitle">สัดส่วนของแต่ละต้นทุนต่อยอดขาย ฿58.4M</span>
+    </div>
+    <div class="card-body">
+      <div style="font-size:11px;color:#7f8c8d;margin-bottom:8px;">ฐาน: ยอดขาย ฿58.4M (รวม VAT) — แสดงสัดส่วนต้นทุนทุกประเภทจากงบทดลองบัญชี</div>
+      <div class="waterfall-bar">
+        <div class="wf-segment" style="width:60.3%;background:#e67e22;" title="COGS ฿35.2M">
+          COGS 60.3%
+        </div>
+        <div class="wf-segment" style="width:14.8%;background:#9b59b6;" title="Salary ฿8.6M">
+          Salary 14.8%
+        </div>
+        <div class="wf-segment" style="width:16.8%;background:#3498db;" title="OpEx ฿9.8M">
+          OpEx 16.8%
+        </div>
+        <div class="wf-segment" style="width:7.0%;background:#e74c3c;" title="ค่าใช้จ่ายการเงิน+บัญชี ฿4.1M">
+          Fin 7.0%
+        </div>
+        <div class="wf-segment" style="width:1.1%;background:#27ae60;font-size:9px;" title="กำไรสุทธิ ประมาณ ฿0.6M+">
+          ~1%
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;font-size:12px;">
+        <span>🟠 COGS ฿35.2M (60.3%)</span>
+        <span>🟣 เงินเดือน ฿8.6M (14.8%)</span>
+        <span>🔵 OpEx ฿9.8M (16.8%)</span>
+        <span>🔴 ค่าใช้จ่ายการเงิน+บัญชี ฿4.1M (7.0%) 🆕</span>
+        <span>🟢 กำไรสุทธิ (งบทดลอง) ฿1.30M (~2.4%)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 สัดส่วนต้นทุน (Cost Structure)</h3>
+        <span class="card-subtitle">ปี 2025 รวม ฿53.7M</span>
+      </div>
+      <div class="card-body">
+        <canvas id="costStructureChart" style="max-height:260px;"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>📉 Gross Margin รายเดือน</h3>
+        <span class="card-subtitle">เป้า ≥ 40% | เฉลี่ย 39.7%</span>
+      </div>
+      <div class="card-body">
+        <canvas id="grossMarginChart" style="max-height:260px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- NET PROFIT MONTHLY -->
+  <div class="card">
+    <div class="card-header">
+      <h3>💹 Net Profit รายเดือน (ก่อนหักค่าใช้จ่ายการเงิน)</h3>
+      <span class="card-subtitle">🔴 = ขาดทุน | 🟢 = กำไร | รวมปี ฿4.75M (ดู Tab 💳 สำหรับตัวเลขที่รวมค่าใช้จ่ายการเงินแล้ว)</span>
+    </div>
+    <div class="card-body">
+      <canvas id="netProfitChart" style="max-height:300px;"></canvas>
+    </div>
+  </div>
+
+  <!-- P&L TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📋 สรุป P&L รายเดือน ปี 2025 (รวมงบทดลองบัญชี)</h3>
+      <span class="card-subtitle">หน่วย: บาท | ✅ = รวมค่าใช้จ่ายการเงินจากงบทดลองแล้ว</span>
+    </div>
+    <div class="card-body" style="padding:0;overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>เดือน</th>
+            <th class="text-right">ยอดขาย (฿)</th>
+            <th class="text-right">COGS (฿)</th>
+            <th class="text-right">Gross Profit</th>
+            <th class="text-right">GM%</th>
+            <th class="text-right">เงินเดือน</th>
+            <th class="text-right">OpEx</th>
+            <th class="text-right" style="color:#e74c3c">ค่าใช้จ่ายการเงิน 🆕</th>
+            <th class="text-right">Net Profit</th>
+            <th class="text-center">สถานะ</th>
+          </tr>
+        </thead>
+        <tbody id="plTableBody"></tbody>
+        <tfoot id="plTableFoot"></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="insight-box">
+    <h4>💡 C-Level Insights – สรุปสำคัญปี 2025 (รวมงบทดลองบัญชี)</h4>
+    <ul>
+      <li><strong>🔴 Net Margin ที่แท้จริง ~2.4%</strong> (ไม่ใช่ 8.1%) — งบทดลองบัญชียืนยันกำไรก่อนภาษี ฿1.30M จากรายได้สุทธิ ฿54.5M (หัก VAT และรายการคืนแล้ว)</li>
+      <li><strong>💳 ค่าใช้จ่ายทางการเงิน ฿4.1M ต่อปี</strong> — ดอกเบี้ยจ่าย ฿1.89M (3.5%) สูงมาก แสดงถึงภาระหนี้ที่กดดัน Margin | ค่าเสื่อมราคา ฿1.24M (2.3%) | ค่าเบี้ยประกัน ฿285K | ค่าเช่าซื้อรถ ฿432K</li>
+      <li><strong>📉 ดอกเบี้ยเบิกเกินบัญชี ฿678K</strong> — สัญญาณว่ามีการใช้ OD Line บ่อย โดยเฉพาะ ม.ค. (฿517K ดอกเบี้ยรวม) ควรวางแผนกระแสเงินสดให้ดีขึ้น</li>
+      <li><strong>Gross Margin เฉลี่ย 39.7%</strong> — เดือนที่ดีที่สุด: ธ.ค. 53.6% | ต่ำที่สุด: พ.ย. 24.6% (COGS พ.ย. สูงผิดปกติ ฿3.6M ควรตรวจสอบ)</li>
+      <li><strong>Supplier รวมศูนย์สูง:</strong> บ. เอฟพีซี อินเตอร์ ซัพพลาย คิดเป็น 27% ของ COGS — ความเสี่ยง Single Supplier ต้องหา Backup Supplier</li>
+      <li><strong>⚠️ Priority Actions:</strong> (1) ลดภาระดอกเบี้ย/หนี้ — กระทบ Margin โดยตรง 3.5% (2) Monitor COGS อย่างใกล้ชิด — COGS 60%+ ทำให้ Margin บางมาก (3) วางแผน Cash Flow ลด OD Line</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ==================== TAB: MONTHLY ==================== -->
+<div class="tab-content" id="tab-monthly">
+  <div class="section-title">📅 ต้นทุนรายเดือน เปรียบเทียบทุกประเภท</div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>📊 Revenue vs Costs รายเดือน 2025</h3>
+      <span class="card-subtitle">Stacked bar — เห็น cost breakdown แต่ละเดือน</span>
+    </div>
+    <div class="card-body">
+      <canvas id="monthlyStackedChart" style="max-height:380px;"></canvas>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📈 Revenue vs Gross Profit รายเดือน</h3>
+      </div>
+      <div class="card-body">
+        <canvas id="revGpChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>💼 OpEx + Salary รายเดือน</h3>
+        <span class="card-subtitle">Total Overhead</span>
+      </div>
+      <div class="card-body">
+        <canvas id="overheadChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONTHLY DETAIL TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📋 ตาราง Cost รายเดือน ทุกประเภท</h3>
+    </div>
+    <div class="card-body" style="padding:0;overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>เดือน</th>
+            <th class="text-right">Revenue</th>
+            <th class="text-right">COGS</th>
+            <th class="text-right">COGS%</th>
+            <th class="text-right">Salary</th>
+            <th class="text-right">OpEx</th>
+            <th class="text-right">Overhead</th>
+            <th class="text-right">Net Profit</th>
+            <th class="text-right">NP%</th>
+          </tr>
+        </thead>
+        <tbody id="monthlyDetailBody"></tbody>
+        <tfoot id="monthlyDetailFoot"></tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB: COGS ==================== -->
+<div class="tab-content" id="tab-cogs">
+  <div class="section-title">🏭 ต้นทุนสินค้า (COGS) ปี 2025 — ฿35,197,752</div>
+
+  <div class="kpi-row">
+    <div class="kpi-card orange">
+      <div class="kpi-label">COGS รวม</div>
+      <div class="kpi-value" style="color:#e67e22">฿35.2M</div>
+      <div class="kpi-sub">60.3% ของยอดขาย</div>
+      <div class="kpi-icon">🏭</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">COGS เฉลี่ย/เดือน</div>
+      <div class="kpi-value" style="color:#e67e22">฿2.93M</div>
+      <div class="kpi-sub">สูงสุด: พ.ย. ฿3.62M | ต่ำสุด: ธ.ค. ฿2.26M</div>
+      <div class="kpi-icon">📊</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">Supplier รายใหญ่สุด</div>
+      <div class="kpi-value" style="color:#e74c3c;font-size:18px">เอฟพีซี 27%</div>
+      <div class="kpi-sub">฿9.49M — ความเสี่ยง Single Supplier</div>
+      <div class="kpi-icon">⚠️</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Supplier ทั้งหมด</div>
+      <div class="kpi-value" style="color:#27ae60">30+</div>
+      <div class="kpi-sub">Top 5 Supplier = 63.1% ของ COGS</div>
+      <div class="kpi-icon">🏢</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 COGS รายเดือน</h3>
+        <span class="card-subtitle">เปรียบเทียบกับ Revenue</span>
+      </div>
+      <div class="card-body">
+        <canvas id="cogsMonthlyChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🥧 Supplier Concentration</h3>
+        <span class="card-subtitle">Top suppliers by COGS share</span>
+      </div>
+      <div class="card-body">
+        <canvas id="supplierDonutChart" style="max-height:280px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP SUPPLIERS -->
+  <div class="card">
+    <div class="card-header">
+      <h3>🏆 Top 10 Suppliers by COGS ปี 2025</h3>
+      <span class="card-subtitle">รวม COGS ฿35,197,752</span>
+    </div>
+    <div class="card-body">
+      <div id="supplierBarsContainer"></div>
+    </div>
+  </div>
+
+  <div class="alert-box">
+    🚨 <strong>Risk Alert — Supplier Concentration:</strong> บ. เอฟพีซี อินเตอร์ ซัพพลาย จำกัด คิดเป็น <strong>27.0% ของ COGS ทั้งหมด</strong> — หากมีปัญหา Supply Chain จะกระทบธุรกิจทันที ควรเจรจาหา Backup Supplier หรือกระจายความเสี่ยงให้ Supplier รายใดไม่เกิน 15% ของ COGS
+  </div>
+</div>
+
+<!-- ==================== TAB: OPEX ==================== -->
+<div class="tab-content" id="tab-opex">
+  <div class="section-title">💼 ค่าใช้จ่ายดำเนินงาน (OpEx) ปี 2025 — ฿9,838,454</div>
+
+  <div class="kpi-row">
+    <div class="kpi-card blue">
+      <div class="kpi-label">OpEx รวม</div>
+      <div class="kpi-value" style="color:#3498db">฿9.8M</div>
+      <div class="kpi-sub">16.8% ของยอดขาย | จาก 2 ระบบ</div>
+      <div class="kpi-icon">💼</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">OpEx เฉลี่ย/เดือน</div>
+      <div class="kpi-value" style="color:#3498db">฿820K</div>
+      <div class="kpi-sub">ยกเว้น ม.ค. (฿2.05M — มีชำระเงินกู้ก้อน)</div>
+      <div class="kpi-icon">📅</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">OpEx รายจ่ายใหญ่สุด</div>
+      <div class="kpi-value" style="color:#e67e22;font-size:16px">เงินกู้/ลีส</div>
+      <div class="kpi-sub">~฿2.3M — ออมสิน, Toyota, กสิกร, BBL</div>
+      <div class="kpi-icon">🏦</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">ค่าขนส่ง</div>
+      <div class="kpi-value" style="color:#e67e22">฿352K</div>
+      <div class="kpi-sub">สูงในช่วง มี.ค.–พ.ค. (high season)</div>
+      <div class="kpi-icon">🚚</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 OpEx รายเดือน</h3>
+        <span class="card-subtitle">ม.ค. สูงผิดปกติจากชำระเงินกู้</span>
+      </div>
+      <div class="card-body">
+        <canvas id="opexMonthlyChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🥧 OpEx แยกประเภท (ประมาณการ)</h3>
+        <span class="card-subtitle">จาก Flow Account + AccCloud</span>
+      </div>
+      <div class="card-body">
+        <canvas id="opexCatChart" style="max-height:280px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP OPEX VENDORS -->
+  <div class="card">
+    <div class="card-header">
+      <h3>🏦 Top Vendors OpEx ปี 2025 (Jan–May Flow Account)</h3>
+    </div>
+    <div class="card-body">
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Vendor</th><th>ประเภท</th><th class="text-right">ยอด (฿)</th><th>% of OpEx</th></tr></thead>
+        <tbody>
+          <tr><td class="rank">1</td><td>ร้านค้าสวัสดิการ ออมสิน</td><td><span class="pill pill-red">เงินกู้</span></td><td class="text-right font-bold">1,410,489</td><td><div class="progress-wrap"><div class="progress-fill" style="width:57%;background:#e74c3c"></div></div> 57.1%</td></tr>
+          <tr><td class="rank">2</td><td>บ. โตโยต้า ลีสซิ่ง (ไทย)</td><td><span class="pill pill-orange">ลีส/เช่า</span></td><td class="text-right">179,505</td><td><div class="progress-wrap"><div class="progress-fill" style="width:7.3%;background:#e67e22"></div></div> 7.3%</td></tr>
+          <tr><td class="rank">3</td><td>ลีสซิ่งกสิกรไทย</td><td><span class="pill pill-orange">ลีส/เช่า</span></td><td class="text-right">168,224</td><td><div class="progress-wrap"><div class="progress-fill" style="width:6.8%;background:#e67e22"></div></div> 6.8%</td></tr>
+          <tr><td class="rank">4</td><td>บ. เชลล์แห่งประเทศไทย</td><td><span class="pill pill-orange">น้ำมัน</span></td><td class="text-right">144,503</td><td><div class="progress-wrap"><div class="progress-fill" style="width:5.9%;background:#f39c12"></div></div> 5.9%</td></tr>
+          <tr><td class="rank">5</td><td>บ. ไอท้อปพลัส</td><td><span class="pill" style="background:#e0f7fa;color:#006064">IT</span></td><td class="text-right">137,500</td><td><div class="progress-wrap"><div class="progress-fill" style="width:5.6%;background:#3498db"></div></div> 5.6%</td></tr>
+          <tr><td class="rank">6</td><td>ธนาคาร ไทยพาณิชย์</td><td><span class="pill pill-red">เงินกู้</span></td><td class="text-right">133,900</td><td><div class="progress-wrap"><div class="progress-fill" style="width:5.4%;background:#e74c3c"></div></div> 5.4%</td></tr>
+          <tr><td class="rank">7</td><td>บ. เดลิเวอรี (ไทยแลนด์)</td><td><span class="pill" style="background:#fff3cd;color:#856404">ขนส่ง</span></td><td class="text-right">117,423</td><td><div class="progress-wrap"><div class="progress-fill" style="width:4.8%;background:#f39c12"></div></div> 4.8%</td></tr>
+          <tr><td class="rank">8</td><td>ธนาคาร กรุงเทพ</td><td><span class="pill pill-red">เงินกู้</span></td><td class="text-right">202,833</td><td><div class="progress-wrap"><div class="progress-fill" style="width:8.2%;background:#e74c3c"></div></div> 8.2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="alert-box info">
+    ℹ️ <strong>หมายเหตุ OpEx:</strong> ม.ค. 2026 สูงถึง ฿2.05M เพราะมีการชำระเงินกู้ ออมสิน ฿1.41M (One-time / ประจำปี?) — ควรแยก "ค่าใช้จ่ายดำเนินงานปกติ" ออกจาก "ชำระหนี้เงินกู้" เพื่อให้ P&L สะท้อนความเป็นจริงได้ดีกว่า
+  </div>
+</div>
+
+<!-- ==================== TAB: SALARY ==================== -->
+<div class="tab-content" id="tab-salary">
+  <div class="section-title">👥 ต้นทุนเงินเดือน ปี 2025 — ฿8,628,541</div>
+
+  <div class="kpi-row">
+    <div class="kpi-card purple">
+      <div class="kpi-label">เงินเดือนรวม</div>
+      <div class="kpi-value" style="color:#9b59b6">฿8.6M</div>
+      <div class="kpi-sub">14.8% ของยอดขาย</div>
+      <div class="kpi-icon">👥</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">เฉลี่ย/เดือน</div>
+      <div class="kpi-value" style="color:#9b59b6">฿719K</div>
+      <div class="kpi-sub">สูงสุด: ม.ค. ฿782K | ต่ำสุด: พ.ค. ฿637K</div>
+      <div class="kpi-icon">📊</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Revenue ต่อบาทเงินเดือน</div>
+      <div class="kpi-value" style="color:#27ae60">฿6.77</div>
+      <div class="kpi-sub">ทุก ฿1 เงินเดือน สร้างรายได้ ฿6.77</div>
+      <div class="kpi-icon">💪</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">Gross Profit ต่อบาทเงินเดือน</div>
+      <div class="kpi-value" style="color:#e67e22">฿2.69</div>
+      <div class="kpi-sub">ทุก ฿1 เงินเดือน สร้าง GP ฿2.69</div>
+      <div class="kpi-icon">📈</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 เงินเดือนรายเดือน vs ยอดขาย</h3>
+      </div>
+      <div class="card-body">
+        <canvas id="salaryChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>📈 สัดส่วนเงินเดือน/ยอดขาย (%) รายเดือน</h3>
+        <span class="card-subtitle">เป้าหมาย: ≤ 15% | เฉลี่ย 14.8%</span>
+      </div>
+      <div class="card-body">
+        <canvas id="salaryPctChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>📋 เงินเดือนรายเดือน ปี 2025</h3></div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>เดือน</th>
+            <th class="text-right">เงินเดือน (฿)</th>
+            <th class="text-right">ยอดขาย (฿)</th>
+            <th class="text-right">% ต่อยอดขาย</th>
+            <th class="text-right">Revenue/เงินเดือน</th>
+            <th class="text-center">สถานะ</th>
+          </tr>
+        </thead>
+        <tbody id="salaryTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB: FINANCE (ค่าใช้จ่ายการเงิน) ==================== -->
+<div class="tab-content" id="tab-finance">
+  <div class="alert-box info">
+    💳 <strong>ค่าใช้จ่ายทางการเงินและบัญชี</strong> — จากงบทดลองบัญชีปี 2568 ที่ยืนยันโดยผู้ทำบัญชี รวมดอกเบี้ย ค่าธรรมเนียมธนาคาร ค่าเสื่อมราคา ค่าประกันภัย ค่าเช่าซื้อรถ และภาษีค่าธรรมเนียม
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-row">
+    <div class="kpi-card red">
+      <div class="kpi-label">ดอกเบี้ยจ่ายรวม</div>
+      <div class="kpi-value" style="color:#e74c3c">฿1.89M</div>
+      <div class="kpi-sub">OD ฿678K + เงินกู้ธนาคาร ฿1.21M | 3.5% ของยอดขาย</div>
+      <div class="kpi-icon">🏦</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">ค่าเสื่อมราคา</div>
+      <div class="kpi-value" style="color:#e67e22">฿1.24M</div>
+      <div class="kpi-sub">อาคาร ฿506K | ยานพาหนะ ฿464K | อุปกรณ์ ฿274K</div>
+      <div class="kpi-icon">📉</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">ค่าเช่าซื้อรถ / KIA</div>
+      <div class="kpi-value" style="color:#e67e22">฿432K</div>
+      <div class="kpi-sub">฿36,000/เดือน | สม่ำเสมอตลอดปี</div>
+      <div class="kpi-icon">🚗</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">ค่าเบี้ยประกันภัย</div>
+      <div class="kpi-value" style="color:#3498db">฿285K</div>
+      <div class="kpi-sub">ประกันกลุ่ม ฿151K | ยานพาหนะ ฿77K | อัคคีภัย ฿33K</div>
+      <div class="kpi-icon">🛡️</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">ค่าธรรมเนียมธนาคาร</div>
+      <div class="kpi-value" style="color:#3498db">฿154K</div>
+      <div class="kpi-sub">ค่าธรรมเนียมเงินกู้ ฿146K + ธรรมเนียมปกติ ฿9K</div>
+      <div class="kpi-icon">🏧</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">รวมค่าใช้จ่ายการเงิน+บัญชี</div>
+      <div class="kpi-value" style="color:#e74c3c">฿4.11M</div>
+      <div class="kpi-sub">7.0% ของยอดขาย | ลด Net Margin จาก 8.1% → ~2.4%</div>
+      <div class="kpi-icon">⚠️</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 1 -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 ดอกเบี้ยจ่ายรายเดือน 2025</h3>
+        <span class="card-subtitle">เงินกู้ธนาคาร vs เบิกเกินบัญชี (OD)</span>
+      </div>
+      <div class="card-body">
+        <canvas id="interestMonthlyChart" style="max-height:280px;"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>🍩 สัดส่วนค่าใช้จ่ายการเงิน+บัญชี</h3>
+        <span class="card-subtitle">รวม ฿4,107,905</span>
+      </div>
+      <div class="card-body">
+        <canvas id="finBreakdownChart" style="max-height:280px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADJUSTED NET PROFIT CHART -->
+  <div class="card">
+    <div class="card-header">
+      <h3>💹 Net Profit รายเดือน (หลังหักค่าใช้จ่ายการเงิน)</h3>
+      <span class="card-subtitle">เปรียบเทียบก่อน/หลัง — เส้นสีแดง = ศูนย์</span>
+    </div>
+    <div class="card-body">
+      <canvas id="adjNetProfitChart" style="max-height:300px;"></canvas>
+    </div>
+  </div>
+
+  <!-- DETAIL TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📋 ค่าใช้จ่ายการเงิน+บัญชี รายเดือน</h3>
+      <span class="card-subtitle">หน่วย: บาท | OD = เบิกเกินบัญชี (ประมาณการตามสัดส่วน)</span>
+    </div>
+    <div class="card-body" style="padding:0;overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>เดือน</th>
+            <th class="text-right">ดอกเบี้ยเงินกู้</th>
+            <th class="text-right">ดอกเบี้ย OD</th>
+            <th class="text-right">ค่าธรรมเนียม</th>
+            <th class="text-right">เสื่อมราคา</th>
+            <th class="text-right">ค่าประกัน</th>
+            <th class="text-right">เช่าซื้อรถ</th>
+            <th class="text-right" style="font-weight:700;color:#e74c3c">รวม</th>
+          </tr>
+        </thead>
+        <tbody id="finTableBody"></tbody>
+        <tfoot id="finTableFoot"></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="alert-box" style="border-left-color:#e74c3c">
+    🚨 <strong>ดอกเบี้ยเดือน ม.ค. สูงผิดปกติ ฿517K</strong> — เป็นเดือนที่มีดอกเบี้ยสูงที่สุดของปี (ดอกเบี้ยเงินกู้ ฿332K + OD ฿185K) ส่งผลให้ ม.ค. เป็นเดือนที่มีค่าใช้จ่ายการเงินรวมสูงสุด ฿702K ควรวางแผนจ่ายชำระหนี้ให้กระจายสม่ำเสมอ
+  </div>
+  <div class="alert-box warning">
+    💡 <strong>ภาระดอกเบี้ยรวม ฿1.89M/ปี เทียบเท่า 3.5% ของยอดขาย</strong> — นี่คือ "ต้นทุนซ่อน" ที่กินกำไรโดยตรง ถ้าลด/ปิดหนี้บางส่วนได้ Net Margin จะขึ้นทันที | ค่าธรรมเนียมเงินกู้ ฿146K ก็ควรรวมในการพิจารณาต้นทุนเงินกู้ที่แท้จริง
+  </div>
+</div>
+
+<!-- ==================== TAB: 2026 YTD ==================== -->
+<div class="tab-content" id="tab-ytd2026">
+  <div class="alert-box info">
+    🆕 <strong>ข้อมูลค่าใช้จ่ายปี 2026</strong> — จากไฟล์ Expense Report ระบบ AccCloud | ม.ค. (1/1–31/1/2026) และ ก.พ. (1/2–28/2/2026) | Revenue จากระบบขาย | ค่าเสื่อมราคา/ประกัน ยังไม่ได้รับงบทดลองปี 2026
+  </div>
+
+  <!-- 2026 YTD KPI -->
+  <div class="kpi-row">
+    <div class="kpi-card dark">
+      <div class="kpi-label">ยอดขาย YTD (ม.ค.–ก.พ.)</div>
+      <div class="kpi-value" style="color:#2c3e50">฿10.1M</div>
+      <div class="kpi-sub">ม.ค. ฿4.89M | ก.พ. ฿5.24M | +7.1% MoM</div>
+      <div class="kpi-icon">💰</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">COGS YTD</div>
+      <div class="kpi-value" style="color:#e67e22">฿6.21M</div>
+      <div class="kpi-sub">เฉลี่ย 61.3% | ม.ค. 61.1% | ก.พ. 61.6%</div>
+      <div class="kpi-icon">🏭</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Gross Profit YTD</div>
+      <div class="kpi-value" style="color:#27ae60">฿3.91M</div>
+      <div class="kpi-sub">Gross Margin เฉลี่ย 38.7%</div>
+      <div class="kpi-icon">📈</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">เงินเดือน YTD</div>
+      <div class="kpi-value" style="color:#9b59b6">฿1.25M</div>
+      <div class="kpi-sub">ม.ค. ฿637K | ก.พ. ฿614K | ลดลงจาก 2025 เฉลี่ย ฿719K</div>
+      <div class="kpi-icon">👥</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">OpEx YTD</div>
+      <div class="kpi-value" style="color:#3498db">฿1.03M</div>
+      <div class="kpi-sub">ม.ค. ฿563K | ก.พ. ฿468K (มี ads 6เดือน ฿133K)</div>
+      <div class="kpi-icon">💼</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Net Profit YTD (ประมาณการ)</div>
+      <div class="kpi-value" style="color:#27ae60">฿1.43M</div>
+      <div class="kpi-sub">ม.ค. ฿553K (11.3%) | ก.พ. ฿879K (16.8%)</div>
+      <div class="kpi-icon">🎯</div>
+    </div>
+  </div>
+
+  <!-- COMPARISON 2025 vs 2026 ALERT -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+    <div class="alert-box info" style="margin:0">
+      📊 <strong>เทียบกับ 2025 Monthly Average:</strong><br>
+      COGS: 60.3% → 61.3% (+1%) ⚠️<br>
+      Salary: ฿719K → ฿625K (-13%) ✅<br>
+      OpEx: ฿820K → ฿516K (-37%) ✅<br>
+      Interest: ฿158K → ฿101K (-36%) ✅
+    </div>
+    <div class="alert-box warning" style="margin:0">
+      ⚠️ <strong>หมายเหตุสำคัญ:</strong><br>
+      — ค่าเสื่อมราคา/ประกัน ยังไม่รวมในตัวเลข 2026<br>
+      — ก.พ. มี Facebook/Google Ads จ่ายล่วงหน้า 6 เดือน ฿133K<br>
+      — Net Profit 2026 ดีกว่า 2025 เนื่องจากยังไม่มีงบทดลองบัญชี
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 Revenue vs Cost Stack — 2026 ม.ค.–ก.พ.</h3>
+        <span class="card-subtitle">เทียบกับ 2025 Monthly Average</span>
+      </div>
+      <div class="card-body">
+        <canvas id="ytd2026StackChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>📉 Gross Margin % เปรียบเทียบ</h3>
+        <span class="card-subtitle">2026 ม.ค.–ก.พ. vs 2025 รายเดือน</span>
+      </div>
+      <div class="card-body">
+        <canvas id="ytdGMChart" style="max-height:300px;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2026 P&L TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📋 P&L รายเดือน ปี 2026 (ประมาณการจาก Expense Report)</h3>
+      <span class="card-subtitle">หน่วย: บาท | ยังไม่รวมค่าเสื่อมราคา / ค่าประกัน</span>
+    </div>
+    <div class="card-body" style="padding:0;overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>เดือน</th>
+            <th class="text-right">ยอดขาย (฿)</th>
+            <th class="text-right">COGS (฿)</th>
+            <th class="text-right">Gross Profit</th>
+            <th class="text-right">GM%</th>
+            <th class="text-right">เงินเดือน</th>
+            <th class="text-right">OpEx</th>
+            <th class="text-right">ดอกเบี้ย</th>
+            <th class="text-right">Net Profit*</th>
+            <th class="text-right">NM%</th>
+          </tr>
+        </thead>
+        <tbody id="ytd2026Body"></tbody>
+        <tfoot id="ytd2026Foot"></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== EXPENSE DROPDOWN DETAIL ====== -->
+  <div class="card">
+    <div class="card-header" style="flex-wrap:wrap;gap:12px;">
+      <h3>🔍 รายละเอียดค่าใช้จ่ายแต่ละเดือน</h3>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <label style="font-size:13px;font-weight:600;color:#7f8c8d;">เลือกเดือน:</label>
+        <select id="expMonthSelect" onchange="buildExpDetail()" style="padding:7px 14px;border:1px solid #dee2e6;border-radius:8px;font-size:13px;font-weight:600;background:#fff;cursor:pointer;color:#2c3e50;">
+          <option value="jan">ม.ค. 2026</option>
+          <option value="feb">ก.พ. 2026</option>
+        </select>
+        <span id="expMonthTotal" style="font-size:13px;color:#7f8c8d;"></span>
+      </div>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <!-- Remark Flags -->
+      <div id="expRemarks" style="padding:12px 20px 0;"></div>
+      <!-- Detail Table -->
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:36px;"></th>
+              <th>รายการ</th>
+              <th>หมวด</th>
+              <th class="text-right">จำนวนเงิน (฿)</th>
+              <th class="text-right">% ของยอดขาย</th>
+              <th style="min-width:160px;">สัดส่วน</th>
+              <th class="text-right">เดือนอื่น (฿)</th>
+              <th class="text-center">หมายเหตุ</th>
+            </tr>
+          </thead>
+          <tbody id="expDetailBody"></tbody>
+          <tfoot id="expDetailFoot"></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- COST TREND TABLE: 2026 vs 2025 avg -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📊 เปรียบเทียบค่าใช้จ่าย: 2026 vs 2025 Monthly Average</h3>
+    </div>
+    <div class="card-body" style="padding:0;overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>รายการ</th>
+            <th class="text-right">2025 เฉลี่ย/เดือน</th>
+            <th class="text-right">ม.ค. 2026</th>
+            <th class="text-right">เปลี่ยนแปลง</th>
+            <th class="text-right">ก.พ. 2026</th>
+            <th class="text-right">เปลี่ยนแปลง</th>
+          </tr>
+        </thead>
+        <tbody id="compareBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="alert-box" style="border-left-color:#27ae60;background:#f0fff4;">
+    ✅ <strong>สัญญาณบวกปี 2026:</strong> เงินเดือนและ OpEx ลดลงอย่างมีนัยสำคัญจาก 2025 | ดอกเบี้ยลดลง ~36% บ่งชี้การชำระหนี้ได้ดีขึ้น | ยอดขาย ก.พ. เพิ่ม +7.1% จาก ม.ค. | Net Margin ก.พ. สูงถึง 16.8% (ก่อนค่าเสื่อมราคา) — ถ้ารวมค่าเสื่อมราคา ฿104K และประกัน ฿24K จะลดลงประมาณ 2.4%
+  </div>
+</div>
+
+<script>
+// ==================== DATA ====================
+const MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const MONTHS_FULL = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
+const rev2025   = [5340694, 5269849, 3882755, 4812425, 4283557, 4186835, 5138709, 5015114, 5263403, 5543165, 4800238, 4874483];
+const cogs2025  = [2977433, 2922916, 2805243, 2378126, 2715491, 2510549, 3128762, 3376844, 3400226, 3102182, 3617042, 2262939];
+const sal2025   = [781694,  774362,  759160,  757407,  637184,  687092,  687356,  696596,  720640,  707474,  700503,  719073];
+const opex2025  = [2049237, 725355,  533786,  423990,  568638,  881102,  757434,  575537,  1016269, 900439,  653227,  753439];
+
+// ===== EXPENSE DETAIL DATA (from AccCloud Expense Reports) =====
+const expDetail2026 = {
+  jan: [
+    {acct:'114102', name:'ซื้อสินค้า/วัตถุดิบ (COGS)', amt:2986009, grp:'cogs'},
+    {acct:'530101', name:'เงินเดือน ค่าจ้าง', amt:617015, grp:'salary'},
+    {acct:'580101', name:'ดอกเบี้ยจ่าย', amt:111236, grp:'interest'},
+    {acct:'520101', name:'ค่านายหน้า/ส่วนแบ่งการขาย', amt:86706, grp:'opex'},
+    {acct:'510107', name:'ค่าขนส่งสินค้า', amt:73975, grp:'opex'},
+    {acct:'530213', name:'ค่าแบบฟอร์มพนักงาน', amt:54400, grp:'opex'},
+    {acct:'520313', name:'ค่าตรวจสอบ/วิเคราะห์คุณภาพสินค้า', amt:49600, grp:'opex'},
+    {acct:'520312', name:'ค่าขนส่งเอกชน (Delivery)', amt:48178, grp:'opex'},
+    {acct:'530108', name:'ค่าสวัสดิการอาหาร/เครื่องดื่ม', amt:36567, grp:'opex'},
+    {acct:'530116', name:'ค่าเช่าซื้อรถ/KIA', amt:36000, grp:'car_lease'},
+    {acct:'520215', name:'ค่าใช้จ่ายบูท/งานแสดงสินค้า', amt:30626, grp:'opex'},
+    {acct:'510104', name:'ค่าเครื่องมือ/อุปกรณ์การผลิต', amt:23300, grp:'opex'},
+    {acct:'530104', name:'เงินสมทบประกันสังคม', amt:19927, grp:'salary'},
+    {acct:'510113', name:'ค่าเครื่องมือ/อุปกรณ์การผลิต (2)', amt:17187, grp:'opex'},
+    {acct:'520303', name:'ค่าน้ำมัน', amt:16181, grp:'opex'},
+    {acct:'530401', name:'ค่าบริการจัดทำบัญชี', amt:15000, grp:'opex'},
+    {acct:'530110', name:'ค่าประกันชีวิตกลุ่ม', amt:11878, grp:'opex'},
+    {acct:'520310', name:'ค่าเดินทางพนักงาน', amt:10325, grp:'opex'},
+    {acct:'530301', name:'ค่าไฟฟ้า', amt:10296, grp:'opex'},
+    {acct:'530107', name:'ค่าอบรมสัมมนา', amt:8411, grp:'opex'},
+    {acct:'510112', name:'ค่าซ่อมยานพาหนะ', amt:7812, grp:'opex'},
+    {acct:'530206', name:'ค่าเครื่องเขียน/วัสดุสำนักงาน', amt:6435, grp:'opex'},
+    {acct:'520213', name:'ค่าส่งเสริมการขาย', amt:6077, grp:'opex'},
+    {acct:'530504', name:'ค่าจอดรถ/ค่าธรรมเนียม', amt:5019, grp:'opex'},
+    {acct:'520311', name:'ค่าขนส่งเอกชน (ลาล่ามูฟ)', amt:4524, grp:'opex'},
+    {acct:'530303', name:'ค่าโทรศัพท์', amt:4236, grp:'opex'},
+    {acct:'530210', name:'ค่าทำความสะอาดสำนักงาน', amt:4206, grp:'opex'},
+    {acct:'530212', name:'ค่าไปรษณีย์/ขนส่งพัสดุ', amt:3427, grp:'opex'},
+    {acct:'520203', name:'ค่าโฆษณาออนไลน์ (Shopee)', amt:3210, grp:'opex'},
+    {acct:'520208', name:'ค่าจ้างบริการเว็บไซต์', amt:3093, grp:'opex'},
+    {acct:'530204', name:'ค่าเช่าเครื่องถ่ายเอกสาร', amt:3000, grp:'opex'},
+    {acct:'520202', name:'ค่าโฆษณา Facebook/Google', amt:2976, grp:'opex'},
+    {acct:'580103', name:'ดอกเบี้ยผิดนัด', amt:2893, grp:'interest'},
+    {acct:'530408', name:'ค่าบริการเครื่องกรองน้ำ', amt:2564, grp:'opex'},
+    {acct:'510110', name:'ค่าธรรมเนียมแพลตฟอร์มออนไลน์', amt:2335, grp:'opex'},
+    {acct:'510114', name:'ค่าทางด่วน/ค่าจอดรถ', amt:2170, grp:'opex'},
+    {acct:'520218', name:'ค่าโฆษณาอื่นๆ', amt:2095, grp:'opex'},
+    {acct:'530214', name:'ค่าบริการมิเตอร์เครื่องถ่ายเอกสาร', amt:1551, grp:'opex'},
+    {acct:'540106', name:'ค่าวัสดุสิ้นเปลือง', amt:1311, grp:'opex'},
+    {acct:'530211', name:'ค่าซ่อมแซมทั่วไป', amt:1300, grp:'opex'},
+    {acct:'540107', name:'ค่าใช้จ่ายเบ็ดเตล็ด', amt:702, grp:'opex'},
+    {acct:'530207', name:'ค่าธรรมเนียมทางกฎหมาย', amt:700, grp:'opex'},
+    {acct:'510111', name:'ค่าน้ำประปา', amt:572, grp:'opex'},
+    {acct:'530306', name:'ค่าบริการคลาวด์/LINE OA', amt:555, grp:'opex'},
+    {acct:'520214', name:'ค่าสินค้าตัวอย่าง', amt:275, grp:'opex'},
+    {acct:'520307', name:'ค่ารับรอง', amt:97, grp:'opex'},
+  ],
+  feb: [
+    {acct:'114102', name:'ซื้อสินค้า/วัตถุดิบ (COGS)', amt:3224583, grp:'cogs'},
+    {acct:'530101', name:'เงินเดือน ค่าจ้าง', amt:594159, grp:'salary'},
+    {acct:'520101', name:'ค่านายหน้า/ส่วนแบ่งการขาย', amt:99649, grp:'opex'},
+    {acct:'520202', name:'ค่าโฆษณา Facebook/Google (6เดือน)', amt:90000, grp:'opex'},
+    {acct:'580101', name:'ดอกเบี้ยจ่าย', amt:86918, grp:'interest'},
+    {acct:'510107', name:'ค่าขนส่งสินค้า', amt:72967, grp:'opex'},
+    {acct:'520201', name:'ค่าโฆษณา Google Marketing (6เดือน)', amt:42500, grp:'opex'},
+    {acct:'530117', name:'ค่าเบี้ยประกันรถยนต์ชั้น 1', amt:24455, grp:'opex'},
+    {acct:'520312', name:'ค่าขนส่งเอกชน (Delivery)', amt:23155, grp:'opex'},
+    {acct:'530104', name:'เงินสมทบประกันสังคม', amt:19386, grp:'salary'},
+    {acct:'530215', name:'ค่าใช้จ่ายตรุษจีน (seasonal)', amt:16011, grp:'opex'},
+    {acct:'520303', name:'ค่าน้ำมัน', amt:13981, grp:'opex'},
+    {acct:'520305', name:'ค่าเบี้ยเลี้ยงเดินทาง', amt:10000, grp:'opex'},
+    {acct:'510114', name:'ค่าทางด่วน/ค่าจอดรถ', amt:8000, grp:'opex'},
+    {acct:'510104', name:'ค่าเครื่องมือ/อุปกรณ์การผลิต', amt:7500, grp:'opex'},
+    {acct:'520310', name:'ค่าเดินทางพนักงาน', amt:6947, grp:'opex'},
+    {acct:'520203', name:'ค่าโฆษณาออนไลน์ (Shopee)', amt:6710, grp:'opex'},
+    {acct:'540106', name:'ค่าวัสดุสิ้นเปลือง', amt:4669, grp:'opex'},
+    {acct:'530206', name:'ค่าเครื่องเขียน/วัสดุสำนักงาน', amt:3719, grp:'opex'},
+    {acct:'520213', name:'ค่าส่งเสริมการขาย', amt:3701, grp:'opex'},
+    {acct:'530207', name:'ค่าธรรมเนียมทางกฎหมาย', amt:3250, grp:'opex'},
+    {acct:'530212', name:'ค่าไปรษณีย์/ขนส่งพัสดุ', amt:3237, grp:'opex'},
+    {acct:'510112', name:'ค่าซ่อมยานพาหนะ', amt:3189, grp:'opex'},
+    {acct:'520208', name:'ค่าจ้างบริการเว็บไซต์', amt:3093, grp:'opex'},
+    {acct:'530204', name:'ค่าเช่าเครื่องถ่ายเอกสาร', amt:3000, grp:'opex'},
+    {acct:'510113', name:'ค่าเครื่องมือ/อุปกรณ์การผลิต (2)', amt:2922, grp:'opex'},
+    {acct:'510110', name:'ค่าธรรมเนียมแพลตฟอร์มออนไลน์', amt:2335, grp:'opex'},
+    {acct:'530304', name:'ค่าอินเทอร์เน็ต', amt:2198, grp:'opex'},
+    {acct:'530107', name:'ค่าอบรมสัมมนา', amt:2103, grp:'opex'},
+    {acct:'540107', name:'ค่าใช้จ่ายเบ็ดเตล็ด', amt:2043, grp:'opex'},
+    {acct:'530214', name:'ค่าบริการมิเตอร์เครื่องถ่ายเอกสาร', amt:2002, grp:'opex'},
+    {acct:'530119', name:'ค่าพัฒนาบุคลากร', amt:2000, grp:'opex'},
+    {acct:'530208', name:'ค่าบำรุงสมาชิกสมาคม', amt:1200, grp:'opex'},
+    {acct:'530118', name:'ค่าเบี้ยประกัน พรบ. รถยนต์', amt:603, grp:'opex'},
+    {acct:'530504', name:'ค่าจอดรถ/ค่าธรรมเนียม', amt:260, grp:'opex'},
+    {acct:'530108', name:'ค่าสวัสดิการอาหาร/เครื่องดื่ม', amt:247, grp:'opex'},
+    {acct:'520214', name:'ค่าสินค้าตัวอย่าง', amt:228, grp:'opex'},
+    {acct:'530112', name:'ค่าสวัสดิการอื่นๆ', amt:135, grp:'opex'},
+  ],
+};
+
+// ===== 2026 YTD DATA (from AccCloud Expense Reports) =====
+const rev2026    = [4889375, 5235852];  // ม.ค. ก.พ. (from Sales Dashboard)
+const cogs2026   = [2986009, 3224583];  // from Expense Report 114102 account
+const sal2026    = [636942,  613545];   // 530101 + 530104
+const opex2026   = [563465,  468009];   // other 5xxxxx expense accounts
+const int2026    = [114129,  86918];    // 580xxx interest
+const car2026x   = [36000,   36000];    // 530116 car lease (Feb estimated)
+const gp2026     = rev2026.map((r,i) => r - cogs2026[i]);
+const np2026     = gp2026.map((g,i) => g - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i]);
+const gm2026     = rev2026.map((r,i) => (r - cogs2026[i]) / r * 100);
+const nm2026     = rev2026.map((r,i) => np2026[i] / r * 100);
+const MONTHS_2026 = ['ม.ค. 2026', 'ก.พ. 2026'];
+
+// ===== NEW: Financial & Accounting items from งบทดลอง 2568 =====
+const loanInt2025  = [331731, 95512, 40033, 188898, 45338, 94904, 97095, 41174, 96462, 99847, 50586, 31548];
+const odInt2025    = [185471, 53401, 22383, 105613, 25349, 53061, 54286, 23021, 53932, 55825, 28283, 17639];
+const totalInt2025 = loanInt2025.map((v,i) => v + odInt2025[i]);
+const bankFee2025  = [12870, 12870, 12870, 12870, 12870, 12870, 12870, 12870, 12870, 12870, 12870, 12870];
+const dep2025      = [103671, 103671, 103671, 103671, 103671, 103671, 103671, 103671, 103671, 103671, 103671, 103671];
+const ins2025      = [23783, 23783, 23783, 23783, 23783, 23783, 23783, 23783, 23783, 23783, 23783, 23783];
+const car2025      = [36000, 36000, 36000, 36000, 36000, 36000, 36000, 36000, 36000, 36000, 36000, 36000];
+const taxFee2025   = [8386, 8386, 8386, 8386, 8386, 8386, 8386, 8386, 8386, 8386, 8386, 8386];
+const finAcct2025  = totalInt2025.map((v,i) => v + bankFee2025[i] + dep2025[i] + ins2025[i] + car2025[i] + taxFee2025[i]);
+
+const gp2025    = rev2025.map((r,i) => r - cogs2025[i]);
+const np2025    = gp2025.map((g,i) => g - sal2025[i] - opex2025[i]);
+const npAdj2025 = np2025.map((n,i) => n - finAcct2025[i]); // adjusted for fin/acct items
+const gmPct2025 = rev2025.map((r,i) => ((r - cogs2025[i]) / r * 100));
+const npPct2025 = rev2025.map((r,i) => (np2025[i] / r * 100));
+const cogsPct2025 = rev2025.map((r,i) => (cogs2025[i] / r * 100));
+const salPct2025  = rev2025.map((r,i) => (sal2025[i] / r * 100));
+
+const topSuppliers = [
+  { name: 'บ. เอฟพีซี อินเตอร์ ซัพพลาย', amt: 9487243, pct: 27.0 },
+  { name: 'บ. อัพ ทู ยู แพ็ค', amt: 3702810, pct: 10.5 },
+  { name: 'บ. เอส.เอ็ม.เค.พริ้นติ้ง', amt: 3176055, pct: 9.0 },
+  { name: 'บ. ซี.พี.อุตสาหกรรมบรรจุภัณฑ์', amt: 2887350, pct: 8.2 },
+  { name: 'บ. ไทย เคเค อุตสาหกรรม', amt: 2275001, pct: 6.5 },
+  { name: 'บ. เบลล์ วอคเกอร์', amt: 2078095, pct: 5.9 },
+  { name: 'บ. เอเอ็มพี คอร์เปอเรชั่น', amt: 1105695, pct: 3.1 },
+  { name: 'บ. เกษมอนันต์ พริ้นติ้ง', amt: 901020, pct: 2.6 },
+  { name: 'บ. ทีเอ็มพีแพ็คเกจจิ้ง', amt: 692380, pct: 2.0 },
+  { name: 'บ. แวนด้าแพค', amt: 675460, pct: 1.9 },
+];
+
+const opexCategories = [
+  { name: 'เงินกู้/ลีส', amt: 1783040 },
+  { name: 'ค่าขนส่ง', amt: 351918 },
+  { name: 'ค่าใช้จ่ายอื่นๆ', amt: 1839476 },
+  { name: 'น้ำมัน/พลังงาน', amt: 71322 },
+  { name: 'IT/ดิจิทัล', amt: 55553 },
+  { name: 'ภาษี/ราชการ', amt: 43764 },
+  { name: 'ค่าประกัน', amt: 43509 },
+  { name: 'เครื่องใช้สำนักงาน', amt: 32111 },
+];
+
+// ==================== HELPERS ====================
+function fmt(v) { return Math.abs(v).toLocaleString('th-TH'); }
+function fmtM(v) { return (v/1e6).toFixed(2)+'M'; }
+const charts = {};
+
+function destroyChart(id) {
+  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+}
+
+const chartDefaults = {
+  responsive: true,
+  maintainAspectRatio: true,
+  plugins: {
+    legend: { labels: { font: { family: 'Segoe UI', size: 11 } } },
+    tooltip: { callbacks: {} }
+  }
+};
+
+// ==================== TAB CONTROL ====================
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+  buildTabCharts(name);
+}
+
+function buildTabCharts(name) {
+  if (name === 'overview') buildOverviewCharts();
+  else if (name === 'monthly') buildMonthlyCharts();
+  else if (name === 'cogs') buildCogsCharts();
+  else if (name === 'opex') buildOpexCharts();
+  else if (name === 'salary') buildSalaryCharts();
+  else if (name === 'finance') buildFinanceCharts();
+  else if (name === 'ytd2026') buildYTD2026Charts();
+}
+
+// ==================== OVERVIEW CHARTS ====================
+function buildOverviewCharts() {
+  // Cost Structure Donut
+  destroyChart('costStructure');
+  charts.costStructure = new Chart(document.getElementById('costStructureChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['COGS ฿35.2M', 'เงินเดือน ฿8.6M', 'OpEx ฿9.8M', 'ค่าใช้จ่ายการเงิน ฿4.1M', 'กำไรสุทธิ ฿1.30M'],
+      datasets: [{ data: [35197752, 8628541, 9838454, 4107905, 1298313], backgroundColor: ['#e67e22', '#9b59b6', '#3498db', '#e74c3c', '#27ae60'], borderWidth: 2, borderColor: '#fff', hoverOffset: 8 }]
+    },
+    options: { ...chartDefaults, cutout: '65%',
+      plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.label + ': ' + (ctx.parsed/58411227*100).toFixed(1) + '%' } } }
+    }
+  });
+
+  // Gross Margin Line
+  destroyChart('grossMargin');
+  charts.grossMargin = new Chart(document.getElementById('grossMarginChart'), {
+    type: 'line',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'Gross Margin %', data: gmPct2025, borderColor: '#27ae60', backgroundColor: '#27ae6022', borderWidth: 2.5, fill: true, pointRadius: 5, tension: 0.3 },
+        { label: 'เป้า 40%', data: Array(12).fill(40), borderColor: '#e74c3c', borderDash: [5,4], borderWidth: 1.5, pointRadius: 0 }
+      ]
+    },
+    options: { ...chartDefaults,
+      scales: { y: { min: 0, max: 65, ticks: { callback: v => v+'%' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+      plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + '%' } } }
+    }
+  });
+
+  // Net Profit Bar
+  destroyChart('netProfit');
+  charts.netProfit = new Chart(document.getElementById('netProfitChart'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [{ label: 'Net Profit (฿)', data: np2025, backgroundColor: np2025.map(v => v >= 0 ? '#27ae6088' : '#e74c3c88'), borderColor: np2025.map(v => v >= 0 ? '#27ae60' : '#e74c3c'), borderWidth: 1, borderRadius: 4 }]
+    },
+    options: { ...chartDefaults,
+      scales: { y: { ticks: { callback: v => (v/1e6).toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+      plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => 'Net Profit: ฿' + ctx.raw.toLocaleString('th-TH') } } }
+    }
+  });
+
+  // Build P&L table
+  buildPLTable();
+}
+
+function buildPLTable() {
+  let html = '';
+  let totals = [0,0,0,0,0,0,0,0,0];
+  MONTHS_FULL.forEach((m, i) => {
+    const r = rev2025[i], c = cogs2025[i], g = gp2025[i], gm = gmPct2025[i];
+    const s = sal2025[i], o = opex2025[i], f = finAcct2025[i];
+    const n = np2025[i] - f; // adjusted net profit
+    totals[0]+=r; totals[1]+=c; totals[2]+=g; totals[4]+=s; totals[5]+=o; totals[6]+=f; totals[7]+=n;
+    const badge = n >= 0 ? '<span class="pill pill-green">กำไร</span>' : '<span class="pill pill-red">ขาดทุน</span>';
+    html += `<tr>
+      <td><strong>${m}</strong></td>
+      <td class="text-right">${fmt(r)}</td>
+      <td class="text-right">${fmt(c)}</td>
+      <td class="text-right ${gm >= 40 ? 'profit-pos' : 'profit-neg'}">${fmt(g)}</td>
+      <td class="text-right"><span class="pill ${gm>=40?'pill-green':'pill-red'}">${gm.toFixed(1)}%</span></td>
+      <td class="text-right">${fmt(s)}</td>
+      <td class="text-right">${fmt(o)}</td>
+      <td class="text-right" style="color:#e74c3c">฿${fmt(f)}</td>
+      <td class="text-right ${n>=0?'profit-pos':'profit-neg'}">${n<0?'-':''}฿${fmt(Math.abs(n))}</td>
+      <td class="text-center">${badge}</td>
+    </tr>`;
+  });
+  document.getElementById('plTableBody').innerHTML = html;
+  const gmT = totals[2]/totals[0]*100;
+  const npT = totals[7]/totals[0]*100;
+  document.getElementById('plTableFoot').innerHTML = `<tr style="font-weight:700;background:#f8f9fa;border-top:2px solid #dee2e6">
+    <td>รวมทั้งปี</td>
+    <td class="text-right">${fmt(totals[0])}</td>
+    <td class="text-right">${fmt(totals[1])}</td>
+    <td class="text-right profit-pos">${fmt(totals[2])}</td>
+    <td class="text-right"><span class="pill pill-green">${gmT.toFixed(1)}%</span></td>
+    <td class="text-right">${fmt(totals[4])}</td>
+    <td class="text-right">${fmt(totals[5])}</td>
+    <td class="text-right" style="color:#e74c3c">฿${fmt(totals[6])}</td>
+    <td class="text-right ${totals[7]>=0?'profit-pos':'profit-neg'}">${totals[7]<0?'-':''}฿${fmt(Math.abs(totals[7]))}</td>
+    <td class="text-center"><span class="pill ${npT>=0?'pill-green':'pill-red'}">${npT.toFixed(1)}% NM</span></td>
+  </tr>`;
+}
+
+// ==================== MONTHLY CHARTS ====================
+function buildMonthlyCharts() {
+  // Stacked cost bar
+  destroyChart('monthlyStacked');
+  charts.monthlyStacked = new Chart(document.getElementById('monthlyStackedChart'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'COGS', data: cogs2025.map(v=>v/1e6), backgroundColor: '#e67e22bb', borderRadius: 0 },
+        { label: 'เงินเดือน', data: sal2025.map(v=>v/1e6), backgroundColor: '#9b59b6bb', borderRadius: 0 },
+        { label: 'OpEx', data: opex2025.map(v=>v/1e6), backgroundColor: '#3498dbbb', borderRadius: 0 },
+        { label: 'Net Profit', data: np2025.map(v => Math.max(0,v)/1e6), backgroundColor: '#27ae60bb', borderRadius: 0 },
+      ]
+    },
+    options: {
+      ...chartDefaults, stacked: true,
+      scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } } },
+      plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } } }
+    }
+  });
+
+  // Rev vs GP
+  destroyChart('revGp');
+  charts.revGp = new Chart(document.getElementById('revGpChart'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'Revenue', data: rev2025.map(v=>v/1e6), backgroundColor: '#2c3e5033', borderColor: '#2c3e50', borderWidth: 1.5, borderRadius: 4 },
+        { label: 'Gross Profit', data: gp2025.map(v=>v/1e6), backgroundColor: '#27ae6066', borderColor: '#27ae60', borderWidth: 1.5, borderRadius: 4 },
+      ]
+    },
+    options: { ...chartDefaults, scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } } }
+  });
+
+  // Overhead
+  destroyChart('overhead');
+  charts.overhead = new Chart(document.getElementById('overheadChart'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'เงินเดือน', data: sal2025.map(v=>v/1e6), backgroundColor: '#9b59b6aa', borderRadius: 4 },
+        { label: 'OpEx', data: opex2025.map(v=>v/1e6), backgroundColor: '#3498dbaa', borderRadius: 4 },
+      ]
+    },
+    options: { ...chartDefaults, scales: { y: { ticks: { callback: v => v.toFixed(2)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } } }
+  });
+
+  // Table
+  let html = '';
+  MONTHS_FULL.forEach((m, i) => {
+    const r=rev2025[i], c=cogs2025[i], s=sal2025[i], o=opex2025[i], n=np2025[i];
+    const oh = s+o, cogsPct = c/r*100, npPct = n/r*100;
+    html += `<tr>
+      <td><strong>${m}</strong></td>
+      <td class="text-right">${fmt(r)}</td>
+      <td class="text-right">${fmt(c)}</td>
+      <td class="text-right"><span class="pill ${cogsPct<=60?'pill-green':'pill-red'}">${cogsPct.toFixed(1)}%</span></td>
+      <td class="text-right">${fmt(s)}</td>
+      <td class="text-right">${fmt(o)}</td>
+      <td class="text-right">${fmt(oh)}</td>
+      <td class="text-right ${n>=0?'profit-pos':'profit-neg'}">${n<0?'-':''}${fmt(n)}</td>
+      <td class="text-right"><span class="pill ${npPct>=5?'pill-green':npPct>=0?'pill-orange':'pill-red'}">${npPct.toFixed(1)}%</span></td>
+    </tr>`;
+  });
+  document.getElementById('monthlyDetailBody').innerHTML = html;
+  const totalRev=rev2025.reduce((a,b)=>a+b,0), totalCogs=cogs2025.reduce((a,b)=>a+b,0);
+  const totalSal=sal2025.reduce((a,b)=>a+b,0), totalOpex=opex2025.reduce((a,b)=>a+b,0);
+  const totalNp=np2025.reduce((a,b)=>a+b,0), totalOh=totalSal+totalOpex;
+  document.getElementById('monthlyDetailFoot').innerHTML = `<tr style="font-weight:700;background:#f8f9fa;border-top:2px solid #dee2e6">
+    <td>รวม</td><td class="text-right">${fmt(totalRev)}</td><td class="text-right">${fmt(totalCogs)}</td>
+    <td class="text-right"><span class="pill pill-green">${(totalCogs/totalRev*100).toFixed(1)}%</span></td>
+    <td class="text-right">${fmt(totalSal)}</td><td class="text-right">${fmt(totalOpex)}</td>
+    <td class="text-right">${fmt(totalOh)}</td>
+    <td class="text-right profit-pos">${fmt(totalNp)}</td>
+    <td class="text-right"><span class="pill pill-green">${(totalNp/totalRev*100).toFixed(1)}%</span></td>
+  </tr>`;
+}
+
+// ==================== COGS CHARTS ====================
+function buildCogsCharts() {
+  // COGS Monthly
+  destroyChart('cogsMonthly');
+  charts.cogsMonthly = new Chart(document.getElementById('cogsMonthlyChart'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'Revenue', data: rev2025.map(v=>v/1e6), backgroundColor: '#2c3e5022', borderColor: '#2c3e5088', borderWidth: 1.5, borderRadius: 4 },
+        { label: 'COGS', data: cogs2025.map(v=>v/1e6), backgroundColor: '#e67e22aa', borderColor: '#e67e22', borderWidth: 1, borderRadius: 4 },
+      ]
+    },
+    options: { ...chartDefaults, scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } } }
+  });
+
+  // Supplier Donut
+  destroyChart('supplierDonut');
+  const top5amt = topSuppliers.slice(0,5).map(s => s.amt);
+  const othersAmt = 35197752 - top5amt.reduce((a,b)=>a+b,0);
+  charts.supplierDonut = new Chart(document.getElementById('supplierDonutChart'), {
+    type: 'doughnut',
+    data: {
+      labels: [...topSuppliers.slice(0,5).map(s => s.name.replace('บ. ','')), 'อื่นๆ'],
+      datasets: [{ data: [...top5amt, othersAmt], backgroundColor: ['#e74c3c','#e67e22','#f1c40f','#27ae60','#3498db','#bdc3c7'], borderWidth: 2, borderColor: '#fff', hoverOffset: 6 }]
+    },
+    options: { ...chartDefaults, cutout: '60%', plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.label + ': ฿' + (ctx.raw).toLocaleString('th-TH') + ' (' + (ctx.raw/35197752*100).toFixed(1)+'%)' } } } }
+  });
+
+  // Supplier bars
+  const container = document.getElementById('supplierBarsContainer');
+  container.innerHTML = topSuppliers.map((s, i) => `
+    <div class="supplier-row">
+      <div style="min-width:24px;font-weight:800;color:#7f8c8d">${i+1}</div>
+      <div class="supplier-name">${s.name}</div>
+      <div class="supplier-bar">
+        <div class="progress-wrap"><div class="progress-fill" style="width:${s.pct/27*100}%;background:${i===0?'#e74c3c':i<3?'#e67e22':i<6?'#f39c12':'#27ae60'}"></div></div>
+      </div>
+      <div class="supplier-amt">฿${s.amt.toLocaleString('th-TH')}</div>
+      <div class="supplier-pct">${s.pct}%</div>
+    </div>
+  `).join('');
+}
+
+// ==================== OPEX CHARTS ====================
+function buildOpexCharts() {
+  destroyChart('opexMonthly');
+  charts.opexMonthly = new Chart(document.getElementById('opexMonthlyChart'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [{ label: 'OpEx (฿)', data: opex2025.map(v=>v/1e6), backgroundColor: opex2025.map(v => v > 900000 ? '#e74c3caa' : '#3498dbaa'), borderRadius: 4 }]
+    },
+    options: { ...chartDefaults, scales: { y: { ticks: { callback: v => v.toFixed(2)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } } }
+  });
+
+  destroyChart('opexCat');
+  charts.opexCat = new Chart(document.getElementById('opexCatChart'), {
+    type: 'doughnut',
+    data: {
+      labels: opexCategories.map(c => c.name),
+      datasets: [{ data: opexCategories.map(c => c.amt), backgroundColor: ['#e74c3c','#e67e22','#bdc3c7','#f39c12','#3498db','#27ae60','#9b59b6','#1abc9c'], borderWidth: 2, borderColor: '#fff' }]
+    },
+    options: { ...chartDefaults, cutout: '55%', plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.label + ': ฿' + (ctx.raw).toLocaleString('th-TH') } } } }
+  });
+}
+
+// ==================== SALARY CHARTS ====================
+function buildSalaryCharts() {
+  destroyChart('salary');
+  charts.salary = new Chart(document.getElementById('salaryChart'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'เงินเดือน (฿)', data: sal2025.map(v=>v/1e6), backgroundColor: '#9b59b6aa', borderColor: '#9b59b6', borderWidth: 1, borderRadius: 4 },
+        { label: 'Revenue (฿)', data: rev2025.map(v=>v/1e6), type: 'line', borderColor: '#2c3e5066', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 3, borderDash: [4,3] }
+      ]
+    },
+    options: { ...chartDefaults, scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } } }
+  });
+
+  destroyChart('salaryPct');
+  charts.salaryPct = new Chart(document.getElementById('salaryPctChart'), {
+    type: 'line',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'เงินเดือน/ยอดขาย %', data: salPct2025, borderColor: '#9b59b6', backgroundColor: '#9b59b622', fill: true, borderWidth: 2.5, pointRadius: 5, tension: 0.3 },
+        { label: 'เป้า 15%', data: Array(12).fill(15), borderColor: '#e74c3c', borderDash: [5,4], borderWidth: 1.5, pointRadius: 0 }
+      ]
+    },
+    options: { ...chartDefaults, scales: { y: { min: 0, max: 25, ticks: { callback: v => v+'%' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } } }
+  });
+
+  let html = '';
+  MONTHS_FULL.forEach((m, i) => {
+    const s=sal2025[i], r=rev2025[i], pct=s/r*100, ratio=r/s;
+    html += `<tr>
+      <td><strong>${m}</strong></td>
+      <td class="text-right">฿${fmt(s)}</td>
+      <td class="text-right">${fmt(r)}</td>
+      <td class="text-right"><span class="pill ${pct<=15?'pill-green':pct<=18?'pill-orange':'pill-red'}">${pct.toFixed(1)}%</span></td>
+      <td class="text-right">${ratio.toFixed(2)}x</td>
+      <td class="text-center">${pct<=15 ? '✅ ปกติ' : '⚠️ สูงกว่าเป้า'}</td>
+    </tr>`;
+  });
+  document.getElementById('salaryTableBody').innerHTML = html;
+}
+
+// ==================== FINANCE CHARTS ====================
+function buildFinanceCharts() {
+  // Monthly Interest Stacked Bar
+  destroyChart('interestMonthly');
+  charts.interestMonthly = new Chart(document.getElementById('interestMonthlyChart'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'ดอกเบี้ยเงินกู้ธนาคาร', data: loanInt2025.map(v=>v/1e3), backgroundColor: '#e74c3ccc', borderRadius: 0 },
+        { label: 'ดอกเบี้ย OD (เบิกเกินบัญชี)', data: odInt2025.map(v=>v/1e3), backgroundColor: '#e67e22cc', borderRadius: 0 }
+      ]
+    },
+    options: {
+      ...chartDefaults,
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, ticks: { callback: v => '฿'+v.toFixed(0)+'K' }, grid: { color: '#f0f2f5' } }
+      },
+      plugins: { ...chartDefaults.plugins,
+        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1000).toLocaleString('th-TH') } }
+      }
+    }
+  });
+
+  // Finance Breakdown Donut
+  destroyChart('finBreakdown');
+  charts.finBreakdown = new Chart(document.getElementById('finBreakdownChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['ดอกเบี้ยจ่าย ฿1.89M', 'ค่าเสื่อมราคา ฿1.24M', 'ค่าเช่าซื้อรถ ฿432K', 'ค่าเบี้ยประกัน ฿285K', 'ค่าธรรมเนียมธนาคาร ฿154K', 'ค่าภาษีและค่าธรรมเนียม ฿101K'],
+      datasets: [{ data: [1891394, 1244049, 432000, 285397, 154436, 100629],
+        backgroundColor: ['#e74c3c','#e67e22','#f39c12','#3498db','#9b59b6','#1abc9c'],
+        borderWidth: 2, borderColor: '#fff', hoverOffset: 8 }]
+    },
+    options: { ...chartDefaults, cutout: '60%',
+      plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.label + ' (' + (ctx.raw/4107905*100).toFixed(1) + '%)' } } }
+    }
+  });
+
+  // Adjusted Net Profit (before vs after)
+  destroyChart('adjNetProfit');
+  charts.adjNetProfit = new Chart(document.getElementById('adjNetProfitChart'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'Net Profit (ก่อนหักค่าใช้จ่ายการเงิน)', data: np2025.map(v=>v/1e6), backgroundColor: np2025.map(v=>v>=0?'#27ae6055':'#e74c3c55'), borderColor: np2025.map(v=>v>=0?'#27ae60':'#e74c3c'), borderWidth: 1, borderRadius: 4 },
+        { label: 'Net Profit (หลังหักค่าใช้จ่ายการเงิน)', data: npAdj2025.map(v=>v/1e6), backgroundColor: npAdj2025.map(v=>v>=0?'#27ae60cc':'#e74c3ccc'), borderColor: npAdj2025.map(v=>v>=0?'#27ae60':'#e74c3c'), borderWidth: 1.5, borderRadius: 4 }
+      ]
+    },
+    options: { ...chartDefaults,
+      scales: { y: { ticks: { callback: v => v.toFixed(2)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+      plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } } }
+    }
+  });
+
+  // Finance Detail Table
+  let html = '';
+  let t = [0,0,0,0,0,0,0];
+  MONTHS_FULL.forEach((m, i) => {
+    const li=loanInt2025[i], od=odInt2025[i], bf=bankFee2025[i], dp=dep2025[i], ins=ins2025[i], cr=car2025[i];
+    const tot = finAcct2025[i];
+    t[0]+=li; t[1]+=od; t[2]+=bf; t[3]+=dp; t[4]+=ins; t[5]+=cr; t[6]+=tot;
+    html += `<tr>
+      <td><strong>${m}</strong></td>
+      <td class="text-right">${fmt(li)}</td>
+      <td class="text-right">${fmt(od)}</td>
+      <td class="text-right">${fmt(bf)}</td>
+      <td class="text-right">${fmt(dp)}</td>
+      <td class="text-right">${fmt(ins)}</td>
+      <td class="text-right">${fmt(cr)}</td>
+      <td class="text-right" style="font-weight:700;color:#e74c3c">฿${fmt(tot)}</td>
+    </tr>`;
+  });
+  document.getElementById('finTableBody').innerHTML = html;
+  document.getElementById('finTableFoot').innerHTML = `<tr style="font-weight:700;background:#fff5f5;border-top:2px solid #e74c3c">
+    <td>รวมทั้งปี</td>
+    <td class="text-right">฿${fmt(t[0])}</td>
+    <td class="text-right">฿${fmt(t[1])}</td>
+    <td class="text-right">฿${fmt(t[2])}</td>
+    <td class="text-right">฿${fmt(t[3])}</td>
+    <td class="text-right">฿${fmt(t[4])}</td>
+    <td class="text-right">฿${fmt(t[5])}</td>
+    <td class="text-right" style="color:#e74c3c;font-size:15px">฿${fmt(t[6])}</td>
+  </tr>`;
+}
+
+// ==================== 2026 YTD CHARTS ====================
+function buildYTD2026Charts() {
+  // Stack chart: 2026 actual vs 2025 avg
+  const avg25_cogs = cogs2025.reduce((a,b)=>a+b,0)/12;
+  const avg25_sal  = sal2025.reduce((a,b)=>a+b,0)/12;
+  const avg25_opex = opex2025.reduce((a,b)=>a+b,0)/12;
+  const avg25_int  = totalInt2025.reduce((a,b)=>a+b,0)/12;
+  const avg25_rev  = rev2025.reduce((a,b)=>a+b,0)/12;
+
+  destroyChart('ytd2026Stack');
+  charts.ytd2026Stack = new Chart(document.getElementById('ytd2026StackChart'), {
+    type: 'bar',
+    data: {
+      labels: ['2025 เฉลี่ย/เดือน', 'ม.ค. 2026', 'ก.พ. 2026'],
+      datasets: [
+        { label: 'COGS', data: [avg25_cogs/1e6, cogs2026[0]/1e6, cogs2026[1]/1e6], backgroundColor: '#e67e22bb', borderRadius: 0 },
+        { label: 'เงินเดือน', data: [avg25_sal/1e6, sal2026[0]/1e6, sal2026[1]/1e6], backgroundColor: '#9b59b6bb', borderRadius: 0 },
+        { label: 'OpEx', data: [avg25_opex/1e6, opex2026[0]/1e6, opex2026[1]/1e6], backgroundColor: '#3498dbbb', borderRadius: 0 },
+        { label: 'ดอกเบี้ย', data: [avg25_int/1e6, int2026[0]/1e6, int2026[1]/1e6], backgroundColor: '#e74c3cbb', borderRadius: 0 },
+        { label: 'Revenue (Line)', data: [avg25_rev/1e6, rev2026[0]/1e6, rev2026[1]/1e6], type: 'line', borderColor: '#2c3e50', backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 6, borderDash: [5,3] }
+      ]
+    },
+    options: {
+      ...chartDefaults,
+      scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } } },
+      plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } } }
+    }
+  });
+
+  // GM% comparison
+  destroyChart('ytdGM');
+  charts.ytdGM = new Chart(document.getElementById('ytdGMChart'), {
+    type: 'line',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'Gross Margin 2025', data: gmPct2025, borderColor: '#3498db88', backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 3, tension: 0.3, borderDash: [4,3] },
+        { label: 'Gross Margin 2026', data: [...gm2026, ...Array(10).fill(null)], borderColor: '#27ae60', backgroundColor: '#27ae6022', fill: true, borderWidth: 2.5, pointRadius: 6, tension: 0.3 },
+        { label: 'เป้า 40%', data: Array(12).fill(40), borderColor: '#e74c3c', borderDash: [5,4], borderWidth: 1.5, pointRadius: 0 }
+      ]
+    },
+    options: { ...chartDefaults,
+      scales: { y: { min: 0, max: 65, ticks: { callback: v => v+'%' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+      plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.y||0).toFixed(1) + '%' } } }
+    }
+  });
+
+  // P&L Table 2026
+  let html = '';
+  let t = [0,0,0,0,0,0,0,0];
+  MONTHS_2026.forEach((m, i) => {
+    const r=rev2026[i], c=cogs2026[i], g=gp2026[i], gm=gm2026[i];
+    const s=sal2026[i], o=opex2026[i], intt=int2026[i]+car2026x[i], n=np2026[i], nm=nm2026[i];
+    t[0]+=r; t[1]+=c; t[2]+=g; t[3]+=s; t[4]+=o; t[5]+=intt; t[6]+=n;
+    const badge = n>=0 ? '<span class="pill pill-green">กำไร</span>' : '<span class="pill pill-red">ขาดทุน</span>';
+    html += `<tr>
+      <td><strong>${m}</strong></td>
+      <td class="text-right">${fmt(r)}</td>
+      <td class="text-right">${fmt(c)}</td>
+      <td class="text-right profit-pos">${fmt(g)}</td>
+      <td class="text-right"><span class="pill ${gm>=40?'pill-green':'pill-red'}">${gm.toFixed(1)}%</span></td>
+      <td class="text-right">${fmt(s)}</td>
+      <td class="text-right">${fmt(o)}</td>
+      <td class="text-right" style="color:#e74c3c">${fmt(intt)}</td>
+      <td class="text-right ${n>=0?'profit-pos':'profit-neg'}">${n<0?'-':''}฿${fmt(Math.abs(n))}</td>
+      <td class="text-right"><span class="pill ${nm>=0?'pill-green':'pill-red'}">${nm.toFixed(1)}%</span></td>
+    </tr>`;
+  });
+  document.getElementById('ytd2026Body').innerHTML = html;
+  const ytdGMt = t[2]/t[0]*100, ytdNMt = t[6]/t[0]*100;
+  document.getElementById('ytd2026Foot').innerHTML = `<tr style="font-weight:700;background:#f0fff4;border-top:2px solid #27ae60">
+    <td>YTD (ม.ค.–ก.พ.)</td>
+    <td class="text-right">${fmt(t[0])}</td>
+    <td class="text-right">${fmt(t[1])}</td>
+    <td class="text-right profit-pos">${fmt(t[2])}</td>
+    <td class="text-right"><span class="pill pill-green">${ytdGMt.toFixed(1)}%</span></td>
+    <td class="text-right">${fmt(t[3])}</td>
+    <td class="text-right">${fmt(t[4])}</td>
+    <td class="text-right" style="color:#e74c3c">${fmt(t[5])}</td>
+    <td class="text-right profit-pos">฿${fmt(t[6])}</td>
+    <td class="text-right"><span class="pill pill-green">${ytdNMt.toFixed(1)}%*</span></td>
+  </tr>`;
+
+  // Comparison table
+  const avg25_car = 36000;
+  const items = [
+    { label: 'COGS', avg25: Math.round(avg25_cogs), jan26: cogs2026[0], feb26: cogs2026[1] },
+    { label: 'เงินเดือน', avg25: Math.round(avg25_sal), jan26: sal2026[0], feb26: sal2026[1] },
+    { label: 'OpEx', avg25: Math.round(avg25_opex), jan26: opex2026[0], feb26: opex2026[1] },
+    { label: 'ดอกเบี้ยจ่าย', avg25: Math.round(avg25_int), jan26: int2026[0], feb26: int2026[1] },
+    { label: 'ค่าเช่าซื้อรถ', avg25: avg25_car, jan26: car2026x[0], feb26: car2026x[1] },
+  ];
+  let chHtml = '';
+  items.forEach(it => {
+    const d1 = it.jan26 - it.avg25, d2 = it.feb26 - it.avg25;
+    const p1 = d1/it.avg25*100, p2 = d2/it.avg25*100;
+    const cls1 = d1<=0?'profit-pos':'profit-neg', cls2 = d2<=0?'profit-pos':'profit-neg';
+    chHtml += `<tr>
+      <td><strong>${it.label}</strong></td>
+      <td class="text-right">฿${fmt(it.avg25)}</td>
+      <td class="text-right">฿${fmt(it.jan26)}</td>
+      <td class="text-right ${cls1}">${d1>=0?'+':''}${p1.toFixed(1)}%</td>
+      <td class="text-right">฿${fmt(it.feb26)}</td>
+      <td class="text-right ${cls2}">${d2>=0?'+':''}${p2.toFixed(1)}%</td>
+    </tr>`;
+  });
+  document.getElementById('compareBody').innerHTML = chHtml;
+
+  // Auto-render expense detail for default selected month
+  buildExpDetail();
+}
+
+// ==================== EXP DETAIL DROPDOWN ====================
+function buildExpDetail() {
+  const mKey  = document.getElementById('expMonthSelect').value; // 'jan' or 'feb'
+  const mIdx  = mKey === 'jan' ? 0 : 1;
+  const otherKey = mKey === 'jan' ? 'feb' : 'jan';
+  const monthLabel = mKey === 'jan' ? 'ม.ค. 2026' : 'ก.พ. 2026';
+  const otherLabel = mKey === 'jan' ? 'ก.พ. 2026' : 'ม.ค. 2026';
+
+  const rev      = rev2026[mIdx];
+  const rows     = expDetail2026[mKey];
+  const otherRows = expDetail2026[otherKey];
+
+  // Build lookup maps by account code
+  const otherMap = {};
+  otherRows.forEach(r => { otherMap[r.acct] = r; });
+  const curMap = {};
+  rows.forEach(r => { curMap[r.acct] = r; });
+
+  // Items in other month but not current month (only if amt > 5,000)
+  const goneItems = otherRows.filter(r => !curMap[r.acct] && r.amt > 5000);
+
+  // Total
+  const total = rows.reduce((s, r) => s + r.amt, 0);
+  const el = document.getElementById('expMonthTotal');
+  if (el) el.textContent = 'รวม ฿' + total.toLocaleString('th-TH');
+
+  // Bar scale: use largest item (COGS) as 100%
+  const maxAmt = rows.reduce((m, r) => Math.max(m, r.amt), 1);
+
+  const grpLabel = { cogs:'สินค้า/COGS', salary:'เงินเดือน', interest:'ดอกเบี้ย', car_lease:'เช่าซื้อรถ', opex:'OpEx' };
+  const grpColor = { cogs:'#e67e22', salary:'#9b59b6', interest:'#e74c3c', car_lease:'#27ae60', opex:'#3498db' };
+
+  // Special annotation by account code (only for specific month)
+  const specialNotes = {
+    'jan': {
+      '530213': '📋 ค่าแบบฟอร์มพนักงาน — เกิดเฉพาะ ม.ค.',
+      '520313': '🔬 ค่าตรวจสอบคุณภาพสินค้า — เกิดเฉพาะ ม.ค.',
+    },
+    'feb': {
+      '520202': '⚠️ จ่ายล่วงหน้า 6 เดือน (Facebook Ads) — ไม่ใช่ค่าใช้จ่ายประจำเดือน',
+      '520201': '⚠️ จ่ายล่วงหน้า 6 เดือน (Google Ads) — ไม่ใช่ค่าใช้จ่ายประจำเดือน',
+      '530117': '📅 เบี้ยประกันรถยนต์ชั้น 1 — ชำระรายปี ไม่ใช่ค่าใช้จ่ายรายเดือน',
+      '530215': '🧧 ค่าใช้จ่ายตรุษจีน — รายการตามฤดูกาล',
+    },
+  };
+  const notes = specialNotes[mKey] || {};
+
+  // Build table rows
+  const flaggedItems = [];
+  let html = '';
+
+  rows.forEach(row => {
+    const pctRev = row.amt / rev * 100;
+    const barW   = (row.amt / maxAmt * 100).toFixed(1);
+    const other  = otherMap[row.acct];
+    const otherAmt = other ? other.amt : 0;
+    const color  = grpColor[row.grp] || '#3498db';
+
+    // Anomaly detection
+    const flags = [];
+    const note  = notes[row.acct];
+
+    if (otherAmt === 0 && row.amt > 5000) {
+      flags.push({ cls: 'flag-new', label: '🆕 เฉพาะเดือนนี้' });
+    } else if (otherAmt > 0) {
+      const ratio = row.amt / otherAmt;
+      if (ratio >= 2.0 && row.amt > 10000) {
+        flags.push({ cls: 'flag-high', label: '🔺 +' + ((ratio - 1) * 100).toFixed(0) + '% vs ' + otherLabel });
+      } else if (ratio <= 0.5 && row.amt > 1000) {
+        flags.push({ cls: 'flag-low', label: '🔻 -' + ((1 - ratio) * 100).toFixed(0) + '% vs ' + otherLabel });
+      }
+    }
+    if (note) flags.push({ cls: 'flag-note', label: note });
+
+    if (flags.length > 0) flaggedItems.push({ ...row, flags, otherAmt });
+
+    const flagBadges = flags.map(f => `<span class="flag-badge ${f.cls}">${f.label}</span>`).join(' ');
+    const otherStr   = otherAmt > 0
+      ? '<span style="color:#95a5a6">฿' + otherAmt.toLocaleString('th-TH') + '</span>'
+      : '<span style="color:#dee2e6">—</span>';
+    const icon = flags.length > 0 ? '⚡' : '<span style="color:#dee2e6">·</span>';
+
+    html += `<tr>
+      <td style="text-align:center;font-size:15px">${icon}</td>
+      <td>
+        <div style="font-size:13px;font-weight:600;color:#2c3e50">${row.name}</div>
+        <div style="font-size:10px;color:#bdc3c7;letter-spacing:.5px">${row.acct}</div>
+      </td>
+      <td><span class="flag-badge grp-${row.grp}">${grpLabel[row.grp] || row.grp}</span></td>
+      <td class="text-right" style="font-weight:700;font-size:13px">฿${row.amt.toLocaleString('th-TH')}</td>
+      <td class="text-right" style="color:#7f8c8d;font-size:12px">${pctRev.toFixed(1)}%</td>
+      <td style="min-width:160px;padding:4px 8px">
+        <div class="exp-bar-wrap"><div class="exp-bar-fill" style="width:${barW}%;background:${color}88"></div></div>
+      </td>
+      <td class="text-right">${otherStr}</td>
+      <td>${flagBadges}</td>
+    </tr>`;
+  });
+
+  // "Gone" items — present in other month but missing here
+  goneItems.forEach(row => {
+    const color = grpColor[row.grp] || '#3498db';
+    html += `<tr style="opacity:0.45;background:#fafafa">
+      <td style="text-align:center;font-size:15px">❌</td>
+      <td>
+        <div style="font-size:13px;color:#aaa;text-decoration:line-through">${row.name}</div>
+        <div style="font-size:10px;color:#ccc">${row.acct}</div>
+      </td>
+      <td><span class="flag-badge grp-${row.grp}" style="opacity:0.5">${grpLabel[row.grp] || row.grp}</span></td>
+      <td class="text-right" style="color:#ccc">—</td>
+      <td class="text-right" style="color:#ccc">—</td>
+      <td style="min-width:160px;padding:4px 8px"><div class="exp-bar-wrap"></div></td>
+      <td class="text-right" style="color:#aaa;font-size:12px">฿${row.amt.toLocaleString('th-TH')}</td>
+      <td><span class="flag-badge flag-gone">❌ ไม่มีใน${monthLabel}</span></td>
+    </tr>`;
+  });
+
+  document.getElementById('expDetailBody').innerHTML = html;
+
+  // Footer total row
+  document.getElementById('expDetailFoot').innerHTML = `
+    <tr style="font-weight:700;background:#f8f9fa;border-top:2px solid #dee2e6">
+      <td colspan="3" style="padding:10px 12px">รวมทั้งหมด ${rows.length} รายการ</td>
+      <td class="text-right" style="font-size:14px;color:#2c3e50">฿${total.toLocaleString('th-TH')}</td>
+      <td class="text-right" style="color:#7f8c8d">${(total / rev * 100).toFixed(1)}%</td>
+      <td colspan="3"></td>
+    </tr>`;
+
+  // Remarks / alert banner
+  let remarkHtml = '';
+  if (flaggedItems.length > 0) {
+    const chips = flaggedItems.map(it => {
+      const f = it.flags[0];
+      return `<span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;background:#fff;border:1px solid #e0e0e0;border-radius:20px;padding:4px 11px;white-space:nowrap">
+        <strong style="color:#2c3e50">${it.name}</strong>
+        <span style="color:#7f8c8d">฿${it.amt.toLocaleString('th-TH')}</span>
+        <span class="flag-badge ${f.cls}" style="font-size:10px">${f.label}</span>
+      </span>`;
+    }).join('');
+    remarkHtml = `
+      <div style="background:#fffbf0;border:1px solid #ffe082;border-radius:8px;padding:10px 16px;margin-bottom:8px">
+        <div style="font-size:13px;font-weight:700;color:#e67e22;margin-bottom:8px">⚡ รายการที่ควรสังเกต — ${flaggedItems.length} รายการ</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px">${chips}</div>
+      </div>`;
+  } else {
+    remarkHtml = `<div style="font-size:12px;color:#95a5a6;padding:4px 0">✅ ไม่พบรายการผิดปกติในเดือนนี้</div>`;
+  }
+  document.getElementById('expRemarks').innerHTML = remarkHtml;
+}
+
+// ==================== INIT ====================
+buildOverviewCharts();
+</script>
+</body>
+</html>
