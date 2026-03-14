@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DD Paper Cup – CEO Executive Dashboard 2025–2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --navy: #1a2f4a;
+    --navy2: #243b55;
+    --gold: #d4a017;
+    --gold2: #f0c040;
+    --green: #27ae60;
+    --red: #e74c3c;
+    --orange: #e67e22;
+    --blue: #2980b9;
+    --purple: #8e44ad;
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --muted: #64748b;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+
+  /* ===== HEADER ===== */
+  .ceo-header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 60%, #1e3a5f 100%);
+    color: white; padding: 28px 40px; position: sticky; top: 0; z-index: 200;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  .ceo-header-left { display: flex; align-items: center; gap: 16px; }
+  .ceo-logo {
+    width: 52px; height: 52px; background: linear-gradient(135deg, var(--gold), var(--gold2));
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 900; color: var(--navy); flex-shrink: 0;
+  }
+  .ceo-title h1 { font-size: 20px; font-weight: 800; letter-spacing: 0.3px; }
+  .ceo-title p { font-size: 12px; opacity: 0.75; margin-top: 3px; }
+  .ceo-meta { text-align: right; }
+  .ceo-meta .date-badge {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block;
+  }
+  .ceo-meta .read-only {
+    display: block; font-size: 10px; opacity: 0.6; margin-top: 4px; text-align: center;
+  }
+
+  /* ===== MAIN CONTAINER ===== */
+  .main { max-width: 1400px; margin: 0 auto; padding: 32px 32px 60px; }
+
+  /* ===== SECTION HEADER ===== */
+  .section-header {
+    display: flex; align-items: center; gap: 12px; margin: 36px 0 20px;
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-icon {
+    width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center;
+    justify-content: center; font-size: 18px; flex-shrink: 0;
+  }
+  .section-icon.finance { background: #e8f5e9; }
+  .section-icon.sales   { background: #e3f2fd; }
+  .section-icon.people  { background: #f3e5f5; }
+  .section-icon.cash    { background: #fff8e1; }
+  .section-icon.risk    { background: #fce4ec; }
+  .section-icon.ytd     { background: #e8eaf6; }
+  .section-label { font-size: 18px; font-weight: 800; color: var(--navy); letter-spacing: 0.3px; }
+  .section-label span { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 8px; }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* ===== CARD ===== */
+  .card {
+    background: var(--card); border-radius: 14px; box-shadow: var(--shadow);
+    margin-bottom: 20px; overflow: hidden; border: 1px solid var(--border);
+  }
+  .card-header {
+    padding: 16px 24px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-header h3 { font-size: 14px; font-weight: 700; color: var(--text); }
+  .card-header .sub { font-size: 11px; color: var(--muted); }
+  .card-body { padding: 20px 24px; }
+
+  /* ===== KPI STRIP ===== */
+  .kpi-strip { display: grid; grid-template-columns: repeat(6,1fr); gap: 16px; margin-bottom: 32px; }
+  .kpi-card {
+    background: var(--card); border-radius: 14px; padding: 20px 20px 16px;
+    box-shadow: var(--shadow); border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  }
+  .kpi-card.navy::before   { background: var(--navy); }
+  .kpi-card.green::before  { background: var(--green); }
+  .kpi-card.orange::before { background: var(--orange); }
+  .kpi-card.blue::before   { background: var(--blue); }
+  .kpi-card.gold::before   { background: var(--gold); }
+  .kpi-card.red::before    { background: var(--red); }
+  .kpi-card.purple::before { background: var(--purple); }
+  .kpi-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 8px; }
+  .kpi-value { font-size: 24px; font-weight: 800; color: var(--text); line-height: 1; }
+  .kpi-value.sm { font-size: 20px; }
+  .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  .kpi-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 32px; opacity: 0.08; }
+  .up   { color: var(--green); font-weight: 700; }
+  .down { color: var(--red); font-weight: 700; }
+
+  /* ===== GRID LAYOUTS ===== */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+  .grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+
+  /* ===== CHART CONTAINERS ===== */
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-height: 280px; }
+
+  /* ===== WATERFALL BAR ===== */
+  .wf-row { display: flex; gap: 0; height: 54px; border-radius: 10px; overflow: hidden; margin: 12px 0; }
+  .wf-seg {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: white; transition: opacity 0.2s;
+    flex-direction: column; gap: 1px; padding: 0 4px; text-align: center; cursor: default;
+  }
+  .wf-seg:hover { opacity: 0.85; }
+  .wf-label { font-size: 9px; opacity: 0.85; }
+
+  /* ===== P&L MINI TABLE ===== */
+  .pl-row {
+    display: flex; align-items: center; padding: 9px 0; border-bottom: 1px solid #f1f5f9;
+  }
+  .pl-row:last-child { border-bottom: none; }
+  .pl-name { flex: 1; font-size: 13px; color: var(--text); }
+  .pl-amt { font-size: 13px; font-weight: 700; text-align: right; min-width: 90px; }
+  .pl-pct { font-size: 11px; color: var(--muted); text-align: right; min-width: 50px; }
+  .pl-bar-wrap { width: 100px; background: #f1f5f9; border-radius: 4px; height: 6px; margin: 0 12px; }
+  .pl-bar-fill { height: 100%; border-radius: 4px; }
+  .pl-indent { padding-left: 20px; font-size: 12px; }
+
+  /* ===== YEAR TREND BARS ===== */
+  .trend-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+  .trend-row:last-child { border-bottom: none; }
+  .trend-year { font-size: 13px; font-weight: 700; min-width: 48px; color: var(--navy); }
+  .trend-bar-wrap { flex: 1; background: #f1f5f9; border-radius: 4px; height: 22px; overflow: hidden; }
+  .trend-bar-fill {
+    height: 100%; border-radius: 4px; display: flex; align-items: center;
+    padding-left: 10px; font-size: 11px; font-weight: 700; color: white; transition: width 0.6s;
+  }
+  .trend-amt { font-size: 13px; font-weight: 800; min-width: 70px; text-align: right; }
+  .trend-yoy { font-size: 11px; min-width: 60px; text-align: right; font-weight: 600; }
+  .trend-tag { font-size: 10px; background: #f1f5f9; border-radius: 10px; padding: 2px 8px; color: var(--muted); }
+
+  /* ===== SP ROWS ===== */
+  .sp-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+  .sp-row:last-child { border-bottom: none; }
+  .sp-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .sp-name { font-size: 13px; font-weight: 600; flex: 1; }
+  .sp-bar-wrap { flex: 1.5; background: #f1f5f9; border-radius: 4px; height: 8px; overflow: hidden; }
+  .sp-bar-fill { height: 100%; border-radius: 4px; }
+  .sp-amt { font-size: 13px; font-weight: 800; min-width: 70px; text-align: right; }
+  .sp-pct { font-size: 11px; color: var(--muted); min-width: 42px; text-align: right; }
+  .sp-level { font-size: 10px; background: #f1f5f9; border-radius: 8px; padding: 2px 6px; white-space: nowrap; }
+
+  /* ===== RETENTION GRID ===== */
+  .ret-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; margin-top: 16px; }
+  .ret-card {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9); border-radius: 12px;
+    padding: 16px; text-align: center; border: 1px solid var(--border);
+  }
+  .ret-num { font-size: 28px; font-weight: 800; color: var(--navy); }
+  .ret-label { font-size: 10px; color: var(--muted); margin-top: 4px; line-height: 1.4; font-weight: 600; }
+
+  /* ===== TOP CUST ===== */
+  .cust-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+  .cust-row:last-child { border-bottom: none; }
+  .cust-rank { font-size: 12px; font-weight: 800; color: var(--muted); min-width: 24px; }
+  .cust-name { flex: 1; font-size: 12px; color: var(--text); }
+  .cust-amt { font-size: 13px; font-weight: 700; text-align: right; }
+  .cust-ly { font-size: 10px; text-align: center; min-width: 50px; }
+  .ly-stars { color: var(--gold); }
+
+  /* ===== DEBT ROWS ===== */
+  .debt-summary { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .debt-card {
+    background: #f8fafc; border-radius: 10px; padding: 16px; text-align: center;
+    border: 1px solid var(--border);
+  }
+  .debt-num { font-size: 22px; font-weight: 800; color: var(--navy); }
+  .debt-lbl { font-size: 10px; color: var(--muted); margin-top: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ===== AR/AP AGING ===== */
+  .aging-row { display: flex; gap: 8px; margin-top: 12px; }
+  .aging-seg {
+    border-radius: 6px; padding: 8px 10px; text-align: center; flex: 1;
+  }
+  .aging-seg .ag-pct { font-size: 15px; font-weight: 800; }
+  .aging-seg .ag-lbl { font-size: 9px; color: #fff; opacity: 0.85; margin-top: 2px; }
+
+  /* ===== INSIGHT CARDS ===== */
+  .insight-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+  .insight-item {
+    border-radius: 12px; padding: 16px 20px; border-left: 4px solid;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .insight-item.green { background: #f0fdf4; border-color: var(--green); }
+  .insight-item.red   { background: #fff5f5; border-color: var(--red); }
+  .insight-item.orange{ background: #fffbeb; border-color: var(--orange); }
+  .insight-item.blue  { background: #eff6ff; border-color: var(--blue); }
+  .insight-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .insight-text h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .insight-text p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ===== 2026 KPI STRIP ===== */
+  .ytd-strip { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+  .ytd-card {
+    border-radius: 12px; padding: 16px 20px; background: var(--card);
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+    border-top: 4px solid;
+  }
+  .ytd-card.navy  { border-top-color: var(--navy); }
+  .ytd-card.green { border-top-color: var(--green); }
+  .ytd-card.blue  { border-top-color: var(--blue); }
+  .ytd-card.gold  { border-top-color: var(--gold); }
+  .ytd-lbl  { font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--muted); font-weight: 700; margin-bottom: 6px; }
+  .ytd-val  { font-size: 22px; font-weight: 800; color: var(--text); }
+  .ytd-sub  { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background: var(--navy); color: rgba(255,255,255,0.6); text-align: center;
+    padding: 20px; font-size: 11px; margin-top: 40px;
+  }
+  .footer strong { color: rgba(255,255,255,0.9); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1100px) {
+    .kpi-strip { grid-template-columns: repeat(3,1fr); }
+    .ytd-strip { grid-template-columns: repeat(2,1fr); }
+    .grid-2-1, .grid-1-2 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .main { padding: 16px 16px 40px; }
+    .ceo-header { padding: 16px 20px; }
+    .kpi-strip { grid-template-columns: repeat(2,1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .debt-summary { grid-template-columns: repeat(2,1fr); }
+    .ret-grid { grid-template-columns: repeat(3,1fr); }
+    .insight-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .kpi-strip { grid-template-columns: 1fr 1fr; }
+    .kpi-value { font-size: 18px; }
+    .ytd-strip { grid-template-columns: 1fr 1fr; }
+    .ret-grid { grid-template-columns: repeat(2,1fr); }
+    canvas { max-height: 200px; }
+  }
+  @media print {
+    .ceo-header { position: relative; }
+    .main { padding: 20px; }
+    .card { break-inside: avoid; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="ceo-header">
+  <div class="ceo-header-left">
+    <div class="ceo-logo">DD</div>
+    <div class="ceo-title">
+      <h1>DD Paper Cup — CEO Executive Dashboard</h1>
+      <p>ภาพรวมธุรกิจ · การเงิน · ยอดขาย · สภาพคล่อง | 2023–2026 YTD</p>
+    </div>
+  </div>
+  <div class="ceo-meta">
+    <span class="date-badge">📅 ข้อมูล ณ มีนาคม 2569</span>
+    <span class="read-only">🔒 Executive View Only</span>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+  <!-- ===== TOP KPI STRIP ===== -->
+  <div class="kpi-strip" style="margin-top:24px;">
+
+    <div class="kpi-card navy">
+      <div class="kpi-label">รายได้รวม 2025</div>
+      <div class="kpi-value">฿58.4M</div>
+      <div class="kpi-sub"><span class="down">▼ 13.3%</span> เทียบปี 2024</div>
+      <div class="kpi-icon">💰</div>
+    </div>
+
+    <div class="kpi-card green">
+      <div class="kpi-label">Gross Margin 2025</div>
+      <div class="kpi-value">39.7%</div>
+      <div class="kpi-sub">Gross Profit ฿23.2M</div>
+      <div class="kpi-icon">📊</div>
+    </div>
+
+    <div class="kpi-card orange">
+      <div class="kpi-label">Net Profit 2025</div>
+      <div class="kpi-value sm">฿1.30M</div>
+      <div class="kpi-sub">Net Margin 2.2%</div>
+      <div class="kpi-icon">📈</div>
+    </div>
+
+    <div class="kpi-card blue">
+      <div class="kpi-label">ยอดขาย 2026 YTD</div>
+      <div class="kpi-value">฿10.1M</div>
+      <div class="kpi-sub">ม.ค.–ก.พ. · GM 38.7%</div>
+      <div class="kpi-icon">🚀</div>
+    </div>
+
+    <div class="kpi-card red">
+      <div class="kpi-label">หนี้รวม</div>
+      <div class="kpi-value sm">฿30.0M</div>
+      <div class="kpi-sub">ผ่อน ฿443K/เดือน</div>
+      <div class="kpi-icon">🏦</div>
+    </div>
+
+    <div class="kpi-card gold">
+      <div class="kpi-label">จำนวนพนักงาน</div>
+      <div class="kpi-value">32 คน</div>
+      <div class="kpi-sub">Revenue/คน ≈ ฿1.82M/ปี</div>
+      <div class="kpi-icon">👥</div>
+    </div>
+
+  </div>
+
+
+  <!-- ===== SECTION: FINANCE 2025 ===== -->
+  <div class="section-header">
+    <div class="section-icon finance">💵</div>
+    <div class="section-label">ภาพรวมการเงิน 2025 <span>งบกำไรขาดทุน Full Year</span></div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-2-1">
+
+    <!-- P&L Chart -->
+    <div class="card">
+      <div class="card-header">
+        <h3>📅 Revenue vs Cost รายเดือน 2025</h3>
+        <span class="sub">฿000</span>
+      </div>
+      <div class="card-body">
+        <div class="chart-wrap"><canvas id="plMonthChart" style="max-height:260px;"></canvas></div>
+      </div>
+    </div>
+
+    <!-- P&L Breakdown -->
+    <div class="card">
+      <div class="card-header">
+        <h3>💡 P&L Breakdown 2025</h3>
+        <span class="sub">ฐาน ฿58.4M</span>
+      </div>
+      <div class="card-body">
+
+        <!-- Waterfall bar -->
+        <div class="wf-row">
+          <div class="wf-seg" style="background:#27ae60;width:100%">
+            <span>Revenue</span><span class="wf-label">฿58.4M</span>
+          </div>
+        </div>
+        <div class="wf-row">
+          <div class="wf-seg" style="background:#e67e22;width:60.3%">
+            <span>COGS</span><span class="wf-label">60.3%</span>
+          </div>
+          <div class="wf-seg" style="background:#9b59b6;width:14.8%">
+            <span>Salary</span><span class="wf-label">14.8%</span>
+          </div>
+          <div class="wf-seg" style="background:#3498db;width:16.8%">
+            <span>OpEx</span><span class="wf-label">16.8%</span>
+          </div>
+          <div class="wf-seg" style="background:#e74c3c;width:5.9%">
+            <span>Fin</span><span class="wf-label">5.9%</span>
+          </div>
+          <div class="wf-seg" style="background:#1abc9c;width:2.2%">
+            <span>🟢</span><span class="wf-label">2.2%</span>
+          </div>
+        </div>
+
+        <!-- P&L rows -->
+        <div style="margin-top:16px;">
+          <div class="pl-row">
+            <span class="pl-name" style="font-weight:700;">💰 รายได้สุทธิ</span>
+            <div class="pl-bar-wrap"><div class="pl-bar-fill" style="width:100%;background:#27ae60;"></div></div>
+            <span class="pl-pct">100%</span>
+            <span class="pl-amt" style="color:#27ae60;">฿58.4M</span>
+          </div>
+          <div class="pl-row">
+            <span class="pl-name pl-indent">🏭 ต้นทุนสินค้า (COGS)</span>
+            <div class="pl-bar-wrap"><div class="pl-bar-fill" style="width:60.3%;background:#e67e22;"></div></div>
+            <span class="pl-pct">60.3%</span>
+            <span class="pl-amt" style="color:#e67e22;">฿35.2M</span>
+          </div>
+          <div class="pl-row" style="border-top:2px solid #e2e8f0;padding-top:12px;">
+            <span class="pl-name" style="font-weight:700;">📊 Gross Profit</span>
+            <div class="pl-bar-wrap"><div class="pl-bar-fill" style="width:39.7%;background:#27ae60;"></div></div>
+            <span class="pl-pct" style="color:#27ae60;font-weight:700;">39.7%</span>
+            <span class="pl-amt" style="color:#27ae60;font-size:15px;">฿23.2M</span>
+          </div>
+          <div class="pl-row">
+            <span class="pl-name pl-indent">👤 เงินเดือน &amp; สวัสดิการ</span>
+            <div class="pl-bar-wrap"><div class="pl-bar-fill" style="width:14.8%;background:#9b59b6;"></div></div>
+            <span class="pl-pct">14.8%</span>
+            <span class="pl-amt" style="color:#9b59b6;">฿8.6M</span>
+          </div>
+          <div class="pl-row">
+            <span class="pl-name pl-indent">💼 ค่าใช้จ่ายดำเนินงาน (OpEx)</span>
+            <div class="pl-bar-wrap"><div class="pl-bar-fill" style="width:16.8%;background:#3498db;"></div></div>
+            <span class="pl-pct">16.8%</span>
+            <span class="pl-amt" style="color:#3498db;">฿9.8M</span>
+          </div>
+          <div class="pl-row">
+            <span class="pl-name pl-indent">🏦 ดอกเบี้ย + ค่าเสื่อม + ประกัน</span>
+            <div class="pl-bar-wrap"><div class="pl-bar-fill" style="width:7.0%;background:#e74c3c;"></div></div>
+            <span class="pl-pct">7.0%</span>
+            <span class="pl-amt" style="color:#e74c3c;">฿4.1M</span>
+          </div>
+          <div class="pl-row" style="border-top:2px solid #e2e8f0;padding-top:12px;">
+            <span class="pl-name" style="font-weight:800;font-size:14px;">✅ กำไรสุทธิ</span>
+            <div class="pl-bar-wrap"><div class="pl-bar-fill" style="width:2.2%;background:#27ae60;"></div></div>
+            <span class="pl-pct" style="color:#27ae60;font-weight:700;">2.2%</span>
+            <span class="pl-amt" style="color:#27ae60;font-size:15px;font-weight:800;">฿1.30M</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ===== SECTION: SALES TREND ===== -->
+  <div class="section-header">
+    <div class="section-icon sales">📈</div>
+    <div class="section-label">ยอดขาย 2023–2026 <span>เปรียบเทียบรายปี</span></div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- Yearly Trend -->
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 ยอดขายรายปี (4 ปี)</h3>
+        <span class="sub">เทียบ YoY Growth</span>
+      </div>
+      <div class="card-body">
+        <!-- Bar chart -->
+        <div class="chart-wrap"><canvas id="yearlyChart" style="max-height:200px;"></canvas></div>
+        <!-- Trend rows -->
+        <div style="margin-top:16px;">
+          <div class="trend-row">
+            <span class="trend-year">2023</span>
+            <div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:92.4%;background:#2980b9;">฿62.2M</div></div>
+            <span class="trend-amt" style="color:#2980b9;">฿62.2M</span>
+            <span class="trend-yoy" style="color:var(--muted)">—</span>
+          </div>
+          <div class="trend-row">
+            <span class="trend-year">2024</span>
+            <div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:100%;background:#27ae60;">฿67.3M</div></div>
+            <span class="trend-amt" style="color:#27ae60;">฿67.3M</span>
+            <span class="trend-yoy up">▲ 8.3%</span>
+          </div>
+          <div class="trend-row">
+            <span class="trend-year">2025</span>
+            <div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:83.7%;background:#e74c3c;">฿56.4M</div></div>
+            <span class="trend-amt" style="color:#e74c3c;">฿56.4M</span>
+            <span class="trend-yoy down">▼ 16.2%</span>
+          </div>
+          <div class="trend-row">
+            <span class="trend-year">2026</span>
+            <div class="trend-bar-wrap"><div class="trend-bar-fill" style="width:15%;background:#e67e22;">฿10.1M</div></div>
+            <span class="trend-amt" style="color:#e67e22;">฿10.1M</span>
+            <span class="trend-tag">ม.ค.–ก.พ.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly 2023 vs 2025 -->
+    <div class="card">
+      <div class="card-header">
+        <h3>📅 ยอดขายรายเดือน — 2023 vs 2025</h3>
+        <span class="sub">฿ ล้านบาท</span>
+      </div>
+      <div class="card-body">
+        <div class="chart-wrap"><canvas id="monthlyCompChart" style="max-height:270px;"></canvas></div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ===== SECTION: SALES TEAM ===== -->
+  <div class="section-header">
+    <div class="section-icon people">👥</div>
+    <div class="section-label">ทีมขาย &amp; Business Unit 2025 <span>Performance Breakdown</span></div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- Salesperson -->
+    <div class="card">
+      <div class="card-header">
+        <h3>🏅 พนักงานขาย 2025</h3>
+        <span class="sub">ยอดสุทธิ ฿56.4M รวม 4 คน</span>
+      </div>
+      <div class="card-body">
+        <div style="display:flex;gap:20px;align-items:flex-start;">
+          <div style="flex:0 0 180px;">
+            <div class="chart-wrap"><canvas id="spDonut" style="max-height:180px;"></canvas></div>
+          </div>
+          <div style="flex:1;">
+            <div class="sp-row">
+              <div class="sp-dot" style="background:#2980b9;"></div>
+              <span class="sp-name">Theerata</span>
+              <div class="sp-bar-wrap"><div class="sp-bar-fill" style="width:100%;background:#2980b9;"></div></div>
+              <span class="sp-amt" style="color:#2980b9;">฿28.3M</span>
+              <span class="sp-pct">50.2%</span>
+            </div>
+            <div class="sp-row">
+              <div class="sp-dot" style="background:#e74c3c;"></div>
+              <span class="sp-name">ศุภิสรา</span>
+              <div class="sp-bar-wrap"><div class="sp-bar-fill" style="width:57.3%;background:#e74c3c;"></div></div>
+              <span class="sp-amt" style="color:#e74c3c;">฿16.2M</span>
+              <span class="sp-pct">28.8%</span>
+            </div>
+            <div class="sp-row">
+              <div class="sp-dot" style="background:#27ae60;"></div>
+              <span class="sp-name">Jutamat</span>
+              <div class="sp-bar-wrap"><div class="sp-bar-fill" style="width:38.9%;background:#27ae60;"></div></div>
+              <span class="sp-amt" style="color:#27ae60;">฿11.0M</span>
+              <span class="sp-pct">19.5%</span>
+            </div>
+            <div class="sp-row">
+              <div class="sp-dot" style="background:#8e44ad;"></div>
+              <span class="sp-name">นิโลบล</span>
+              <div class="sp-bar-wrap"><div class="sp-bar-fill" style="width:3.2%;background:#8e44ad;"></div></div>
+              <span class="sp-amt" style="color:#8e44ad;">฿0.9M</span>
+              <span class="sp-pct">1.6%</span>
+            </div>
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid #f1f5f9;">
+              <div style="font-size:11px;color:var(--muted);">⚠️ <strong style="color:var(--red)">ความเสี่ยงกระจุกตัว:</strong> Theerata คิดเป็น 50.2% ของยอดขายทั้งหมด</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BU Breakdown -->
+    <div class="card">
+      <div class="card-header">
+        <h3>🗂️ Business Unit 2025</h3>
+        <span class="sub">สัดส่วนยอดขายตาม BU</span>
+      </div>
+      <div class="card-body">
+        <div style="display:flex;gap:20px;align-items:flex-start;">
+          <div style="flex:0 0 180px;">
+            <div class="chart-wrap"><canvas id="buDonut" style="max-height:180px;"></canvas></div>
+          </div>
+          <div style="flex:1;">
+            <div class="sp-row">
+              <div class="sp-dot" style="background:#27ae60;"></div>
+              <span class="sp-name" style="font-size:12px;">BU1 Café &amp; Beverage</span>
+              <span class="sp-amt" style="color:#27ae60;">฿11.3M</span>
+              <span class="sp-pct">20.0%</span>
+            </div>
+            <div class="sp-row">
+              <div class="sp-dot" style="background:#2980b9;"></div>
+              <span class="sp-name" style="font-size:12px;">BU3 Corporate &amp; B2B</span>
+              <span class="sp-amt" style="color:#2980b9;">฿7.5M</span>
+              <span class="sp-pct">13.4%</span>
+            </div>
+            <div class="sp-row">
+              <div class="sp-dot" style="background:#f39c12;"></div>
+              <span class="sp-name" style="font-size:12px;">BU5 Agent &amp; Distributor</span>
+              <span class="sp-amt" style="color:#f39c12;">฿1.4M</span>
+              <span class="sp-pct">2.5%</span>
+            </div>
+            <div class="sp-row">
+              <div class="sp-dot" style="background:#8e44ad;"></div>
+              <span class="sp-name" style="font-size:12px;">BU4 Hotel &amp; Resort</span>
+              <span class="sp-amt" style="color:#8e44ad;">฿1.4M</span>
+              <span class="sp-pct">2.5%</span>
+            </div>
+            <div class="sp-row">
+              <div class="sp-dot" style="background:#bdc3c7;"></div>
+              <span class="sp-name" style="font-size:12px;">อื่นๆ / Unclassified</span>
+              <span class="sp-amt" style="color:#7f8c8d;">฿33.7M</span>
+              <span class="sp-pct">59.8%</span>
+            </div>
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid #f1f5f9;">
+              <div style="font-size:11px;color:var(--muted);">💡 59.8% ยังไม่ได้จัดกลุ่ม BU — โอกาสพัฒนา CRM &amp; Segmentation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ===== SECTION: CUSTOMERS ===== -->
+  <div class="section-header">
+    <div class="section-icon sales">🤝</div>
+    <div class="section-label">ลูกค้าสำคัญ &amp; Customer Retention <span>2023–2026</span></div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- Top Customers -->
+    <div class="card">
+      <div class="card-header">
+        <h3>🏆 Top 10 ลูกค้า (ยอดขายรวม 4 ปี)</h3>
+        <span class="sub">2023–2026</span>
+      </div>
+      <div class="card-body" style="padding:12px 24px;">
+        <div class="cust-row">
+          <span class="cust-rank">1</span>
+          <span class="cust-name">บ. เซ็นทรัลพัฒนา จำกัด (มหาชน)</span>
+          <span class="cust-amt">฿3.84M</span>
+          <span class="cust-ly"><span class="ly-stars">★★★★</span></span>
+        </div>
+        <div class="cust-row">
+          <span class="cust-rank">2</span>
+          <span class="cust-name">บ. แพ็คเวิร์คส์ จำกัด</span>
+          <span class="cust-amt">฿2.91M</span>
+          <span class="cust-ly"><span class="ly-stars">★★★★</span></span>
+        </div>
+        <div class="cust-row">
+          <span class="cust-rank">3</span>
+          <span class="cust-name">บ. โนส ที (ประเทศไทย) จำกัด</span>
+          <span class="cust-amt">฿2.75M</span>
+          <span class="cust-ly"><span class="ly-stars">★★★</span></span>
+        </div>
+        <div class="cust-row">
+          <span class="cust-rank">4</span>
+          <span class="cust-name">บ. เวนดิ้ง เซอร์วิสเซส จำกัด</span>
+          <span class="cust-amt">฿2.53M</span>
+          <span class="cust-ly"><span class="ly-stars">★★★★</span></span>
+        </div>
+        <div class="cust-row">
+          <span class="cust-rank">5</span>
+          <span class="cust-name">บ. Bigtree จำกัด</span>
+          <span class="cust-amt">฿2.39M</span>
+          <span class="cust-ly"><span class="ly-stars">★★★★</span></span>
+        </div>
+        <div class="cust-row">
+          <span class="cust-rank">6</span>
+          <span class="cust-name">บ. แพชชั่น เรสเตอรองท์ กรุ๊ป</span>
+          <span class="cust-amt">฿1.99M</span>
+          <span class="cust-ly"><span class="ly-stars">★★★</span></span>
+        </div>
+        <div class="cust-row">
+          <span class="cust-rank">7</span>
+          <span class="cust-name">บ. จีพีซีเอ็ม กรุ๊ป จำกัด</span>
+          <span class="cust-amt">฿1.82M</span>
+          <span class="cust-ly"><span class="ly-stars">★★★</span></span>
+        </div>
+        <div class="cust-row">
+          <span class="cust-rank">8</span>
+          <span class="cust-name">Shell Café (กลุ่ม)</span>
+          <span class="cust-amt">฿1.65M</span>
+          <span class="cust-ly"><span class="ly-stars">★★★★</span></span>
+        </div>
+        <div class="cust-row">
+          <span class="cust-rank">9</span>
+          <span class="cust-name">บ. ซีพีเอ็น พัทยา จำกัด</span>
+          <span class="cust-amt">฿1.51M</span>
+          <span class="cust-ly"><span class="ly-stars">★★</span></span>
+        </div>
+        <div class="cust-row">
+          <span class="cust-rank">10</span>
+          <span class="cust-name">บ. เซ็นทรัลเวิลด์ จำกัด</span>
+          <span class="cust-amt">฿1.40M</span>
+          <span class="cust-ly"><span class="ly-stars">★★★★</span></span>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);padding-top:10px;border-top:1px solid #f1f5f9;">
+          ★ = จำนวนปีที่ซื้อซ้ำ (max ★★★★ = ซื้อครบ 4 ปี 2023–2026)
+        </div>
+      </div>
+    </div>
+
+    <!-- Retention -->
+    <div class="card">
+      <div class="card-header">
+        <h3>🔄 Customer Retention</h3>
+        <span class="sub">ลูกค้าที่ซื้อซ้ำข้ามปี</span>
+      </div>
+      <div class="card-body">
+        <div class="ret-grid">
+          <div class="ret-card">
+            <div class="ret-num" style="color:#2980b9;">596</div>
+            <div class="ret-label">ลูกค้า Repeat<br>2023→2024</div>
+          </div>
+          <div class="ret-card">
+            <div class="ret-num" style="color:#27ae60;">272</div>
+            <div class="ret-label">ลูกค้า Repeat<br>2024→2025</div>
+          </div>
+          <div class="ret-card">
+            <div class="ret-num" style="color:#e67e22;">119</div>
+            <div class="ret-label">ลูกค้า Repeat<br>2025→2026</div>
+          </div>
+          <div class="ret-card">
+            <div class="ret-num" style="color:#8e44ad;">133</div>
+            <div class="ret-label">ซื้อต่อเนื่อง<br>3 ปี</div>
+          </div>
+          <div class="ret-card">
+            <div class="ret-num" style="color:#d4a017;">41</div>
+            <div class="ret-label">ซื้อต่อเนื่อง<br>4 ปี (Loyal)</div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;">
+          <div class="chart-wrap"><canvas id="retChart" style="max-height:160px;"></canvas></div>
+        </div>
+
+        <div style="margin-top:16px;padding:12px;background:#fffbeb;border-radius:10px;border:1px solid #fde68a;">
+          <div style="font-size:12px;color:#92400e;font-weight:700;">⚠️ Retention Trend: ลดลงต่อเนื่อง</div>
+          <div style="font-size:11px;color:#b45309;margin-top:4px;">ลูกค้าที่กลับมาซื้อซ้ำลดจาก 596 (2023→24) เหลือ 272 (2024→25) — ลดลง 54% · ควรมีโปรแกรม Loyalty</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ===== SECTION: CASH FLOW & DEBT ===== -->
+  <div class="section-header">
+    <div class="section-icon cash">💳</div>
+    <div class="section-label">สภาพคล่อง &amp; หนี้สิน <span>ณ 8 มีนาคม 2569</span></div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- AR / AP / Inventory -->
+    <div class="card">
+      <div class="card-header">
+        <h3>⚖️ Working Capital Snapshot</h3>
+        <span class="sub">ณ 8 มี.ค. 2569</span>
+      </div>
+      <div class="card-body">
+        <div class="debt-summary">
+          <div class="debt-card" style="border-top:3px solid #27ae60;">
+            <div class="debt-num" style="color:#27ae60;">฿2.82M</div>
+            <div class="debt-lbl">ลูกหนี้ (AR)<br><span style="color:#7f8c8d;font-size:10px;">DSO 16.2 วัน</span></div>
+          </div>
+          <div class="debt-card" style="border-top:3px solid #e74c3c;">
+            <div class="debt-num" style="color:#e74c3c;">฿6.22M</div>
+            <div class="debt-lbl">เจ้าหนี้ (AP)<br><span style="color:#7f8c8d;font-size:10px;">DPO 57.9 วัน</span></div>
+          </div>
+          <div class="debt-card" style="border-top:3px solid #f39c12;">
+            <div class="debt-num" style="color:#f39c12;">฿4.12M</div>
+            <div class="debt-lbl">สินค้าคงคลัง<br><span style="color:#7f8c8d;font-size:10px;">DIO 38.3 วัน</span></div>
+          </div>
+        </div>
+
+        <!-- AR Aging -->
+        <div style="margin-top:16px;">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">📊 AR Aging (ลูกหนี้)</div>
+          <div class="aging-row">
+            <div class="aging-seg" style="background:#27ae60;flex:90.9;">
+              <div class="ag-pct" style="color:#fff;">90.9%</div>
+              <div class="ag-lbl">ยังไม่ครบกำหนด</div>
+            </div>
+            <div class="aging-seg" style="background:#f39c12;flex:8.6;">
+              <div class="ag-pct" style="color:#fff;">8.6%</div>
+              <div class="ag-lbl">1–30 วัน</div>
+            </div>
+            <div class="aging-seg" style="background:#e74c3c;flex:0.5;">
+              <div class="ag-pct" style="color:#fff;">0.5%</div>
+              <div class="ag-lbl">31–60</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">✅ AR คุณภาพดี — 90.9% ยังไม่เลยกำหนด</div>
+        </div>
+
+        <!-- Inventory health -->
+        <div style="margin-top:16px;">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">📦 Inventory Health</div>
+          <div class="aging-row">
+            <div class="aging-seg" style="background:#e74c3c;flex:60.7;">
+              <div class="ag-pct" style="color:#fff;">60.7%</div>
+              <div class="ag-lbl">❌ ไม่มียอดขาย</div>
+            </div>
+            <div class="aging-seg" style="background:#f39c12;flex:25.1;">
+              <div class="ag-pct" style="color:#fff;">25.1%</div>
+              <div class="ag-lbl">🐢 ขายช้า</div>
+            </div>
+            <div class="aging-seg" style="background:#27ae60;flex:14.6;">
+              <div class="ag-pct" style="color:#fff;">14.6%</div>
+              <div class="ag-lbl">✅ Fast</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:#e74c3c;margin-top:4px;">⚠️ สินค้าไม่เคลื่อนไหว ฿2.5M (60.7%) — ต้องทบทวนการสั่งซื้อ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Debt Summary -->
+    <div class="card">
+      <div class="card-header">
+        <h3>🏦 สรุปหนี้สิน</h3>
+        <span class="sub">ยอดคงค้างทั้งหมด</span>
+      </div>
+      <div class="card-body">
+        <div class="chart-wrap"><canvas id="debtChart" style="max-height:200px;"></canvas></div>
+        <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="background:#f8fafc;border-radius:10px;padding:12px;text-align:center;border:1px solid #e2e8f0;">
+            <div style="font-size:20px;font-weight:800;color:#e74c3c;">฿30.0M</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px;font-weight:700;">หนี้รวมทั้งหมด</div>
+          </div>
+          <div style="background:#f8fafc;border-radius:10px;padding:12px;text-align:center;border:1px solid #e2e8f0;">
+            <div style="font-size:20px;font-weight:800;color:#e67e22;">฿443K</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px;font-weight:700;">ผ่อนชำระ/เดือน</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <div style="font-size:12px;font-weight:700;margin-bottom:8px;">รายละเอียดสินเชื่อ</div>
+          <div style="font-size:12px;display:flex;flex-direction:column;gap:4px;">
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f1f5f9;">
+              <span>ออมสิน (รวม 5 สัญญา)</span><span style="font-weight:700;">฿14.6M</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f1f5f9;">
+              <span>TTB OD (บ้านค้ำประกัน)</span><span style="font-weight:700;color:#e74c3c;">฿8.0M</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f1f5f9;">
+              <span>SCB ไม่มีหลักประกัน</span><span style="font-weight:700;">฿3.1M</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f1f5f9;">
+              <span>SME BANK NEW</span><span style="font-weight:700;">฿2.9M</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;">
+              <span>KTB ซื้อบอย</span><span style="font-weight:700;">฿1.3M</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:10px 12px;background:#fff5f5;border-radius:8px;border:1px solid #fecaca;font-size:11px;color:#b91c1c;">
+          💡 Net Profit ฿157K/เดือน เทียบกับดอกเบี้ย OD ฿47K/เดือน — กำไรยังคุมต้นทุนดอกเบี้ยได้
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ===== SECTION: 2026 YTD ===== -->
+  <div class="section-header">
+    <div class="section-icon ytd">🚀</div>
+    <div class="section-label">2026 YTD — ม.ค.–ก.พ. <span>ผลการดำเนินงาน</span></div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="ytd-strip" style="margin-bottom:20px;">
+    <div class="ytd-card navy">
+      <div class="ytd-lbl">Revenue Jan 2026</div>
+      <div class="ytd-val">฿4.89M</div>
+      <div class="ytd-sub">GM 38.9% · NP ฿553K</div>
+    </div>
+    <div class="ytd-card green">
+      <div class="ytd-lbl">Revenue Feb 2026</div>
+      <div class="ytd-val">฿5.24M</div>
+      <div class="ytd-sub">GM 38.4% · NP ฿807K</div>
+    </div>
+    <div class="ytd-card blue">
+      <div class="ytd-lbl">YTD ยอดรวม</div>
+      <div class="ytd-val">฿10.1M</div>
+      <div class="ytd-sub">Net Profit ฿1.36M (13.4%)</div>
+    </div>
+    <div class="ytd-card gold">
+      <div class="ytd-lbl">Run-rate (12 เดือน)</div>
+      <div class="ytd-val">฿60.8M</div>
+      <div class="ytd-sub">ถ้าทุกเดือนเท่ากับ ม.ค.–ก.พ.</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3>📊 Revenue vs Cost Structure — ม.ค.–ก.พ. 2026</h3>
+      </div>
+      <div class="card-body">
+        <div class="chart-wrap"><canvas id="ytdChart" style="max-height:220px;"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>📋 P&amp;L ม.ค.–ก.พ. 2026 เทียบ 2025 (เฉลี่ยเดือน)</h3>
+      </div>
+      <div class="card-body">
+        <div style="font-size:12px;margin-bottom:8px;color:var(--muted);">เปรียบเทียบ: ค่าเฉลี่ยต่อเดือนของปี 2026 YTD vs 2025</div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:0;font-size:12px;">
+          <div style="font-weight:700;padding:8px 0;border-bottom:2px solid #e2e8f0;color:var(--muted);">รายการ</div>
+          <div style="font-weight:700;padding:8px 4px;border-bottom:2px solid #e2e8f0;text-align:right;color:var(--muted);">2026 avg/เดือน</div>
+          <div style="font-weight:700;padding:8px 4px;border-bottom:2px solid #e2e8f0;text-align:right;color:var(--muted);">2025 avg/เดือน</div>
+          <div style="padding:8px 0;border-bottom:1px solid #f1f5f9;font-weight:600;">Revenue</div>
+          <div style="padding:8px 4px;border-bottom:1px solid #f1f5f9;text-align:right;font-weight:700;color:#27ae60;">฿5.06M</div>
+          <div style="padding:8px 4px;border-bottom:1px solid #f1f5f9;text-align:right;color:var(--muted);">฿4.87M</div>
+          <div style="padding:8px 0;border-bottom:1px solid #f1f5f9;">COGS</div>
+          <div style="padding:8px 4px;border-bottom:1px solid #f1f5f9;text-align:right;">฿3.11M</div>
+          <div style="padding:8px 4px;border-bottom:1px solid #f1f5f9;text-align:right;color:var(--muted);">฿2.93M</div>
+          <div style="padding:8px 0;border-bottom:1px solid #f1f5f9;">Gross Profit</div>
+          <div style="padding:8px 4px;border-bottom:1px solid #f1f5f9;text-align:right;font-weight:700;color:#27ae60;">฿1.95M (38.7%)</div>
+          <div style="padding:8px 4px;border-bottom:1px solid #f1f5f9;text-align:right;color:var(--muted);">฿1.93M (39.7%)</div>
+          <div style="padding:8px 0;border-bottom:1px solid #f1f5f9;">เงินเดือน</div>
+          <div style="padding:8px 4px;border-bottom:1px solid #f1f5f9;text-align:right;">฿625K</div>
+          <div style="padding:8px 4px;border-bottom:1px solid #f1f5f9;text-align:right;color:var(--muted);">฿719K</div>
+          <div style="padding:8px 0;border-bottom:1px solid #f1f5f9;">OpEx</div>
+          <div style="padding:8px 4px;border-bottom:1px solid #f1f5f9;text-align:right;">฿516K</div>
+          <div style="padding:8px 4px;border-bottom:1px solid #f1f5f9;text-align:right;color:var(--muted);">฿820K</div>
+          <div style="padding:8px 0;font-weight:700;">Net Profit</div>
+          <div style="padding:8px 4px;text-align:right;font-weight:800;color:#27ae60;">฿680K (13.4%)</div>
+          <div style="padding:8px 4px;text-align:right;color:var(--muted);">฿108K (2.2%)</div>
+        </div>
+        <div style="margin-top:12px;padding:10px 12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;font-size:11px;color:#166534;">
+          ✅ 2026 Net Margin ดีขึ้นมากจาก 2.2% → 13.4% จากต้นทุน OpEx และเงินเดือนที่ลดลง
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ===== SECTION: KEY INSIGHTS ===== -->
+  <div class="section-header">
+    <div class="section-icon risk">🎯</div>
+    <div class="section-label">Key Insights &amp; Action Items <span>สำหรับผู้บริหาร</span></div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="insight-grid">
+    <div class="insight-item green">
+      <div class="insight-icon">📈</div>
+      <div class="insight-text">
+        <h4>2026 Margin ดีขึ้นอย่างชัดเจน</h4>
+        <p>Net Margin ปี 2026 YTD อยู่ที่ 13.4% เทียบกับ 2.2% ในปี 2025 — มาจาก OpEx ที่ลดลงและรายได้ที่ขยับขึ้นเล็กน้อย</p>
+      </div>
+    </div>
+    <div class="insight-item red">
+      <div class="insight-icon">⚠️</div>
+      <div class="insight-text">
+        <h4>Salesperson Concentration Risk</h4>
+        <p>Theerata สร้างยอดขาย 50.2% ของทีม — ความเสี่ยงสูงหากมีการลาออก ควรพัฒนา Junior SP และกระจายลูกค้า</p>
+      </div>
+    </div>
+    <div class="insight-item orange">
+      <div class="insight-icon">📉</div>
+      <div class="insight-text">
+        <h4>Retention Rate ลดลงต่อเนื่อง</h4>
+        <p>ลูกค้า Repeat ลดจาก 596 → 272 → 119 ราย ใน 3 ปี — ควรลงทุนใน CRM, โปรแกรม Loyalty, และ Account Management</p>
+      </div>
+    </div>
+    <div class="insight-item blue">
+      <div class="insight-icon">📦</div>
+      <div class="insight-text">
+        <h4>สินค้าคงคลังไม่เคลื่อนไหว ฿2.5M</h4>
+        <p>60.7% ของ Inventory ไม่มียอดขายเลย — ควร Clear Stock ด้วย Promotion หรือ Write-off เพื่อลด Dead Stock</p>
+      </div>
+    </div>
+    <div class="insight-item orange">
+      <div class="insight-icon">🗂️</div>
+      <div class="insight-text">
+        <h4>BU Classification ยังไม่ครบ</h4>
+        <p>59.8% ของยอดขายยังอยู่ใน "Unclassified" BU — ควร Map ลูกค้าเข้า BU เพื่อวิเคราะห์ Channel Profitability</p>
+      </div>
+    </div>
+    <div class="insight-item green">
+      <div class="insight-icon">🏦</div>
+      <div class="insight-text">
+        <h4>AR คุณภาพดี — DSO ต่ำ</h4>
+        <p>DSO 16.2 วัน และ AR 90.9% ยังไม่ครบกำหนด — แสดงว่าลูกค้าจ่ายเงินเร็ว เป็น Cash Flow ที่แข็งแกร่ง</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .main -->
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <strong>DD Paper Cup</strong> · CEO Executive Dashboard ·
+  ข้อมูลการเงิน: AccCloud / งบทดลอง 2568 ·
+  ข้อมูลยอดขาย: FlowAccount 2023–2026 ·
+  จัดทำ: มีนาคม 2569 ·
+  <em>🔒 Confidential — For Internal Use Only</em>
+</div>
+
+<script>
+// ===== DATA =====
+const MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+
+const rev2025  = [5340694, 5269849, 3882755, 4812425, 4283557, 4186835, 5138709, 5015114, 5263403, 5543165, 4800238, 4874483];
+const cogs2025 = [2977433, 2922916, 2805243, 2378126, 2715491, 2510549, 3128762, 3376844, 3400226, 3102182, 3617042, 2262939];
+const sal2025  = [781694,  774362,  759160,  757407,  637184,  687092,  687356,  696596,  720640,  707474,  700503,  719073];
+const opex2025 = [2049237, 725355,  533786,  423990,  568638,  881102,  757434,  575537,  1016269, 900439,  653227,  753439];
+const gp2025   = rev2025.map((r,i) => r - cogs2025[i]);
+const np2025   = gp2025.map((g,i) => g - sal2025[i] - opex2025[i]);
+
+const monthly2023 = [4555893, 4367113, 5852357, 4219952, 4590348, 5340263, 4929022, 6459508, 4656343, 5196486, 6102081, 5889136];
+const monthly2025 = [3261673, 5235852, 3895142, 4028951, 5083204, 5201887, 4912034, 5413892, 4738201, 4901823, 5219043, 4478757];
+
+const rev2026  = [4889375, 5235852];
+const cogs2026 = [2986009, 3224583];
+const sal2026  = [636942,  613545];
+const opex2026 = [563465,  468009];
+const int2026  = [114129,  86918];
+const car2026  = [36000,   36000];
+const np2026   = rev2026.map((r,i) => r - cogs2026[i] - sal2026[i] - opex2026[i] - int2026[i] - car2026[i]);
+
+// ===== CHARTS =====
+const charts = {};
+function dc(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+// --- P&L Monthly Chart ---
+dc('plMonthChart');
+charts.plMonthChart = new Chart(document.getElementById('plMonthChart'), {
+  type: 'bar',
+  data: {
+    labels: MONTHS,
+    datasets: [
+      { label: 'Revenue',  data: rev2025.map(v=>v/1e6),  backgroundColor: 'rgba(39,174,96,0.7)',   borderRadius: 3, order: 2 },
+      { label: 'COGS',     data: cogs2025.map(v=>v/1e6), backgroundColor: 'rgba(230,126,34,0.8)',  borderRadius: 3, order: 3 },
+      { label: 'Net Profit', data: np2025.map(v=>v/1e6), type:'line', borderColor:'#1a2f4a', backgroundColor:'rgba(26,47,74,0.1)', borderWidth:2.5, pointRadius:4, fill:true, tension:0.3, order:1 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { position: 'top', labels: { font: { size: 11 } } },
+      tooltip: { callbacks: { label: c => `${c.dataset.label}: ฿${c.raw.toFixed(2)}M` } }
+    },
+    scales: {
+      y: { ticks: { callback: v => '฿'+v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// --- Yearly Bar Chart ---
+dc('yearlyChart');
+charts.yearlyChart = new Chart(document.getElementById('yearlyChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2023','2024','2025','2026 YTD'],
+    datasets: [{
+      label: 'ยอดขาย',
+      data: [62.16, 67.32, 56.37, 10.13],
+      backgroundColor: ['#2980b9','#27ae60','#e74c3c','#e67e22'],
+      borderRadius: 6, borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: c => `฿${c.raw}M` } }
+    },
+    scales: {
+      y: { ticks: { callback: v => '฿'+v+'M' }, grid: { color: '#f0f2f5' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// --- Monthly Comparison 2023 vs 2025 ---
+dc('monthlyCompChart');
+charts.monthlyCompChart = new Chart(document.getElementById('monthlyCompChart'), {
+  type: 'bar',
+  data: {
+    labels: MONTHS,
+    datasets: [
+      { label: '2023', data: monthly2023.map(v=>v/1e6), backgroundColor: 'rgba(41,128,185,0.75)', borderRadius: 3 },
+      { label: '2025', data: monthly2025.map(v=>v/1e6), backgroundColor: 'rgba(231,76,60,0.75)',  borderRadius: 3 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { position: 'top', labels: { font: { size: 11 } } },
+      tooltip: { callbacks: { label: c => `${c.dataset.label}: ฿${c.raw.toFixed(2)}M` } }
+    },
+    scales: {
+      y: { ticks: { callback: v => '฿'+v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// --- SP Donut ---
+dc('spDonut');
+charts.spDonut = new Chart(document.getElementById('spDonut'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Theerata','ศุภิสรา','Jutamat','นิโลบล'],
+    datasets: [{ data: [28282252,16207466,10989977,890765], backgroundColor: ['#2980b9','#e74c3c','#27ae60','#8e44ad'], borderWidth: 2, borderColor: '#fff' }]
+  },
+  options: {
+    cutout: '60%', responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: c => `${c.label}: ฿${(c.raw/1e6).toFixed(2)}M` } }
+    }
+  }
+});
+
+// --- BU Donut ---
+dc('buDonut');
+charts.buDonut = new Chart(document.getElementById('buDonut'), {
+  type: 'doughnut',
+  data: {
+    labels: ['BU1','BU3','BU5','BU4','BU2','อื่นๆ'],
+    datasets: [{ data: [11268487,7530943,1404000,1385647,1074666,33706717], backgroundColor: ['#27ae60','#2980b9','#f39c12','#8e44ad','#e67e22','#bdc3c7'], borderWidth: 2, borderColor: '#fff' }]
+  },
+  options: {
+    cutout: '60%', responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: c => `${c.label}: ฿${(c.raw/1e6).toFixed(2)}M` } }
+    }
+  }
+});
+
+// --- Retention Chart ---
+dc('retChart');
+charts.retChart = new Chart(document.getElementById('retChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2023→24','2024→25','2025→26'],
+    datasets: [{ label: 'ลูกค้า Repeat', data: [596,272,119], backgroundColor: ['#2980b9','#f39c12','#e74c3c'], borderRadius: 6 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: c => `${c.raw} ราย` } }
+    },
+    scales: {
+      y: { grid: { color: '#f0f2f5' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// --- Debt Chart ---
+dc('debtChart');
+charts.debtChart = new Chart(document.getElementById('debtChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['ออมสิน (รวม)','TTB OD','SCB','SME BANK','KTB'],
+    datasets: [{ data: [14664814,8000000,3125391,2926233,1300988], backgroundColor: ['#1a2f4a','#e74c3c','#e67e22','#2980b9','#8e44ad'], borderWidth: 2, borderColor: '#fff' }]
+  },
+  options: {
+    cutout: '60%', responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 10 }, boxWidth: 10 } },
+      tooltip: { callbacks: { label: c => `${c.label}: ฿${(c.raw/1e6).toFixed(2)}M` } }
+    }
+  }
+});
+
+// --- 2026 YTD Stacked Chart ---
+dc('ytdChart');
+charts.ytdChart = new Chart(document.getElementById('ytdChart'), {
+  type: 'bar',
+  data: {
+    labels: ['ม.ค. 2026','ก.พ. 2026'],
+    datasets: [
+      { label: 'COGS',     data: [2986009/1e6, 3224583/1e6], backgroundColor: '#e67e22', borderRadius: 0, stack: 'cost' },
+      { label: 'เงินเดือน', data: [636942/1e6, 613545/1e6],   backgroundColor: '#9b59b6', borderRadius: 0, stack: 'cost' },
+      { label: 'OpEx',     data: [563465/1e6, 468009/1e6],   backgroundColor: '#3498db', borderRadius: 0, stack: 'cost' },
+      { label: 'ดอกเบี้ย', data: [(114129+36000)/1e6, (86918+36000)/1e6], backgroundColor: '#e74c3c', borderRadius: 0, stack: 'cost' },
+      { label: 'Net Profit', data: np2026.map(v=>v/1e6), backgroundColor: '#27ae60', borderRadius: 4, stack: 'cost' },
+      { label: 'Revenue',  data: rev2026.map(v=>v/1e6), type: 'line', borderColor:'#1a2f4a', backgroundColor:'transparent', borderWidth:2.5, pointRadius:8, pointBackgroundColor:'#1a2f4a', order: 0 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { position: 'top', labels: { font: { size: 10 }, boxWidth: 10 } },
+      tooltip: { callbacks: { label: c => `${c.dataset.label}: ฿${c.raw.toFixed(2)}M` } }
+    },
+    scales: {
+      y: { ticks: { callback: v => '฿'+v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>

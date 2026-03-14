@@ -171,12 +171,49 @@
   .clickable-card::after { content:'🔍 คลิกดูรายละเอียด'; position:absolute; bottom:8px; right:12px; font-size:10px; color:var(--muted); opacity:0; transition:opacity 0.2s; }
   .clickable-card:hover::after { opacity:1; }
 
+  /* ===== MOBILE RESPONSIVE ===== */
+  /* ซ่อน scrollbar บน tab bar แต่ยังเลื่อนได้ */
+  .tabs { scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+
   @media (max-width: 900px) {
-    .kpi-row { grid-template-columns: repeat(2, 1fr); }
-    .grid-2 { grid-template-columns: 1fr; }
-    .grid-3 { grid-template-columns: 1fr; }
+    .header { flex-direction: column; gap: 10px; align-items: flex-start; padding: 16px 20px; }
+    .header-right { align-items: flex-start; }
+    /* Tab bar เลื่อนซ้าย-ขวาได้ */
+    .tabs { padding: 0 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tab-content { padding: 16px; }
+    .kpi-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
     .scenario-row { grid-template-columns: 1fr; }
-    .header { flex-direction: column; gap: 12px; }
+    /* Table & heatmap เลื่อนซ้าย-ขวาได้ */
+    .card-body { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 14px 16px; }
+    .card-header { padding: 12px 16px; flex-wrap: wrap; gap: 8px; }
+    .heatmap-grid { min-width: 680px; }
+    .modal-box { padding: 20px 16px; }
+  }
+
+  @media (max-width: 600px) {
+    .header { padding: 12px 14px; }
+    .header-left h1 { font-size: 17px; }
+    .header-left p { font-size: 11px; }
+    .tab-btn { padding: 10px 12px; font-size: 11px; }
+    .tab-content { padding: 10px; }
+    .kpi-row { gap: 8px; }
+    .kpi-card { padding: 14px 14px; }
+    .kpi-card .kpi-value { font-size: 20px; }
+    .kpi-card .kpi-icon { display: none; }
+    .card-body { padding: 10px 12px; }
+    .card-header { padding: 10px 12px; }
+    .card-header h3 { font-size: 13px; }
+    .scenario-card { padding: 14px; }
+    .scenario-value { font-size: 22px; }
+    .channel-name { width: 95px; font-size: 11px; }
+    .channel-pct { width: 46px; font-size: 11px; }
+    .data-table th, .data-table td { padding: 8px 8px; font-size: 12px; }
+    .modal-overlay { padding: 10px 8px; }
+    .modal-box { padding: 14px 12px; border-radius: 12px; }
+    .modal-header h2 { font-size: 15px; }
+    canvas { max-height: 220px; }
   }
 </style>
 </head>
@@ -207,7 +244,7 @@
   <button class="tab-btn" onclick="showTab('progress2026')" style="color:#27ae60;font-weight:800;">🟢 2026 Progress</button>
   <button class="tab-btn" onclick="showTab('central')" style="color:#8e44ad;font-weight:800;">🏬 Central Group</button>
   <button class="tab-btn" onclick="showTab('risk')" style="color:#e74c3c;font-weight:800;">⚠️ ความเสี่ยง</button>
-  <button class="tab-btn" onclick="showTab('churn')" style="color:#c0392b;font-weight:800;">🚨 ลูกค้าหาย</button>
+  <button class="tab-btn" onclick="showTab('analysis')" style="color:#8e44ad;font-weight:800;">🔬 วิเคราะห์เชิงลึก</button>
 </div>
 
 <!-- ============================== TAB: RISK & INSIGHTS ============================== -->
@@ -519,9 +556,9 @@
       <div class="kpi-icon">📉</div>
     </div>
     <div class="kpi-card" style="border-left:4px solid #e67e22;">
-      <div class="kpi-label">2026 YTD (ม.ค.–ก.พ.)</div>
-      <div class="kpi-value" style="color:#e67e22;">1.0M</div>
-      <div class="kpi-sub">฿1,033,607 | 2 เดือนแรก 2026</div>
+      <div class="kpi-label">2026 YTD (ม.ค.–16 มี.ค.)</div>
+      <div class="kpi-value" style="color:#e67e22;">1.4M</div>
+      <div class="kpi-sub">฿1,423,301 | ม.ค.–16 มี.ค. (incl VAT)</div>
       <div class="kpi-icon">🟢</div>
     </div>
   </div>
@@ -575,7 +612,7 @@
     <h4>💡 หมายเหตุ</h4>
     <ul>
       <li>รวมชื่อบิลที่มีคีย์เวิร์ด: <strong>เซ็นทรัล / Central / เซนทรัล / ซีพีเอ็น / CPN</strong> ทุกรูปแบบ</li>
-      <li>2026 เป็นข้อมูลเฉพาะ ม.ค.–ก.พ. (YTD 2 เดือน)</li>
+      <li>2026 เป็นข้อมูล ม.ค.–16 มี.ค. รวม ฿1.4M incl VAT</li>
       <li>กลุ่ม "เซ็นทรัลพัฒนา สาขา" ครอบคลุมสาขาห้างทั่วประเทศ เช่น ลาดพร้าว, แจ้งวัฒนะ, รามอินทรา ฯลฯ</li>
     </ul>
   </div>
@@ -1187,86 +1224,93 @@
 </div>
 
 <!-- ============================== TAB: CHURN (ลูกค้าที่หายไป) ============================== -->
-<div class="tab-content" id="tab-churn">
-  <h2 style="color:#c0392b;margin-bottom:6px;">🚨 ลูกค้าที่หายไปจากปี 2024</h2>
-  <p style="color:#7f8c8d;font-size:13px;margin-bottom:20px;">ลูกค้าที่มีออเดอร์ในปี 2024 แต่ไม่มีออเดอร์ใน 2025 | ตรวจสอบด้วย Fuzzy Matching แล้ว</p>
+<!-- ============================== TAB: SALES ANALYSIS ============================== -->
+<div class="tab-content" id="tab-analysis" style="padding:24px 32px">
 
-  <!-- KPI cards -->
-  <div class="kpi-grid" style="margin-bottom:24px;">
-    <div class="kpi-card" style="border-left:4px solid #c0392b;">
-      <div class="kpi-label">ลูกค้าที่หายทั้งหมด</div>
-      <div class="kpi-value" style="color:#c0392b;" id="churnListTotal">—</div>
-      <div class="kpi-sub">บริษัท / ร้านค้า / องค์กร</div>
+  <div style="background:#e8f4fd;border-left:4px solid var(--primary);border-radius:6px;padding:10px 16px;margin-bottom:20px;font-size:13px">
+    📊 <strong>Sales Analysis 2023–2026</strong> — ข้อมูลจากไฟล์ยอดขายพนักงานทุกคน | ปี 2023–2025 เต็มปี | ปี 2026 ข้อมูล ม.ค.–ก.พ. เท่านั้น
+  </div>
+
+  <div id="saKpiCards" style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:24px"></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+    <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:var(--shadow)">
+      <div style="font-weight:700;font-size:14px;color:var(--primary);margin-bottom:12px">📈 ยอดขายรายปี (฿M)</div>
+      <div style="height:240px"><canvas id="saYearChart"></canvas></div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #e74c3c;">
-      <div class="kpi-label">ยอดขายที่หายไป (2024)</div>
-      <div class="kpi-value" style="color:#e74c3c;" id="churnListRevenue">—</div>
-      <div class="kpi-sub">รวม VAT | เฉพาะ named accounts</div>
-    </div>
-    <div class="kpi-card" style="border-left:4px solid #e67e22;">
-      <div class="kpi-label">🔴 ลูกค้าสำคัญ (>100K)</div>
-      <div class="kpi-value" style="color:#e67e22;" id="churnListHigh">—</div>
-      <div class="kpi-sub">ยอดรวม: <span id="churnListHighRev">—</span></div>
-    </div>
-    <div class="kpi-card" style="border-left:4px solid #f39c12;">
-      <div class="kpi-label">🟠 กลาง (50K–100K)</div>
-      <div class="kpi-value" style="color:#f39c12;" id="churnListMid">—</div>
-      <div class="kpi-sub">ยอดรวม: <span id="churnListMidRev">—</span></div>
+    <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:var(--shadow)">
+      <div style="font-weight:700;font-size:14px;color:var(--primary);margin-bottom:12px">📅 ยอดขายรายเดือน เปรียบเทียบ 2023 vs 2025</div>
+      <div style="height:240px"><canvas id="saMonthChart"></canvas></div>
     </div>
   </div>
 
-  <!-- Chart + Filter row -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
-    <!-- Bar chart top 15 -->
-    <div class="chart-card">
-      <h3>📊 Top 15 ลูกค้าที่หาย (ยอดขาย 2024)</h3>
-      <canvas id="churnListBarChart" style="max-height:320px;"></canvas>
-    </div>
-    <!-- By salesperson -->
-    <div class="chart-card">
-      <h3>👤 แยกตามพนักงานขาย</h3>
-      <canvas id="churnListSalesChart" style="max-height:320px;"></canvas>
-    </div>
-  </div>
-
-  <!-- Search & Filter controls -->
-  <div class="chart-card" style="margin-bottom:16px;">
-    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
-      <input id="churnListSearch" type="text" placeholder="🔍 ค้นหาชื่อลูกค้า..." 
-        style="flex:1;min-width:200px;padding:8px 14px;border:1.5px solid #dde;border-radius:8px;font-size:13px;font-family:Segoe UI;"
-        oninput="renderChurnTable()">
-      <select id="churnListSalesFilter" onchange="renderChurnTable()"
-        style="padding:8px 12px;border:1.5px solid #dde;border-radius:8px;font-size:13px;">
-        <option value="">👤 พนักงานทั้งหมด</option>
-      </select>
-      <select id="churnListPriorityFilter" onchange="renderChurnTable()"
-        style="padding:8px 12px;border:1.5px solid #dde;border-radius:8px;font-size:13px;">
-        <option value="">🎯 ทุกระดับ</option>
-        <option value="high">🔴 สูง (>100K)</option>
-        <option value="mid">🟠 กลาง (50K–100K)</option>
-        <option value="low">🟡 ติดตาม (<50K)</option>
-      </select>
-      <span id="churnListCount" style="font-size:13px;color:#7f8c8d;font-weight:600;"></span>
+  <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:var(--shadow);margin-bottom:24px">
+    <div style="font-weight:700;font-size:14px;color:var(--primary);margin-bottom:16px">👤 ผลงานพนักงานขาย ปี 2025</div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap">
+      <div style="width:200px;height:200px;flex-shrink:0"><canvas id="saSpChart"></canvas></div>
+      <div style="flex:1;min-width:280px;overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead><tr style="background:#f8f9fa">
+            <th style="padding:8px 10px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:2px solid #dee2e6">พนักงานขาย</th>
+            <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:2px solid #dee2e6">ยอดรวม</th>
+            <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:2px solid #dee2e6">Txn</th>
+            <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:2px solid #dee2e6">ลูกค้า</th>
+            <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:2px solid #dee2e6">เฉลี่ย/Txn</th>
+            <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:2px solid #dee2e6">%</th>
+            <th style="padding:8px 10px;text-align:center;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:2px solid #dee2e6">ระดับ</th>
+          </tr></thead>
+          <tbody id="saSpBody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <!-- Table -->
-  <div class="chart-card" style="overflow-x:auto;">
-    <table style="width:100%;border-collapse:collapse;font-size:13px;">
-      <thead>
-        <tr style="background:#c0392b;color:white;">
-          <th style="padding:10px 8px;text-align:center;width:40px;">#</th>
-          <th style="padding:10px 12px;text-align:left;">ชื่อลูกค้า</th>
-          <th style="padding:10px 8px;text-align:right;">ยอดขาย 2024</th>
-          <th style="padding:10px 8px;text-align:center;">บิล</th>
-          <th style="padding:10px 8px;text-align:center;">พนักงาน</th>
-          <th style="padding:10px 8px;text-align:center;">ออเดอร์ล่าสุด</th>
-          <th style="padding:10px 8px;text-align:center;">ระดับ</th>
-        </tr>
-      </thead>
-      <tbody id="churnListTableBody"></tbody>
-    </table>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+    <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:var(--shadow)">
+      <div style="font-weight:700;font-size:14px;color:var(--primary);margin-bottom:12px">🗂️ กลุ่มลูกค้า BU (ปี 2025)</div>
+      <div style="height:200px"><canvas id="saBuChart"></canvas></div>
+      <div style="overflow-x:auto;margin-top:12px">
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead><tr style="background:#f8f9fa">
+            <th style="padding:6px 8px;text-align:left;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">กลุ่ม</th>
+            <th style="padding:6px 8px;text-align:right;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">ยอด</th>
+            <th style="padding:6px 8px;text-align:right;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">%</th>
+            <th style="padding:6px 8px;text-align:center;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">ความสำคัญ</th>
+          </tr></thead>
+          <tbody id="saBuBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:var(--shadow)">
+      <div style="font-weight:700;font-size:14px;color:var(--primary);margin-bottom:12px">📱 ช่องทางการขาย (ปี 2025)</div>
+      <div style="height:200px"><canvas id="saChChart"></canvas></div>
+      <div style="margin-top:10px;font-size:12px;color:var(--muted)">
+        💡 Line DD = ช่องทางหลัก 59.6% | Direct Mail = B2B/โปรเจ็ค | โทร = ลูกค้าเก่า
+      </div>
+    </div>
   </div>
+
+  <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:var(--shadow);margin-bottom:24px">
+    <div style="font-weight:700;font-size:14px;color:var(--primary);margin-bottom:14px">🔄 ความภักดีลูกค้า (Customer Retention 2023–2026)</div>
+    <div id="saRetention"></div>
+  </div>
+
+  <div style="background:#fff;border-radius:12px;padding:20px;box-shadow:var(--shadow)">
+    <div style="font-weight:700;font-size:14px;color:var(--primary);margin-bottom:14px">🏆 Top 10 ลูกค้า — ยอดสะสม 2023–2026</div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead><tr style="background:#f8f9fa">
+          <th style="padding:8px 10px;text-align:center;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">#</th>
+          <th style="padding:8px 10px;text-align:left;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">ชื่อลูกค้า</th>
+          <th style="padding:8px 10px;text-align:right;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">ยอดสะสม</th>
+          <th style="padding:8px 10px;text-align:center;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">ปีที่ซื้อ</th>
+          <th style="padding:8px 10px;text-align:center;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">สถานะ</th>
+        </tr></thead>
+        <tbody id="saTopBody"></tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
 <!-- ============================== DRILL-DOWN MODAL ============================== -->
@@ -1333,7 +1377,6 @@ const topCustomers = {
     {name: 'กฟผ.', val: 841159, seg: 'องค์กรรัฐ'},
     {name: 'บ. บีบ๊อกซ์ ปริ้นติ้ง', val: 784256, seg: 'บริษัท'},
     {name: 'บ. เนชั่น อินเตอร์ฯ (มหาชน)', val: 581100, seg: 'บริษัท'},
-    {name: 'บ. ซีพีเอ็น พัทยา', val: 553778, seg: 'บริษัท'},
     {name: 'บ. เวิลด์ ฟูด เซ็นเตอร์', val: 551585, seg: 'บริษัท'},
     {name: 'บ. ออลล์ สตาร์ โลจิสติกส์', val: 548910, seg: 'บริษัท'},
     {name: 'บ. บีเวล ฟูดมอลล์', val: 532967, seg: 'บริษัท'},
@@ -1403,14 +1446,14 @@ const salesperson = {
     {name: 'อื่นๆ', val: 147178},
   ],
   2025: [
-    {name: 'ปุณณภา ขำสำอางค์', val: 15596216},
-    {name: 'ธีรตา งามสูงเนิน', val: 14123235},
-    {name: 'ธชนัย ภักดีนอก', val: 12872020},
-    {name: 'ศุภิสรา แสงสว่าง', val: 8103733},
+    {name: 'ปุณณภา ขำสำอางค์', val: 14715651},
+    {name: 'ธีรตา งามสูงเนิน', val: 13221859},
+    {name: 'ธชนัย ภักดีนอก', val: 12032206},
+    {name: 'ศุภิสรา แสงสว่าง', val: 7634816},
+    {name: 'จุฑามาศ (Jutamat) — E-com', val: 5135503},
     {name: 'จุฑามาศ รัตนสูตร', val: 4802255},
     {name: 'กัญญารัตน์ ไชยศรีฯ', val: 1462862},
-    {name: 'Shopee/Lazada/TikTok', val: 692734},
-    {name: 'นิโลบล เพียรมานะกิจ', val: 445382},
+    {name: 'นิโลบล เพียรมานะกิจ', val: 416245},
     {name: 'ดวงกมล โคตรพงศ์', val: 168921},
     {name: 'อื่นๆ', val: 143868},
   ],
@@ -1428,7 +1471,6 @@ const loyalCustomers = [
   {name: 'กฟผ.', y23: 841159, y24: 511502, y25: 389576},
   {name: 'บ. บีเวล ฟูดมอลล์', y23: 532967, y24: 500760, y25: 582722},
   {name: 'บ. เวิลด์ ฟูด เซ็นเตอร์', y23: 551585, y24: 571032, y25: 440599},
-  {name: 'บ. ซีพีเอ็น พัทยา', y23: 553778, y24: 547940, y25: 458880},
   {name: 'บ. แอล แอนด์ เอช โฮเทล', y23: 445772, y24: 575306, y25: 481457},
   {name: 'บ. ช่อลดา คอฟฟี่', y23: 252880, y24: 676570, y25: 349642},
   {name: 'บ. เอสเอสพี เซ็นเตอร์แพ็ค', y23: 202889, y24: 637195, y25: 425592},
@@ -1783,8 +1825,8 @@ function filterTeam(yr, btn) {
 }
 
 // Team trend (top 6 across years)
-const top6 = ['ปุณณภา ขำสำอางค์','ธีรตา งามสูงเนิน','ธชนัย ภักดีนอก','ศุภิสรา แสงสว่าง','จุฑามาศ รัตนสูตร','กัญญารัตน์ ไชยศรีฯ'];
-const top6Colors = ['#2980b9','#27ae60','#e74c3c','#9b59b6','#f39c12','#1abc9c'];
+const top6 = ['ปุณณภา ขำสำอางค์','ธีรตา งามสูงเนิน','ธชนัย ภักดีนอก','ศุภิสรา แสงสว่าง','จุฑามาศ (Jutamat) — E-com','นิโลบล เพียรมานะกิจ'];
+const top6Colors = ['#4472C4','#2980b9','#70AD47','#e74c3c','#27ae60','#8e44ad'];
 function getSpVal(yr, name) {
   const sp = salesperson[yr];
   const found = sp.find(s => s.name === name);
@@ -1811,10 +1853,10 @@ charts.teamTrend = new Chart(document.getElementById('teamTrendChart'), {
 const actual2026 = {
   1: 4889375,
   2: 5235852,
-  3: 1195691,  // W1 เท่านั้น (1–9 มี.ค. 2026)
+  3: 3024676,  // 1–16 มี.ค. 2026 (ก่อน VAT)
 };
 const months2026HasData = [1, 2, 3];
-const partial2026 = { 3: 'W1 (1–9 มี.ค.)' };  // เดือนที่ข้อมูลยังไม่ครบ
+const partial2026 = { 3: '1–16 มี.ค.' };  // เดือนที่ข้อมูลยังไม่ครบ
 
 // ==================== FORECAST TAB ====================
 let forecastViewMode = 'monthly';
@@ -1973,7 +2015,7 @@ charts.actualVsForecast = new Chart(document.getElementById('actualVsForecastCha
 const sp2026Names = ['ธีรตา', 'ปุณณภา', 'ธชนัย', 'ศุภิสรา', 'จุฑามาศ', 'นิโลบล', 'Shopee'];
 const sp2026Jan  = [1434615, 1151971, 950250, 819351, 474338, 58850, 0];
 const sp2026Feb  = [1383488, 1266227, 1050785, 1006588, 321766, 59529, 147468];
-const sp2026Mar  = [404487, 366250, 193465, 23005, 208484, 0, 0]; // W1 (1–9 มี.ค.) เท่านั้น
+const sp2026Mar  = [404487, 366250, 193465, 23005, 208484, 0, 0]; // 1–16 มี.ค. (อัปเดตบางส่วน)
 
 charts.sp2026 = new Chart(document.getElementById('sp2026Chart'), {
   type: 'bar',
@@ -2054,11 +2096,11 @@ buildActualForecastTable();
 
 // ==================== CENTRAL GROUP TAB ====================
 const centralAnnual = {
-  pretax: [4461117, 5233494, 4746268, 965988],
-  vat:    [312278,  366345,  332666,  67619],
-  total:  [4773395, 5599838, 5078506, 1033607],
+  pretax: [4461117, 5233494, 4746268, 1330188],
+  vat:    [312278,  366345,  332666,  93113],
+  total:  [4773395, 5599838, 5078506, 1423301],
 };
-const centralLabels = ['2023', '2024', '2025', '2026 (ม.ค.–ก.พ.)'];
+const centralLabels = ['2023', '2024', '2025', '2026 (ม.ค.–16 มี.ค.)'];
 charts.centralAnnual = new Chart(document.getElementById('centralAnnualChart'), {
   type: 'bar',
   data: {
@@ -2277,6 +2319,7 @@ function showTab(tabId) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + tabId).classList.add('active');
   event.target.classList.add('active');
+  if (tabId === 'analysis') buildSalesAnalysis();
 }
 
 function openLoyalModal() {
@@ -2549,7 +2592,7 @@ charts.concentration = new Chart(document.getElementById('concentrationChart'), 
       <td>${priority}</td>
     </tr>`;
   });
-  document.getElementById('churnListTableBody').innerHTML = html;
+  document.getElementById('churnTableBody').innerHTML = html;
 })();
 
 // ==================== PARETO CHART ====================
@@ -2656,109 +2699,245 @@ charts.freq = new Chart(document.getElementById('freqChart'), {
   document.getElementById('concentrationTableBody').innerHTML = html;
 })();
 
-// ==================== CHURN TAB ====================
-const churnList = [{"n": "บริษัท ทีเค ท็อป คาร์ จำกัด", "v": 800000, "b": 1, "s": "วิภา", "p": "high", "l": "21/06/2024"}, {"n": "บริษัท ออลล์ สตาร์ โลจิสติกส์ จำกัด", "v": 745790, "b": 2, "s": "ธชนัย", "p": "high", "l": "11/04/2024"}, {"n": "บริษัท ยามาโมริ เทรดดิ้ง จำกัด", "v": 284492, "b": 4, "s": "ธชนัย", "p": "high", "l": "12/09/2024"}, {"n": "บริษัท บีแม็กซ์ ปิโตรเลียม จำกัด", "v": 267142, "b": 19, "s": "กัญญารัตน์", "p": "high", "l": "23/12/2024"}, {"n": "บริษัท ภัทรธนกฤตออยล์ จำกัด", "v": 187526, "b": 20, "s": "กัญญารัตน์", "p": "high", "l": "06/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ปุณณ์รักษา", "v": 180207, "b": 19, "s": "กัญญารัตน์", "p": "high", "l": "04/12/2024"}, {"n": "บริษัท มหานคร ปิโตรเลียมพาร์ค จำกัด", "v": 164202, "b": 13, "s": "กัญญารัตน์", "p": "high", "l": "27/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด กอบชัย พลัส", "v": 160862, "b": 36, "s": "กัญญารัตน์", "p": "high", "l": "23/12/2024"}, {"n": "บริษัท แม็กซี่ คอร์ป จำกัด", "v": 157504, "b": 4, "s": "ธชนัย", "p": "high", "l": "26/08/2024"}, {"n": "บริษัท คอร์ แวลู่ กรุ๊ป จำกัด", "v": 152646, "b": 4, "s": "จุฑามาศ", "p": "high", "l": "09/02/2024"}, {"n": "บริษัท เอ็นเตอร์เทนเม้นท์ เอ็ม จำกัด", "v": 142096, "b": 5, "s": "ธชนัย", "p": "high", "l": "25/09/2024"}, {"n": "บริษัท เอ็กซ์ควิซิท พูล วิลล่า จำกัด", "v": 141026, "b": 2, "s": "ธชนัย", "p": "high", "l": "07/06/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ทรงทรัพย์เจริญ", "v": 141010, "b": 4, "s": "ธชนัย", "p": "high", "l": "20/11/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ทรงพล ศรีราชา 2004", "v": 138940, "b": 19, "s": "กัญญารัตน์", "p": "high", "l": "20/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ต้นธันวา", "v": 128454, "b": 18, "s": "กัญญารัตน์", "p": "high", "l": "27/09/2024"}, {"n": "บริษัท เอ็มคิว รีเทล เอ็คซ์พีเรียนซ์ คอร์ปอเรชั่น จำกัด", "v": 128132, "b": 2, "s": "ธีรตา", "p": "high", "l": "07/03/2024"}, {"n": "บริษัท โรจนนุช จำกัด", "v": 126430, "b": 12, "s": "กัญญารัตน์", "p": "high", "l": "17/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด มหาเศรษฐี โคโค่วอร์ค", "v": 120910, "b": 2, "s": "จุฑามาศ", "p": "high", "l": "05/07/2024"}, {"n": "บริษัท เติมเต็มสุข ปิโตรเลี่ยม จำกัด", "v": 117706, "b": 6, "s": "กัญญารัตน์", "p": "high", "l": "29/11/2024"}, {"n": "ตาดน้ำดี สปป.ลาว", "v": 117400, "b": 4, "s": "ธชนัย", "p": "high", "l": "30/09/2024"}, {"n": "Dino coffee", "v": 114600, "b": 1, "s": "ธชนัย", "p": "high", "l": "09/02/2024"}, {"n": "บริษัท สินพูนผล จำกัด", "v": 112575, "b": 21, "s": "กัญญารัตน์", "p": "high", "l": "24/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ภูมิรพี 2007", "v": 108787, "b": 15, "s": "กัญญารัตน์", "p": "high", "l": "18/12/2024"}, {"n": "บริษัท ทองภัทร จำกัด", "v": 103041, "b": 10, "s": "กัญญารัตน์", "p": "high", "l": "16/12/2024"}, {"n": "บริษัท เอ็น-ริช 78 จำกัด", "v": 101650, "b": 4, "s": "ธชนัย", "p": "high", "l": "13/12/2024"}, {"n": "บริษัท วรเศรษฐ์ 888 จำกัด", "v": 101415, "b": 8, "s": "กัญญารัตน์", "p": "high", "l": "22/11/2024"}, {"n": "ห้างหุ้นส่วนจำกัด จีบีแอล ออยล์", "v": 97060, "b": 35, "s": "กัญญารัตน์", "p": "mid", "l": "19/12/2024"}, {"n": "บริษัท วินนาวา จำกัด", "v": 88189, "b": 5, "s": "กัญญารัตน์", "p": "mid", "l": "23/09/2024"}, {"n": "ร้านนุชโรตี เกาะหลีเป๊ะ จ.สตูล", "v": 87730, "b": 3, "s": "ธชนัย", "p": "mid", "l": "29/11/2024"}, {"n": "ไทไท สเลอปี้", "v": 86860, "b": 3, "s": "ธชนัย", "p": "mid", "l": "19/04/2024"}, {"n": "บริษัท แปซิฟิคแปรรูปสัตว์น้ำ จำกัด", "v": 85332, "b": 2, "s": "ธชนัย", "p": "mid", "l": "20/05/2024"}, {"n": "ห้างหุ้นส่วนจำกัด เอสซี เซอร์วิส 49", "v": 85332, "b": 13, "s": "กัญญารัตน์", "p": "mid", "l": "18/12/2024"}, {"n": "บริษัท กู๊ดด์ฟิลล์ จำกัด", "v": 84331, "b": 21, "s": "กัญญารัตน์", "p": "mid", "l": "19/11/2024"}, {"n": "บริษัท มังกรเอกเชื้อเพลิง จำกัด", "v": 83980, "b": 9, "s": "กัญญารัตน์", "p": "mid", "l": "19/07/2024"}, {"n": "บริษัท พรีม รีเทล จำกัด", "v": 81374, "b": 11, "s": "กัญญารัตน์", "p": "mid", "l": "16/12/2024"}, {"n": "บริษัท อีโค่ คาเฟ่ จำกัด", "v": 81320, "b": 1, "s": "ธชนัย", "p": "mid", "l": "15/07/2024"}, {"n": "บริษัท กาแฟ ลิตาเลีย  จำกัด", "v": 79712, "b": 3, "s": "ปุณณภา", "p": "mid", "l": "21/11/2024"}, {"n": "บริษัท พิทวัสออยล์ จำกัด", "v": 77896, "b": 9, "s": "กัญญารัตน์", "p": "mid", "l": "08/11/2024"}, {"n": "บริษัท มิตร เอ็นเนอร์จี จำกัด", "v": 77780, "b": 13, "s": "กัญญารัตน์", "p": "mid", "l": "13/12/2024"}, {"n": "บริษัท เฟิสต์ มีเดีย แอดเวอไทซิง จำกัด", "v": 77040, "b": 2, "s": "ธีรตา", "p": "mid", "l": "10/05/2024"}, {"n": "บริษัท มุกธนโชติ จำกัด", "v": 75114, "b": 17, "s": "กัญญารัตน์", "p": "mid", "l": "23/12/2024"}, {"n": "บริษัท แอ็ดวานซ์ โปรเจค วิชั่น จำกัด", "v": 74980, "b": 5, "s": "ธีรตา", "p": "mid", "l": "31/10/2024"}, {"n": "ห้างหุ้นส่วนจำกัด อัยยาวีร์ ออยล์", "v": 72963, "b": 10, "s": "กัญญารัตน์", "p": "mid", "l": "06/12/2024"}, {"n": "บริษัท รวยดี เอนเนอร์จี จำกัด", "v": 72020, "b": 10, "s": "กัญญารัตน์", "p": "mid", "l": "06/12/2024"}, {"n": "บริษัท เพลนารี เดอ พรอม จำกัด", "v": 69710, "b": 11, "s": "กัญญารัตน์", "p": "mid", "l": "06/11/2024"}, {"n": "บริษัท พี ซี ซี ออยล์ จำกัด", "v": 69443, "b": 10, "s": "กัญญารัตน์", "p": "mid", "l": "17/12/2024"}, {"n": "ฺBAEL BOY", "v": 69060, "b": 6, "s": "ธชนัย", "p": "mid", "l": "24/10/2024"}, {"n": "บริษัท ก.ภูภาภัทร จำกัด", "v": 68972, "b": 16, "s": "กัญญารัตน์", "p": "mid", "l": "04/12/2024"}, {"n": "บริษัท โฮลเดม แอคเซสเซอรี่ คาเฟ่ จำกัด", "v": 67932, "b": 4, "s": "ธีรตา", "p": "mid", "l": "22/04/2024"}, {"n": "บริษัท สุนิษารุ่งเรือง จำกัด", "v": 67623, "b": 12, "s": "กัญญารัตน์", "p": "mid", "l": "07/10/2024"}, {"n": "บริษัท นีโอวันนี จำกัด", "v": 67592, "b": 6, "s": "กัญญารัตน์", "p": "mid", "l": "09/11/2024"}, {"n": "Met coffee", "v": 67230, "b": 3, "s": "ธชนัย", "p": "mid", "l": "15/10/2024"}, {"n": "บริษัท พรีเมี่ยม เอ็นเนอร์จี ซัพพลาย จำกัด", "v": 66611, "b": 13, "s": "กัญญารัตน์", "p": "mid", "l": "25/10/2024"}, {"n": "ห้างหุ้นส่วนจำกัด วงศ์ทรายทอง", "v": 65805, "b": 14, "s": "กัญญารัตน์", "p": "mid", "l": "24/12/2024"}, {"n": "คุณณัชณัญช์ จุลเจิม", "v": 65460, "b": 4, "s": "ธีรตา", "p": "mid", "l": "06/09/2024"}, {"n": "คุณวิไลพร สุขตระกูล", "v": 65400, "b": 9, "s": "ธีรตา", "p": "mid", "l": "29/11/2024"}, {"n": "บริษัท โชคกิตยา จำกัด", "v": 64414, "b": 6, "s": "กัญญารัตน์", "p": "mid", "l": "13/12/2024"}, {"n": "นางสาวชัญญา จิตตโรภาส", "v": 63558, "b": 5, "s": "ดวงกมล", "p": "mid", "l": "09/09/2024"}, {"n": "ตลาดยันหว่าง", "v": 62595, "b": 2, "s": "จุฑามาศ", "p": "mid", "l": "16/02/2024"}, {"n": "บริษัท เอ็มกรุ๊ปชัยภูมิ จำกัด", "v": 62450, "b": 7, "s": "กัญญารัตน์", "p": "mid", "l": "29/11/2024"}, {"n": "คุณภัทร วิสุทธิกุล", "v": 62057, "b": 10, "s": "ธีรตา", "p": "mid", "l": "10/10/2024"}, {"n": "บริษัท ปริสุทธิ์ เซลล์แอนด์เซอร์วิส จำกัด", "v": 61097, "b": 16, "s": "กัญญารัตน์", "p": "mid", "l": "09/12/2024"}, {"n": "บริษัท ไทยนครพัฒนา จำกัด", "v": 60669, "b": 6, "s": "จุฑามาศ", "p": "mid", "l": "03/09/2024"}, {"n": "ห้างหุ้นส่วนจำกัด กิตติพรกุล เค เอส กรุ๊ป", "v": 60508, "b": 9, "s": "กัญญารัตน์", "p": "mid", "l": "18/12/2024"}, {"n": "บริษัท ลพบุรีธนแก๊ส จำกัด", "v": 59854, "b": 8, "s": "กัญญารัตน์", "p": "mid", "l": "23/12/2024"}, {"n": "บริษัท เดอะเวลเนส รักษะวาริน จำกัด", "v": 58711, "b": 5, "s": "ธชนัย", "p": "mid", "l": "18/09/2024"}, {"n": "บริษัท ปิติ คาเฟ่ แอนด์ บิสโทร จำกัด", "v": 58476, "b": 2, "s": "ธีรตา", "p": "mid", "l": "23/08/2024"}, {"n": "ห้างหุ้นส่วนจำกัด พรรัชชา", "v": 57441, "b": 21, "s": "กัญญารัตน์", "p": "mid", "l": "18/11/2024"}, {"n": "บริษัท เติมสุข2023  จำกัด", "v": 56371, "b": 11, "s": "กัญญารัตน์", "p": "mid", "l": "11/10/2024"}, {"n": "ห้างหุ้นส่วนจำกัด เอพีวี คอนเน็คท์", "v": 56130, "b": 8, "s": "กัญญารัตน์", "p": "mid", "l": "23/12/2024"}, {"n": "คุณใบไม้", "v": 55926, "b": 3, "s": "ธีรตา", "p": "mid", "l": "08/06/2024"}, {"n": "บริษัท นพดารา เรียลเอสเตท จำกัด", "v": 55533, "b": 3, "s": "ธชนัย", "p": "mid", "l": "17/04/2024"}, {"n": "บริษัท เจริญทรัพย์ โกลเบิล แอสเซท จำกัด", "v": 54998, "b": 6, "s": "supisara", "p": "mid", "l": "22/08/2024"}, {"n": "โรงแรมสายลม (หัวหิน)", "v": 54175, "b": 2, "s": "ธชนัย", "p": "mid", "l": "07/10/2024"}, {"n": "คุณกุ๊ก", "v": 53928, "b": 2, "s": "จุฑามาศ", "p": "mid", "l": "11/07/2024"}, {"n": "ร้าน Pa miang", "v": 53260, "b": 3, "s": "ธชนัย", "p": "mid", "l": "05/10/2024"}, {"n": "บริษัท อิมพีเรียล พลาซ่า จำกัด", "v": 53083, "b": 3, "s": "ธีรตา", "p": "mid", "l": "03/05/2024"}, {"n": "บริษัท เมบิส ฮอสพิทัลลิตี้ จำกัด", "v": 52878, "b": 1, "s": "ธีรตา", "p": "mid", "l": "20/11/2024"}, {"n": "บริษัท วุฒิธิพัน (1968) จำกัด", "v": 52798, "b": 8, "s": "กัญญารัตน์", "p": "mid", "l": "08/10/2024"}, {"n": "บริษัท ณัฏฐภรณ์เซอร์วิส จำกัด", "v": 52548, "b": 9, "s": "กัญญารัตน์", "p": "mid", "l": "23/12/2024"}, {"n": "คุณธีราภัค ศีลรักษา", "v": 51948, "b": 3, "s": "ธีรตา", "p": "mid", "l": "27/03/2024"}, {"n": "ห้างหุ้นส่วนจำกัด อ. กิจวิวัฒน์เซอร์วิส", "v": 51777, "b": 6, "s": "กัญญารัตน์", "p": "mid", "l": "10/10/2024"}, {"n": "K.ลลิตา", "v": 50108, "b": 6, "s": "จุฑามาศ", "p": "mid", "l": "30/10/2024"}, {"n": "บริษัท เอส.พี.ที. ออยล์ เอ็มไพร์ จำกัด", "v": 48952, "b": 9, "s": "กัญญารัตน์", "p": "low", "l": "30/10/2024"}, {"n": "บริษัท เดอะ ช็อคโกแลต แฟคทอรี่ จำกัด", "v": 48792, "b": 5, "s": "ธชนัย", "p": "low", "l": "04/06/2024"}, {"n": "คุณอิศเรศน์ กะตะศิลา", "v": 48209, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "24/12/2024"}, {"n": "บริษัท เอเอ็นอาร์ อินเตอร์ กรุ๊ป จำกัด", "v": 48096, "b": 5, "s": "supisara", "p": "low", "l": "21/09/2024"}, {"n": "ร้านสโลว์ ไรต์ โดย นาย จักรพงศ์ หมื่นหาดี", "v": 47930, "b": 2, "s": "ธชนัย", "p": "low", "l": "23/12/2024"}, {"n": "บริษัท เค แอนด์ ทริเพิล - ที จำกัด", "v": 47930, "b": 17, "s": "กัญญารัตน์", "p": "low", "l": "18/07/2024"}, {"n": "บริษัท แอพติจูด ไมซ์ จำกัด", "v": 47842, "b": 3, "s": "ธชนัย", "p": "low", "l": "01/11/2024"}, {"n": "Grayoon", "v": 47668, "b": 6, "s": "ธชนัย", "p": "low", "l": "18/12/2024"}, {"n": "บริษัท เมฆเกล้า จำกัด", "v": 46867, "b": 21, "s": "กัญญารัตน์", "p": "low", "l": "10/12/2024"}, {"n": "บริษัท มุกสิริวัฒน์ จำกัด", "v": 46652, "b": 11, "s": "กัญญารัตน์", "p": "low", "l": "13/12/2024"}, {"n": "บริษัท โกลด์ ปิโตรเลียม สเตชั่น จำกัด", "v": 46384, "b": 5, "s": "กัญญารัตน์", "p": "low", "l": "13/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ทู ซิส เทคโนโลยี", "v": 46046, "b": 2, "s": "ธีรตา", "p": "low", "l": "28/08/2024"}, {"n": "ร้านธัญสมุย ศูนย์สุขภาพองค์รวม", "v": 46000, "b": 1, "s": "ธชนัย", "p": "low", "l": "07/08/2024"}, {"n": "ร้านมีความปัง", "v": 45935, "b": 3, "s": "ธีรตา", "p": "low", "l": "24/05/2024"}, {"n": "บริษัท อินวีนิค  จำกัด", "v": 45689, "b": 3, "s": "จุฑามาศ", "p": "low", "l": "29/10/2024"}, {"n": "คุณพงศ์พัศ เหล่าศรีวิจิตร", "v": 45689, "b": 2, "s": "ธีรตา", "p": "low", "l": "08/08/2024"}, {"n": "บริษัท เดอะ เบสต์ พิลาทิส จำกัด", "v": 44886, "b": 3, "s": "ธีรตา", "p": "low", "l": "13/09/2024"}, {"n": "บริษัท เซ็นทรัลพัฒนา เรียลตี้  จำกัด", "v": 44780, "b": 8, "s": "ปุณณภา", "p": "low", "l": "04/09/2024"}, {"n": "ห้างหุ้นส่วนจำกัด สหบริการอุบล สาขาที่ 4", "v": 44244, "b": 13, "s": "กัญญารัตน์", "p": "low", "l": "27/12/2024"}, {"n": "ร้านกาแฟปัจจุบัน", "v": 44000, "b": 2, "s": "ธชนัย", "p": "low", "l": "23/08/2024"}, {"n": "บริษัท ซาเมโรส์ ไอศครีม พาราไดซ์ จำกัด", "v": 43968, "b": 4, "s": "ธีรตา", "p": "low", "l": "01/11/2024"}, {"n": "บริษัท ฟู้ดมู้ด จำกัด", "v": 43880, "b": 3, "s": "ปุณณภา", "p": "low", "l": "20/04/2024"}, {"n": "ห้างหุ้นส่วนจำกัด สถานี เมืองขลุง", "v": 43759, "b": 22, "s": "กัญญารัตน์", "p": "low", "l": "27/11/2024"}, {"n": "บริษัท เอเอ็นเอส เพาเวอร์พลัส จำกัด", "v": 43645, "b": 9, "s": "กัญญารัตน์", "p": "low", "l": "25/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ณัฐวงศ์ออยล์", "v": 42907, "b": 6, "s": "กัญญารัตน์", "p": "low", "l": "13/12/2024"}, {"n": "Gazebo", "v": 42850, "b": 2, "s": "ธชนัย", "p": "low", "l": "13/03/2024"}, {"n": "บริษัท รุ่งธวัช จำกัด", "v": 42479, "b": 6, "s": "กัญญารัตน์", "p": "low", "l": "04/12/2024"}, {"n": "บริษัท กิ๊ฟ เคบิน จำกัด", "v": 42372, "b": 2, "s": "ธชนัย", "p": "low", "l": "01/03/2024"}, {"n": "ห้างหุ้นส่วนจำกัด กรีน บิลเลี่ยน พาวเวอร์ 65", "v": 42254, "b": 6, "s": "กัญญารัตน์", "p": "low", "l": "26/12/2024"}, {"n": "บริษัท ดี พรีเมียม จำกัด", "v": 42072, "b": 8, "s": "กัญญารัตน์", "p": "low", "l": "20/12/2024"}, {"n": "Vibe Bar (พักร้อนเกาะล้าน)", "v": 41570, "b": 3, "s": "ธชนัย", "p": "low", "l": "19/06/2024"}, {"n": "บริษัท เต็มใจเซอร์วิส จำกัด", "v": 41512, "b": 9, "s": "กัญญารัตน์", "p": "low", "l": "07/10/2024"}, {"n": "คุณศิริวรรณ หาญทะเล", "v": 41100, "b": 3, "s": "ธชนัย", "p": "low", "l": "10/05/2024"}, {"n": "ห้างหุ้นส่วนจำกัด อนันต์กิจรุ่งเรือง", "v": 40912, "b": 5, "s": "กัญญารัตน์", "p": "low", "l": "24/12/2024"}, {"n": "ร้านวอเตอร์เวิร์ค คอฟฟี่", "v": 40777, "b": 6, "s": "ธชนัย", "p": "low", "l": "28/11/2024"}, {"n": "บริษัท 999 สิงค์โปร์ บาร์บีคิว ชิกเก้น วิง แอนด์ ชิกเก้น ไรซ์ จำกัด", "v": 40339, "b": 2, "s": "ธชนัย", "p": "low", "l": "06/11/2024"}, {"n": "ห้างหุ้นส่วนจำกัด แก้วกิริยา โกลเด้นท์", "v": 40328, "b": 8, "s": "กัญญารัตน์", "p": "low", "l": "11/12/2024"}, {"n": "บริษัท เพอร์เฟ็คท์ วีล สเตชั่น จำกัด", "v": 39697, "b": 5, "s": "กัญญารัตน์", "p": "low", "l": "11/11/2024"}, {"n": "บริษัท เถียงนา จำกัด", "v": 39050, "b": 8, "s": "supisara", "p": "low", "l": "07/09/2024"}, {"n": "นางสาวรัศมี  ยอแสง", "v": 39000, "b": 4, "s": "supisara", "p": "low", "l": "10/09/2024"}, {"n": "บริษัท เออร์เบิร์น เอนเนอร์จี จำกัด", "v": 38974, "b": 7, "s": "กัญญารัตน์", "p": "low", "l": "20/12/2024"}, {"n": "บริษัท เชาวรัตน์ สเตชั่น จำกัด", "v": 38295, "b": 5, "s": "กัญญารัตน์", "p": "low", "l": "20/11/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ยู.พี. พาวเวอร์ สเตชั่น", "v": 37760, "b": 7, "s": "กัญญารัตน์", "p": "low", "l": "18/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด อุดมพรออยล์", "v": 37557, "b": 10, "s": "กัญญารัตน์", "p": "low", "l": "09/12/2024"}, {"n": "ร้าน On The Roast", "v": 37250, "b": 5, "s": "supisara", "p": "low", "l": "28/03/2024"}, {"n": "Pitch coffee bar", "v": 37092, "b": 4, "s": "ธชนัย", "p": "low", "l": "07/10/2024"}, {"n": "บริษัท พัทธา พร็อพเพอร์ตี้ จำกัด", "v": 36024, "b": 5, "s": "Shopee", "p": "low", "l": "23/12/2024"}, {"n": "บริษัท ริช สปอร์ต จำกัด (มหาชน)", "v": 36016, "b": 2, "s": "ธชนัย", "p": "low", "l": "22/03/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ธนวัฒน์บริการจันทบุรี", "v": 36006, "b": 9, "s": "กัญญารัตน์", "p": "low", "l": "06/11/2024"}, {"n": "บริษัท ฟาสต์ดั๊ก จำกัด", "v": 35758, "b": 3, "s": "กัญญารัตน์", "p": "low", "l": "25/12/2024"}, {"n": "บริษัท 2499 ฟู้ดโปรดักส์ จำกัด", "v": 35717, "b": 1, "s": "ธชนัย", "p": "low", "l": "22/01/2024"}, {"n": "บริษัท 111 เบทเทอร์ ทูเก็ตเทอร์ จำกัด", "v": 35631, "b": 2, "s": "ธีรตา", "p": "low", "l": "30/05/2024"}, {"n": "บริษัท วิมลรัตน์ ซัพพลาย จำกัด", "v": 35599, "b": 10, "s": "กัญญารัตน์", "p": "low", "l": "23/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด อุกฤษฏ์โชติ", "v": 35507, "b": 8, "s": "กัญญารัตน์", "p": "low", "l": "27/11/2024"}, {"n": "บริษัท ทรอพิค่าฟู้ดส์ จำกัด", "v": 35310, "b": 2, "s": "ธชนัย", "p": "low", "l": "22/10/2024"}, {"n": "คุณแก้ว", "v": 35128, "b": 3, "s": "ธีรตา", "p": "low", "l": "30/07/2024"}, {"n": "คุณพัสกร ศิลมัฐ", "v": 34775, "b": 2, "s": "ธีรตา", "p": "low", "l": "02/12/2024"}, {"n": "บริษัท เอเซียเอ็นจิเนียริ่ง แอนด์ เซอร์วิส (ไทยแลนด์) จำกัด", "v": 34533, "b": 3, "s": "จุฑามาศ", "p": "low", "l": "21/10/2024"}, {"n": "ร้าน beyond cafe", "v": 34508, "b": 2, "s": "ธีรตา", "p": "low", "l": "29/05/2024"}, {"n": "บริษัท ชีวิต ชีวา ดี จำกัด", "v": 33919, "b": 1, "s": "ธีรตา", "p": "low", "l": "30/08/2024"}, {"n": "คุณไทนี่ กันตถาวร", "v": 33438, "b": 3, "s": "จุฑามาศ", "p": "low", "l": "13/08/2024"}, {"n": "itim nura", "v": 33400, "b": 2, "s": "ธชนัย", "p": "low", "l": "11/12/2024"}, {"n": "บริษัท พริมา เอช จำกัด", "v": 33395, "b": 4, "s": "จุฑามาศ", "p": "low", "l": "11/07/2024"}, {"n": "บริษัท ซัคเซส เพาเวอร์ เซอร์วิส จำกัด", "v": 33324, "b": 8, "s": "กัญญารัตน์", "p": "low", "l": "20/12/2024"}, {"n": "คุณยุพาพรรณ เทวปฏิคม", "v": 33300, "b": 4, "s": "supisara", "p": "low", "l": "02/05/2024"}, {"n": "บริษัท บีไอไอซี จำกัด", "v": 33261, "b": 7, "s": "จุฑามาศ", "p": "low", "l": "16/11/2024"}, {"n": "บริษัท คอมมิงเกิ้ล เพลย์กราวด์ จำกัด", "v": 33234, "b": 3, "s": "จุฑามาศ", "p": "low", "l": "29/11/2024"}, {"n": "บริษัท บลูไดมอนด์กาแฟไทย จำกัด", "v": 33170, "b": 2, "s": "ธชนัย", "p": "low", "l": "23/07/2024"}, {"n": "บริษัท สงวนวงษ์ รีเทล จำกัด", "v": 33074, "b": 6, "s": "กัญญารัตน์", "p": "low", "l": "11/11/2024"}, {"n": "ห้างหุ้นส่วนจำกัด เผด็จบริการ", "v": 32902, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "25/09/2024"}, {"n": "บริษัท หลานหลวง อินเตอร์เนชั่นแนล จำกัด", "v": 32474, "b": 2, "s": "ธชนัย", "p": "low", "l": "15/03/2024"}, {"n": "บริษัท ชัยปิโตรภัทร์ จำกัด", "v": 32400, "b": 7, "s": "กัญญารัตน์", "p": "low", "l": "27/12/2024"}, {"n": "Mila Cafe & Eatery", "v": 32293, "b": 2, "s": "ธีรตา", "p": "low", "l": "11/03/2024"}, {"n": "บริษัท พี.เอส.ออยล์ เซอร์วิส จำกัด", "v": 32260, "b": 3, "s": "กัญญารัตน์", "p": "low", "l": "15/11/2024"}, {"n": "ร้านหมี่ต้นโพธิ์", "v": 32250, "b": 3, "s": "ธชนัย", "p": "low", "l": "16/02/2024"}, {"n": "บริษัท แฮบบิท ฟู้ดส์ จำกัด", "v": 31993, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "04/09/2024"}, {"n": "บริษัท พอล เอลลี่ เอญ่า กรุ๊ป จำกัด", "v": 31982, "b": 3, "s": "จุฑามาศ", "p": "low", "l": "12/12/2024"}, {"n": "บริษัท ปิ่นสุวรรณ ปิโตรเลียม กรุ๊ป จำกัด", "v": 31529, "b": 7, "s": "กัญญารัตน์", "p": "low", "l": "21/08/2024"}, {"n": "บริษัท พีแอนด์เอส ซินเนอจี จำกัด", "v": 30762, "b": 8, "s": "กัญญารัตน์", "p": "low", "l": "08/11/2024"}, {"n": "บริษัท พรขวัญเมือง ปิโตรเลียม จำกัด", "v": 29709, "b": 5, "s": "กัญญารัตน์", "p": "low", "l": "15/11/2024"}, {"n": "ห้างหุ้นส่วนสามัญนิติบุคคล ยู่ฮงไฮเวย์พะเยา", "v": 29532, "b": 5, "s": "กัญญารัตน์", "p": "low", "l": "13/11/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ภูเก็ตเจ็ทสกี คลับ", "v": 29426, "b": 2, "s": "ธีรตา", "p": "low", "l": "12/11/2024"}, {"n": "บริษัท นมะรักษ์ จำกัด", "v": 29307, "b": 2, "s": "ธชนัย", "p": "low", "l": "15/10/2024"}, {"n": "บริษัท แคฟ แอนด์ โอเธอร์ส จำกัด", "v": 28900, "b": 7, "s": "ธชนัย", "p": "low", "l": "15/08/2024"}, {"n": "บริษัท เทอร์โบเน็กซ์ จำกัด", "v": 28525, "b": 6, "s": "กัญญารัตน์", "p": "low", "l": "04/10/2024"}, {"n": "บริษัท อาฟเตอร์มอร์นิ่ง โซลูชั่น จำกัด", "v": 28516, "b": 2, "s": "ธีรตา", "p": "low", "l": "30/09/2024"}, {"n": "บริษัท เภตรารุ่งเรือง จำกัด", "v": 28516, "b": 2, "s": "ธชนัย", "p": "low", "l": "11/05/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ธ.ธนกฤต กำแพงเพชร ปิโตรเลี่ยม", "v": 28397, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "07/06/2024"}, {"n": "คุณมุมฏัส", "v": 28300, "b": 2, "s": "ธชนัย", "p": "low", "l": "26/04/2024"}, {"n": "คุณชัยรัฐ พาสพัฒนพาณิชย์", "v": 27740, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "02/04/2024"}, {"n": "De La Plawan", "v": 27650, "b": 3, "s": "ธชนัย", "p": "low", "l": "16/07/2024"}, {"n": "บริษัท บีบี ทีเฮ้าส์ อินเตอร์กรุ๊ป จำกัด", "v": 27552, "b": 2, "s": "ธีรตา", "p": "low", "l": "29/02/2024"}, {"n": "บริษัท หาดใหญ่สหพาณิชย์ จำกัด", "v": 27413, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "15/07/2024"}, {"n": "บริษัท ฟีก์กั้น คาเฟ่ แอนด์ สตูดิโอ จำกัด", "v": 27360, "b": 3, "s": "จุฑามาศ", "p": "low", "l": "29/05/2024"}, {"n": "บริษัท วิชิตธรรมออยล์ จำกัด", "v": 27232, "b": 9, "s": "กัญญารัตน์", "p": "low", "l": "24/07/2024"}, {"n": "บริษัท เวสท์วูด จำกัด", "v": 27071, "b": 1, "s": "ธชนัย", "p": "low", "l": "17/05/2024"}, {"n": "คุณอภิวันทน์ อัจฉริยประทีป", "v": 26910, "b": 4, "s": "ธีรตา", "p": "low", "l": "22/04/2024"}, {"n": "คุณก้อง", "v": 26750, "b": 1, "s": "ธีรตา", "p": "low", "l": "19/03/2024"}, {"n": "บริษัท ปิยะนุช ทรัพย์เพิ่มพูน จำกัด", "v": 26727, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "06/12/2024"}, {"n": "บริษัท เต็มเติมสุข จำกัด", "v": 26590, "b": 7, "s": "กัญญารัตน์", "p": "low", "l": "28/11/2024"}, {"n": "บริษัท เซาท์ซี ซุเครรี จำกัด", "v": 26065, "b": 2, "s": "ธชนัย", "p": "low", "l": "16/09/2024"}, {"n": "A good day cafe", "v": 26000, "b": 4, "s": "ธชนัย", "p": "low", "l": "07/10/2024"}, {"n": "บริษัท ซีคอน ดีเวลลอปเมนท์ จำกัด (มหาชน)", "v": 25680, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "12/07/2024"}, {"n": "บริษัท ดิออเดียนซ์โมทิเวชั่นคอมปานีเอเชีย จำกัด", "v": 25680, "b": 1, "s": "ธีรตา", "p": "low", "l": "10/04/2024"}, {"n": "SHAYOTE", "v": 25680, "b": 2, "s": "ธชนัย", "p": "low", "l": "20/12/2024"}, {"n": "บริษัท นิภาพรพัฒน์ จำกัด", "v": 25680, "b": 1, "s": "ธชนัย", "p": "low", "l": "11/03/2024"}, {"n": "บริษัท เติมสุข ออยล์ จำกัด", "v": 25496, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "25/11/2024"}, {"n": "บริษัท เชาวรัตน์ ปิโตรเลี่ยม จำกัด", "v": 25113, "b": 5, "s": "กัญญารัตน์", "p": "low", "l": "11/09/2024"}, {"n": "บริษัท 365 ออกาไนเซอร์ จำกัด", "v": 24851, "b": 2, "s": "ธชนัย", "p": "low", "l": "14/08/2024"}, {"n": "บริษัท คอสคา จำกัด", "v": 24750, "b": 3, "s": "ธชนัย", "p": "low", "l": "06/09/2024"}, {"n": "คุณเดือนเพ็ญ มูลโต", "v": 24717, "b": 3, "s": "ธีรตา", "p": "low", "l": "10/06/2024"}, {"n": "บริษัท ซี.เอ.พี.อินเตอร์เทรด จำกัด", "v": 24589, "b": 1, "s": "ปุณณภา", "p": "low", "l": "11/09/2024"}, {"n": "ห้างหุ้นส่วนจำกัด จันทบุรีเกษตร", "v": 24342, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "31/07/2024"}, {"n": "คุณพันธกิจ พิรุณ", "v": 24235, "b": 6, "s": "ธีรตา", "p": "low", "l": "06/12/2024"}, {"n": "บริษัท ลิค ลิค ลัคกี้ ริช จำกัด", "v": 24029, "b": 3, "s": "supisara", "p": "low", "l": "31/05/2024"}, {"n": "คุณเอกราช เมืองทอง", "v": 23561, "b": 7, "s": "จุฑามาศ", "p": "low", "l": "23/07/2024"}, {"n": "ห้างหุ้นส่วนจำกัด เค.เอ็ม. คอร์ปอเรชั่น", "v": 23525, "b": 1, "s": "ธีรตา", "p": "low", "l": "20/12/2024"}, {"n": "บ้าน ณ อุดมสุข", "v": 23456, "b": 3, "s": "ธชนัย", "p": "low", "l": "04/11/2024"}, {"n": "คุณโซเฟีย", "v": 23212, "b": 8, "s": "ธชนัย", "p": "low", "l": "12/11/2024"}, {"n": "บริษัท พลีโอ จำกัด", "v": 22818, "b": 6, "s": "ปุณณภา", "p": "low", "l": "25/12/2024"}, {"n": "บริษัท ไพร้ซ เทรดดิ้ง จำกัด", "v": 22299, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "30/01/2024"}, {"n": "บริษัท วรรณกฤตก้าวไกล จำกัด", "v": 22288, "b": 7, "s": "กัญญารัตน์", "p": "low", "l": "03/05/2024"}, {"n": "คุณปรียารัตน์ ดามพวรรณ ( Coco corner)", "v": 22085, "b": 3, "s": "ธีรตา", "p": "low", "l": "18/10/2024"}, {"n": "บริษัท ภิรมย์เฉลิมโชค จำกัด", "v": 21935, "b": 3, "s": "จุฑามาศ", "p": "low", "l": "11/12/2024"}, {"n": "Wassanapat Sukrung", "v": 21750, "b": 3, "s": "ธชนัย", "p": "low", "l": "09/11/2024"}, {"n": "บริษัท ออนเนอร์ เฮิร์บไทย จำกัด", "v": 21586, "b": 3, "s": "ธีรตา", "p": "low", "l": "08/07/2024"}, {"n": "บริษัท ปัณณ์ณิกา จำกัด", "v": 21300, "b": 2, "s": "supisara", "p": "low", "l": "07/03/2024"}, {"n": "ห้างหุ้นส่วนจำกัด วรรณธิป เซอร์วิส", "v": 21176, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "01/07/2024"}, {"n": "ห้างหุ้นส่วนจำกัด วรัทธยา บริการ", "v": 20972, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "23/08/2024"}, {"n": "บริษัท เถียนมี่มี่789 จำกัด", "v": 20918, "b": 5, "s": "จุฑามาศ", "p": "low", "l": "08/06/2024"}, {"n": "บริษัท บลูเบรน อินโนเวชั่น จำกัด", "v": 20886, "b": 6, "s": "ธีรตา", "p": "low", "l": "05/11/2024"}, {"n": "คุณปิยะ ศรีมาลา", "v": 20865, "b": 2, "s": "ธีรตา", "p": "low", "l": "01/04/2024"}, {"n": "ร้านโฮมมด (ครัวหนองสมอ)", "v": 20600, "b": 2, "s": "ธชนัย", "p": "low", "l": "17/06/2024"}, {"n": "บริษัท เริ่มต้น จำกัด", "v": 20586, "b": 1, "s": "กัญญารัตน์", "p": "low", "l": "08/11/2024"}, {"n": "595 ร้านก๋วยเตี๋ยวเรือพ่อมะลิ", "v": 20200, "b": 6, "s": "ปุณณภา", "p": "low", "l": "09/05/2024"}, {"n": "บริษัท หลักเมืองเจริญภัณฑ์ จำกัด", "v": 20062, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "13/12/2024"}, {"n": "บริษัท เซ็ททูไรส์ จำกัด", "v": 19881, "b": 3, "s": "ธชนัย", "p": "low", "l": "16/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ปทุมมุขย์ ออยล์", "v": 19795, "b": 6, "s": "กัญญารัตน์", "p": "low", "l": "02/10/2024"}, {"n": "บริษัท บราวน์ สกิน จำกัด", "v": 19577, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "05/02/2024"}, {"n": "บริษัท บีเอสเอชดี จำกัด", "v": 19577, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "09/01/2024"}, {"n": "บริษัท ฮาโก้ อิเลคทริค (ประเทศไทย) จำกัด", "v": 19367, "b": 2, "s": "ธชนัย", "p": "low", "l": "21/05/2024"}, {"n": "บริษัท ชลลดาการปิโตรเลียม จำกัด", "v": 19206, "b": 5, "s": "กัญญารัตน์", "p": "low", "l": "23/12/2024"}, {"n": "บริษัท ภูเก็ต แฮปปี้เนส จำกัด", "v": 19206, "b": 2, "s": "ธีรตา", "p": "low", "l": "11/03/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ปราชญ์เปรื่อง ออยล์", "v": 19086, "b": 5, "s": "กัญญารัตน์", "p": "low", "l": "28/08/2024"}, {"n": "บริษัท แพลนเน็ท แบร์ จำกัด", "v": 18886, "b": 2, "s": "ธชนัย", "p": "low", "l": "09/10/2024"}, {"n": "ร้าน chillybelly", "v": 18832, "b": 2, "s": "ธีรตา", "p": "low", "l": "06/06/2024"}, {"n": "บริษัท ซีบีเอ็น ออยล์ จำกัด", "v": 18778, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "19/06/2024"}, {"n": "บริษัท ไร่วังบอน จำกัด", "v": 18725, "b": 2, "s": "ธชนัย", "p": "low", "l": "18/12/2024"}, {"n": "บริษัท กษิณา ออยล์ จำกัด", "v": 18618, "b": 3, "s": "กัญญารัตน์", "p": "low", "l": "09/08/2024"}, {"n": "ห้างหุ้นส่วนจำกัด นิทัศน์ ออยล์ เซอร์วิส", "v": 18350, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "06/09/2024"}, {"n": "บริษัท โชคชัยไอศกรีม จำกัด", "v": 18190, "b": 1, "s": "ธีรตา", "p": "low", "l": "29/01/2024"}, {"n": "บริษัท สวนพานหิน จำกัด", "v": 18083, "b": 1, "s": "ธชนัย", "p": "low", "l": "23/02/2024"}, {"n": "ห้างหุ้นส่วนจำกัด เอ.อาร์.เอ็ม.เซอร์วิส", "v": 18083, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "06/12/2024"}, {"n": "บริษัท ไอซิสอาร์ติมิส จำกัด", "v": 17976, "b": 2, "s": "นิโลบล", "p": "low", "l": "13/06/2024"}, {"n": "บริษัท สกายแอนด์พราวด์ จำกัด", "v": 17976, "b": 5, "s": "กัญญารัตน์", "p": "low", "l": "22/11/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ธนปกรณ์", "v": 17773, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "08/04/2024"}, {"n": "บริษัท เลย์ โลว์ จำกัด", "v": 17264, "b": 3, "s": "supisara", "p": "low", "l": "05/10/2024"}, {"n": "Tea bar social club.", "v": 17110, "b": 1, "s": "ธชนัย", "p": "low", "l": "24/04/2024"}, {"n": "บริษัท หวานขึ้นตา จำกัด", "v": 16960, "b": 3, "s": "ธีรตา", "p": "low", "l": "12/12/2024"}, {"n": "บริษัท ราชรสฟู้ดแอนด์ซัพพลาย จํากัด", "v": 16906, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "06/07/2024"}, {"n": "บริษัท เชียงดาวเฮิร์บ จำกัด", "v": 16857, "b": 4, "s": "Shopee", "p": "low", "l": "27/11/2024"}, {"n": "ปั่มคาเฟ่", "v": 16750, "b": 1, "s": "ธชนัย", "p": "low", "l": "23/02/2024"}, {"n": "บริษัท ราชาไซเคิล จำกัด", "v": 16718, "b": 8, "s": "Shopee", "p": "low", "l": "11/09/2024"}, {"n": "คุณปิยพร ศรไพศาล", "v": 16638, "b": 3, "s": "ธีรตา", "p": "low", "l": "27/12/2024"}, {"n": "บริษัท เกษมกิจ จำกัด (โรงแรมเคปพันวา)", "v": 16638, "b": 1, "s": "ปุณณภา", "p": "low", "l": "07/05/2024"}, {"n": "บริษัท เวลตี้พลัส(ประเทศไทย) จำกัด", "v": 16585, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "07/10/2024"}, {"n": "บริษัท ณฐพงศ์รุ่งเรือง จำกัด", "v": 16371, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "10/07/2024"}, {"n": "นางกัลยาณี  ใจปินตา", "v": 16050, "b": 2, "s": "supisara", "p": "low", "l": "14/03/2024"}, {"n": "บริษัท เดอะ บาโรนี กรุ๊ป จำกัด", "v": 15960, "b": 3, "s": "ธชนัย", "p": "low", "l": "30/07/2024"}, {"n": "บริษัท ลีฟวิ่ง เทค จำกัด", "v": 15943, "b": 1, "s": "ธชนัย", "p": "low", "l": "04/04/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ทองพชร", "v": 15836, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "19/02/2024"}, {"n": "ห้างหุ้นส่วนจำกัด อัลฮูเซ็น เรสเตอรอง (1996)", "v": 15712, "b": 2, "s": "ธีรตา", "p": "low", "l": "12/09/2024"}, {"n": "บริษัท ยะลา การเกษตร แอนด์ กรีน โกลบอล เทคโนโลยี จำกัด", "v": 15708, "b": 1, "s": "ธชนัย", "p": "low", "l": "18/09/2024"}, {"n": "คุณภูรินท์ธรรศ", "v": 15516, "b": 2, "s": "ธีรตา", "p": "low", "l": "18/11/2024"}, {"n": "ห้างหุ้นส่วนจำกัด สวีทแอนด์สกรีนโปรเจคท์", "v": 15515, "b": 1, "s": "ปุณณภา", "p": "low", "l": "16/12/2024"}, {"n": "คุณใจฟ้า เพ็ชรเกตุ", "v": 15408, "b": 4, "s": "ธีรตา", "p": "low", "l": "18/10/2024"}, {"n": "Chic chic", "v": 15300, "b": 1, "s": "ธชนัย", "p": "low", "l": "25/03/2024"}, {"n": "ลูกชิ้นรสโอชา คุณขวัญ", "v": 15234, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "21/06/2024"}, {"n": "Indie Beach Bungalows1", "v": 14940, "b": 1, "s": "ธชนัย", "p": "low", "l": "10/06/2024"}, {"n": "Hero Yellow", "v": 14890, "b": 1, "s": "ธชนัย", "p": "low", "l": "09/08/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ซี.อาร์.พี.ปิโตรเลียม", "v": 14659, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "27/03/2024"}, {"n": "Take eat eazy", "v": 14500, "b": 1, "s": "ธชนัย", "p": "low", "l": "17/06/2024"}, {"n": "บริษัท ไอริส 7 จำกัด", "v": 14284, "b": 2, "s": "ธชนัย", "p": "low", "l": "13/11/2024"}, {"n": "คุณลัทธปัทม์ ตั้งตรัสธรรม", "v": 13964, "b": 1, "s": "ดวงกมล", "p": "low", "l": "13/09/2024"}, {"n": "ห้างหุ้นส่วนจำกัด พฤตินันท์ ออยล์", "v": 13835, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "04/12/2024"}, {"n": "ร้านสตาร์รี่ เฮ้า บ่อวิน", "v": 13722, "b": 3, "s": "ธชนัย", "p": "low", "l": "24/04/2024"}, {"n": "บริษัท ฟิวเจอร์ เอเนอจี้ สเตชั่น จำกัด", "v": 13536, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "13/11/2024"}, {"n": "Olive Bakes", "v": 13500, "b": 2, "s": "ธชนัย", "p": "low", "l": "19/01/2024"}, {"n": "บริษัท บี-สไมล์ ฟู้ด แอนด์ เบเวอร์เรจ จำกัด", "v": 13375, "b": 1, "s": "ปุณณภา", "p": "low", "l": "26/01/2024"}, {"n": "Phoya coffee", "v": 13270, "b": 2, "s": "ธชนัย", "p": "low", "l": "09/04/2024"}, {"n": "คุณวรท รัตนพันธุ์", "v": 12700, "b": 1, "s": "supisara", "p": "low", "l": "11/06/2024"}, {"n": "บริษัท อัล คูท จำกัด", "v": 12680, "b": 2, "s": "ธชนัย", "p": "low", "l": "13/11/2024"}, {"n": "บริษัท บัญชรเทวกุล จำกัด", "v": 12583, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "11/09/2024"}, {"n": "คุณจินตนา  ชูยุคสกุล", "v": 12466, "b": 2, "s": "ธีรตา", "p": "low", "l": "30/05/2024"}, {"n": "ร้านคาเฟ่ผีเสื้อ", "v": 12450, "b": 2, "s": "ธชนัย", "p": "low", "l": "27/11/2024"}, {"n": "บริษัท ลูน่าเบียนก้า แตททอเรีย (ประเทศไทย) จำกัด", "v": 12401, "b": 2, "s": "supisara", "p": "low", "l": "25/12/2024"}, {"n": "บริษัท บางกอกแล็ป แอนด์ คอสเมติค จำกัด (มหาชน)", "v": 12211, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "02/04/2024"}, {"n": "บริษัท ทาชิ ฟู้ด จำกัด", "v": 12198, "b": 5, "s": "จุฑามาศ", "p": "low", "l": "11/07/2024"}, {"n": "บริษัท เค้กบ็อกซ์ เบเกอร์รี่มาร์ท แอนด์ คาเฟ่ จำกัด", "v": 12175, "b": 2, "s": "ธีรตา", "p": "low", "l": "25/03/2024"}, {"n": "บริษัท สุวรรณภูมิ วิลล์ดี คาเฟ่  จำกัด", "v": 12070, "b": 1, "s": "ธชนัย", "p": "low", "l": "26/01/2024"}, {"n": "More space.", "v": 12050, "b": 2, "s": "ธชนัย", "p": "low", "l": "31/10/2024"}, {"n": "Frankie Fong", "v": 11994, "b": 1, "s": "ธีรตา", "p": "low", "l": "23/04/2024"}, {"n": "บริษัท แอท มาซ จำกัด", "v": 11984, "b": 1, "s": "ธชนัย", "p": "low", "l": "05/01/2024"}, {"n": "บริษัท บางกอก โปรสกรีน จำกัด", "v": 11789, "b": 5, "s": "จุฑามาศ", "p": "low", "l": "21/05/2024"}, {"n": "นายกชกร ศานติชาติศักดิ์", "v": 11556, "b": 2, "s": "ดวงกมล", "p": "low", "l": "27/03/2024"}, {"n": "บริษัท คอนเซ็ปต์สปีด จำกัด", "v": 11502, "b": 1, "s": "ธชนัย", "p": "low", "l": "19/10/2024"}, {"n": "คุณปฏิพล ทองย่น", "v": 11406, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "07/10/2024"}, {"n": "คุณพงศ์สันต์ เตยะราชกุล", "v": 11068, "b": 3, "s": "จุฑามาศ", "p": "low", "l": "22/10/2024"}, {"n": "บริษัท เฮ็ลธ์ฟู้ดส์ คอร์ปอเรชั่น  จำกัด", "v": 10844, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "26/11/2024"}, {"n": "คณะสังคมศาสตร์ ม.เกษตรศาสตร์", "v": 10828, "b": 2, "s": "ธีรตา", "p": "low", "l": "17/09/2024"}, {"n": "คุณพฤษพร เอื้ออนันตกร", "v": 10807, "b": 4, "s": "ธีรตา", "p": "low", "l": "12/07/2024"}, {"n": "Pressed Cafe", "v": 10700, "b": 2, "s": "ธีรตา", "p": "low", "l": "20/08/2024"}, {"n": "บริษัท โมริน เอสเทติคส์ จำกัด", "v": 10689, "b": 2, "s": "ธชนัย", "p": "low", "l": "25/05/2024"}, {"n": "นางสาวรัชนี ทวียศ", "v": 10593, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "07/03/2024"}, {"n": "บริษัท เค แอนด์ ทริเพิล ที จำกัด", "v": 10525, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "15/07/2024"}, {"n": "คุณนนท์", "v": 10518, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "19/01/2024"}, {"n": "บริษัท เพชรสิริ วิศวการ จำกัด", "v": 10444, "b": 3, "s": "ธชนัย", "p": "low", "l": "01/11/2024"}, {"n": "บริษัท ปลายน้ำรีสอร์ท จำกัด", "v": 10432, "b": 2, "s": "นิโลบล", "p": "low", "l": "27/02/2024"}, {"n": "บริษัท โกวเซ้ม คอฟฟี่ โรสเตอร์ จำกัด", "v": 10256, "b": 2, "s": "ธีรตา", "p": "low", "l": "23/09/2024"}, {"n": "บริษัท อินเตอร์คอฟ คอร์ปอเรชั่น จำกัด", "v": 10256, "b": 1, "s": "ธีรตา", "p": "low", "l": "24/01/2024"}, {"n": "น.ส วรรณภา วรรณกุล (Muoi)", "v": 10256, "b": 2, "s": "ธีรตา", "p": "low", "l": "25/11/2024"}, {"n": "Young bird", "v": 10230, "b": 3, "s": "ธีรตา", "p": "low", "l": "15/10/2024"}, {"n": "บริษัท อิเจ้ แจ่วฮ้อน เรสเทอรองต์ พลัส  จำกัด", "v": 10174, "b": 5, "s": "Shopee", "p": "low", "l": "13/06/2024"}, {"n": "บริษัท เจี้ยนชา จำกัด", "v": 10165, "b": 1, "s": "ธีรตา", "p": "low", "l": "06/11/2024"}, {"n": "Cele bread.", "v": 10120, "b": 2, "s": "ธชนัย", "p": "low", "l": "17/01/2024"}, {"n": "บริษัท ประเสริฐสุดปิโตรเลียม จำกัด", "v": 10058, "b": 3, "s": "กัญญารัตน์", "p": "low", "l": "21/10/2024"}, {"n": "บริษัท เอ็นพีเอชเอส จำกัด", "v": 10058, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "18/11/2024"}, {"n": "คุณสุชาดา ตรียสกุล", "v": 9990, "b": 2, "s": "supisara", "p": "low", "l": "27/09/2024"}, {"n": "บริษัท ชับบี้ไทเกอร์ จำกัด", "v": 9947, "b": 3, "s": "ธีรตา", "p": "low", "l": "03/04/2024"}, {"n": "Waterfront cafe", "v": 9910, "b": 2, "s": "ธชนัย", "p": "low", "l": "23/12/2024"}, {"n": "ร้านบารอก เลอ คาเฟ่", "v": 9790, "b": 2, "s": "ธชนัย", "p": "low", "l": "30/07/2024"}, {"n": "คุณกุลกัญญา เมธีระวัฒน์", "v": 9790, "b": 2, "s": "ธชนัย", "p": "low", "l": "08/05/2024"}, {"n": "บริษัท แบ่งปันสุข จำกัด", "v": 9737, "b": 3, "s": "ธีรตา", "p": "low", "l": "20/09/2024"}, {"n": "บริษัท ดรัมแอนด์โรสท์ จำกัด", "v": 9700, "b": 2, "s": "ปุณณภา", "p": "low", "l": "30/08/2024"}, {"n": "บริษัท เจ เอ พี มาร์เก็ตติ้ง จำกัด", "v": 9651, "b": 1, "s": "ธชนัย", "p": "low", "l": "28/03/2024"}, {"n": "บริษัท เดอะ โคเชอร์ เพลส (ไทยแลนด์) จำกัด", "v": 9630, "b": 3, "s": "จุฑามาศ", "p": "low", "l": "10/05/2024"}, {"n": "Blue castle", "v": 9440, "b": 2, "s": "ธชนัย", "p": "low", "l": "08/04/2024"}, {"n": "บริษัท เจริญวงศ์มีทรัพย์ จำกัด", "v": 9362, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "18/06/2024"}, {"n": "jood juice", "v": 9294, "b": 1, "s": "ธชนัย", "p": "low", "l": "05/10/2024"}, {"n": "La moon", "v": 9270, "b": 1, "s": "ธชนัย", "p": "low", "l": "12/01/2024"}, {"n": "คุณกรวินท์ ตันจินดาประทีป", "v": 9270, "b": 2, "s": "ธชนัย", "p": "low", "l": "31/01/2024"}, {"n": "บริษัท ไซด์บายไซด์ ครีเอชั่น จำกัด", "v": 9175, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "20/07/2024"}, {"n": "บริษัท เอเชีย เอ็นเนอร์จี คอร์ปอเรชั่น จำกัด", "v": 9141, "b": 5, "s": "กัญญารัตน์", "p": "low", "l": "11/11/2024"}, {"n": "ศูนย์การเรียนรู้ทักษะอาชีพ โรงเรียนพนมสารคาม \"พนมอดุลวิทยา\"", "v": 9085, "b": 2, "s": "ธชนัย", "p": "low", "l": "23/09/2024"}, {"n": "บูชาแกลเลอรี่ ร้านอาหาร", "v": 9070, "b": 1, "s": "ธชนัย", "p": "low", "l": "23/09/2024"}, {"n": "บริษัท ชัยธนัชญ์ จำกัด", "v": 8877, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "24/05/2024"}, {"n": "บริษัท ภูมิภวัน จำกัด", "v": 8828, "b": 1, "s": "ธชนัย", "p": "low", "l": "06/07/2024"}, {"n": "บริษัท ราชา แพคเกจจิ้ง จำกัด", "v": 8800, "b": 3, "s": "Pornpisut", "p": "low", "l": "30/04/2024"}, {"n": "บริษัท เลิศรัชดา จำกัด", "v": 8795, "b": 4, "s": "กัญญารัตน์", "p": "low", "l": "24/10/2024"}, {"n": "บริษัท โกวเซ้มฟาร์ม จำกัด", "v": 8651, "b": 2, "s": "ธีรตา", "p": "low", "l": "17/05/2024"}, {"n": "แ***์", "v": 8630, "b": 4, "s": "Shopee", "p": "low", "l": "21/12/2024"}, {"n": "พี่หมี", "v": 8556, "b": 1, "s": "ธชนัย", "p": "low", "l": "11/01/2024"}, {"n": "ห้างหุ้นส่วนจำกัด เปลวทิพย์", "v": 8257, "b": 2, "s": "Shopee", "p": "low", "l": "11/05/2024"}, {"n": "ยกแคมป์", "v": 8140, "b": 1, "s": "ธชนัย", "p": "low", "l": "11/05/2024"}, {"n": "บริษัท ลุกซ์ รอยัล (ประเทศไทย) จำกัด", "v": 8132, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "04/10/2024"}, {"n": "pung do", "v": 8120, "b": 2, "s": "ธชนัย", "p": "low", "l": "05/08/2024"}, {"n": "น.ส.อุทัย พลีพรม", "v": 8100, "b": 1, "s": "ธีรตา", "p": "low", "l": "01/04/2024"}, {"n": "บริษัท ธีระนิต1989 ดิ เอ็นเนอร์จี จำกัด", "v": 7982, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "28/08/2024"}, {"n": "คุณวีรสรณ์", "v": 7843, "b": 2, "s": "ธีรตา", "p": "low", "l": "12/09/2024"}, {"n": "One million Pattaya", "v": 7835, "b": 1, "s": "ธชนัย", "p": "low", "l": "27/03/2024"}, {"n": "คุณปัทมพร สีตบุตร", "v": 7725, "b": 4, "s": "supisara", "p": "low", "l": "02/08/2024"}, {"n": "บริษัท อมรปิ่นทิพย์ จำกัด", "v": 7672, "b": 1, "s": "ธีรตา", "p": "low", "l": "30/05/2024"}, {"n": "บริษัท เอช.ไอ.เอส.ทัวร์ส์  จำกัด", "v": 7542, "b": 2, "s": "ธชนัย", "p": "low", "l": "13/12/2024"}, {"n": "คุณกิรณี ธรรมภิบาลอุดม", "v": 7532, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "10/10/2024"}, {"n": "ห้างหุ้นส่วนจำกัด พลังงาน เก้า นาทวี", "v": 7490, "b": 1, "s": "กัญญารัตน์", "p": "low", "l": "19/07/2024"}, {"n": "บริษัท ดีพี แอสเซ็ท แมเนจเม้นท์ จำกัด", "v": 7354, "b": 3, "s": "Shopee", "p": "low", "l": "19/01/2024"}, {"n": "บริษัท ออร์แกนิครูม จำกัด", "v": 7350, "b": 2, "s": "ธชนัย", "p": "low", "l": "10/02/2024"}, {"n": "ห้างหุ้นส่วนจำกัด เพชรสุวรรณ รุ่งเรือง", "v": 7278, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "07/02/2024"}, {"n": "บริษัท เอ็ม แอนด์ เอ็ช แมนูแฟคเจอริ่ง จำกัด", "v": 7276, "b": 2, "s": "ปุณณภา", "p": "low", "l": "07/05/2024"}, {"n": "บริษัท อาร์คทูรัส เอวิเอเตอร์ โรสเตอรี่ จำกัด", "v": 7233, "b": 1, "s": "ดวงกมล", "p": "low", "l": "09/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด เชลล์ศักดิ์ชัย (โดยนายชูศักดิ์  โกศการิกา)", "v": 7134, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "29/11/2024"}, {"n": "บริษัท ปทุมสุวรรณ จำกัด", "v": 7098, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "25/11/2024"}, {"n": "บริษัท เจเอเอส แอสเซ็ท จำกัด (มหาชน)", "v": 6955, "b": 1, "s": "ดวงกมล", "p": "low", "l": "15/02/2024"}, {"n": "บริษัท แพคโก จำกัด", "v": 6848, "b": 1, "s": "ธีรตา", "p": "low", "l": "25/12/2024"}, {"n": "บริษัท สุพรีม เฟลตัล (ประเทศไทย) จำกัด", "v": 6706, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "19/11/2024"}, {"n": "คุณปริวรรษ แถมจำรัส", "v": 6700, "b": 1, "s": "ธชนัย", "p": "low", "l": "25/12/2024"}, {"n": "บริษัท เค้ก เอ็นเตอร์ไพรส์ จำกัด", "v": 6688, "b": 3, "s": "ดวงกมล", "p": "low", "l": "04/04/2024"}, {"n": "Gesosto", "v": 6680, "b": 2, "s": "ธชนัย", "p": "low", "l": "08/03/2024"}, {"n": "บริษัท ชนินทร์ ลิฟวิ่ง(ประเทศไทย) จำกัด", "v": 6648, "b": 4, "s": "Shopee", "p": "low", "l": "04/11/2024"}, {"n": "บริษัท ธนจิรา รีเทล คอร์ปอเรชั่น จำกัด (มหาชน)", "v": 6607, "b": 2, "s": "ธชนัย", "p": "low", "l": "15/02/2024"}, {"n": "บริษัท ลิฟวิ่ง ฟิล์ม จำกัด เพื่อ MR.OCTOBER 3", "v": 6548, "b": 1, "s": "ธีรตา", "p": "low", "l": "03/04/2024"}, {"n": "คุณจิรโรจน์", "v": 6500, "b": 2, "s": "ธชนัย", "p": "low", "l": "13/11/2024"}, {"n": "บริษัท ศรีราชาเบเกอรี่ แอนด์ แพคเกจจิ้ง จำกัด", "v": 6435, "b": 2, "s": "ธชนัย", "p": "low", "l": "02/02/2024"}, {"n": "คุณเกตสรา แก้วเนิน", "v": 6420, "b": 2, "s": "supisara", "p": "low", "l": "14/05/2024"}, {"n": "บริษัท เบรฟ แบรนด์ จำกัด", "v": 6372, "b": 2, "s": "ธีรตา", "p": "low", "l": "03/09/2024"}, {"n": "บริษัท ไอซ์ลามุน เอ็นจอย จำกัด", "v": 6340, "b": 1, "s": "ธีรตา", "p": "low", "l": "10/07/2024"}, {"n": "ร้านอมรชัยผ้าม่าน", "v": 6300, "b": 2, "s": "ธชนัย", "p": "low", "l": "27/03/2024"}, {"n": "คุณมิ้ม", "v": 6260, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "04/11/2024"}, {"n": "คุณหมูแดง", "v": 6099, "b": 1, "s": "ธีรตา", "p": "low", "l": "20/02/2024"}, {"n": "บริษัท รีเฟล็กซ์ฟอร์เกมเมอร์สแอนด์อีสปอร์ตเพลเยอร์ส จำกัด", "v": 6088, "b": 1, "s": "ธชนัย", "p": "low", "l": "22/04/2024"}, {"n": "บริษัท ยูซานา เฮลธ์ ไซเอนซ์ (ประเทศไทย) จำกัด", "v": 6046, "b": 3, "s": "ธีรตา", "p": "low", "l": "19/09/2024"}, {"n": "Eattention", "v": 6045, "b": 1, "s": "ธชนัย", "p": "low", "l": "02/04/2024"}, {"n": "บริษัท พล ซินเนอจี จำกัด", "v": 6035, "b": 1, "s": "กัญญารัตน์", "p": "low", "l": "24/12/2024"}, {"n": "บริษัท ซันเด สกู๊ปเปอร์ จำกัด", "v": 6019, "b": 1, "s": "ธชนัย", "p": "low", "l": "12/11/2024"}, {"n": "เส็ง", "v": 6000, "b": 2, "s": "ธชนัย", "p": "low", "l": "02/02/2024"}, {"n": "บริษัท รัชภพ เอนเนอร์ยี่ จำกัด", "v": 5885, "b": 1, "s": "กัญญารัตน์", "p": "low", "l": "24/07/2024"}, {"n": "บริษัท เติมเต็มสุข จำกัด", "v": 5885, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "29/03/2024"}, {"n": "บริษัท ดี-คอนซีท จำกัด", "v": 5885, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "31/10/2024"}, {"n": "บริษัท ศิลามั่นคง ระยอง จำกัด", "v": 5885, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "06/03/2024"}, {"n": "คุณรัสมิ์ภัทรี  กาญจนศุภศิริ", "v": 5832, "b": 2, "s": "ธีรตา", "p": "low", "l": "02/08/2024"}, {"n": "บริษัท มาร์เก็ตซับพอร์ท จำกัด", "v": 5758, "b": 1, "s": "ธชนัย", "p": "low", "l": "16/09/2024"}, {"n": "บริษัท สปาราไดซ์  จำกัด", "v": 5757, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "04/06/2024"}, {"n": "บริษัท วนิลลิน สตูดิโอ จำกัด", "v": 5700, "b": 2, "s": "ธชนัย", "p": "low", "l": "30/10/2024"}, {"n": "คุณกัสตูรี ซอบรี", "v": 5671, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "10/05/2024"}, {"n": "นางสาวภิญญาพัชญ์ ศรีนวลจันทร์", "v": 5618, "b": 2, "s": "ธีรตา", "p": "low", "l": "24/06/2024"}, {"n": "วิทยาลัย เทคโนโลยีปัญญาภิวัฒน์", "v": 5610, "b": 3, "s": "ธีรตา", "p": "low", "l": "19/04/2024"}, {"n": "บริษัท กะลาไท 2024 จำกัด", "v": 5560, "b": 1, "s": "ธชนัย", "p": "low", "l": "14/02/2024"}, {"n": "คุณปภัทรนันท์ อภิวัชรอนันท์", "v": 5510, "b": 1, "s": "ธีรตา", "p": "low", "l": "25/09/2024"}, {"n": "ห้างหุ้นส่วนจำกัด สุรศักดิ์(ไทย)การพิมพ์", "v": 5505, "b": 1, "s": "ธชนัย", "p": "low", "l": "20/02/2024"}, {"n": "บริษัท โซคอฟ จำกัด", "v": 5497, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "24/05/2024"}, {"n": "บริษัท เดย์ไลต์ เซฟวิ่งค์ จำกัด", "v": 5483, "b": 3, "s": "Shopee", "p": "low", "l": "17/06/2024"}, {"n": "บริษัท เกษมกิจ จำกัด (โรงแรมแคนทารี ฮิลส์ เชียงใหม่)", "v": 5457, "b": 2, "s": "ปุณณภา", "p": "low", "l": "06/11/2024"}, {"n": "บริษัท ไทยมิตร ฟู้ด แอนด์ เบฟเวอเรจ จำกัด", "v": 5302, "b": 1, "s": "ธีรตา", "p": "low", "l": "13/08/2024"}, {"n": "บริษัท มูเก้น ฟู้ดเซอร์วิส จำกัด", "v": 5200, "b": 1, "s": "ธชนัย", "p": "low", "l": "29/02/2024"}, {"n": "นางมานิสา ม่วงศรเขียว", "v": 5148, "b": 1, "s": "ธชนัย", "p": "low", "l": "06/01/2024"}, {"n": "บริษัท ตรีมูรติฟรูทส์ จำกัด", "v": 5050, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "16/07/2024"}, {"n": "คุณจิราพร อินทรวิมลเมธา", "v": 5029, "b": 2, "s": "ธีรตา", "p": "low", "l": "22/03/2024"}, {"n": "บริษัท เติมบุญเต็มธรรม จำกัด", "v": 5029, "b": 1, "s": "กัญญารัตน์", "p": "low", "l": "27/12/2024"}, {"n": "บริษัท เอพีไอ คอร์ป จำกัด", "v": 4942, "b": 2, "s": "ธีรตา", "p": "low", "l": "27/02/2024"}, {"n": "แตงจันทร์", "v": 4930, "b": 1, "s": "ธชนัย", "p": "low", "l": "09/03/2024"}, {"n": "คุณนคธัช ศรีปะนะ", "v": 4874, "b": 4, "s": "จุฑามาศ", "p": "low", "l": "23/12/2024"}, {"n": "บริษัท เนเจอร์ ซีเล็คชั่น จำกัด", "v": 4868, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "21/05/2024"}, {"n": "คุณวรินทร ดวงมณี", "v": 4842, "b": 2, "s": "ธีรตา", "p": "low", "l": "29/11/2024"}, {"n": "ร้าน Castle black", "v": 4830, "b": 2, "s": "ธชนัย", "p": "low", "l": "08/03/2024"}, {"n": "คุณวศิน ศิริจันทร์ชื่น", "v": 4797, "b": 3, "s": "Shopee", "p": "low", "l": "10/06/2024"}, {"n": "บริษัท ไทย โคโคนัท จำกัด (มหาชน)", "v": 4735, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "30/10/2024"}, {"n": "บริษัท ช้อน เอ็ม.เอ็ม.นครสวรรค์ จำกัด", "v": 4708, "b": 2, "s": "ธีรตา", "p": "low", "l": "30/09/2024"}, {"n": "บริษัท อิตัลไทย เรียล เอ็ซเทท จำกัด", "v": 4697, "b": 1, "s": "ธีรตา", "p": "low", "l": "26/01/2024"}, {"n": "จรัญ สุวรรณรอด", "v": 4654, "b": 1, "s": "ธีรตา", "p": "low", "l": "13/03/2024"}, {"n": "บริษัท แจ็กซั่น โฟร์ จำกัด", "v": 4636, "b": 3, "s": "ธชนัย", "p": "low", "l": "26/04/2024"}, {"n": "บริษัท ฮาร์ทวอมมิ่ง จำกัด", "v": 4601, "b": 1, "s": "ธชนัย", "p": "low", "l": "04/06/2024"}, {"n": "บริษัท เดอะ1995คิดส์ จำกัด", "v": 4441, "b": 4, "s": "Shopee", "p": "low", "l": "07/09/2024"}, {"n": "บริษัท เดอะ โวลคาโน่ จำกัด (สำนักงานใหญ่)", "v": 4440, "b": 2, "s": "ธีรตา", "p": "low", "l": "03/12/2024"}, {"n": "คุณรัชญา วงศ์สาขา", "v": 4414, "b": 1, "s": "ธีรตา", "p": "low", "l": "07/02/2024"}, {"n": "คุณเม", "v": 4387, "b": 1, "s": "ธีรตา", "p": "low", "l": "02/09/2024"}, {"n": "บริษัท หลุยซ่า คอฟฟี่ (ประเทศไทย) จำกัด", "v": 4334, "b": 1, "s": "ปุณณภา", "p": "low", "l": "11/01/2024"}, {"n": "ร้านนัดภัคคอฟฟี่", "v": 4334, "b": 2, "s": "ธีรตา", "p": "low", "l": "12/07/2024"}, {"n": "บริษัท ธรรมดา888 จำกัด", "v": 4280, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "22/08/2024"}, {"n": "คุณสุนที หวังพัฒน์", "v": 4260, "b": 3, "s": "จุฑามาศ", "p": "low", "l": "23/02/2024"}, {"n": "บริษัท พีเอ็กซ์ ซิสเต็ม จำกัด", "v": 4225, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "24/05/2024"}, {"n": "บริษัท เทสตี้ ควิซีน จำกัด", "v": 4167, "b": 3, "s": "Shopee", "p": "low", "l": "03/12/2024"}, {"n": "คุณอภิญญา ตั้งทรงสวัสดิ์", "v": 4124, "b": 1, "s": "Shopee", "p": "low", "l": "29/01/2024"}, {"n": "บริษัท ลดาวัลย์ เพิ่มพูนทรัพย์ จำกัด", "v": 4122, "b": 1, "s": "Shopee", "p": "low", "l": "30/09/2024"}, {"n": "บริษัท รอยัล สวีท จำกัด", "v": 4120, "b": 2, "s": "ธีรตา", "p": "low", "l": "29/01/2024"}, {"n": "บริษัท บอสตัน เอเวนิว (1987) จำกัด", "v": 4120, "b": 1, "s": "ธชนัย", "p": "low", "l": "13/11/2024"}, {"n": "คุณขวัญ", "v": 4120, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "08/05/2024"}, {"n": "บริษัท เย็นดี ปิโตรเลียม จำกัด", "v": 4066, "b": 1, "s": "กัญญารัตน์", "p": "low", "l": "06/03/2024"}, {"n": "บริษัท เบอร์แทรม(1958) จำกัด", "v": 4066, "b": 1, "s": "ธีรตา", "p": "low", "l": "29/10/2024"}, {"n": "Raptor Express ll", "v": 4058, "b": 1, "s": "Lazada", "p": "low", "l": "31/01/2024"}, {"n": "0866669491", "v": 4028, "b": 1, "s": "Lazada", "p": "low", "l": "17/04/2024"}, {"n": "คุณเทียนเทพ บุญโชควิทูร", "v": 3906, "b": 1, "s": "ธีรตา", "p": "low", "l": "07/06/2024"}, {"n": "บริษัท ฮอท ซอส จำกัด", "v": 3852, "b": 1, "s": "ธีรตา", "p": "low", "l": "24/05/2024"}, {"n": "B612", "v": 3850, "b": 2, "s": "ธชนัย", "p": "low", "l": "19/04/2024"}, {"n": "นางสาวจิราพัชร เทพสุรินทร์", "v": 3839, "b": 1, "s": "Lazada", "p": "low", "l": "05/01/2024"}, {"n": "อ******ฐ", "v": 3769, "b": 1, "s": "Shopee", "p": "low", "l": "30/04/2024"}, {"n": "หยก", "v": 3667, "b": 2, "s": "Lazada", "p": "low", "l": "06/09/2024"}, {"n": "jeab7914", "v": 3656, "b": 4, "s": "จุฑามาศ", "p": "low", "l": "28/10/2024"}, {"n": "Choe brew", "v": 3650, "b": 1, "s": "ธชนัย", "p": "low", "l": "23/12/2024"}, {"n": "คุณเบญจลักษณ์", "v": 3638, "b": 3, "s": "ธีรตา", "p": "low", "l": "27/03/2024"}, {"n": "บริษัท เอส.เอ็ม.เค.พริ้นติ้ง จำกัด", "v": 3617, "b": 2, "s": "รัตติยา", "p": "low", "l": "09/09/2024"}, {"n": "บริษัท โรนิน เอฟแอนด์บี จำกัด", "v": 3584, "b": 1, "s": "ธชนัย", "p": "low", "l": "29/01/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ศูนย์บริการพรลดา", "v": 3563, "b": 2, "s": "กัญญารัตน์", "p": "low", "l": "18/01/2024"}, {"n": "ร้านในสวน", "v": 3550, "b": 1, "s": "ธชนัย", "p": "low", "l": "15/01/2024"}, {"n": "บริษัท พิงค์เทนเดอร์ เคเทอริง จำกัด", "v": 3536, "b": 2, "s": "ธีรตา", "p": "low", "l": "22/10/2024"}, {"n": "บริษัท ช้อน เอ็ม.เอ็ม.นครสวรรค์", "v": 3531, "b": 2, "s": "ธีรตา", "p": "low", "l": "21/06/2024"}, {"n": "คุณปัทมาภรณ์  บรรจง", "v": 3445, "b": 1, "s": "ธีรตา", "p": "low", "l": "30/05/2024"}, {"n": "คุณสาลินี วิทยานิวาส", "v": 3424, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "25/03/2024"}, {"n": "คุณกวาง", "v": 3370, "b": 1, "s": "ธีรตา", "p": "low", "l": "08/04/2024"}, {"n": "คุณวรรณิสา ชี้แจง", "v": 3370, "b": 8, "s": "จุฑามาศ", "p": "low", "l": "10/12/2024"}, {"n": "WAFF HANDCRAFT GELATO", "v": 3350, "b": 1, "s": "ธชนัย", "p": "low", "l": "14/02/2024"}, {"n": "คุณพิมพ์ชนก สุทธิศิริวัฒนะ", "v": 3331, "b": 1, "s": "ธชนัย", "p": "low", "l": "03/05/2024"}, {"n": "คุณยลดา", "v": 3310, "b": 1, "s": "ธชนัย", "p": "low", "l": "12/12/2024"}, {"n": "18 th FLOOR", "v": 3300, "b": 2, "s": "ธชนัย", "p": "low", "l": "20/01/2024"}, {"n": "เสน่ห์ (คุณตาว)", "v": 3220, "b": 1, "s": "ธชนัย", "p": "low", "l": "22/01/2024"}, {"n": "บริษัท คริสเตียน ดิออร์ (ไทยแลนด์) จำกัด", "v": 3210, "b": 1, "s": "ธีรตา", "p": "low", "l": "25/11/2024"}, {"n": "บริษัท ไอเฟล คาเฟ่ จำกัด", "v": 3210, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "25/10/2024"}, {"n": "บริษัท ยันต์ชนะ จำกัด", "v": 3203, "b": 1, "s": "ธชนัย", "p": "low", "l": "13/11/2024"}, {"n": "บริษัท บิสโตร เวิลด์ จำกัด", "v": 3197, "b": 2, "s": "Shopee", "p": "low", "l": "23/12/2024"}, {"n": "ร้านเกอิชา", "v": 3170, "b": 2, "s": "ธชนัย", "p": "low", "l": "22/11/2024"}, {"n": "คุณโชติกา ถิระกิตติกุล", "v": 3106, "b": 3, "s": "Shopee", "p": "low", "l": "24/05/2024"}, {"n": "คุณรุ่งนภา อินต๊ะปัญญา", "v": 3100, "b": 1, "s": "ธชนัย", "p": "low", "l": "09/01/2024"}, {"n": "บริษัท ไทยวาโก้ จำกัด (มหาชน)", "v": 3096, "b": 2, "s": "ธชนัย", "p": "low", "l": "09/12/2024"}, {"n": "โรงพยาบาลเลิดสิน", "v": 3094, "b": 1, "s": "ธชนัย", "p": "low", "l": "20/06/2024"}, {"n": "บริษัท โอซีซี จำกัด (มหาชน)", "v": 3069, "b": 1, "s": "Shopee", "p": "low", "l": "10/02/2024"}, {"n": "What The Cup", "v": 3050, "b": 1, "s": "ธชนัย", "p": "low", "l": "09/01/2024"}, {"n": "KR coffee station", "v": 3000, "b": 2, "s": "ธชนัย", "p": "low", "l": "26/01/2024"}, {"n": "นายธนิน อานันทนะสุวงศ์", "v": 2996, "b": 2, "s": "ธีรตา", "p": "low", "l": "26/06/2024"}, {"n": "บริษัท วีแกนเนอรี จำกัด", "v": 2934, "b": 1, "s": "ธีรตา", "p": "low", "l": "09/09/2024"}, {"n": "บริษัท บุญญ์ จำกัด", "v": 2857, "b": 1, "s": "ธีรตา", "p": "low", "l": "19/04/2024"}, {"n": "บริษัท วีพี เทรดดิ้ง 2017 จำกัด", "v": 2840, "b": 1, "s": "Shopee", "p": "low", "l": "02/07/2024"}, {"n": "คุณมาติกา วรรณโกวิท", "v": 2836, "b": 1, "s": "ธีรตา", "p": "low", "l": "12/07/2024"}, {"n": "บริษัท ตั้งถาวรฟาร์ม จำกัด", "v": 2797, "b": 1, "s": "Shopee", "p": "low", "l": "04/01/2024"}, {"n": "บริษัท ลาวัลศิริ จำกัด", "v": 2782, "b": 1, "s": "ธชนัย", "p": "low", "l": "20/11/2024"}, {"n": "นาย ชิตพล", "v": 2693, "b": 1, "s": "Shopee", "p": "low", "l": "15/10/2024"}, {"n": "วรจักรเซ็นเตอร์", "v": 2675, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "17/01/2024"}, {"n": "บริษัท เกรท เดย์ ออแกไนเซอร์ จำกัด", "v": 2675, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "24/01/2024"}, {"n": "ห้างหุ้นส่วนจำกัด อาตี๋ โกปี๊", "v": 2628, "b": 1, "s": "Shopee", "p": "low", "l": "26/08/2024"}, {"n": "ว******ี", "v": 2524, "b": 1, "s": "Shopee", "p": "low", "l": "11/10/2024"}, {"n": "บริษัท อาร์เอสยู ฮอไรซอน  จำกัด", "v": 2516, "b": 2, "s": "Shopee", "p": "low", "l": "23/08/2024"}, {"n": "บริษัท พาดารี่ จำกัด", "v": 2504, "b": 1, "s": "ธชนัย", "p": "low", "l": "29/11/2024"}, {"n": "นาง ธัญญารัตน์", "v": 2485, "b": 2, "s": "Shopee", "p": "low", "l": "30/11/2024"}, {"n": "ก******ร", "v": 2477, "b": 2, "s": "Shopee", "p": "low", "l": "10/12/2024"}, {"n": "บริษัท พริ้งค์  ครีเอชั่น จำกัด", "v": 2470, "b": 1, "s": "ธชนัย", "p": "low", "l": "12/09/2024"}, {"n": "บริษัท หอมเคย ชุมพร จำกัด", "v": 2464, "b": 1, "s": "Shopee", "p": "low", "l": "07/06/2024"}, {"n": "บริษัท เจอาร์ เอ็นที จำกัด", "v": 2461, "b": 1, "s": "ธีรตา", "p": "low", "l": "01/03/2024"}, {"n": "บริษัท อินเตอร์เนชั่นเเนล เอ็นแอนด์เอช (ประเทศไทย) จำกัด", "v": 2456, "b": 1, "s": "ธีรตา", "p": "low", "l": "13/03/2024"}, {"n": "ห้างหุ้นส่วนจำกัด อาร์.อี.เอ.แอล คอฟ", "v": 2413, "b": 1, "s": "Shopee", "p": "low", "l": "05/02/2024"}, {"n": "คุณกัญญาพัชญ์ จงวัฒนาไพศาล", "v": 2408, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "28/10/2024"}, {"n": "ร้านกาแฟ ซิป", "v": 2367, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "24/09/2024"}, {"n": "คุณประกฤษฎิ์ จ.ขอนแก่น", "v": 2300, "b": 1, "s": "ธชนัย", "p": "low", "l": "21/08/2024"}, {"n": "นิศานาถ", "v": 2298, "b": 1, "s": "Shopee", "p": "low", "l": "23/07/2024"}, {"n": "บริษัท โอเอ็มจี โปรดักชั่น จำกัด", "v": 2298, "b": 1, "s": "Shopee", "p": "low", "l": "27/02/2024"}, {"n": "บริษัท กุลพัฒน์ (519) โฮลดิ้ง จำกัด", "v": 2290, "b": 1, "s": "ธชนัย", "p": "low", "l": "22/10/2024"}, {"n": "บริษัท โอเชี่ยน บรีซ เขาหลัก จำกัด", "v": 2288, "b": 2, "s": "Shopee", "p": "low", "l": "13/08/2024"}, {"n": "บริษัท ดรีมโคน จำกัด", "v": 2275, "b": 1, "s": "supisara", "p": "low", "l": "20/11/2024"}, {"n": "อ******ท", "v": 2168, "b": 4, "s": "Shopee", "p": "low", "l": "31/10/2024"}, {"n": "น******ร", "v": 2148, "b": 1, "s": "Shopee", "p": "low", "l": "22/10/2024"}, {"n": "บริษัท ปิ่นเกล้าเซอร์วิส จำกัด", "v": 2140, "b": 1, "s": "กัญญารัตน์", "p": "low", "l": "17/04/2024"}, {"n": "บริษัท ฟูจิ อิเลคทริค แมนูแฟคเจอริ่ง (ประเทศไทย)  จำกัด", "v": 2140, "b": 1, "s": "ธีรตา", "p": "low", "l": "21/05/2024"}, {"n": "บริษัท สเปซ มอร์ จำกัด", "v": 2133, "b": 3, "s": "Shopee", "p": "low", "l": "10/07/2024"}, {"n": "คุณมีน", "v": 2119, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "22/10/2024"}, {"n": "บริษัท สิริพัฒน์ ไฟฟ์ จำกัด", "v": 2060, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "07/08/2024"}, {"n": "บริษัท บิซโบล อีเอ็มพี จำกัด", "v": 2054, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "04/04/2024"}, {"n": "White House Rangsit", "v": 2021, "b": 1, "s": "ธชนัย", "p": "low", "l": "04/06/2024"}, {"n": "บริษัท อายตนะ ดี จำกัด", "v": 1979, "b": 2, "s": "Shopee", "p": "low", "l": "23/08/2024"}, {"n": "คุณมุทิตา จันทร์อินทร์", "v": 1976, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "23/12/2024"}, {"n": "บริษัท บ้านหลานยาย จำกัด", "v": 1955, "b": 1, "s": "Shopee", "p": "low", "l": "16/02/2024"}, {"n": "ธ******ู", "v": 1936, "b": 2, "s": "Shopee", "p": "low", "l": "02/10/2024"}, {"n": "บริษัท เดอะ โวลคาโน่ จำกัด", "v": 1904, "b": 1, "s": "Shopee", "p": "low", "l": "30/09/2024"}, {"n": "ห้างหุ้นส่วนจำกัด โรงงานมหาชัย", "v": 1899, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "23/09/2024"}, {"n": "ห้างหุ้นส่วนจำกัด มี แคร", "v": 1891, "b": 1, "s": "Shopee", "p": "low", "l": "14/06/2024"}, {"n": "บริษัท สกายไลน์ ฟิล์ม บางกอก จำกัด", "v": 1830, "b": 1, "s": "Shopee", "p": "low", "l": "15/01/2024"}, {"n": "บริษัท เน็กซเตอร์ ดิจิตอล แอนด์ โซลูชั่น จำกัด", "v": 1825, "b": 1, "s": "ดวงกมล", "p": "low", "l": "12/07/2024"}, {"n": "บริษัท บี แอนด์ บี เอาท์ดอร์ สปอร์ต จำกัด", "v": 1820, "b": 1, "s": "ธชนัย", "p": "low", "l": "06/12/2024"}, {"n": "นายชัยพจน์ มาโนช", "v": 1801, "b": 1, "s": "Shopee", "p": "low", "l": "19/02/2024"}, {"n": "บริษัท จงเจริญ มาร์เก็ตติ้ง กรุ๊ป จำกัด", "v": 1792, "b": 4, "s": "ธีรตา", "p": "low", "l": "04/09/2024"}, {"n": "ช******์", "v": 1708, "b": 1, "s": "Shopee", "p": "low", "l": "11/10/2024"}, {"n": "บริษัท คูโบต้ามหาสารคาม จำกัด", "v": 1700, "b": 1, "s": "Shopee", "p": "low", "l": "07/06/2024"}, {"n": "บริษัท โอแอล รีพับลิค จำกัด", "v": 1679, "b": 4, "s": "Shopee", "p": "low", "l": "18/11/2024"}, {"n": "บริษัท แฮปปี้เดย์ เอ็นจิเนียริ่ง จำกัด", "v": 1675, "b": 1, "s": "Shopee", "p": "low", "l": "17/06/2024"}, {"n": "บริษัท ฉัน เรสเตอรองท์ จำกัด", "v": 1658, "b": 1, "s": "ธีรตา", "p": "low", "l": "25/09/2024"}, {"n": "ปลายฟ้า คำประกอบ", "v": 1652, "b": 1, "s": "Shopee", "p": "low", "l": "06/03/2024"}, {"n": "ห้างหุ้นส่วนจำกัด พลังลีรักษ์ลิ้ม", "v": 1614, "b": 1, "s": "Shopee", "p": "low", "l": "05/01/2024"}, {"n": "บริษัท เทวาศรม เขาหลัก จำกัด", "v": 1584, "b": 1, "s": "Shopee", "p": "low", "l": "29/03/2024"}, {"n": "Realizing Sexual and Reproductive Justice", "v": 1578, "b": 1, "s": "ธชนัย", "p": "low", "l": "26/11/2024"}, {"n": "คุณต๋อย", "v": 1568, "b": 1, "s": "ธีรตา", "p": "low", "l": "24/06/2024"}, {"n": "ณัฐฤดี มีสุวรรณ", "v": 1553, "b": 1, "s": "Lazada", "p": "low", "l": "26/01/2024"}, {"n": "บริษัท หวานไร้ขีด จำกัด", "v": 1550, "b": 1, "s": "ธชนัย", "p": "low", "l": "09/08/2024"}, {"n": "N*", "v": 1516, "b": 1, "s": "Shopee", "p": "low", "l": "11/09/2024"}, {"n": "Dovico screen", "v": 1480, "b": 1, "s": "ธชนัย", "p": "low", "l": "09/09/2024"}, {"n": "บริษัท อินฟินิตี้ ฟาร์มาซูติคอล จำกัด", "v": 1431, "b": 1, "s": "ธชนัย", "p": "low", "l": "11/11/2024"}, {"n": "ชุติมา", "v": 1414, "b": 4, "s": "Lazada", "p": "low", "l": "13/11/2024"}, {"n": "ร้านบิงซูหมู่บ้านแสงบัวทอง", "v": 1400, "b": 1, "s": "ธีรตา", "p": "low", "l": "06/02/2024"}, {"n": "บริษัท ดับเบิ้ลยู.บี.ปริ้นท์ จำกัด", "v": 1396, "b": 1, "s": "ธชนัย", "p": "low", "l": "12/06/2024"}, {"n": "บริษัท ทรัฟเฟิล เบเกอรี่ จำกัด", "v": 1395, "b": 1, "s": "Shopee", "p": "low", "l": "06/05/2024"}, {"n": "บริษัท แอลฟาคิด จำกัด", "v": 1390, "b": 2, "s": "Shopee", "p": "low", "l": "14/08/2024"}, {"n": "บริษัท ดั่งฝัน จำกัด", "v": 1373, "b": 3, "s": "Shopee", "p": "low", "l": "26/07/2024"}, {"n": "kanokwanpuengob", "v": 1349, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "17/04/2024"}, {"n": "บริษัท ชนินทร์ ลิฟวิ่ง (ประเทศไทย) จำกัด", "v": 1340, "b": 1, "s": "Shopee", "p": "low", "l": "24/06/2024"}, {"n": "ป******ฐ", "v": 1337, "b": 2, "s": "Shopee", "p": "low", "l": "23/08/2024"}, {"n": "คุณพิชญ์อัญญ์ โพธิ์ภักดี", "v": 1330, "b": 2, "s": "Shopee", "p": "low", "l": "13/08/2024"}, {"n": "Fang chashsorcha", "v": 1316, "b": 2, "s": "Lazada", "p": "low", "l": "29/06/2024"}, {"n": "บังอ๊าด", "v": 1306, "b": 4, "s": "ธีรตา", "p": "low", "l": "12/09/2024"}, {"n": "บริษัท ราวินโฮม จำกัด", "v": 1303, "b": 1, "s": "Shopee", "p": "low", "l": "06/03/2024"}, {"n": "n******y", "v": 1298, "b": 3, "s": "Shopee", "p": "low", "l": "17/12/2024"}, {"n": "บริษัท พัทยา ปาร์ค บีช โฮเต็ล จำกัด", "v": 1284, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "13/11/2024"}, {"n": "ร้านละลานตาเบเกอรี่", "v": 1284, "b": 1, "s": "ธีรตา", "p": "low", "l": "04/09/2024"}, {"n": "G****a", "v": 1236, "b": 1, "s": "Shopee", "p": "low", "l": "28/12/2024"}, {"n": "คุณภัทรวรินท์ดา เดโว", "v": 1236, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "24/01/2024"}, {"n": "L******i", "v": 1216, "b": 1, "s": "Shopee", "p": "low", "l": "11/12/2024"}, {"n": "บริษัท ไอดี สตูดิโอ จำกัด", "v": 1204, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "17/12/2024"}, {"n": "K'kot Sorvixay", "v": 1200, "b": 1, "s": "Lazada", "p": "low", "l": "09/09/2024"}, {"n": "บริษัท แกรนด์ซุปเปอร์ริช จำกัด", "v": 1177, "b": 1, "s": "ธีรตา", "p": "low", "l": "28/11/2024"}, {"n": "นาง คนึงนิตย์", "v": 1177, "b": 1, "s": "ธีรตา", "p": "low", "l": "22/01/2024"}, {"n": "นาง คนึงนิตย์ โรจน์สุวณิชกร", "v": 1177, "b": 1, "s": "ธีรตา", "p": "low", "l": "20/03/2024"}, {"n": "บริษัท แทนไทย เอสเธติกส์ จำกัด", "v": 1174, "b": 1, "s": "Shopee", "p": "low", "l": "20/06/2024"}, {"n": "บริษัท เอ็มเค เรสโตรองต์ กรุ๊ป จำกัด (มหาชน)", "v": 1150, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "31/05/2024"}, {"n": "คุณจิรวัฒน์ ลิ่วคงสถาพร", "v": 1140, "b": 3, "s": "ธีรตา", "p": "low", "l": "23/04/2024"}, {"n": "บริษัท อาร์เจวิลล์ (ไทยแลนด์) จำกัด", "v": 1115, "b": 2, "s": "Shopee", "p": "low", "l": "05/04/2024"}, {"n": "บริษัท อาโซ คอฟฟี่ จำกัด", "v": 1103, "b": 2, "s": "Shopee", "p": "low", "l": "29/06/2024"}, {"n": "น******ม", "v": 1100, "b": 3, "s": "Shopee", "p": "low", "l": "27/11/2024"}, {"n": "บริษัท โกโก้กิฟท์แอนด์พรีเมียม จำกัด", "v": 1086, "b": 1, "s": "Shopee", "p": "low", "l": "30/04/2024"}, {"n": "คุณอนัญญา โอสถานนท์", "v": 1081, "b": 1, "s": "Shopee", "p": "low", "l": "04/11/2024"}, {"n": "จ******า", "v": 1077, "b": 2, "s": "Shopee", "p": "low", "l": "11/10/2024"}, {"n": "บริษัท รวยไม่มีหมด จำกัด", "v": 1055, "b": 1, "s": "Shopee", "p": "low", "l": "18/12/2024"}, {"n": "น******น", "v": 1054, "b": 2, "s": "Shopee", "p": "low", "l": "02/09/2024"}, {"n": "บริษัท เพอร์เดย์ เอ็นเตอร์ไพรส์ จำกัด", "v": 1047, "b": 1, "s": "Shopee", "p": "low", "l": "25/10/2024"}, {"n": "บริษัท พลัง งาน รวย จำกัด", "v": 1045, "b": 4, "s": "Shopee", "p": "low", "l": "23/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด นู้บ คอฟฟี่ ช้อป แอนด์ ซัพพลายส์", "v": 1044, "b": 1, "s": "Shopee", "p": "low", "l": "08/03/2024"}, {"n": "บริษัท เวสปิอาริโอ (ประเทศไทย) จำกัด", "v": 1043, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "26/11/2024"}, {"n": "ร******ล", "v": 1039, "b": 1, "s": "Shopee", "p": "low", "l": "23/02/2024"}, {"n": "บริษัท คิงคอง กรุ๊ป (ไทยแลนด์) จำกัด", "v": 1038, "b": 1, "s": "ธีรตา", "p": "low", "l": "15/01/2024"}, {"n": "บริษัท ไอเอ็มซีเอฟ จำกัด", "v": 1009, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "03/12/2024"}, {"n": "บริษัท เดอะ โวลคาโน่ จำกัด", "v": 1000, "b": 1, "s": "Shopee", "p": "low", "l": "21/02/2024"}, {"n": "บริษัท บริติช เออร์ลี่ เยียรส์ เซ็นเตอร์ จำกัด", "v": 997, "b": 1, "s": "Shopee", "p": "low", "l": "23/01/2024"}, {"n": "ป******)", "v": 991, "b": 2, "s": "Shopee", "p": "low", "l": "03/12/2024"}, {"n": "ศ******์", "v": 991, "b": 1, "s": "Shopee", "p": "low", "l": "01/08/2024"}, {"n": "บริษัท ทูพีเอ็นแอล จำกัด", "v": 966, "b": 1, "s": "Shopee", "p": "low", "l": "22/04/2024"}, {"n": "cat Wipawan  S.", "v": 953, "b": 1, "s": "Lazada", "p": "low", "l": "04/06/2024"}, {"n": "บริษัท อร๊อย อร่อย จำกัด", "v": 950, "b": 5, "s": "Shopee", "p": "low", "l": "19/10/2024"}, {"n": "578905338479544982-tiktok", "v": 935, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "10/06/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ต้นไม้พูนผล", "v": 931, "b": 1, "s": "Shopee", "p": "low", "l": "17/01/2024"}, {"n": "ล******ว", "v": 901, "b": 1, "s": "Shopee", "p": "low", "l": "01/10/2024"}, {"n": "tom431125", "v": 895, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "02/12/2024"}, {"n": "บริษัท ศิวยาธร จำกัด", "v": 887, "b": 1, "s": "ธีรตา", "p": "low", "l": "04/09/2024"}, {"n": "579065904896445152 - Tiktok", "v": 874, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "15/07/2024"}, {"n": "ก******ะ", "v": 868, "b": 2, "s": "Shopee", "p": "low", "l": "27/11/2024"}, {"n": "Chayanin Somjai", "v": 852, "b": 1, "s": "Lazada", "p": "low", "l": "29/02/2024"}, {"n": "ไ******ฐ", "v": 851, "b": 1, "s": "Shopee", "p": "low", "l": "11/10/2024"}, {"n": "user4235017626597", "v": 836, "b": 2, "s": "จุฑามาศ", "p": "low", "l": "19/11/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ไตรรงค์ ซัพพลาย", "v": 824, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "09/08/2024"}, {"n": "ปิยพรรณ จรัญพงษ์", "v": 824, "b": 1, "s": "ธีรตา", "p": "low", "l": "03/07/2024"}, {"n": "nuchjaa.1983", "v": 813, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "29/11/2024"}, {"n": "ภ******ล", "v": 802, "b": 1, "s": "Shopee", "p": "low", "l": "12/01/2024"}, {"n": "ช******ล", "v": 797, "b": 1, "s": "Shopee", "p": "low", "l": "05/11/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ธัญกร ซัพพลาย", "v": 792, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "17/06/2024"}, {"n": "เ******ร", "v": 774, "b": 1, "s": "Shopee", "p": "low", "l": "11/10/2024"}, {"n": "ป****า", "v": 769, "b": 1, "s": "Shopee", "p": "low", "l": "11/10/2024"}, {"n": "K******.", "v": 769, "b": 1, "s": "Shopee", "p": "low", "l": "02/08/2024"}, {"n": "ช******ย", "v": 767, "b": 2, "s": "Shopee", "p": "low", "l": "29/08/2024"}, {"n": "บริษัท ริช อินเตอร์ ฟู้ดส์ จำกัด", "v": 752, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "19/06/2024"}, {"n": "578853496233101686 - tiktok", "v": 746, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "21/05/2024"}, {"n": "อ******ง", "v": 744, "b": 1, "s": "Shopee", "p": "low", "l": "30/08/2024"}, {"n": "บริษัท สยามคาเฟอีน จำกัด", "v": 742, "b": 1, "s": "Shopee", "p": "low", "l": "29/01/2024"}, {"n": "ธ******์", "v": 735, "b": 2, "s": "Shopee", "p": "low", "l": "09/10/2024"}, {"n": "อ******์", "v": 727, "b": 2, "s": "Shopee", "p": "low", "l": "22/08/2024"}, {"n": "เ******ศ", "v": 721, "b": 1, "s": "Shopee", "p": "low", "l": "22/08/2024"}, {"n": "บริษัท เมซโซ่  จำกัด", "v": 693, "b": 1, "s": "Shopee", "p": "low", "l": "06/09/2024"}, {"n": "ส******ล", "v": 682, "b": 2, "s": "Shopee", "p": "low", "l": "12/09/2024"}, {"n": "บริษัท คาเฟ่ รีจอยส์ จำกัด", "v": 669, "b": 1, "s": "Shopee", "p": "low", "l": "28/08/2024"}, {"n": "เ******า", "v": 669, "b": 1, "s": "Shopee", "p": "low", "l": "26/11/2024"}, {"n": "ห******ท", "v": 666, "b": 1, "s": "Shopee", "p": "low", "l": "05/11/2024"}, {"n": "บริษัท เวิลด์ เทรดดิ้ง พรอสเพอริตี้ จำกัด", "v": 666, "b": 1, "s": "Shopee", "p": "low", "l": "11/06/2024"}, {"n": "วิลาพร", "v": 663, "b": 1, "s": "Lazada", "p": "low", "l": "12/11/2024"}, {"n": "บริษัท เดอะ โกรซี่รี่ บาย บีเอ็ม จำกัด", "v": 659, "b": 1, "s": "Shopee", "p": "low", "l": "16/08/2024"}, {"n": "บริษัท คอนโว่ จำกัด", "v": 657, "b": 1, "s": "Shopee", "p": "low", "l": "16/05/2024"}, {"n": "บริษัท โอบีซีเอส จำกัด", "v": 644, "b": 1, "s": "Shopee", "p": "low", "l": "27/09/2024"}, {"n": "บริษัท โตโลโปตี้ จำกัด", "v": 629, "b": 1, "s": "Shopee", "p": "low", "l": "17/06/2024"}, {"n": "ร******é", "v": 614, "b": 1, "s": "Shopee", "p": "low", "l": "20/12/2024"}, {"n": "E******s", "v": 614, "b": 2, "s": "Shopee", "p": "low", "l": "29/11/2024"}, {"n": "ว******ล", "v": 605, "b": 1, "s": "Shopee", "p": "low", "l": "27/09/2024"}, {"n": "บริษัท แอมมิดา เมดิคอล จำกัด", "v": 597, "b": 2, "s": "Shopee", "p": "low", "l": "06/05/2024"}, {"n": "ฐ******์", "v": 594, "b": 1, "s": "Shopee", "p": "low", "l": "15/01/2024"}, {"n": "น**ล", "v": 588, "b": 1, "s": "Shopee", "p": "low", "l": "18/06/2024"}, {"n": "T******.", "v": 587, "b": 1, "s": "Shopee", "p": "low", "l": "23/12/2024"}, {"n": "ร******l", "v": 584, "b": 1, "s": "Shopee", "p": "low", "l": "09/09/2024"}, {"n": "บริษัท คันไซ 1980 เอ็นจิเนียริ่ง จำกัด", "v": 583, "b": 1, "s": "Shopee", "p": "low", "l": "27/02/2024"}, {"n": "578690598216501537 - tiktok", "v": 579, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "01/04/2024"}, {"n": "คุณรฐนนท์ หนองหลวง", "v": 560, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "18/11/2024"}, {"n": "คุณนิธิโรจน์ ละอองพานิชคุณ", "v": 556, "b": 1, "s": "Shopee", "p": "low", "l": "13/08/2024"}, {"n": "บริษัท เดลิ สตอร์รี่ จำกัด", "v": 554, "b": 1, "s": "Shopee", "p": "low", "l": "01/03/2024"}, {"n": "อ******ำ", "v": 554, "b": 1, "s": "Shopee", "p": "low", "l": "29/10/2024"}, {"n": "นายมหาพร ชูเกียรติวงศ์กุล", "v": 553, "b": 1, "s": "Shopee", "p": "low", "l": "09/01/2024"}, {"n": "S******i", "v": 548, "b": 1, "s": "Shopee", "p": "low", "l": "14/05/2024"}, {"n": "ล******ี", "v": 543, "b": 1, "s": "Shopee", "p": "low", "l": "17/10/2024"}, {"n": "การประปาส่วนภูมิภาค", "v": 540, "b": 1, "s": "Shopee", "p": "low", "l": "29/08/2024"}, {"n": "บริษัท ตักเงินเย็น จำกัด", "v": 531, "b": 1, "s": "Shopee", "p": "low", "l": "14/02/2024"}, {"n": "บริษัท เกาะนอก รีสอร์ท จำกัด", "v": 528, "b": 1, "s": "Shopee", "p": "low", "l": "12/02/2024"}, {"n": "ป******ร, ******49", "v": 528, "b": 1, "s": "Shopee", "p": "low", "l": "09/01/2024"}, {"n": "ปิยพนธ์ ศีติสาร", "v": 516, "b": 1, "s": "Shopee", "p": "low", "l": "06/11/2024"}, {"n": "ธ******ญ", "v": 514, "b": 1, "s": "Shopee", "p": "low", "l": "10/09/2024"}, {"n": "มหาวิทยาลัย สงขลานครินทร์", "v": 502, "b": 1, "s": "Shopee", "p": "low", "l": "26/04/2024"}, {"n": "thisismyneck543", "v": 495, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "14/02/2024"}, {"n": "nongyaochumekha", "v": 495, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "02/12/2024"}, {"n": "คุณฐิติภัทร ศรีสุข", "v": 480, "b": 1, "s": "Shopee", "p": "low", "l": "16/12/2024"}, {"n": "ก******)", "v": 478, "b": 2, "s": "Shopee", "p": "low", "l": "07/09/2024"}, {"n": "ก******ย", "v": 468, "b": 2, "s": "Shopee", "p": "low", "l": "18/11/2024"}, {"n": "บริษัท ไอ พลัส คิว จำกัด", "v": 464, "b": 1, "s": "Shopee", "p": "low", "l": "30/04/2024"}, {"n": "บริษัท ไอโกลบ ดิสทริบิวชั่น จำกัด", "v": 460, "b": 1, "s": "Shopee", "p": "low", "l": "23/07/2024"}, {"n": "578846851902769459 - tiktok", "v": 449, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "20/05/2024"}, {"n": "K******g", "v": 449, "b": 1, "s": "Shopee", "p": "low", "l": "07/09/2024"}, {"n": "บริษัท ธีระนิต1989 เดอ คาเฟ่ จำกัด", "v": 447, "b": 1, "s": "กัญญารัตน์", "p": "low", "l": "10/06/2024"}, {"n": "บริษัท โนเบิลวิลเลจ จำกัด", "v": 442, "b": 1, "s": "Shopee", "p": "low", "l": "08/04/2024"}, {"n": "บริษัท คาเนะโมจิ 168 จำกัด", "v": 433, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "21/10/2024"}, {"n": "578690042712918390 - tiktok", "v": 431, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "01/04/2024"}, {"n": "ห้างหุ้นส่วนจำกัด เฮงโคตร2", "v": 430, "b": 1, "s": "Shopee", "p": "low", "l": "23/07/2024"}, {"n": "579667194862733433 - tiktok", "v": 418, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "22/11/2024"}, {"n": "579769060240099631-tiktok", "v": 418, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "17/12/2024"}, {"n": "579768609974749649-tiktok", "v": 418, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "16/12/2024"}, {"n": "579670245592172810 - tiktok", "v": 418, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "23/11/2024"}, {"n": "579637860222863663 - tiktok", "v": 418, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "15/11/2024"}, {"n": "579471829128874287 - tiktok", "v": 418, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "15/10/2024"}, {"n": "579286340463987442 - tiktok", "v": 418, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "04/09/2024"}, {"n": "579223724078042033 - Tiktok", "v": 418, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "21/08/2024"}, {"n": "พ******ร", "v": 405, "b": 1, "s": "Shopee", "p": "low", "l": "31/08/2024"}, {"n": "คุณบุญเลิศ วงษ์พิชัย", "v": 395, "b": 1, "s": "Shopee", "p": "low", "l": "10/09/2024"}, {"n": "บังอร จันทร์ทอง", "v": 383, "b": 1, "s": "Lazada", "p": "low", "l": "30/05/2024"}, {"n": "N******m", "v": 383, "b": 1, "s": "Shopee", "p": "low", "l": "25/12/2024"}, {"n": "บริษัท ซีที 88 กรุ๊ป จำกัด", "v": 377, "b": 1, "s": "ธีรตา", "p": "low", "l": "02/04/2024"}, {"n": "น******ศ", "v": 372, "b": 1, "s": "Shopee", "p": "low", "l": "25/12/2024"}, {"n": "Sucha Nan", "v": 370, "b": 1, "s": "Lazada", "p": "low", "l": "02/07/2024"}, {"n": "พ******ณ", "v": 364, "b": 1, "s": "Shopee", "p": "low", "l": "12/12/2024"}, {"n": "ส******ิ", "v": 362, "b": 2, "s": "Shopee", "p": "low", "l": "11/10/2024"}, {"n": "ต******น", "v": 362, "b": 2, "s": "Shopee", "p": "low", "l": "12/12/2024"}, {"n": "อ******ร", "v": 360, "b": 1, "s": "Shopee", "p": "low", "l": "27/11/2024"}, {"n": "บริษัท เอบีเอ็ม คอนเนค จำกัด", "v": 353, "b": 1, "s": "ธีรตา", "p": "low", "l": "09/02/2024"}, {"n": "เ******ส", "v": 351, "b": 2, "s": "Shopee", "p": "low", "l": "21/06/2024"}, {"n": "0947532176", "v": 350, "b": 1, "s": "Lazada", "p": "low", "l": "29/01/2024"}, {"n": "น******ช", "v": 349, "b": 1, "s": "Shopee", "p": "low", "l": "27/11/2024"}, {"n": "บริษัท ชนิดาภา จำกัด", "v": 349, "b": 1, "s": "Shopee", "p": "low", "l": "16/09/2024"}, {"n": "บริษัท สุรินทร์ โอทอป อินเตอร์ เทรดเดอร์ จำกัด", "v": 344, "b": 1, "s": "Shopee", "p": "low", "l": "28/03/2024"}, {"n": "บริษัท เฮทาโอะ  แมพปิ้ง จำกัด", "v": 340, "b": 1, "s": "Lazada", "p": "low", "l": "19/06/2024"}, {"n": "บริษัท ซิลพิน เอเชีย จำกัด", "v": 340, "b": 1, "s": "Shopee", "p": "low", "l": "17/10/2024"}, {"n": "บริษัท สยามคราฟท์อุตสาหกรรม จำกัด", "v": 337, "b": 1, "s": "Shopee", "p": "low", "l": "30/06/2024"}, {"n": "บริษัท เจแอนด์เอ็น บัตเตอร์คับ จำกัด", "v": 335, "b": 1, "s": "Shopee", "p": "low", "l": "30/09/2024"}, {"n": "Géraldine Pernot", "v": 330, "b": 1, "s": "Lazada", "p": "low", "l": "02/12/2024"}, {"n": "Alice's Pizza TaaN", "v": 315, "b": 1, "s": "Lazada", "p": "low", "l": "30/01/2024"}, {"n": "บริษัท ประพันธ์มงคล จำกัด", "v": 313, "b": 1, "s": "ธีรตา", "p": "low", "l": "05/08/2024"}, {"n": "พ******ก", "v": 311, "b": 1, "s": "Shopee", "p": "low", "l": "10/12/2024"}, {"n": "บริษัท กู๊ดที (ไทยแลนด์) จำกัด", "v": 310, "b": 1, "s": "Shopee", "p": "low", "l": "05/10/2024"}, {"n": "ร้าน​ Live Great Before​Tomorrow​", "v": 307, "b": 1, "s": "Shopee", "p": "low", "l": "09/07/2024"}, {"n": "ฮ******ิ", "v": 307, "b": 1, "s": "Shopee", "p": "low", "l": "11/04/2024"}, {"n": "p******n", "v": 305, "b": 1, "s": "Shopee", "p": "low", "l": "11/10/2024"}, {"n": "บริษัท 2608 อินเตอร์เทรด จำกัด", "v": 304, "b": 1, "s": "Shopee", "p": "low", "l": "29/11/2024"}, {"n": "คุณพลอยชมพู กัลมาพิจิตร", "v": 303, "b": 1, "s": "Shopee", "p": "low", "l": "11/10/2024"}, {"n": "บริษัท ยินดี เอเจนซี จำกัด", "v": 300, "b": 1, "s": "Shopee", "p": "low", "l": "17/07/2024"}, {"n": "บริษัท อัลเฟรโด เอ็นเตอร์ไพรส์ จำกัด", "v": 300, "b": 1, "s": "Shopee", "p": "low", "l": "25/07/2024"}, {"n": "578498423652649281-tiktok", "v": 300, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "09/02/2024"}, {"n": "เ******น", "v": 293, "b": 1, "s": "Shopee", "p": "low", "l": "26/07/2024"}, {"n": "C******)", "v": 292, "b": 1, "s": "Shopee", "p": "low", "l": "25/12/2024"}, {"n": "ร******า", "v": 292, "b": 1, "s": "Shopee", "p": "low", "l": "15/03/2024"}, {"n": "ส******น", "v": 291, "b": 1, "s": "Shopee", "p": "low", "l": "21/08/2024"}, {"n": "578817077300070547 - tiktok", "v": 290, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "10/05/2024"}, {"n": "ณ***า", "v": 287, "b": 1, "s": "Shopee", "p": "low", "l": "22/10/2024"}, {"n": "บริษัท มิซูโน เอแพค (ประเทศไทย) จำกัด", "v": 286, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "24/10/2024"}, {"n": "ป******์", "v": 278, "b": 1, "s": "Shopee", "p": "low", "l": "27/02/2024"}, {"n": "Marisance Official", "v": 276, "b": 1, "s": "Shopee", "p": "low", "l": "28/02/2024"}, {"n": "ค******น", "v": 273, "b": 1, "s": "Shopee", "p": "low", "l": "15/11/2024"}, {"n": "T******e", "v": 263, "b": 1, "s": "Shopee", "p": "low", "l": "09/10/2024"}, {"n": "user3674387731803", "v": 260, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "28/12/2024"}, {"n": "240717SU8BRNY1 - hopee (DDpapercup)", "v": 251, "b": 1, "s": "Shopee", "p": "low", "l": "18/07/2024"}, {"n": "ภ******ย", "v": 251, "b": 1, "s": "Shopee", "p": "low", "l": "30/07/2024"}, {"n": "สุทธิ​พงษ์​ ศรี​สุวรรณ​", "v": 251, "b": 1, "s": "Shopee", "p": "low", "l": "28/02/2024"}, {"n": "เ******์", "v": 249, "b": 1, "s": "Shopee", "p": "low", "l": "05/08/2024"}, {"n": "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย มุกดาหาร", "v": 241, "b": 1, "s": "Shopee", "p": "low", "l": "10/09/2024"}, {"n": "susu60150", "v": 240, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "11/06/2024"}, {"n": "บริษัท บี คายน์ ทู เอเวอรี่ คายน์ จำกัด", "v": 237, "b": 1, "s": "Shopee", "p": "low", "l": "30/05/2024"}, {"n": "ณ******)", "v": 235, "b": 1, "s": "Shopee", "p": "low", "l": "19/12/2024"}, {"n": "ป******น", "v": 235, "b": 1, "s": "Shopee", "p": "low", "l": "14/11/2024"}, {"n": "เ******ล", "v": 230, "b": 1, "s": "Shopee", "p": "low", "l": "21/10/2024"}, {"n": "ท******น", "v": 208, "b": 1, "s": "Shopee", "p": "low", "l": "04/11/2024"}, {"n": "บริษัท สมอลเบคกิ้งกรุ้ป จำกัด", "v": 207, "b": 1, "s": "Shopee", "p": "low", "l": "10/08/2024"}, {"n": "ส******ร", "v": 198, "b": 1, "s": "Shopee", "p": "low", "l": "03/12/2024"}, {"n": "น****ล", "v": 198, "b": 1, "s": "Shopee", "p": "low", "l": "20/04/2024"}, {"n": "พ******น", "v": 198, "b": 1, "s": "Shopee", "p": "low", "l": "27/09/2024"}, {"n": "จ******ง", "v": 196, "b": 2, "s": "Shopee", "p": "low", "l": "29/11/2024"}, {"n": "คุณธนกฤต  หาดทวายกาญจน์", "v": 195, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "30/07/2024"}, {"n": "ห******)", "v": 189, "b": 1, "s": "Shopee", "p": "low", "l": "29/11/2024"}, {"n": "K***ก", "v": 182, "b": 1, "s": "Shopee", "p": "low", "l": "17/12/2024"}, {"n": "ส******ว", "v": 181, "b": 1, "s": "Shopee", "p": "low", "l": "10/12/2024"}, {"n": "3******R", "v": 180, "b": 1, "s": "Shopee", "p": "low", "l": "31/10/2024"}, {"n": "เ******ย", "v": 177, "b": 1, "s": "Shopee", "p": "low", "l": "06/11/2024"}, {"n": "บริษัท เต๋าการ์เด้นเฮลธ์สปาแอนด์รีสอร์ท  จำกัด", "v": 177, "b": 1, "s": "Shopee", "p": "low", "l": "24/01/2024"}, {"n": "โ*****า", "v": 176, "b": 1, "s": "Shopee", "p": "low", "l": "25/11/2024"}, {"n": "คุณชม", "v": 171, "b": 1, "s": "ปุณณภา", "p": "low", "l": "31/05/2024"}, {"n": "ว******ย", "v": 171, "b": 1, "s": "Shopee", "p": "low", "l": "23/11/2024"}, {"n": "1729606201986550014 - tiktok", "v": 167, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "04/07/2024"}, {"n": "เ******ม", "v": 164, "b": 1, "s": "Shopee", "p": "low", "l": "16/08/2024"}, {"n": "578528970440542227 - tiktok", "v": 162, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "16/02/2024"}, {"n": "ม****ส", "v": 160, "b": 1, "s": "Shopee", "p": "low", "l": "27/03/2024"}, {"n": "จ***้", "v": 157, "b": 1, "s": "Shopee", "p": "low", "l": "27/02/2024"}, {"n": "บริษัท ลี่หยาง หยู่ไถ่ (ประเทศไทย) จำกัด", "v": 155, "b": 1, "s": "Shopee", "p": "low", "l": "09/10/2024"}, {"n": "บริษัท ลี่หยาง หยู่ไถ่ (ประเทศไทย) จำกัด", "v": 155, "b": 1, "s": "Shopee", "p": "low", "l": "13/06/2024"}, {"n": "บริษัท โทโร่ฟรายส์ จำกัด", "v": 150, "b": 1, "s": "ธีรตา", "p": "low", "l": "06/03/2024"}, {"n": "บจก. เคเค เซิร์ฟ แอนด์ เซอร์วิส", "v": 150, "b": 1, "s": "ธีรตา", "p": "low", "l": "20/05/2024"}, {"n": "บริษัท ไทซันฟูดส์ จำกัด", "v": 150, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "07/10/2024"}, {"n": "ร้าน Wednesdaybake", "v": 150, "b": 1, "s": "ธีรตา", "p": "low", "l": "22/03/2024"}, {"n": "578683900938258566 - tiktok", "v": 149, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "01/04/2024"}, {"n": "ณ******ต", "v": 147, "b": 1, "s": "Shopee", "p": "low", "l": "03/12/2024"}, {"n": "ห้างหุ้นส่วนจำกัด ทองงอก", "v": 137, "b": 1, "s": "Shopee", "p": "low", "l": "21/10/2024"}, {"n": "เ******ะ", "v": 136, "b": 1, "s": "Shopee", "p": "low", "l": "11/12/2024"}, {"n": "บริษัท เลม่อน แรบบิท  จำกัด", "v": 134, "b": 1, "s": "Shopee", "p": "low", "l": "21/05/2024"}, {"n": "ส******ด", "v": 131, "b": 1, "s": "Shopee", "p": "low", "l": "10/04/2024"}, {"n": "ขายเงินสดสด (คุณแวร์)", "v": 130, "b": 1, "s": "วิภา", "p": "low", "l": "29/05/2024"}, {"n": "ขายสดหน้าร้าน (พี่แป๋ม)", "v": 129, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "14/02/2024"}, {"n": "คุณอัญชลีพร", "v": 129, "b": 1, "s": "ธีรตา", "p": "low", "l": "04/01/2024"}, {"n": "user6234858470347", "v": 128, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "21/02/2024"}, {"n": "บริษัท เจอร์นีย์ โฮเต็ล บางนา จำกัด", "v": 124, "b": 1, "s": "Shopee", "p": "low", "l": "29/11/2024"}, {"n": "ป******อ", "v": 120, "b": 1, "s": "Shopee", "p": "low", "l": "09/01/2024"}, {"n": "ก******ม", "v": 120, "b": 1, "s": "Shopee", "p": "low", "l": "13/03/2024"}, {"n": "Anucha Jittanupong", "v": 120, "b": 1, "s": "ธีรตา", "p": "low", "l": "05/11/2024"}, {"n": "ณ******ร", "v": 117, "b": 1, "s": "Shopee", "p": "low", "l": "15/11/2024"}, {"n": "S***i", "v": 109, "b": 1, "s": "Shopee", "p": "low", "l": "27/12/2024"}, {"n": "ขายสดหน้าร้าน ( คุณสม )", "v": 107, "b": 1, "s": "ธีรตา", "p": "low", "l": "12/01/2024"}, {"n": "บริษัท เมย์ทรี แพ็ค (ประเทศไทย) จำกัด", "v": 102, "b": 1, "s": "ธีรตา", "p": "low", "l": "11/06/2024"}, {"n": "นายธนัทภัทร ปิงเมือง", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "12/03/2024"}, {"n": "คุณนุสรา ชัยสิทธิโรจน์", "v": 100, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "18/04/2024"}, {"n": "บริษัท ร้านอาหารคุณต้อย จำกัด", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "29/03/2024"}, {"n": "The one hotel", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "16/11/2024"}, {"n": "บริษัท อิน อินน์ ฮอสปิทัลลิตี้ จำกัด", "v": 100, "b": 1, "s": "ธีรตา", "p": "low", "l": "30/09/2024"}, {"n": "คุณกวินทร์วรดา", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "04/10/2024"}, {"n": "คุณกัลยากร", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "03/05/2024"}, {"n": "คุณจิรโรจน์  (ตัวอย่าง)", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "17/10/2024"}, {"n": "คุณฉัฐญาภรณ์ เพิ่มทรัพย์", "v": 100, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "26/12/2024"}, {"n": "คุณชาญศักดิ์ สมชาติ", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "24/01/2024"}, {"n": "คุณปุ้ย (ตัวอย่าง)", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "04/10/2024"}, {"n": "ตัวอย่าง", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "28/08/2024"}, {"n": "คุณพิชญา เพชรสง", "v": 100, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "21/10/2024"}, {"n": "คุณภคินี จิรวณิชย์สกุล", "v": 100, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "04/07/2024"}, {"n": "บริษัท พยอม ที จำกัด", "v": 100, "b": 1, "s": "ธีรตา", "p": "low", "l": "25/10/2024"}, {"n": "คุณวิระวัลย์ พรลาภเลิศสุข", "v": 100, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "21/10/2024"}, {"n": "คุณศุภกร ทองอยู่", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "01/02/2024"}, {"n": "คุณสุพรรษา", "v": 100, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "12/06/2024"}, {"n": "คุณอริยะ", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "03/01/2024"}, {"n": "คุณอัมพิกา", "v": 100, "b": 1, "s": "ธีรตา", "p": "low", "l": "11/01/2024"}, {"n": "คุณเนส (สินค้าตัวอย่าง)", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "04/10/2024"}, {"n": "คุณแอร์", "v": 100, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "31/01/2024"}, {"n": "Fundao", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "28/05/2024"}, {"n": "บริษัท สแกนดิเนเวียน ออโต้ จำกัด", "v": 100, "b": 1, "s": "ธีรตา", "p": "low", "l": "25/10/2024"}, {"n": "บริษัท ไทรทัน รีซอร์สเซส จำกัด", "v": 100, "b": 1, "s": "ธชนัย", "p": "low", "l": "23/10/2024"}, {"n": "บริษัท แสงอคิณ จำกัด", "v": 100, "b": 1, "s": "จุฑามาศ", "p": "low", "l": "07/09/2024"}, {"n": "ร้านกาแฟ slurp coffee", "v": 100, "b": 1, "s": "ธีรตา", "p": "low", "l": "20/09/2024"}, {"n": "24030352N8229J - hopee (DDpapercup)", "v": 75, "b": 1, "s": "Shopee", "p": "low", "l": "05/03/2024"}, {"n": "พ******า", "v": 70, "b": 1, "s": "Shopee", "p": "low", "l": "31/10/2024"}, {"n": "บริษัท เว็ลธ พลัส พร็อพเพอร์ตี้ จำกัด", "v": 67, "b": 1, "s": "Shopee", "p": "low", "l": "03/12/2024"}, {"n": "แ******า", "v": 67, "b": 1, "s": "Shopee", "p": "low", "l": "29/11/2024"}, {"n": "แ******ส", "v": 60, "b": 1, "s": "Shopee", "p": "low", "l": "30/01/2024"}, {"n": "บริษัท วายเอ็ม ไทรบ์ (ประเทศไทย) จำกัด", "v": 60, "b": 1, "s": "Shopee", "p": "low", "l": "20/08/2024"}, {"n": "บริษัท เดอะ เจอาร์ เมาท์เท่น ฟรอนท์ จำกัด", "v": 60, "b": 1, "s": "Shopee", "p": "low", "l": "23/02/2024"}, {"n": "ภ*****์", "v": 60, "b": 1, "s": "Shopee", "p": "low", "l": "03/01/2024"}, {"n": "ณ*****า", "v": 60, "b": 1, "s": "Shopee", "p": "low", "l": "11/10/2024"}, {"n": "จ*****ศ", "v": 57, "b": 1, "s": "Shopee", "p": "low", "l": "21/11/2024"}, {"n": "คุณดิว", "v": 50, "b": 1, "s": "ธีรตา", "p": "low", "l": "23/04/2024"}];
 
-// Populate salesperson filter
-(function() {
-  const sales = [...new Set(churnList.map(r => r.s))].sort();
-  const sel = document.getElementById('churnListSalesFilter');
-  sales.forEach(s => { const o = document.createElement('option'); o.value=s; o.textContent=s; sel.appendChild(o); });
-})();
+</script>
+<script>
+// ==================== SALES ANALYSIS DATA ====================
+const SALES_DATA = {
+  yearly: [
+    { year: 2023, total: 62158502,  txn: 7366, customers: 2575 },
+    { year: 2024, total: 67321215,  txn: 8210, customers: 2773 },
+    { year: 2025, total: 56370459,  txn: 4014, customers: 1437 },
+    { year: 2026, total: 12518004,  txn: 1309, customers: 459, note: "ม.ค.–16 มี.ค." },
+  ],
+  monthly2023: [
+    { m:"ม.ค.", v:4555893 }, { m:"ก.พ.", v:4367113 }, { m:"มี.ค.", v:5852357 },
+    { m:"เม.ย.", v:4219952 }, { m:"พ.ค.", v:4590348 }, { m:"มิ.ย.", v:5340263 },
+    { m:"ก.ค.", v:4929022 }, { m:"ส.ค.", v:6459508 }, { m:"ก.ย.", v:4656343 },
+    { m:"ต.ค.", v:5196486 }, { m:"พ.ย.", v:6102081 }, { m:"ธ.ค.", v:5889136 },
+  ],
+  monthly2025: [
+    { m:"ม.ค.", v:3261673 }, { m:"ก.พ.", v:5235852 }, { m:"มี.ค.", v:3895142 },
+    { m:"เม.ย.", v:4028951 }, { m:"พ.ค.", v:5083204 }, { m:"มิ.ย.", v:5201887 },
+    { m:"ก.ค.", v:4912034 }, { m:"ส.ค.", v:5413892 }, { m:"ก.ย.", v:4738201 },
+    { m:"ต.ค.", v:4901823 }, { m:"พ.ย.", v:5219043 }, { m:"ธ.ค.", v:4478757 },
+  ],
+  salesperson2025: [
+    { name:"ปุณณภา",   total:14715651, txn:null, customers:135,  color:"#4472C4" },
+    { name:"Theerata",  total:13221859, txn:null, customers:348,  color:"#2980b9" },
+    { name:"ธชนัย",    total:12032206, txn:null, customers:347,  color:"#70AD47" },
+    { name:"ศุภิสรา",  total:7634816,  txn:null, customers:28,   color:"#e74c3c" },
+    { name:"Jutamat",   total:5135503,  txn:null, customers:1064, color:"#27ae60" },
+    { name:"นิโลบล",   total:416245,   txn:null, customers:8,    color:"#8e44ad" },
+  ],
+  bu2025: [
+    { bu:"BU1 — Cafe & Beverage",      total:11268487, pct:19.99, color:"#27ae60" },
+    { bu:"BU2 — Restaurant & Food",     total:1074666,  pct:1.91,  color:"#e67e22" },
+    { bu:"BU3 — Corporate & B2B",       total:7530943,  pct:13.36, color:"#2980b9" },
+    { bu:"BU4 — Hotel & Resort",        total:1385647,  pct:2.46,  color:"#8e44ad" },
+    { bu:"BU5 — Agent & Distributor",   total:1404000,  pct:2.49,  color:"#f39c12" },
+    { bu:"BU7 — อื่นๆ",                total:33706717, pct:59.79, color:"#bdc3c7" },
+  ],
+  channels2025: [
+    { ch:"Line DD",     total:13526141, pct:59.6, txn:771 },
+    { ch:"Direct Mail", total:5526219,  pct:24.4, txn:239 },
+    { ch:"โทร",         total:2085418,  pct:9.2,  txn:164 },
+    { ch:"Facebook DD", total:1459033,  pct:6.4,  txn:107 },
+    { ch:"อื่นๆ",       total:92125,    pct:0.4,  txn:55  },
+  ],
+  retention: { r2324:596, r2425:272, r2526:119, y3:133, y4:41 },
+  topCustomers: [
+    { name:"Central Group Thailand (รวมทุกบริษัท)", total:6753349, years:"2023,2024,2025,2026", ly:4 },
+    { name:"บ. แพ็คเวิร์คส์ จำกัด",           total:2914803, years:"2023,2024,2025,2026", ly:4 },
+    { name:"บ. โนส ที (ประเทศไทย) จำกัด",      total:2748910, years:"2023,2024,2025",      ly:3 },
+    { name:"บ. เวนดิ้ง เซอร์วิสเซส จำกัด",     total:2531407, years:"2023,2024,2025,2026", ly:4 },
+    { name:"บ. Bigtree จำกัด",                 total:2389654, years:"2023,2024,2025,2026", ly:4 },
+    { name:"บ. แพชชั่น เรสเตอรองท์ กรุ๊ป",    total:1987432, years:"2023,2024,2025",      ly:3 },
+    { name:"บ. จีพีซีเอ็ม กรุ๊ป จำกัด",       total:1823190, years:"2023,2024,2025",      ly:3 },
+    { name:"Shell Cafe (กลุ่ม)",               total:1654320, years:"2023,2024,2025,2026", ly:4 },
+    { name:"ACE TECHNOLOGY CO.,LTD.",          total:1404000, years:"2023,2024,2025",      ly:3 },
+    { name:"บ. ซุปเปอร์ เทอร์เทิล จำกัด",    total:760213,  years:"2023,2024,2025",      ly:3 },
+  ],
+};
 
-// KPI cards
-(function() {
-  const total = churnList.length;
-  const rev   = churnList.reduce((a,r)=>a+r.v, 0);
-  const high  = churnList.filter(r=>r.p==='high');
-  const mid   = churnList.filter(r=>r.p==='mid');
-  const fmt   = v => '฿'+v.toLocaleString('th-TH');
-  const fmtM  = v => '฿'+(v/1e6).toFixed(1)+'M';
-  document.getElementById('churnTotal').textContent   = total.toLocaleString('th-TH')+' ราย';
-  document.getElementById('churnRevenue').textContent = fmtM(rev);
-  document.getElementById('churnHigh').textContent    = high.length+' ราย';
-  document.getElementById('churnMid').textContent     = mid.length+' ราย';
-  document.getElementById('churnHighRev').textContent = fmt(high.reduce((a,r)=>a+r.v,0));
-  document.getElementById('churnMidRev').textContent  = fmt(mid.reduce((a,r)=>a+r.v,0));
-})();
-
-// Bar chart: Top 15
-(function() {
-  const top15 = [...churnList].sort((a,b)=>b.v-a.v).slice(0,15);
-  const labels = top15.map(r => r.n.length>22 ? r.n.substring(0,22)+'…' : r.n);
-  charts.churnListBar = new Chart(document.getElementById('churnListBarChart'), {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{ label: 'ยอดขาย 2024', data: top15.map(r=>r.v),
-        backgroundColor: top15.map(r => r.p==='high'?'#e74c3ccc': r.p==='mid'?'#e67e22cc':'#f39c12cc'),
-        borderRadius: 4 }]
-    },
-    options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: { legend: {display:false}, tooltip: { callbacks: {
-        label: ctx => '฿'+ctx.raw.toLocaleString('th-TH')
-      } } },
-      scales: { x: { ticks: {callback: v=>'฿'+(v/1000).toFixed(0)+'K'}, grid:{color:'#f0f2f5'} },
-                 y: { grid:{display:false}, ticks:{font:{size:11}} } }
-    }
+let salesBuilt = false;
+function buildSalesAnalysis() {
+  if (salesBuilt) return;
+  salesBuilt = true;
+  try {
+  const d = SALES_DATA;
+  document.getElementById('saKpiCards').innerHTML = d.yearly.map((y,i) => {
+    const yoy = i > 0 ? ((y.total / d.yearly[i-1].total) - 1) * 100 : null;
+    const yoyHtml = yoy !== null
+      ? `<div style="font-size:11px;margin-top:4px;color:${yoy>=0?'var(--success)':'var(--danger)'};font-weight:700">${yoy>=0?'▲':'▼'} ${Math.abs(yoy).toFixed(1)}% YoY</div>` : '';
+    const noteHtml = y.note ? `<div style="font-size:10px;color:var(--warning);margin-top:2px">${y.note}</div>` : '';
+    return `<div style="background:#fff;border-radius:10px;padding:16px 20px;flex:1;min-width:150px;box-shadow:var(--shadow);border-top:4px solid var(--primary)">
+      <div style="font-size:11px;color:var(--muted);font-weight:600">ยอดขาย ${y.year}</div>
+      <div style="font-size:22px;font-weight:800;color:var(--text)">฿${(y.total/1e6).toFixed(1)}M</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">${y.txn.toLocaleString('th-TH')} txn · ${y.customers.toLocaleString('th-TH')} ลูกค้า</div>
+      ${yoyHtml}${noteHtml}</div>`;
+  }).join('');
+  destroyChart('saYearChart');
+  charts.saYearChart = new Chart(document.getElementById('saYearChart'), {
+    type:'bar', data:{ labels:d.yearly.map(y=>String(y.year)),
+      datasets:[{label:'ยอดขายสุทธิ',data:d.yearly.map(y=>y.total/1e6),
+        backgroundColor:['#2980b9','#27ae60','#e74c3c','#e67e22'],borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`฿${c.raw.toFixed(2)}M`}}},
+      scales:{y:{ticks:{callback:v=>`฿${v.toFixed(0)}M`},grid:{color:'#f0f2f5'}},x:{grid:{display:false}}}}
   });
-})();
-
-// Sales chart: by salesperson
-(function() {
-  const byS = {};
-  churnList.forEach(r => { byS[r.s] = (byS[r.s]||0) + r.v; });
-  const sorted = Object.entries(byS).sort((a,b)=>b[1]-a[1]);
-  charts.churnListSales = new Chart(document.getElementById('churnListSalesChart'), {
-    type: 'bar',
-    data: {
-      labels: sorted.map(e=>e[0]),
-      datasets: [{ label: 'ยอดที่หาย', data: sorted.map(e=>e[1]),
-        backgroundColor: '#c0392bcc', borderRadius: 4 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>'฿'+ctx.raw.toLocaleString('th-TH')}} },
-      scales: { x:{grid:{display:false}}, y:{ticks:{callback:v=>'฿'+(v/1000).toFixed(0)+'K'},grid:{color:'#f0f2f5'}} }
-    }
+  destroyChart('saMonthChart');
+  charts.saMonthChart = new Chart(document.getElementById('saMonthChart'), {
+    type:'bar', data:{ labels:d.monthly2023.map(m=>m.m),
+      datasets:[
+        {label:'2023',data:d.monthly2023.map(m=>m.v/1e6),backgroundColor:'rgba(41,128,185,0.7)',borderRadius:3},
+        {label:'2025',data:d.monthly2025.map(m=>m.v/1e6),backgroundColor:'rgba(231,76,60,0.7)',borderRadius:3},
+      ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:11}}},
+        tooltip:{callbacks:{label:c=>`${c.dataset.label}: ฿${c.raw.toFixed(2)}M`}}},
+      scales:{y:{ticks:{callback:v=>`฿${v.toFixed(1)}M`},grid:{color:'#f0f2f5'}},x:{grid:{display:false}}}}
   });
-})();
-
-// Render filterable table
-function renderChurnTable() {
-  const q    = (document.getElementById('churnListSearch').value||'').toLowerCase();
-  const sp   = document.getElementById('churnListSalesFilter').value;
-  const pri  = document.getElementById('churnListPriorityFilter').value;
-  const fmt  = v => '฿'+v.toLocaleString('th-TH');
-  const priLabel = {high:'🔴 สูง', mid:'🟠 กลาง', low:'🟡 ติดตาม'};
-  const priFill  = {high:'#fdecea', mid:'#fff3e0', low:''} ;
-
-  let filtered = churnList.filter(r =>
-    (!q  || r.n.toLowerCase().includes(q)) &&
-    (!sp  || r.s === sp) &&
-    (!pri || r.p === pri)
-  );
-  document.getElementById('churnListCount').textContent = filtered.length.toLocaleString('th-TH')+' รายการ';
-
-  let html = '';
-  filtered.forEach((r,i) => {
-    const bg = priFill[r.p] ? `background:${priFill[r.p]}` : '';
-    html += `<tr style="${bg};border-bottom:1px solid #f0f2f5;">
-      <td style="padding:8px;text-align:center;color:#7f8c8d;font-size:12px;">${i+1}</td>
-      <td style="padding:8px 12px;font-weight:600;color:#1e3a5f;">${r.n}</td>
-      <td style="padding:8px;text-align:right;font-weight:700;color:#c0392b;">${fmt(r.v)}</td>
-      <td style="padding:8px;text-align:center;color:#7f8c8d;">${r.b}</td>
-      <td style="padding:8px;text-align:center;">${r.s}</td>
-      <td style="padding:8px;text-align:center;color:#7f8c8d;font-size:12px;">${r.l}</td>
-      <td style="padding:8px;text-align:center;">${priLabel[r.p]}</td>
-    </tr>`;
+  destroyChart('saSpChart');
+  charts.saSpChart = new Chart(document.getElementById('saSpChart'), {
+    type:'doughnut', data:{labels:d.salesperson2025.map(s=>s.name),
+      datasets:[{data:d.salesperson2025.map(s=>s.total),
+        backgroundColor:d.salesperson2025.map(s=>s.color),borderWidth:2,borderColor:'#fff'}]},
+    options:{cutout:'58%',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:11}}},
+        tooltip:{callbacks:{label:c=>`${c.label}: ฿${(c.raw/1e6).toFixed(2)}M`}}}}
   });
-  if (!html) html = '<tr><td colspan="7" style="padding:24px;text-align:center;color:#7f8c8d;">ไม่พบข้อมูล</td></tr>';
-  document.getElementById('churnListTableBody').innerHTML = html;
+  const spTot = d.salesperson2025.reduce((s,x)=>s+x.total,0);
+  document.getElementById('saSpBody').innerHTML = d.salesperson2025.map(s => {
+    const pct=(s.total/spTot*100).toFixed(1);
+    const lvl=s.total>20e6?'⭐⭐⭐ Elite':s.total>10e6?'⭐⭐ Senior':s.total>5e6?'⭐ Mid':'🔰 Junior';
+    return `<tr><td><span style="width:10px;height:10px;background:${s.color};border-radius:50%;display:inline-block;margin-right:6px"></span><strong>${s.name}</strong></td>
+      <td style="text-align:right;font-weight:700">฿${(s.total/1e6).toFixed(2)}M</td>
+      <td style="text-align:right">${s.txn!=null?s.txn.toLocaleString('th-TH'):'—'}</td><td style="text-align:right">${s.customers}</td>
+      <td style="text-align:right">${s.txn!=null?'฿'+Math.round(s.total/s.txn).toLocaleString('th-TH'):'—'}</td>
+      <td style="text-align:right">${pct}%</td><td style="text-align:center">${lvl}</td></tr>`;
+  }).join('');
+  destroyChart('saBuChart');
+  charts.saBuChart = new Chart(document.getElementById('saBuChart'), {
+    type:'doughnut', data:{labels:d.bu2025.map(b=>b.bu.split('—')[0].trim()),
+      datasets:[{data:d.bu2025.map(b=>b.total),backgroundColor:d.bu2025.map(b=>b.color),borderWidth:2,borderColor:'#fff'}]},
+    options:{cutout:'55%',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},
+        tooltip:{callbacks:{label:c=>`฿${(c.raw/1e6).toFixed(2)}M (${d.bu2025[c.dataIndex].pct.toFixed(1)}%)`}}}}
+  });
+  document.getElementById('saBuBody').innerHTML = d.bu2025.map(b => {
+    const pri=b.pct>20?'🔴 หลัก':b.pct>10?'🟡 สำคัญ':b.pct>2?'🟢 ศักยภาพ':'⚪ เล็กน้อย';
+    const bar=`<div style="background:#f0f2f5;border-radius:3px;height:6px;margin-top:3px"><div style="background:${b.color};width:${Math.min(b.pct,100)}%;height:6px;border-radius:3px"></div></div>`;
+    return `<tr><td><span style="width:10px;height:10px;background:${b.color};border-radius:2px;display:inline-block;margin-right:6px"></span>${b.bu}</td>
+      <td style="text-align:right;font-weight:700">฿${(b.total/1e6).toFixed(2)}M</td>
+      <td style="text-align:right">${b.pct.toFixed(1)}%${bar}</td><td style="text-align:center">${pri}</td></tr>`;
+  }).join('');
+  destroyChart('saChChart');
+  charts.saChChart = new Chart(document.getElementById('saChChart'), {
+    type:'bar', data:{labels:d.channels2025.map(c=>c.ch),
+      datasets:[{label:'ยอดขาย',data:d.channels2025.map(c=>c.total/1e6),
+        backgroundColor:['#1e3a5f','#2980b9','#e67e22','#27ae60','#bdc3c7'],borderRadius:5}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`฿${c.raw.toFixed(2)}M (${d.channels2025[c.dataIndex].pct}%)`}}},
+      scales:{x:{ticks:{callback:v=>`฿${v.toFixed(0)}M`},grid:{color:'#f0f2f5'}},y:{grid:{display:false}}}}
+  });
+  const r=d.retention;
+  const loyalSorted = [...loyalCustomers].sort((a,b)=>(b.y23+b.y24+b.y25)-(a.y23+a.y24+a.y25));
+  const vip4List = d.topCustomers.filter(c=>c.ly>=4);
+
+  function retCard(id,label,val,sub,color,detailHtml){
+    return `<div style="background:#fff;border-radius:10px;box-shadow:var(--shadow);border-left:4px solid ${color};overflow:hidden;flex:1;min-width:140px">
+      <div style="padding:14px 18px;cursor:pointer;user-select:none" onclick="
+        var el=document.getElementById('ret-${id}');
+        var arr=this.querySelector('.ret-arr');
+        if(el.style.display==='none'){el.style.display='block';arr.textContent='▲';}
+        else{el.style.display='none';arr.textContent='▼';}">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:11px;color:var(--muted);font-weight:600">${label}</div>
+          <span class="ret-arr" style="font-size:10px;color:var(--muted)">▼</span>
+        </div>
+        <div style="font-size:26px;font-weight:800;color:${color}">${val}</div>
+        <div style="font-size:11px;color:var(--muted)">${sub}</div>
+      </div>
+      <div id="ret-${id}" style="display:none;border-top:1px solid #f0f2f5;padding:12px 14px;background:#fafbfc;max-height:260px;overflow-y:auto;font-size:12px">
+        ${detailHtml}
+      </div>
+    </div>`;
+  }
+
+  const detail2324 = `<div style="color:var(--muted);margin-bottom:8px">ลูกค้าปี 2023 ทั้งหมด <strong>2,575 ราย</strong> → ซื้อซ้ำปี 2024 <strong style="color:var(--primary)">596 ราย (23%)</strong></div>
+    <div style="background:#e8f4fd;border-radius:6px;padding:8px 10px;margin-bottom:6px">📌 กลยุทธ์: ลูกค้าที่ไม่กลับมา 1,979 ราย ควรเป็น target Win-back ปี 2026</div>`;
+
+  const detail2425 = `<div style="color:var(--muted);margin-bottom:8px">ลูกค้าปี 2024 ทั้งหมด <strong>2,773 ราย</strong> → ซื้อซ้ำปี 2025 <strong style="color:var(--warning)">272 ราย (10%)</strong></div>
+    <div style="background:#fff8e1;border-radius:6px;padding:8px 10px;margin-bottom:6px">⚠️ ลูกค้าซื้อซ้ำลดลง 596→272 (−54%) — จุดวิกฤตที่ต้องแก้ไขด่วน</div>
+    <div style="color:var(--muted)">ลูกค้าหายไป 2,501 ราย คิดเป็นยอดประมาณ ฿14.9M</div>`;
+
+  const detail2526 = `<div style="color:var(--muted);margin-bottom:8px">ลูกค้าปี 2025 → มีออเดอร์ใน 2026 (ม.ค.–16 มี.ค.) <strong style="color:var(--danger)">119 ราย</strong></div>
+    <div style="background:#fdecea;border-radius:6px;padding:8px 10px;margin-bottom:6px">🔴 Retention ลดต่อเนื่อง — ต้องติดตามลูกค้าเก่าก่อนสิ้นไตรมาส 1</div>
+    <div style="color:var(--muted)">ยังเหลือเวลาดึงลูกค้ากลับได้ใน Q1–Q2 2026</div>`;
+
+  const detail3yr = `<div style="color:var(--muted);margin-bottom:8px">ลูกค้าซื้อต่อเนื่อง <strong>3 ปี</strong> (2023+2024+2025) จำนวน <strong style="color:var(--success)">133 ราย</strong></div>
+    <table style="width:100%;border-collapse:collapse">
+      <thead><tr style="background:#f0f4f8">
+        <th style="padding:5px 8px;text-align:left;font-size:11px;color:var(--muted)">ชื่อลูกค้า</th>
+        <th style="padding:5px 8px;text-align:right;font-size:11px;color:var(--muted)">2023</th>
+        <th style="padding:5px 8px;text-align:right;font-size:11px;color:var(--muted)">2024</th>
+        <th style="padding:5px 8px;text-align:right;font-size:11px;color:var(--muted)">2025</th>
+      </tr></thead>
+      <tbody>${loyalSorted.map(c=>`<tr style="border-bottom:1px solid #f0f2f5">
+        <td style="padding:5px 8px;font-weight:600">${c.name}</td>
+        <td style="padding:5px 8px;text-align:right;color:#2980b9">฿${(c.y23/1e3).toFixed(0)}K</td>
+        <td style="padding:5px 8px;text-align:right;color:#27ae60">฿${(c.y24/1e3).toFixed(0)}K</td>
+        <td style="padding:5px 8px;text-align:right;color:${c.y25>=c.y24?'var(--success)':'var(--danger)'}">฿${(c.y25/1e3).toFixed(0)}K</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+
+  const detail4yr = `<div style="color:var(--muted);margin-bottom:8px">ลูกค้า <strong>VIP 4 ปี</strong> (2023+2024+2025+2026) — กลุ่มที่มีความภักดีสูงสุด <strong style="color:#8e44ad">41 ราย</strong></div>
+    <table style="width:100%;border-collapse:collapse">
+      <thead><tr style="background:#f5eef8">
+        <th style="padding:5px 8px;text-align:left;font-size:11px;color:var(--muted)">#</th>
+        <th style="padding:5px 8px;text-align:left;font-size:11px;color:var(--muted)">ชื่อลูกค้า</th>
+        <th style="padding:5px 8px;text-align:right;font-size:11px;color:var(--muted)">ยอดสะสม</th>
+      </tr></thead>
+      <tbody>${vip4List.map((c,i)=>`<tr style="border-bottom:1px solid #f0f2f5">
+        <td style="padding:5px 8px;text-align:center;font-weight:800;color:#8e44ad">${i+1}</td>
+        <td style="padding:5px 8px;font-weight:600">${c.name}</td>
+        <td style="padding:5px 8px;text-align:right;color:#8e44ad;font-weight:700">฿${(c.total/1e6).toFixed(2)}M</td>
+      </tr>`).join('')}
+      <tr style="background:#f5eef8;font-size:11px;color:var(--muted)">
+        <td colspan="3" style="padding:6px 8px;text-align:center">* แสดงเฉพาะ Top customers — ยังมี VIP 4 ปีอีก ${41-vip4List.length} ราย</td>
+      </tr></tbody>
+    </table>`;
+
+  document.getElementById('saRetention').innerHTML=`
+    <div style="display:flex;flex-wrap:wrap;gap:12px">
+      ${retCard('r1','2023→2024',r.r2324,'ลูกค้าซื้อซ้ำ','var(--primary)',detail2324)}
+      ${retCard('r2','2024→2025',r.r2425,'retention '+(r.r2425/r.r2324*100).toFixed(0)+'%','var(--warning)',detail2425)}
+      ${retCard('r3','2025→2026',r.r2526,'retention '+(r.r2526/r.r2425*100).toFixed(0)+'%','var(--danger)',detail2526)}
+      ${retCard('r4','3 ปีต่อเนื่อง',r.y3,'ลูกค้า','var(--success)',detail3yr)}
+      ${retCard('r5','VIP 4 ปี',r.y4,'ลูกค้า','#8e44ad',detail4yr)}
+    </div>
+    <div style="margin-top:10px;padding:10px 14px;background:#fff8e1;border-radius:8px;border-left:3px solid var(--warning);font-size:12px;color:#7f6003">
+      ⚠️ ลูกค้าซื้อซ้ำลดลง 596 → 272 ราย (−54%) ระหว่าง 2024→2025 ควรทำ Win-back Campaign
+    </div>`;
+  document.getElementById('saTopBody').innerHTML = d.topCustomers.map((c,i) => {
+    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
+    const lc=c.ly>=4?'#f39c12':c.ly>=3?'var(--success)':'var(--primary)';
+    const lb=c.ly>=4?'🌟 VIP 4 ปี':c.ly>=3?'💚 3 ปี':'🔵 2 ปี';
+    return `<tr><td style="text-align:center;font-weight:800">${medal}</td><td><strong>${c.name}</strong></td>
+      <td style="text-align:right;font-weight:700;color:var(--primary)">฿${(c.total/1e6).toFixed(2)}M</td>
+      <td style="text-align:center;font-size:11px;color:var(--muted)">${c.years}</td>
+      <td style="text-align:center"><span style="background:${lc}22;color:${lc};border-radius:12px;padding:2px 8px;font-size:11px;font-weight:700">${lb}</span></td></tr>`;
+  }).join('');
+  } catch(e) {
+    salesBuilt = false;
+    document.getElementById('saKpiCards').innerHTML =
+      `<div style="background:#fdecea;border:1px solid #e74c3c;border-radius:8px;padding:16px;color:#c0392b;width:100%">
+        <strong>&#10060; Error loading Sales Analysis:</strong><br>
+        <code style="font-size:12px">${e.message}</code>
+      </div>`;
+  }
 }
-renderChurnTable();
-
 </script>
 </body>
 </html>
