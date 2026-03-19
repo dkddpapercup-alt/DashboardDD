@@ -556,9 +556,9 @@
       <div class="kpi-icon">📉</div>
     </div>
     <div class="kpi-card" style="border-left:4px solid #e67e22;">
-      <div class="kpi-label">2026 YTD (ม.ค.–16 มี.ค.)</div>
-      <div class="kpi-value" style="color:#e67e22;">1.4M</div>
-      <div class="kpi-sub">฿1,423,301 | ม.ค.–16 มี.ค. (incl VAT)</div>
+      <div class="kpi-label">2026 YTD (ม.ค.–20 มี.ค.)</div>
+      <div class="kpi-value" style="color:#e67e22;">1.5M</div>
+      <div class="kpi-sub">฿1,465,983 | ม.ค.–20 มี.ค. (incl VAT)</div>
       <div class="kpi-icon">🟢</div>
     </div>
   </div>
@@ -612,7 +612,7 @@
     <h4>💡 หมายเหตุ</h4>
     <ul>
       <li>รวมชื่อบิลที่มีคีย์เวิร์ด: <strong>เซ็นทรัล / Central / เซนทรัล / ซีพีเอ็น / CPN</strong> ทุกรูปแบบ</li>
-      <li>2026 เป็นข้อมูล ม.ค.–16 มี.ค. รวม ฿1.4M incl VAT</li>
+      <li>2026 เป็นข้อมูล ม.ค.–20 มี.ค. รวม ฿1.5M incl VAT</li>
       <li>กลุ่ม "เซ็นทรัลพัฒนา สาขา" ครอบคลุมสาขาห้างทั่วประเทศ เช่น ลาดพร้าว, แจ้งวัฒนะ, รามอินทรา ฯลฯ</li>
     </ul>
   </div>
@@ -1853,10 +1853,10 @@ charts.teamTrend = new Chart(document.getElementById('teamTrendChart'), {
 const actual2026 = {
   1: 4889375,
   2: 5235852,
-  3: 3024676,  // 1–16 มี.ค. 2026 (ก่อน VAT)
+  3: 3554087,  // 1–20 มี.ค. 2026 (ก่อน VAT)
 };
 const months2026HasData = [1, 2, 3];
-const partial2026 = { 3: '1–16 มี.ค.' };  // เดือนที่ข้อมูลยังไม่ครบ
+const partial2026 = { 3: '1–20 มี.ค.' };  // เดือนที่ข้อมูลยังไม่ครบ
 
 // ==================== FORECAST TAB ====================
 let forecastViewMode = 'monthly';
@@ -2096,11 +2096,11 @@ buildActualForecastTable();
 
 // ==================== CENTRAL GROUP TAB ====================
 const centralAnnual = {
-  pretax: [4461117, 5233494, 4746268, 1330188],
-  vat:    [312278,  366345,  332666,  93113],
-  total:  [4773395, 5599838, 5078506, 1423301],
+  pretax: [4461117, 5233494, 4746268, 1370078],
+  vat:    [312278,  366345,  332666,  95905],
+  total:  [4773395, 5599838, 5078506, 1465983],
 };
-const centralLabels = ['2023', '2024', '2025', '2026 (ม.ค.–16 มี.ค.)'];
+const centralLabels = ['2023', '2024', '2025', '2026 (ม.ค.–20 มี.ค.)'];
 charts.centralAnnual = new Chart(document.getElementById('centralAnnualChart'), {
   type: 'bar',
   data: {
@@ -2708,7 +2708,7 @@ const SALES_DATA = {
     { year: 2023, total: 62158502,  txn: 7366, customers: 2575 },
     { year: 2024, total: 67321215,  txn: 8210, customers: 2773 },
     { year: 2025, total: 56370459,  txn: 4014, customers: 1437 },
-    { year: 2026, total: 12518004,  txn: 1309, customers: 459, note: "ม.ค.–16 มี.ค." },
+    { year: 2026, total: 13047415,  txn: 1380, customers: 558, note: "ม.ค.–20 มี.ค." },
   ],
   monthly2023: [
     { m:"ม.ค.", v:4555893 }, { m:"ก.พ.", v:4367113 }, { m:"มี.ค.", v:5852357 },
