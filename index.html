@@ -1067,14 +1067,14 @@
     </div>
     <div class="kpi-card orange">
       <div class="kpi-label">มีนาคม 2026 (1–25 มี.ค.)</div>
-      <div class="kpi-value">4.09M</div>
-      <div class="kpi-sub">25 วัน | ประมาณการเต็มเดือน <strong>~฿5.07M</strong> ✅✅ vs ScA ฿4.17M</div>
+      <div class="kpi-value">5.28M</div>
+      <div class="kpi-sub">25 วัน | ประมาณการเต็มเดือน <strong>~฿6.55M</strong> ✅✅ vs ScA ฿4.17M</div>
       <div class="kpi-icon">📅</div>
     </div>
     <div class="kpi-card red">
       <div class="kpi-label">เป้าที่ต้องทำอีก (เม.ย.–ธ.ค. + มี.ค. ที่เหลือ)</div>
-      <div class="kpi-value">48.4M</div>
-      <div class="kpi-sub">ScA: ฿62.6M รวม – YTD 14.21M = ฿48.4M | เฉลี่ย ฿5.2M/เดือน (เม.ย.–ธ.ค.)</div>
+      <div class="kpi-value">48.2M</div>
+      <div class="kpi-sub">ScA: ฿62.6M รวม – YTD 14.43M = ฿48.2M | เฉลี่ย ฿5.2M/เดือน (เม.ย.–ธ.ค.)</div>
       <div class="kpi-icon">🎯</div>
     </div>
   </div>
@@ -1200,7 +1200,7 @@
         </table>
         <div style="margin-top:12px;padding:10px;background:#f8f9fa;border-radius:8px;font-size:13px;">
           <strong>📈 ประมาณการเต็มเดือนมีนาคม:</strong><br/>
-          25 วัน → ~฿4.09M | ×(31/25) ≈ <strong style="color:#27ae60">฿5.07M</strong><br/>
+          25 วัน → ~฿5.28M | ×(31/25) ≈ <strong style="color:#27ae60">฿6.55M</strong><br/>
           <span style="color:#27ae60">✅✅ สูงกว่า ScA (฿4.17M) และ ScB (฿3.73M)</span>
         </div>
       </div>
@@ -1211,12 +1211,12 @@
   <div class="insight-box">
     <h4>💡 2026 Insights – มกราคม–25 มีนาคม</h4>
     <ul>
-      <li><strong>มี.ค. 1–25 (25 วัน): ฿4.09M</strong> — ประมาณการเต็มเดือน ~฿5.07M <span style="color:#27ae60">✅✅ สูงกว่า ScA ฿4.17M</span> — มี.ค. กำลังจะเป็นเดือนที่ดีที่สุดของปี 2026</li>
+      <li><strong>มี.ค. 1–25 (25 วัน): ฿5.28M</strong> — ประมาณการเต็มเดือน ~฿6.55M <span style="color:#27ae60">✅✅ สูงกว่า ScA ฿4.17M</span> — มี.ค. กำลังจะเป็นเดือนที่แข็งแกร่งที่สุดของปี 2026</li>
       <li><strong>ปุณณภา #1 มี.ค.:</strong> ฿1.40M (25 วัน) — นำทีมอย่างชัดเจน, momentum แข็งแกร่ง</li>
       <li><strong>ศุภิสรา ฿796K</strong> — ขยับขึ้นมา #2 มี.ค. ฟอร์มดีกว่า ม.ค. และ ก.พ.</li>
       <li><strong>ธีรตา ฿843K มี.ค.</strong> — ยังคงฟอร์มดีต่อเนื่อง ติด Top 3 ทุกเดือน</li>
       <li><strong>Bigtree ลูกค้าใหม่ Top 1</strong> — ฿694K ในมี.ค. เพียงเดือนเดียว น่าติดตามเป็น Key Account</li>
-      <li><strong>YTD ม.ค.–25 มี.ค.: ฿14.21M</strong> | เหลือเป้า ScA อีก ฿48.4M (เม.ย.–ธ.ค. + มี.ค. ที่เหลือ)</li>
+      <li><strong>YTD ม.ค.–25 มี.ค.: ฿14.43M</strong> | เหลือเป้า ScA อีก ฿48.2M (เม.ย.–ธ.ค. + มี.ค. ที่เหลือ)</li>
     </ul>
   </div>
 </div>
@@ -1851,7 +1851,7 @@ charts.teamTrend = new Chart(document.getElementById('teamTrendChart'), {
 const actual2026 = {
   1: 4889375,
   2: 5235852,
-  3: 4088052,  // 1–25 มี.ค. 2026 (ก่อน VAT)
+  3: 5280842,  // 1–25 มี.ค. 2026 (รวม DRT+VAT ทั้งหมด)
 };
 const months2026HasData = [1, 2, 3];
 const partial2026 = { 3: '1–25 มี.ค.' };  // เดือนที่ข้อมูลยังไม่ครบ
@@ -2013,7 +2013,7 @@ charts.actualVsForecast = new Chart(document.getElementById('actualVsForecastCha
 const sp2026Names = ['ธีรตา', 'ปุณณภา', 'ธชนัย', 'ศุภิสรา', 'จุฑามาศ', 'นิโลบล', 'Shopee'];
 const sp2026Jan  = [1434615, 1151971, 950250, 819351, 474338, 58850, 0];
 const sp2026Feb  = [1383488, 1266227, 1050785, 1006588, 321766, 59529, 147468];
-const sp2026Mar  = [843409, 1400762, 583490, 796202, 330482, 0, 132217]; // 1–25 มี.ค. 2026
+const sp2026Mar  = [967635, 1400762, 839234, 1028653, 569562, 0, 132217]; // 1–25 มี.ค. 2026 (incl DRT)
 
 charts.sp2026 = new Chart(document.getElementById('sp2026Chart'), {
   type: 'bar',
@@ -2706,7 +2706,7 @@ const SALES_DATA = {
     { year: 2023, total: 62158502,  txn: 7366, customers: 2575 },
     { year: 2024, total: 67321215,  txn: 8210, customers: 2773 },
     { year: 2025, total: 56370459,  txn: 4014, customers: 1437 },
-    { year: 2026, total: 14213279,  txn: 1451, customers: 587, note: "ม.ค.–25 มี.ค." },
+    { year: 2026, total: 14426720,  txn: 1499, customers: 587, note: "ม.ค.–25 มี.ค." },
   ],
   monthly2023: [
     { m:"ม.ค.", v:4555893 }, { m:"ก.พ.", v:4367113 }, { m:"มี.ค.", v:5852357 },
