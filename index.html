@@ -245,6 +245,7 @@
   <button class="tab-btn" onclick="showTab('central')" style="color:#8e44ad;font-weight:800;">🏬 Central Group</button>
   <button class="tab-btn" onclick="showTab('risk')" style="color:#e74c3c;font-weight:800;">⚠️ ความเสี่ยง</button>
   <button class="tab-btn" onclick="showTab('analysis')" style="color:#8e44ad;font-weight:800;">🔬 วิเคราะห์เชิงลึก</button>
+  <button class="tab-btn" onclick="showTab('analysis2026')" style="color:#e67e22;font-weight:800;">🔍 วิเคราะห์ 2026</button>
 </div>
 
 <!-- ============================== TAB: RISK & INSIGHTS ============================== -->
@@ -1311,6 +1312,120 @@
 
 </div>
 
+<!-- ============================== TAB: 2026 ANALYSIS ============================== -->
+<div class="tab-content" id="tab-analysis2026">
+
+  <div style="background:linear-gradient(135deg,#e67e22,#f39c12);color:white;border-radius:12px;padding:16px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
+    <div style="font-size:32px;">🔍</div>
+    <div>
+      <div style="font-size:16px;font-weight:800;">วิเคราะห์เชิงลึก ม.ค.–25 มี.ค. 2026</div>
+      <div style="font-size:12px;opacity:0.9;margin-top:3px;">ข้อมูลจาก 1,606 รายการ | ลูกค้า 576 ราย | รวม DRT+RT+IVT (pretax)</div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 1: SP PERFORMANCE ── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <h3>🏆 Performance พนักงานขาย 2026 (YTD)</h3>
+      <span class="card-subtitle">ยอดรวม incl. VAT ม.ค.–25 มี.ค.</span>
+    </div>
+    <div class="card-body">
+      <!-- SP KPI Cards -->
+      <div id="a26SpCards" style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px"></div>
+
+      <!-- Chart + Table -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px;">Stacked Bar — ยอดแต่ละเดือน</div>
+          <div style="height:260px"><canvas id="a26SpChart"></canvas></div>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px;">ตารางสรุป (฿K = พัน)</div>
+          <div id="a26SpTable" style="overflow-x:auto"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: TOP CUSTOMERS ── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <h3>🏅 Top Customers 2026</h3>
+      <span class="card-subtitle">ยอดรวม pretax ม.ค.–25 มี.ค. | รวม duplicates แล้ว</span>
+    </div>
+    <div class="card-body">
+      <div id="a26CustTable" style="overflow-x:auto"></div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: FREQUENCY + SEGMENTATION ── -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+
+    <!-- Frequency -->
+    <div class="card">
+      <div class="card-header"><h3>📊 ความถี่การซื้อ (Frequency)</h3></div>
+      <div class="card-body">
+        <div style="height:220px"><canvas id="a26FreqChart"></canvas></div>
+        <div style="margin-top:14px;padding:10px 14px;background:#ebf5fb;border-radius:8px;font-size:12px">
+          <strong style="color:#2980b9">💡 Insight:</strong> ลูกค้า 65.6% ซื้อเพียง 1 ครั้ง
+          — โอกาสใหญ่ในการทำ retention campaign เพื่อดึงกลุ่มนี้มาซื้อซ้ำ
+        </div>
+      </div>
+    </div>
+
+    <!-- Segmentation -->
+    <div class="card">
+      <div class="card-header"><h3>🎯 กลุ่มลูกค้า (Segmentation)</h3></div>
+      <div class="card-body">
+        <div style="height:200px"><canvas id="a26SegChart"></canvas></div>
+        <div id="a26SegCards"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── SECTION 4: PRODUCT NOTE + INSIGHTS ── -->
+  <div class="card">
+    <div class="card-header"><h3>💡 Key Insights & หมายเหตุ</h3></div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="insight-box">
+          <h4>📦 สินค้าขายดี (Best Sellers)</h4>
+          <ul>
+            <li>ไฟล์รายงานยอดขาย (Excel/PDF) ปัจจุบัน<br>ไม่มีข้อมูลรหัสสินค้า/ประเภทสินค้า</li>
+            <li>หากต้องการวิเคราะห์สินค้า ควรเพิ่มคอลัมน์<br><strong>รหัสสินค้า</strong> ในรายงานรายเดือน</li>
+          </ul>
+        </div>
+        <div class="insight-box" style="background:#f0fff4;border-color:#27ae60">
+          <h4 style="color:#27ae60">✅ จุดแข็ง 2026 (ม.ค.–มี.ค.)</h4>
+          <ul>
+            <li>ยอด YTD 15.41M — ทุกเดือนสูงกว่า 4.8M</li>
+            <li>Bigtree เติบโตแรง: ฿1.94M ใน 3 เดือน</li>
+            <li>ปุณณภา ขึ้นแรง — มี.ค. สูงสุดทีม</li>
+            <li>VIP 7 ราย ซื้อทุกเดือน — ฐานลูกค้าแกร่ง</li>
+          </ul>
+        </div>
+        <div class="insight-box" style="background:#fff8e1;border-color:#f39c12">
+          <h4 style="color:#e67e22">⚠️ จุดที่ต้องระวัง</h4>
+          <ul>
+            <li>65.6% ลูกค้าซื้อแค่ครั้งเดียว — retention ต่ำ</li>
+            <li>นิโลบล: มี.ค. ยอด 0 — ติดตามด่วน</li>
+            <li>จุฑามาศ: ก.พ. ต่ำผิดปกติ (320K vs 570K)</li>
+          </ul>
+        </div>
+        <div class="insight-box" style="background:#fdf2f8;border-color:#8e44ad">
+          <h4 style="color:#8e44ad">🎯 คำแนะนำ</h4>
+          <ul>
+            <li>ทำ Win-back campaign กลุ่ม 1-ครั้ง (378 ราย)</li>
+            <li>ดูแล VIP 7 รายให้พิเศษ — ป้องกันหลุด</li>
+            <li>เพิ่ม Bigtree/แพ็คเวิร์คส์เป็น Key Account</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 <!-- ============================== DRILL-DOWN MODAL ============================== -->
 <div class="modal-overlay" id="drillModal" onclick="handleModalClick(event)">
   <div class="modal-box">
@@ -2318,6 +2433,7 @@ function showTab(tabId) {
   document.getElementById('tab-' + tabId).classList.add('active');
   event.target.classList.add('active');
   if (tabId === 'analysis') buildSalesAnalysis();
+  if (tabId === 'analysis2026') buildAnalysis2026();
 }
 
 function openLoyalModal() {
@@ -2935,6 +3051,225 @@ function buildSalesAnalysis() {
         <code style="font-size:12px">${e.message}</code>
       </div>`;
   }
+}
+
+/* ============================================================
+   2026 ANALYSIS TAB
+   ============================================================ */
+let analysis2026Built = false;
+
+function buildAnalysis2026() {
+  if (analysis2026Built) return;
+  analysis2026Built = true;
+
+  // ── SP DATA (total incl VAT per salesperson) ──────────────
+  const spNames = ['ธีรตา', 'ปุณณภา', 'ธชนัย', 'ศุภิสรา', 'จุฑามาศ', 'นิโลบล', 'Shopee'];
+  const spJan   = [1434615, 1151971, 950250, 819351, 474338, 58850, 0];
+  const spFeb   = [1383488, 1266227, 1050785, 1006588, 321766, 59529, 147468];
+  const spMar   = [967635, 1400762, 839234, 1028653, 569562, 0, 132217];
+  const spTotal = spNames.map((_,i) => spJan[i]+spFeb[i]+spMar[i]);
+  const grandTotal = spTotal.reduce((a,b)=>a+b,0);
+
+  // ── TOP CUSTOMERS (merged duplicates) ────────────────────
+  const topCust = [
+    {name:'บ. Bigtree',             total:1937450, txn:10, months:3, seg:'VIP'},
+    {name:'Central Group Thailand', total:1283028, txn:151,months:3, seg:'VIP'},
+    {name:'บ. แพ็คเวิร์คส์',         total:582375,  txn:49, months:3, seg:'VIP'},
+    {name:'บ. ACE TECHNOLOGY',      total:468000,  txn:1,  months:1, seg:'ใหม่'},
+    {name:'บ. เวนดิ้ง เซอร์วิสเซส', total:407039,  txn:18, months:3, seg:'VIP'},
+    {name:'บ. บีบอกซ ปริ้นติ้ง',    total:365500,  txn:3,  months:1, seg:'ใหม่'},
+    {name:'Shopee (รวม)',            total:282758,  txn:448,months:3, seg:'VIP'},
+    {name:'บ. แพชชั่น เรสเตอรองท์', total:266650,  txn:29, months:2, seg:'Regular'},
+    {name:'บ. สยาม แฟรนไชส์ ธุรกิจ',total:219593,  txn:19, months:3, seg:'VIP'},
+    {name:'บ. จีพีซีเอ็ม กรุ๊ป',    total:219400,  txn:5,  months:2, seg:'Regular'},
+    {name:'บ. โนมิมาโช',            total:215665,  txn:2,  months:1, seg:'ใหม่'},
+    {name:'Juice Bomb',             total:179500,  txn:2,  months:2, seg:'Regular'},
+    {name:'บ. โนส ที (ประเทศไทย)',  total:176300,  txn:2,  months:1, seg:'ใหม่'},
+    {name:'บ. ทีพี โปรเจค',         total:142000,  txn:1,  months:1, seg:'ใหม่'},
+    {name:'บ. เจพี สปา แอนด์ เดคคอร์',total:122230,txn:5, months:2, seg:'Regular'},
+    {name:'บ. เพ็น เค อินเตอร์เทรดดิ้ง',total:99000,txn:3,months:2,seg:'Regular'},
+  ];
+
+  // ── FREQUENCY DATA ────────────────────────────────────────
+  const freqData = [
+    {txn:1,count:378},{txn:2,count:122},{txn:3,count:39},{txn:4,count:14},
+    {txn:5,count:7},{txn:6,count:4},{txn:7,count:1},{txn:8,count:1},
+    {txn:9,count:1},{txn:'10+',count:5},
+  ];
+  // month spread: 1 month=478, 2 months=91, 3 months=7
+  const totalCustomers = 576; // 478+91+7
+
+  // ── RENDER SP KPI CARDS ──────────────────────────────────
+  const topSPIdx = spTotal.indexOf(Math.max(...spTotal));
+  document.getElementById('a26SpCards').innerHTML = spNames.map((n,i)=>{
+    const pct = (spTotal[i]/grandTotal*100).toFixed(1);
+    const colors = ['#2980b9','#27ae60','#8e44ad','#e67e22','#e74c3c','#16a085','#f39c12'];
+    const isTop = i===topSPIdx;
+    return `<div style="background:white;border-radius:10px;padding:14px 18px;box-shadow:var(--shadow);
+            border-left:4px solid ${colors[i]};min-width:160px;flex:1;position:relative">
+      ${isTop?'<div style="position:absolute;top:8px;right:10px;font-size:16px">🏆</div>':''}
+      <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:0.5px;margin-bottom:6px">${n}</div>
+      <div style="font-size:20px;font-weight:800;color:${colors[i]}">฿${(spTotal[i]/1e6).toFixed(2)}M</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">${pct}% ของยอดรวม</div>
+      <div style="margin-top:6px;background:#f0f2f5;border-radius:3px;height:5px;overflow:hidden">
+        <div style="background:${colors[i]};height:100%;width:${pct}%;border-radius:3px"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── RENDER SP TABLE ──────────────────────────────────────
+  const spRanked = spNames.map((n,i)=>({n,j:spJan[i],f:spFeb[i],m:spMar[i],t:spTotal[i]}))
+    .sort((a,b)=>b.t-a.t);
+  document.getElementById('a26SpTable').innerHTML = `
+    <table class="data-table" style="min-width:520px">
+      <thead><tr>
+        <th>พนักงาน</th>
+        <th style="text-align:right">ม.ค.</th>
+        <th style="text-align:right">ก.พ.</th>
+        <th style="text-align:right">มี.ค.*</th>
+        <th style="text-align:right">รวม YTD</th>
+        <th style="text-align:right">%</th>
+      </tr></thead>
+      <tbody>
+        ${spRanked.map((s,i)=>{
+          const pct=(s.t/grandTotal*100).toFixed(1);
+          const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+          return `<tr>
+            <td><strong>${medal} ${s.n}</strong></td>
+            <td style="text-align:right">${s.j?'฿'+Math.round(s.j/1000)+'K':'–'}</td>
+            <td style="text-align:right">${s.f?'฿'+Math.round(s.f/1000)+'K':'–'}</td>
+            <td style="text-align:right">${s.m?'฿'+Math.round(s.m/1000)+'K':'–'}</td>
+            <td style="text-align:right;font-weight:700;color:var(--primary)">฿${(s.t/1e6).toFixed(2)}M</td>
+            <td style="text-align:right">
+              <span style="background:#ebf5fb;color:#2980b9;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">${pct}%</span>
+            </td>
+          </tr>`;
+        }).join('')}
+        <tr style="background:#f8f9fa;font-weight:800">
+          <td>รวม</td>
+          <td style="text-align:right">฿${Math.round(spJan.reduce((a,b)=>a+b,0)/1000)}K</td>
+          <td style="text-align:right">฿${Math.round(spFeb.reduce((a,b)=>a+b,0)/1000)}K</td>
+          <td style="text-align:right">฿${Math.round(spMar.reduce((a,b)=>a+b,0)/1000)}K</td>
+          <td style="text-align:right;color:var(--primary)">฿${(grandTotal/1e6).toFixed(2)}M</td>
+          <td style="text-align:right">100%</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">* มี.ค. = 1–25 มี.ค. 2026 (ยังไม่สิ้นเดือน)</div>`;
+
+  // ── SP MONTHLY STACKED BAR CHART ─────────────────────────
+  const ctx26sp = document.getElementById('a26SpChart').getContext('2d');
+  new Chart(ctx26sp, {
+    type:'bar',
+    data:{
+      labels: spNames,
+      datasets:[
+        {label:'ม.ค.',data:spJan.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#2980b9cc',borderRadius:3},
+        {label:'ก.พ.',data:spFeb.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#27ae60cc',borderRadius:3},
+        {label:'มี.ค.(1–25)',data:spMar.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#e67e22cc',borderRadius:3},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:11}}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ฿${ctx.parsed.y.toFixed(2)}M`}}},
+      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{callback:v=>`฿${v}M`}}}
+    }
+  });
+
+  // ── TOP CUSTOMERS TABLE ───────────────────────────────────
+  const segColor = {VIP:'#8e44ad',Regular:'#27ae60','ใหม่':'#2980b9'};
+  const segIcon  = {VIP:'👑',Regular:'⭐','ใหม่':'🆕'};
+  document.getElementById('a26CustTable').innerHTML = `
+    <table class="data-table" style="min-width:580px">
+      <thead><tr>
+        <th style="text-align:center">#</th>
+        <th>ชื่อลูกค้า</th>
+        <th style="text-align:right">ยอดรวม (pretax)</th>
+        <th style="text-align:center">ออเดอร์</th>
+        <th style="text-align:center">เดือนที่ซื้อ</th>
+        <th style="text-align:center">กลุ่ม</th>
+      </tr></thead>
+      <tbody>
+        ${topCust.map((c,i)=>{
+          const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
+          const sc=segColor[c.seg]||'#7f8c8d';
+          const si=segIcon[c.seg]||'';
+          return `<tr>
+            <td style="text-align:center;font-weight:800">${medal}</td>
+            <td><strong>${c.name}</strong></td>
+            <td style="text-align:right;font-weight:700;color:var(--primary)">฿${c.total.toLocaleString()}</td>
+            <td style="text-align:center;color:var(--muted)">${c.txn.toLocaleString()}</td>
+            <td style="text-align:center">${'🟦'.repeat(c.months)}${'⬜'.repeat(3-c.months)}</td>
+            <td style="text-align:center">
+              <span style="background:${sc}20;color:${sc};padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700">${si} ${c.seg}</span>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">🟦=เดือนที่ซื้อ | ข้อมูล ม.ค.–25 มี.ค. 2026 | pretax ก่อน VAT</div>`;
+
+  // ── FREQUENCY CHART ──────────────────────────────────────
+  const ctx26fr = document.getElementById('a26FreqChart').getContext('2d');
+  new Chart(ctx26fr,{
+    type:'bar',
+    data:{
+      labels:freqData.map(d=>`${d.txn} ครั้ง`),
+      datasets:[{
+        label:'จำนวนลูกค้า',
+        data:freqData.map(d=>d.count),
+        backgroundColor:freqData.map((_,i)=>i===0?'#2980b9bb':i===1?'#27ae60bb':i===2?'#e67e22bb':'#bdc3c7bb'),
+        borderRadius:6,
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y} ราย`}}},
+      scales:{x:{grid:{display:false}},y:{ticks:{stepSize:50}}}
+    }
+  });
+
+  // ── SEGMENTATION PIE CHART ────────────────────────────────
+  const ctx26seg = document.getElementById('a26SegChart').getContext('2d');
+  new Chart(ctx26seg,{
+    type:'doughnut',
+    data:{
+      labels:['VIP (3 เดือน)','Regular (2 เดือน)','ลูกค้าใหม่ (1 เดือน)'],
+      datasets:[{data:[7,91,478],backgroundColor:['#8e44ad','#27ae60','#2980b9'],borderWidth:2,borderColor:'#fff'}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{position:'bottom',labels:{font:{size:12},padding:12}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw} ราย (${(ctx.raw/totalCustomers*100).toFixed(1)}%)`}}}
+    }
+  });
+
+  // ── SEGMENT STATS CARDS ───────────────────────────────────
+  document.getElementById('a26SegCards').innerHTML = `
+    <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:16px">
+      <div style="flex:1;min-width:160px;background:#f5eef8;border-radius:10px;padding:16px 20px;border-left:4px solid #8e44ad;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:#8e44ad">7</div>
+        <div style="font-weight:700;font-size:13px;margin:4px 0">👑 VIP (ซื้อทุกเดือน)</div>
+        <div style="font-size:11px;color:var(--muted)">3 เดือนต่อเนื่อง ม.ค.–มี.ค.</div>
+      </div>
+      <div style="flex:1;min-width:160px;background:#eafaf1;border-radius:10px;padding:16px 20px;border-left:4px solid #27ae60;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:#27ae60">91</div>
+        <div style="font-weight:700;font-size:13px;margin:4px 0">⭐ Regular (2 เดือน)</div>
+        <div style="font-size:11px;color:var(--muted)">ซื้อ 2 ใน 3 เดือน</div>
+      </div>
+      <div style="flex:1;min-width:160px;background:#ebf5fb;border-radius:10px;padding:16px 20px;border-left:4px solid #2980b9;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:#2980b9">478</div>
+        <div style="font-weight:700;font-size:13px;margin:4px 0">🆕 ใหม่/ครั้งเดียว</div>
+        <div style="font-size:11px;color:var(--muted)">ซื้อเพียง 1 เดือน</div>
+      </div>
+      <div style="flex:1;min-width:160px;background:#fef9e7;border-radius:10px;padding:16px 20px;border-left:4px solid #f39c12;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:#f39c12">576</div>
+        <div style="font-weight:700;font-size:13px;margin:4px 0">👥 ลูกค้าทั้งหมด</div>
+        <div style="font-size:11px;color:var(--muted)">Unique customers ม.ค.–มี.ค.</div>
+      </div>
+    </div>`;
 }
 </script>
 </body>
