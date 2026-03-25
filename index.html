@@ -3082,7 +3082,7 @@ function buildSalesAnalysis() {
    ============================================================ */
 let analysis2026Built = false;
 
-/* ── Embedded customer data (Jan/Feb/Mar pretax, DRT amounts) ── */
+/* ── Embedded customer data (Jan/Feb/Mar pretax, DRT amounts) — sorted by total ── */
 const cust2026 = [
   {name:'Central Group Thailand',jan:481278,feb:484710,mar:317040,total:1283028,txn1:53,txn2:59,txn3:39,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
   {name:'Bigtree',jan:0,feb:158550,mar:693950,total:852500,txn1:0,txn2:2,txn3:2,drt1:158550,drt2:693950,drt3:232450,months:[2,3]},
@@ -3090,30 +3090,29 @@ const cust2026 = [
   {name:'ACE TECHNOLOGY',jan:468000,feb:0,mar:0,total:468000,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
   {name:'เวนดิ้ง เซอร์วิสเซส',jan:116025,feb:155590,mar:135424,total:407038,txn1:5,txn2:8,txn3:5,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
   {name:'บีบ์อกซ์ ปริ้นติ้ง อินเตอร์เนชั่นแนล',jan:0,feb:0,mar:365500,total:365500,txn1:0,txn2:0,txn3:3,drt1:0,drt2:0,drt3:0,months:[3]},
+  {name:'Bwell Group (จีพีซีเอ็ม+บีเวล)',jan:150900,feb:132700,mar:68000,total:351600,txn1:4,txn2:4,txn3:3,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'แพชชั่น เรสเตอรองท์ กรุ๊ป',jan:116850,feb:149800,mar:58590,total:325240,txn1:10,txn2:19,txn3:10,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
   {name:'Shopee (รวม)',jan:95462,feb:94031,mar:94766,total:284259,txn1:142,txn2:155,txn3:152,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'แพชชั่น เรสเตอรองท์ กรุ๊ป',jan:116850,feb:149800,mar:0,total:266650,txn1:10,txn2:19,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
   {name:'สยาม แฟรนไชส์ ธุรกิจ',jan:91395,feb:29008,mar:99191,total:219594,txn1:4,txn2:5,txn3:10,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'จีพีซีเอ็ม กรุ๊ป',jan:129300,feb:90100,mar:0,total:219400,txn1:3,txn2:2,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
   {name:'โนมิมาโช',jan:0,feb:215665,mar:0,total:215665,txn1:0,txn2:2,txn3:0,drt1:0,drt2:0,drt3:0,months:[2]},
   {name:'เจพี สปา แอนด์ เดคคอร์',jan:104730,feb:17500,mar:63400,total:185630,txn1:4,txn2:1,txn3:2,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'Juice bomb',jan:89750,feb:89750,mar:0,total:179500,txn1:1,txn2:1,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
   {name:'โนส ที (ประเทศไทย)',jan:0,feb:176300,mar:0,total:176300,txn1:0,txn2:2,txn3:0,drt1:0,drt2:0,drt3:0,months:[2]},
   {name:'ทีพี โปรเจค',jan:0,feb:0,mar:142000,total:142000,txn1:0,txn2:0,txn3:1,drt1:0,drt2:0,drt3:0,months:[3]},
-  {name:'บีเวล ฟูดมอลล์',jan:21600,feb:42600,mar:68000,total:132200,txn1:1,txn2:2,txn3:3,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
   {name:'สวนลุม พร็อพเพอร์ตี้',jan:48240,feb:9700,mar:57340,total:115280,txn1:1,txn2:1,txn3:1,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
   {name:'บอททอมเลส 2020',jan:40916,feb:35800,mar:32000,total:108716,txn1:2,txn2:2,txn3:1,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
   {name:'เวิลด์ ฟูด เซ็นเตอร์',jan:37200,feb:34900,mar:35000,total:107100,txn1:2,txn2:2,txn3:2,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'แอล แอนด์ เอช โฮเทล แมเนจเมนท์',jan:23080,feb:36520,mar:37750,total:97350,txn1:3,txn2:3,txn3:3,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ',jan:91950,feb:0,mar:0,total:91950,txn1:3,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
   {name:'เพ็น เค อินเตอร์เทรดดิ้ง',jan:33000,feb:66000,mar:0,total:99000,txn1:1,txn2:2,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
-  {name:'Juice bomb',jan:89750,feb:89750,mar:0,total:179500,txn1:1,txn2:1,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
+  {name:'แอล แอนด์ เอช โฮเทล แมเนจเมนท์',jan:23080,feb:36520,mar:37750,total:97350,txn1:3,txn2:3,txn3:3,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'แฮปปี้ ฟู้ด อินเตอร์คิทเช่น',jan:50280,feb:0,mar:44900,total:95180,txn1:1,txn2:0,txn3:1,drt1:44900,drt2:0,drt3:47590,months:[1,3]},
   {name:'นมสดพระนคร',jan:93458,feb:0,mar:0,total:93458,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
   {name:'ทรู คอฟฟี่',jan:23800,feb:39900,mar:25900,total:89600,txn1:1,txn2:2,txn3:1,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ',jan:91950,feb:0,mar:0,total:91950,txn1:3,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
   {name:'เฟิสต์ มีเดีย แอดเวอไทซิง',jan:38000,feb:38000,mar:0,total:76000,txn1:1,txn2:1,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
   {name:'Gold Café (ปั๊มเชลล์)',jan:62593,feb:0,mar:0,total:62593,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
   {name:'อุทยานแห่งชาติดอยอินทนนท์',jan:57300,feb:0,mar:0,total:57300,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
   {name:'ทู ธันเดอร์ คอฟฟี่',jan:56100,feb:0,mar:0,total:56100,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
   {name:'วีไอคิว กรุ๊ป',jan:55000,feb:0,mar:0,total:55000,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
-  {name:'แฮปปี้ ฟู้ด อินเตอร์คิทเช่น',jan:50280,feb:0,mar:31450,total:81730,txn1:1,txn2:0,txn3:1,drt1:44900,drt2:0,drt3:31450,months:[1,3]},
 ];
 
 /* ── DRT pending → April forecast ── */
