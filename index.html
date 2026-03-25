@@ -1347,11 +1347,35 @@
     </div>
   </div>
 
+  <!-- ── SECTION: DRT & FORECAST ── -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header">
+      <h3>📋 ยอดมัดจำ (DRT) & Forecast เม.ษ. 2026</h3>
+      <span class="card-subtitle">DRT pending = ออเดอร์ยืนยันแล้ว รอส่งมอบ → forecast เดือนถัดไป</span>
+    </div>
+    <div class="card-body">
+      <!-- Forecast KPI cards -->
+      <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px" id="a26ForecastCards"></div>
+
+      <!-- DRT Chart + April pipeline table -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px">RT / IVT / DRT pending แต่ละเดือน (pretax)</div>
+          <div style="height:240px"><canvas id="a26DrtChart"></canvas></div>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px">📌 DRT รอส่งมอบ มี.ค. → Forecast เม.ษ.</div>
+          <div id="a26ForecastTable" style="overflow-x:auto"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── SECTION 2: TOP CUSTOMERS ── -->
   <div class="card" style="margin-bottom:20px">
     <div class="card-header">
       <h3>🏅 Top Customers 2026</h3>
-      <span class="card-subtitle">ยอดรวม pretax ม.ค.–25 มี.ค. | รวม duplicates แล้ว</span>
+      <span class="card-subtitle">ยอดรวม pretax ม.ค.–25 มี.ค. | คลิกแถวเพื่อดูรายละเอียดรายเดือน</span>
     </div>
     <div class="card-body">
       <div id="a26CustTable" style="overflow-x:auto"></div>
@@ -3058,6 +3082,59 @@ function buildSalesAnalysis() {
    ============================================================ */
 let analysis2026Built = false;
 
+/* ── Embedded customer data (Jan/Feb/Mar pretax, DRT amounts) ── */
+const cust2026 = [
+  {name:'Central Group Thailand',jan:481278,feb:484710,mar:317040,total:1283028,txn1:53,txn2:59,txn3:39,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'Bigtree',jan:0,feb:158550,mar:693950,total:852500,txn1:0,txn2:2,txn3:2,drt1:158550,drt2:693950,drt3:232450,months:[2,3]},
+  {name:'แพ็คเวิร์คส์',jan:257700,feb:140000,mar:184675,total:582375,txn1:17,txn2:15,txn3:17,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'ACE TECHNOLOGY',jan:468000,feb:0,mar:0,total:468000,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
+  {name:'เวนดิ้ง เซอร์วิสเซส',jan:116025,feb:155590,mar:135424,total:407038,txn1:5,txn2:8,txn3:5,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'บีบ์อกซ์ ปริ้นติ้ง อินเตอร์เนชั่นแนล',jan:0,feb:0,mar:365500,total:365500,txn1:0,txn2:0,txn3:3,drt1:0,drt2:0,drt3:0,months:[3]},
+  {name:'Shopee (รวม)',jan:95462,feb:94031,mar:94766,total:284259,txn1:142,txn2:155,txn3:152,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'แพชชั่น เรสเตอรองท์ กรุ๊ป',jan:116850,feb:149800,mar:0,total:266650,txn1:10,txn2:19,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
+  {name:'สยาม แฟรนไชส์ ธุรกิจ',jan:91395,feb:29008,mar:99191,total:219594,txn1:4,txn2:5,txn3:10,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'จีพีซีเอ็ม กรุ๊ป',jan:129300,feb:90100,mar:0,total:219400,txn1:3,txn2:2,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
+  {name:'โนมิมาโช',jan:0,feb:215665,mar:0,total:215665,txn1:0,txn2:2,txn3:0,drt1:0,drt2:0,drt3:0,months:[2]},
+  {name:'เจพี สปา แอนด์ เดคคอร์',jan:104730,feb:17500,mar:63400,total:185630,txn1:4,txn2:1,txn3:2,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'โนส ที (ประเทศไทย)',jan:0,feb:176300,mar:0,total:176300,txn1:0,txn2:2,txn3:0,drt1:0,drt2:0,drt3:0,months:[2]},
+  {name:'ทีพี โปรเจค',jan:0,feb:0,mar:142000,total:142000,txn1:0,txn2:0,txn3:1,drt1:0,drt2:0,drt3:0,months:[3]},
+  {name:'บีเวล ฟูดมอลล์',jan:21600,feb:42600,mar:68000,total:132200,txn1:1,txn2:2,txn3:3,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'สวนลุม พร็อพเพอร์ตี้',jan:48240,feb:9700,mar:57340,total:115280,txn1:1,txn2:1,txn3:1,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'บอททอมเลส 2020',jan:40916,feb:35800,mar:32000,total:108716,txn1:2,txn2:2,txn3:1,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'เวิลด์ ฟูด เซ็นเตอร์',jan:37200,feb:34900,mar:35000,total:107100,txn1:2,txn2:2,txn3:2,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'แอล แอนด์ เอช โฮเทล แมเนจเมนท์',jan:23080,feb:36520,mar:37750,total:97350,txn1:3,txn2:3,txn3:3,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ',jan:91950,feb:0,mar:0,total:91950,txn1:3,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
+  {name:'เพ็น เค อินเตอร์เทรดดิ้ง',jan:33000,feb:66000,mar:0,total:99000,txn1:1,txn2:2,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
+  {name:'Juice bomb',jan:89750,feb:89750,mar:0,total:179500,txn1:1,txn2:1,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
+  {name:'นมสดพระนคร',jan:93458,feb:0,mar:0,total:93458,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
+  {name:'ทรู คอฟฟี่',jan:23800,feb:39900,mar:25900,total:89600,txn1:1,txn2:2,txn3:1,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
+  {name:'เฟิสต์ มีเดีย แอดเวอไทซิง',jan:38000,feb:38000,mar:0,total:76000,txn1:1,txn2:1,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
+  {name:'Gold Café (ปั๊มเชลล์)',jan:62593,feb:0,mar:0,total:62593,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
+  {name:'อุทยานแห่งชาติดอยอินทนนท์',jan:57300,feb:0,mar:0,total:57300,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
+  {name:'ทู ธันเดอร์ คอฟฟี่',jan:56100,feb:0,mar:0,total:56100,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
+  {name:'วีไอคิว กรุ๊ป',jan:55000,feb:0,mar:0,total:55000,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
+  {name:'แฮปปี้ ฟู้ด อินเตอร์คิทเช่น',jan:50280,feb:0,mar:31450,total:81730,txn1:1,txn2:0,txn3:1,drt1:44900,drt2:0,drt3:31450,months:[1,3]},
+];
+
+/* ── DRT pending → April forecast ── */
+const drtPendingMar = [
+  {cust:'Bigtree',pre:193750},{cust:'คุณ ลัดดาวัลย์ ชุติมาพาณิชย์',pre:40680},
+  {cust:'Time square',pre:40460},{cust:'Bigtree',pre:38700},
+  {cust:'นางสาว อภิรัตน์ ทยานุกูล',pre:37383},{cust:'SINOUK CAFÉ GOURMET LAO',pre:33458},
+  {cust:'แฮปปี้ ฟู้ด อินเตอร์คิทเช่น',pre:31450},{cust:'เจเอ็นซีดี',pre:26000},
+  {cust:'แฟมิลี่สุกี้',pre:24900},{cust:'คุณ อารีวรรณ ไมหมาด',pre:22575},
+  {cust:'บริษัท โอเอซิส แอนด์ โค',pre:22500},{cust:'TREASURE',pre:21875},
+  {cust:'บ.ฟิกา แอนด์ โค',pre:12725},{cust:'ห้างขนมแม่ส้ม',pre:15150},
+  {cust:'คลินิกบ้านหมอฟัน',pre:2056},{cust:'อื่นๆ รวม',pre:207799},
+];
+
+/* ── Document type summary ── */
+const docTypeSummary = {
+  1:{RT:1794146,IVT:1938523,DRT_done:42296,DRT_pending:923363},
+  2:{RT:1377310,IVT:2362179,DRT_done:0,DRT_pending:1162722},
+  3:{RT:1387051,IVT:2701001,DRT_done:0,DRT_pending:851501},
+};
+
 function buildAnalysis2026() {
   if (analysis2026Built) return;
   analysis2026Built = true;
@@ -3070,34 +3147,13 @@ function buildAnalysis2026() {
   const spTotal = spNames.map((_,i) => spJan[i]+spFeb[i]+spMar[i]);
   const grandTotal = spTotal.reduce((a,b)=>a+b,0);
 
-  // ── TOP CUSTOMERS (merged duplicates) ────────────────────
-  const topCust = [
-    {name:'บ. Bigtree',             total:1937450, txn:10, months:3, seg:'VIP'},
-    {name:'Central Group Thailand', total:1283028, txn:151,months:3, seg:'VIP'},
-    {name:'บ. แพ็คเวิร์คส์',         total:582375,  txn:49, months:3, seg:'VIP'},
-    {name:'บ. ACE TECHNOLOGY',      total:468000,  txn:1,  months:1, seg:'ใหม่'},
-    {name:'บ. เวนดิ้ง เซอร์วิสเซส', total:407039,  txn:18, months:3, seg:'VIP'},
-    {name:'บ. บีบอกซ ปริ้นติ้ง',    total:365500,  txn:3,  months:1, seg:'ใหม่'},
-    {name:'Shopee (รวม)',            total:282758,  txn:448,months:3, seg:'VIP'},
-    {name:'บ. แพชชั่น เรสเตอรองท์', total:266650,  txn:29, months:2, seg:'Regular'},
-    {name:'บ. สยาม แฟรนไชส์ ธุรกิจ',total:219593,  txn:19, months:3, seg:'VIP'},
-    {name:'บ. จีพีซีเอ็ม กรุ๊ป',    total:219400,  txn:5,  months:2, seg:'Regular'},
-    {name:'บ. โนมิมาโช',            total:215665,  txn:2,  months:1, seg:'ใหม่'},
-    {name:'Juice Bomb',             total:179500,  txn:2,  months:2, seg:'Regular'},
-    {name:'บ. โนส ที (ประเทศไทย)',  total:176300,  txn:2,  months:1, seg:'ใหม่'},
-    {name:'บ. ทีพี โปรเจค',         total:142000,  txn:1,  months:1, seg:'ใหม่'},
-    {name:'บ. เจพี สปา แอนด์ เดคคอร์',total:122230,txn:5, months:2, seg:'Regular'},
-    {name:'บ. เพ็น เค อินเตอร์เทรดดิ้ง',total:99000,txn:3,months:2,seg:'Regular'},
-  ];
-
   // ── FREQUENCY DATA ────────────────────────────────────────
   const freqData = [
     {txn:1,count:378},{txn:2,count:122},{txn:3,count:39},{txn:4,count:14},
     {txn:5,count:7},{txn:6,count:4},{txn:7,count:1},{txn:8,count:1},
     {txn:9,count:1},{txn:'10+',count:5},
   ];
-  // month spread: 1 month=478, 2 months=91, 3 months=7
-  const totalCustomers = 576; // 478+91+7
+  const totalCustomers = 576;
 
   // ── RENDER SP KPI CARDS ──────────────────────────────────
   const topSPIdx = spTotal.indexOf(Math.max(...spTotal));
@@ -3105,9 +3161,12 @@ function buildAnalysis2026() {
     const pct = (spTotal[i]/grandTotal*100).toFixed(1);
     const colors = ['#2980b9','#27ae60','#8e44ad','#e67e22','#e74c3c','#16a085','#f39c12'];
     const isTop = i===topSPIdx;
-    return `<div style="background:white;border-radius:10px;padding:14px 18px;box-shadow:var(--shadow);
-            border-left:4px solid ${colors[i]};min-width:160px;flex:1;position:relative">
+    return `<div onclick="showSP2026Modal(${i})" style="background:white;border-radius:10px;padding:14px 18px;box-shadow:var(--shadow);
+            border-left:4px solid ${colors[i]};min-width:150px;flex:1;position:relative;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s"
+            onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,0.12)'"
+            onmouseout="this.style.transform='';this.style.boxShadow='var(--shadow)'">
       ${isTop?'<div style="position:absolute;top:8px;right:10px;font-size:16px">🏆</div>':''}
+      <div style="font-size:10px;color:var(--muted);margin-bottom:3px">🔍 คลิกดูรายละเอียด</div>
       <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:0.5px;margin-bottom:6px">${n}</div>
       <div style="font-size:20px;font-weight:800;color:${colors[i]}">฿${(spTotal[i]/1e6).toFixed(2)}M</div>
       <div style="font-size:11px;color:var(--muted);margin-top:4px">${pct}% ของยอดรวม</div>
@@ -3177,38 +3236,119 @@ function buildAnalysis2026() {
     }
   });
 
-  // ── TOP CUSTOMERS TABLE ───────────────────────────────────
+  // ── DRT FORECAST KPI CARDS ────────────────────────────────
+  const totalDrtPendingMar = drtPendingMar.reduce((a,r)=>a+r.pre,0);
+  const aprForecastIncVat  = Math.round(totalDrtPendingMar * 1.07);
+  document.getElementById('a26ForecastCards').innerHTML = `
+    <div style="flex:1;min-width:180px;background:linear-gradient(135deg,#1e3a5f,#2980b9);color:white;border-radius:12px;padding:18px 22px;text-align:center">
+      <div style="font-size:11px;opacity:.8;letter-spacing:.5px;margin-bottom:6px">📌 DRT PENDING (มี.ค.)</div>
+      <div style="font-size:26px;font-weight:800">฿${(totalDrtPendingMar/1e6).toFixed(2)}M</div>
+      <div style="font-size:11px;opacity:.8;margin-top:4px">pretax | 48 ออเดอร์ confirmed</div>
+    </div>
+    <div style="flex:1;min-width:180px;background:linear-gradient(135deg,#27ae60,#1abc9c);color:white;border-radius:12px;padding:18px 22px;text-align:center">
+      <div style="font-size:11px;opacity:.8;letter-spacing:.5px;margin-bottom:6px">🎯 FORECAST เม.ษ. (incl VAT)</div>
+      <div style="font-size:26px;font-weight:800">฿${(aprForecastIncVat/1e6).toFixed(2)}M</div>
+      <div style="font-size:11px;opacity:.8;margin-top:4px">confirmed minimum จาก DRT pending</div>
+    </div>
+    <div style="flex:1;min-width:180px;background:#fff;border-radius:12px;padding:18px 22px;border:2px solid #e67e22;text-align:center">
+      <div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">📊 DRT/Total Ratio มี.ค.</div>
+      <div style="font-size:26px;font-weight:800;color:#e67e22">${(totalDrtPendingMar/(4939553)*100).toFixed(1)}%</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">851K / 4.94M pretax</div>
+    </div>
+    <div style="flex:1;min-width:220px;background:#fff8e1;border-radius:12px;padding:18px 22px;border-left:4px solid #f39c12">
+      <div style="font-size:12px;font-weight:700;color:#e67e22;margin-bottom:6px">💡 วิธีอ่านค่า DRT</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.7">
+        DRT = ใบรับมัดจำ ลูกค้าจ่ายเงินจองไว้แล้ว<br>
+        สถานะ <strong>"รอหักมัดจำ"</strong> = รอส่งมอบสินค้า<br>
+        → รับรู้รายได้เดือนถัดไปเมื่อส่งมอบแล้ว
+      </div>
+    </div>`;
+
+  // ── DRT CHART (stacked: RT / IVT / DRT done / DRT pending) ──
+  const ctx26drt = document.getElementById('a26DrtChart').getContext('2d');
+  new Chart(ctx26drt,{
+    type:'bar',
+    data:{
+      labels:['ม.ค.','ก.พ.','มี.ค.(1-25)'],
+      datasets:[
+        {label:'RT (ใบเสร็จ)',data:[docTypeSummary[1].RT,docTypeSummary[2].RT,docTypeSummary[3].RT].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#2980b9cc',borderRadius:3},
+        {label:'IVT (ใบแจ้งหนี้)',data:[docTypeSummary[1].IVT,docTypeSummary[2].IVT,docTypeSummary[3].IVT].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#27ae60cc',borderRadius:3},
+        {label:'DRT หักแล้ว',data:[docTypeSummary[1].DRT_done,docTypeSummary[2].DRT_done,docTypeSummary[3].DRT_done].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#f39c12cc',borderRadius:3},
+        {label:'DRT pending → forecast',data:[docTypeSummary[1].DRT_pending,docTypeSummary[2].DRT_pending,docTypeSummary[3].DRT_pending].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#e74c3ccc',borderRadius:3},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ฿${ctx.parsed.y.toFixed(2)}M`}}},
+      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{callback:v=>`฿${v}M`}}}
+    }
+  });
+
+  // ── APRIL FORECAST TABLE ──────────────────────────────────
+  const mergedForecast = {};
+  drtPendingMar.forEach(r=>{
+    mergedForecast[r.cust]=(mergedForecast[r.cust]||0)+r.pre;
+  });
+  const forecastList=Object.entries(mergedForecast).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('a26ForecastTable').innerHTML=`
+    <table class="data-table" style="font-size:12px">
+      <thead><tr>
+        <th>ลูกค้า (DRT รอส่งมอบ)</th>
+        <th style="text-align:right">Pretax</th>
+        <th style="text-align:right">incl VAT</th>
+      </tr></thead>
+      <tbody>
+        ${forecastList.map(([name,pre])=>`<tr>
+          <td>${name}</td>
+          <td style="text-align:right;font-weight:700;color:#e74c3c">฿${pre.toLocaleString()}</td>
+          <td style="text-align:right;color:var(--muted)">฿${Math.round(pre*1.07).toLocaleString()}</td>
+        </tr>`).join('')}
+        <tr style="background:#fff8e1;font-weight:800">
+          <td>รวม Forecast เม.ษ.</td>
+          <td style="text-align:right;color:#e74c3c">฿${totalDrtPendingMar.toLocaleString()}</td>
+          <td style="text-align:right;color:#e67e22">฿${aprForecastIncVat.toLocaleString()}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:10px;color:var(--muted);margin-top:5px">*ยังไม่รวมออเดอร์ใหม่เดือน เม.ษ.</div>`;
+
+  // ── TOP CUSTOMERS TABLE (clickable) ──────────────────────
+  const segOf = c => c.months.length===3?'VIP':c.months.length===2?'Regular':'ใหม่';
   const segColor = {VIP:'#8e44ad',Regular:'#27ae60','ใหม่':'#2980b9'};
   const segIcon  = {VIP:'👑',Regular:'⭐','ใหม่':'🆕'};
   document.getElementById('a26CustTable').innerHTML = `
-    <table class="data-table" style="min-width:580px">
+    <table class="data-table" style="min-width:640px">
       <thead><tr>
         <th style="text-align:center">#</th>
         <th>ชื่อลูกค้า</th>
-        <th style="text-align:right">ยอดรวม (pretax)</th>
-        <th style="text-align:center">ออเดอร์</th>
-        <th style="text-align:center">เดือนที่ซื้อ</th>
+        <th style="text-align:right">ยอดรวม</th>
+        <th style="text-align:right">ม.ค.</th>
+        <th style="text-align:right">ก.พ.</th>
+        <th style="text-align:right">มี.ค.*</th>
         <th style="text-align:center">กลุ่ม</th>
+        <th style="text-align:center">DRT pending</th>
       </tr></thead>
       <tbody>
-        ${topCust.map((c,i)=>{
+        ${cust2026.map((c,i)=>{
+          const seg=segOf(c); const sc=segColor[seg]; const si=segIcon[seg];
           const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
-          const sc=segColor[c.seg]||'#7f8c8d';
-          const si=segIcon[c.seg]||'';
-          return `<tr>
+          const drtTotal=c.drt1+c.drt2+c.drt3;
+          const txnTotal=c.txn1+c.txn2+c.txn3;
+          return `<tr onclick="showCust2026Modal(${i})" style="cursor:pointer" title="คลิกดูรายละเอียด">
             <td style="text-align:center;font-weight:800">${medal}</td>
-            <td><strong>${c.name}</strong></td>
+            <td><strong>${c.name}</strong><span style="font-size:10px;color:var(--muted);margin-left:6px">${txnTotal} ออเดอร์</span></td>
             <td style="text-align:right;font-weight:700;color:var(--primary)">฿${c.total.toLocaleString()}</td>
-            <td style="text-align:center;color:var(--muted)">${c.txn.toLocaleString()}</td>
-            <td style="text-align:center">${'🟦'.repeat(c.months)}${'⬜'.repeat(3-c.months)}</td>
-            <td style="text-align:center">
-              <span style="background:${sc}20;color:${sc};padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700">${si} ${c.seg}</span>
-            </td>
+            <td style="text-align:right;color:${c.jan?'#2980b9':'#ccc'}">${c.jan?'฿'+Math.round(c.jan/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:${c.feb?'#27ae60':'#ccc'}">${c.feb?'฿'+Math.round(c.feb/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:${c.mar?'#e67e22':'#ccc'}">${c.mar?'฿'+Math.round(c.mar/1000)+'K':'–'}</td>
+            <td style="text-align:center"><span style="background:${sc}20;color:${sc};padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">${si} ${seg}</span></td>
+            <td style="text-align:center">${drtTotal?`<span style="background:#fdecea;color:#e74c3c;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">฿${Math.round(drtTotal/1000)}K</span>`:'<span style="color:#ccc">–</span>'}</td>
           </tr>`;
         }).join('')}
       </tbody>
     </table>
-    <div style="font-size:11px;color:var(--muted);margin-top:6px">🟦=เดือนที่ซื้อ | ข้อมูล ม.ค.–25 มี.ค. 2026 | pretax ก่อน VAT</div>`;
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">* มี.ค. = 1–25 มี.ค. | คลิกแถวเพื่อดูรายละเอียด | DRT pending = มัดจำรอส่งมอบ</div>`;
 
   // ── FREQUENCY CHART ──────────────────────────────────────
   const ctx26fr = document.getElementById('a26FreqChart').getContext('2d');
@@ -3270,6 +3410,155 @@ function buildAnalysis2026() {
         <div style="font-size:11px;color:var(--muted)">Unique customers ม.ค.–มี.ค.</div>
       </div>
     </div>`;
+}
+
+/* ── CUSTOMER DRILL-DOWN MODAL ─────────────────────────── */
+function showCust2026Modal(idx) {
+  const c = cust2026[idx];
+  const drtTotal = c.drt1+c.drt2+c.drt3;
+  const txnTotal = c.txn1+c.txn2+c.txn3;
+  const seg = c.months.length===3?'👑 VIP':c.months.length===2?'⭐ Regular':'🆕 ใหม่';
+  const maxVal = Math.max(c.jan,c.feb,c.mar,1);
+
+  function bar(v,color) {
+    const pct = (v/maxVal*100).toFixed(0);
+    return v ? `<div style="background:#f0f2f5;border-radius:4px;height:20px;overflow:hidden;margin-top:4px">
+      <div style="background:${color};height:100%;width:${pct}%;border-radius:4px;display:flex;align-items:center;padding-left:6px">
+        <span style="color:white;font-size:10px;font-weight:700">฿${(v/1000).toFixed(0)}K</span>
+      </div></div>` : `<div style="color:#ccc;font-size:12px;padding:4px 0">ไม่มีข้อมูล</div>`;
+  }
+
+  document.getElementById('modalTitle').innerHTML = `👤 ${c.name} <span style="font-size:13px;color:var(--muted);font-weight:400">${seg}</span>`;
+  document.getElementById('modalTabs').innerHTML = '';
+  document.getElementById('modalBody').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+      <div style="background:#ebf5fb;border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">ยอดรวม (pretax)</div>
+        <div style="font-size:22px;font-weight:800;color:#2980b9">฿${(c.total/1000).toFixed(0)}K</div>
+      </div>
+      <div style="background:#eafaf1;border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">จำนวนออเดอร์</div>
+        <div style="font-size:22px;font-weight:800;color:#27ae60">${txnTotal} ครั้ง</div>
+      </div>
+      <div style="background:${drtTotal?'#fdecea':'#f8f9fa'};border-radius:10px;padding:14px;text-align:center">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">DRT pending</div>
+        <div style="font-size:22px;font-weight:800;color:${drtTotal?'#e74c3c':'#ccc'}">${drtTotal?'฿'+(drtTotal/1000).toFixed(0)+'K':'–'}</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px">📅 ยอดซื้อรายเดือน (RT+IVT pretax)</div>
+      <div style="display:grid;grid-template-columns:60px 1fr;gap:8px;align-items:center">
+        <div style="font-size:12px;font-weight:700;color:#2980b9">ม.ค.</div>
+        ${bar(c.jan,'#2980b9')}
+        <div style="font-size:12px;font-weight:700;color:#27ae60">ก.พ.</div>
+        ${bar(c.feb,'#27ae60')}
+        <div style="font-size:12px;font-weight:700;color:#e67e22">มี.ค.*</div>
+        ${bar(c.mar,'#e67e22')}
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px">* มี.ค. = 1–25 มี.ค. 2026 เท่านั้น</div>
+    </div>
+
+    ${drtTotal ? `<div style="background:#fff8e1;border-left:4px solid #e74c3c;border-radius:6px;padding:12px 16px;font-size:12px">
+      <strong style="color:#e74c3c">📌 DRT Pending (รอส่งมอบ)</strong><br>
+      <span style="color:var(--text)">
+        ${c.drt1?`ม.ค.: ฿${c.drt1.toLocaleString()} `:''}
+        ${c.drt2?`ก.พ.: ฿${c.drt2.toLocaleString()} `:''}
+        ${c.drt3?`มี.ค.: ฿${c.drt3.toLocaleString()} `:''}
+        → รวม ฿${drtTotal.toLocaleString()} pretax (฿${Math.round(drtTotal*1.07).toLocaleString()} incl VAT)
+      </span>
+    </div>` : ''}
+
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
+      <div style="background:#f8f9fa;border-radius:8px;padding:10px 14px">
+        <strong>ม.ค.:</strong> ${c.txn1} ออเดอร์ ${c.jan?'| ฿'+c.jan.toLocaleString():'| –'}
+      </div>
+      <div style="background:#f8f9fa;border-radius:8px;padding:10px 14px">
+        <strong>ก.พ.:</strong> ${c.txn2} ออเดอร์ ${c.feb?'| ฿'+c.feb.toLocaleString():'| –'}
+      </div>
+      <div style="background:#f8f9fa;border-radius:8px;padding:10px 14px">
+        <strong>มี.ค.*:</strong> ${c.txn3} ออเดอร์ ${c.mar?'| ฿'+c.mar.toLocaleString():'| –'}
+      </div>
+      <div style="background:${c.months.length===3?'#f5eef8':'#f8f9fa'};border-radius:8px;padding:10px 14px">
+        <strong>กลุ่ม:</strong> ${seg}
+      </div>
+    </div>`;
+  document.getElementById('drillModal').classList.add('open');
+}
+
+/* ── SP DRILL-DOWN MODAL ───────────────────────────────── */
+function showSP2026Modal(idx) {
+  const spN = ['ธีรตา','ปุณณภา','ธชนัย','ศุภิสรา','จุฑามาศ','นิโลบล','Shopee'];
+  const spJ = [1434615,1151971,950250,819351,474338,58850,0];
+  const spF = [1383488,1266227,1050785,1006588,321766,59529,147468];
+  const spM = [967635,1400762,839234,1028653,569562,0,132217];
+  const colors=['#2980b9','#27ae60','#8e44ad','#e67e22','#e74c3c','#16a085','#f39c12'];
+  const n=spN[idx]; const j=spJ[idx]; const f=spF[idx]; const m=spM[idx];
+  const tot=j+f+m;
+  const grandT=spN.reduce((_,__,i)=>_+spJ[i]+spF[i]+spM[i],0);
+
+  // MoM trend
+  const trend = (f>j&&m>f)?'📈 เติบโตต่อเนื่อง':(m>f)?'🔼 ฟื้นตัว มี.ค.':(m<f)?'🔽 ลดลง มี.ค.':'➡️ ทรงตัว';
+  const trendColor=(m>f)?'#27ae60':'#e74c3c';
+
+  document.getElementById('modalTitle').innerHTML=`🏆 ${n} <span style="font-size:13px;color:var(--muted);font-weight:400">Performance 2026 YTD</span>`;
+  document.getElementById('modalTabs').innerHTML='';
+  document.getElementById('modalBody').innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
+      <div style="background:#ebf5fb;border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--muted)">ม.ค. 2026</div>
+        <div style="font-size:18px;font-weight:800;color:#2980b9">${j?'฿'+(j/1e6).toFixed(2)+'M':'–'}</div>
+      </div>
+      <div style="background:#eafaf1;border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--muted)">ก.พ. 2026</div>
+        <div style="font-size:18px;font-weight:800;color:#27ae60">${f?'฿'+(f/1e6).toFixed(2)+'M':'–'}</div>
+      </div>
+      <div style="background:#fef5ec;border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--muted)">มี.ค. (1-25)</div>
+        <div style="font-size:18px;font-weight:800;color:#e67e22">${m?'฿'+(m/1e6).toFixed(2)+'M':'–'}</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--muted)">รวม YTD</div>
+        <div style="font-size:18px;font-weight:800;color:${colors[idx]}">฿${(tot/1e6).toFixed(2)}M</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:60px 1fr;gap:8px;align-items:center">
+        <div style="font-size:12px;font-weight:700;color:#2980b9">ม.ค.</div>
+        <div style="background:#f0f2f5;border-radius:4px;height:22px;overflow:hidden">
+          <div style="background:#2980b9;height:100%;width:${j?Math.round(j/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
+            ${j?`<span style="color:white;font-size:11px;font-weight:700">฿${(j/1e6).toFixed(2)}M</span>`:''}
+          </div></div>
+        <div style="font-size:12px;font-weight:700;color:#27ae60">ก.พ.</div>
+        <div style="background:#f0f2f5;border-radius:4px;height:22px;overflow:hidden">
+          <div style="background:#27ae60;height:100%;width:${f?Math.round(f/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
+            ${f?`<span style="color:white;font-size:11px;font-weight:700">฿${(f/1e6).toFixed(2)}M</span>`:''}
+          </div></div>
+        <div style="font-size:12px;font-weight:700;color:#e67e22">มี.ค.*</div>
+        <div style="background:#f0f2f5;border-radius:4px;height:22px;overflow:hidden">
+          <div style="background:#e67e22;height:100%;width:${m?Math.round(m/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
+            ${m?`<span style="color:white;font-size:11px;font-weight:700">฿${(m/1e6).toFixed(2)}M</span>`:''}
+          </div></div>
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">* มี.ค. = 1–25 มี.ค. 2026 (ยังไม่สิ้นเดือน)</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px">
+      <div style="background:#f8f9fa;border-radius:8px;padding:12px">
+        <strong>% สัดส่วนทีม:</strong> ${(tot/grandT*100).toFixed(1)}%
+      </div>
+      <div style="background:${trendColor}15;border-radius:8px;padding:12px">
+        <strong>Trend:</strong> <span style="color:${trendColor}">${trend}</span>
+      </div>
+      <div style="background:#f8f9fa;border-radius:8px;padding:12px">
+        <strong>เฉลี่ย/เดือน:</strong> ฿${(tot/3/1e6).toFixed(2)}M
+      </div>
+      <div style="background:#f8f9fa;border-radius:8px;padding:12px">
+        <strong>Rank ทีม:</strong> #${[...spN.map((_,i)=>spJ[i]+spF[i]+spM[i])].sort((a,b)=>b-a).indexOf(tot)+1} จาก ${spN.length}
+      </div>
+    </div>`;
+  document.getElementById('drillModal').classList.add('open');
 }
 </script>
 </body>
