@@ -1049,7 +1049,7 @@
 <div class="tab-content" id="tab-progress2026">
   <div style="margin: 24px 0 16px; display:flex; align-items:center; gap:12px;">
     <h2 style="font-size:18px;">🟢 2026 Progress – Actual vs Forecast</h2>
-    <span class="badge badge-green" style="font-size:12px; padding:5px 14px;">อัพเดต: 1 เม.ย. 2026 | ม.ค.–มี.ค. ครบเดือน</span>
+    <span class="badge badge-green" style="font-size:12px; padding:5px 14px;">อัพเดต: 4 เม.ย. 2026 | ม.ค.–มี.ค. ครบเดือน | เม.ย. ข้อมูล 1–4 เม.ย.</span>
   </div>
 
   <!-- KPI CARDS — updated with Scenario A/B -->
@@ -1991,9 +1991,10 @@ const actual2026 = {
   1: 4889375,
   2: 5235852,
   3: 6061498,  // มี.ค. 2026 เต็มเดือน (1–31 มี.ค.)
+  4: 1027870,  // เม.ย. 2026 ข้อมูล 1–4 เม.ย. (ยังไม่ครบเดือน)
 };
-const months2026HasData = [1, 2, 3];
-const partial2026 = {};  // ข้อมูลมี.ค. ครบเดือนแล้ว
+const months2026HasData = [1, 2, 3, 4];
+const partial2026 = { 4: '1–4 เม.ย.' };
 
 // ==================== FORECAST TAB ====================
 let forecastViewMode = 'monthly';
@@ -2153,6 +2154,7 @@ const sp2026Names = ['ธีรตา', 'ปุณณภา', 'ธชนัย',
 const sp2026Jan  = [1434615, 1151971, 950250, 819351, 474338, 58850, 0];
 const sp2026Feb  = [1383488, 1266227, 1050785, 1006588, 321766, 59529, 147468];
 const sp2026Mar  = [1157314, 1781232, 1202144, 1078580, 674974, 0, 167254]; // มี.ค. 2026 เต็มเดือน (1–31 มี.ค.)
+const sp2026Apr  = [277241, 206415, 371283, 89250, 66911, 970, 15800];     // เม.ย. 2026 ข้อมูล 1–4 เม.ย. (ยังไม่ครบเดือน)
 
 charts.sp2026 = new Chart(document.getElementById('sp2026Chart'), {
   type: 'bar',
@@ -2162,6 +2164,7 @@ charts.sp2026 = new Chart(document.getElementById('sp2026Chart'), {
       { label: 'ม.ค. 2026', data: sp2026Jan.map(v=>v/1e6), backgroundColor: '#2980b9aa', borderRadius: 4 },
       { label: 'ก.พ. 2026', data: sp2026Feb.map(v=>v/1e6), backgroundColor: '#27ae60aa', borderRadius: 4 },
       { label: 'มี.ค. 2026 (เต็มเดือน)', data: sp2026Mar.map(v=>v/1e6), backgroundColor: '#e67e22aa', borderRadius: 4 },
+      { label: 'เม.ย. 2026 (1–4 เม.ย.)', data: sp2026Apr.map(v=>v/1e6), backgroundColor: '#9b59b6aa', borderRadius: 4 },
     ]
   },
   options: {
@@ -3563,34 +3566,39 @@ function showSP2026Modal(idx) {
   const spJ = [1434615,1151971,950250,819351,474338,58850,0];
   const spF = [1383488,1266227,1050785,1006588,321766,59529,147468];
   const spM = [1157314,1781232,1202144,1078580,674974,0,167254];
+  const spA = [277241,206415,371283,89250,66911,970,15800]; // เม.ย. 1–4 เม.ย.
   const colors=['#2980b9','#27ae60','#8e44ad','#e67e22','#e74c3c','#16a085','#f39c12'];
-  const n=spN[idx]; const j=spJ[idx]; const f=spF[idx]; const m=spM[idx];
-  const tot=j+f+m;
-  const grandT=spN.reduce((_,__,i)=>_+spJ[i]+spF[i]+spM[i],0);
+  const n=spN[idx]; const j=spJ[idx]; const f=spF[idx]; const m=spM[idx]; const a=spA[idx];
+  const tot=j+f+m+a;
+  const grandT=spN.reduce((_,__,i)=>_+spJ[i]+spF[i]+spM[i]+spA[i],0);
 
-  // MoM trend
+  // MoM trend (เทียบ มี.ค. vs ก.พ.)
   const trend = (f>j&&m>f)?'📈 เติบโตต่อเนื่อง':(m>f)?'🔼 ฟื้นตัว มี.ค.':(m<f)?'🔽 ลดลง มี.ค.':'➡️ ทรงตัว';
   const trendColor=(m>f)?'#27ae60':'#e74c3c';
 
   document.getElementById('modalTitle').innerHTML=`🏆 ${n} <span style="font-size:13px;color:var(--muted);font-weight:400">Performance 2026 YTD</span>`;
   document.getElementById('modalTabs').innerHTML='';
   document.getElementById('modalBody').innerHTML=`
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
-      <div style="background:#ebf5fb;border-radius:10px;padding:12px;text-align:center">
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px">
+      <div style="background:#ebf5fb;border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:10px;color:var(--muted)">ม.ค. 2026</div>
-        <div style="font-size:18px;font-weight:800;color:#2980b9">${j?'฿'+(j/1e6).toFixed(2)+'M':'–'}</div>
+        <div style="font-size:16px;font-weight:800;color:#2980b9">${j?'฿'+(j/1e6).toFixed(2)+'M':'–'}</div>
       </div>
-      <div style="background:#eafaf1;border-radius:10px;padding:12px;text-align:center">
+      <div style="background:#eafaf1;border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:10px;color:var(--muted)">ก.พ. 2026</div>
-        <div style="font-size:18px;font-weight:800;color:#27ae60">${f?'฿'+(f/1e6).toFixed(2)+'M':'–'}</div>
+        <div style="font-size:16px;font-weight:800;color:#27ae60">${f?'฿'+(f/1e6).toFixed(2)+'M':'–'}</div>
       </div>
-      <div style="background:#fef5ec;border-radius:10px;padding:12px;text-align:center">
+      <div style="background:#fef5ec;border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:10px;color:var(--muted)">มี.ค.</div>
-        <div style="font-size:18px;font-weight:800;color:#e67e22">${m?'฿'+(m/1e6).toFixed(2)+'M':'–'}</div>
+        <div style="font-size:16px;font-weight:800;color:#e67e22">${m?'฿'+(m/1e6).toFixed(2)+'M':'–'}</div>
       </div>
-      <div style="background:#f8f9fa;border-radius:10px;padding:12px;text-align:center">
+      <div style="background:#f5eef8;border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--muted)">เม.ย.*</div>
+        <div style="font-size:16px;font-weight:800;color:#9b59b6">${a?'฿'+(a/1e6).toFixed(2)+'M':'–'}</div>
+      </div>
+      <div style="background:#f8f9fa;border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:10px;color:var(--muted)">รวม YTD</div>
-        <div style="font-size:18px;font-weight:800;color:${colors[idx]}">฿${(tot/1e6).toFixed(2)}M</div>
+        <div style="font-size:16px;font-weight:800;color:${colors[idx]}">฿${(tot/1e6).toFixed(2)}M</div>
       </div>
     </div>
 
@@ -3611,8 +3619,13 @@ function showSP2026Modal(idx) {
           <div style="background:#e67e22;height:100%;width:${m?Math.round(m/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
             ${m?`<span style="color:white;font-size:11px;font-weight:700">฿${(m/1e6).toFixed(2)}M</span>`:''}
           </div></div>
+        <div style="font-size:12px;font-weight:700;color:#9b59b6">เม.ย.*</div>
+        <div style="background:#f0f2f5;border-radius:4px;height:22px;overflow:hidden">
+          <div style="background:#9b59b6;height:100%;width:${a?Math.round(a/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
+            ${a?`<span style="color:white;font-size:11px;font-weight:700">฿${(a/1e6).toFixed(2)}M</span>`:''}
+          </div></div>
       </div>
-      <div style="font-size:10px;color:var(--muted);margin-top:4px">* มี.ค. = ข้อมูลเต็มเดือน 1–31 มี.ค. 2026</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">* เม.ย. = ข้อมูล 1–4 เม.ย. 2026 (ยังไม่ครบเดือน)</div>
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px">
@@ -3623,10 +3636,10 @@ function showSP2026Modal(idx) {
         <strong>Trend:</strong> <span style="color:${trendColor}">${trend}</span>
       </div>
       <div style="background:#f8f9fa;border-radius:8px;padding:12px">
-        <strong>เฉลี่ย/เดือน:</strong> ฿${(tot/3/1e6).toFixed(2)}M
+        <strong>เฉลี่ย/เดือน (3 เดือนครบ):</strong> ฿${((j+f+m)/3/1e6).toFixed(2)}M
       </div>
       <div style="background:#f8f9fa;border-radius:8px;padding:12px">
-        <strong>Rank ทีม:</strong> #${[...spN.map((_,i)=>spJ[i]+spF[i]+spM[i])].sort((a,b)=>b-a).indexOf(tot)+1} จาก ${spN.length}
+        <strong>Rank ทีม:</strong> #${[...spN.map((_,i)=>spJ[i]+spF[i]+spM[i]+spA[i])].sort((a,b)=>b-a).indexOf(tot)+1} จาก ${spN.length}
       </div>
     </div>`;
   document.getElementById('drillModal').classList.add('open');
