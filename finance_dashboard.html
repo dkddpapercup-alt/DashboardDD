@@ -822,7 +822,7 @@
 <!-- ==================== TAB: 2026 YTD ==================== -->
 <div class="tab-content" id="tab-ytd2026">
   <div class="alert-box info">
-    🆕 <strong>ข้อมูลค่าใช้จ่ายปี 2026</strong> — จากไฟล์ Expense Report ระบบ AccCloud | ม.ค. (1/1–31/1) | ก.พ. (1/2–28/2) | มี.ค.* (1/3–25/3 ข้อมูลบางส่วน เงินเดือน/ดอกเบี้ยเป็นประมาณการ) | Revenue จากระบบขาย | ค่าเสื่อมราคา/ประกัน ยังไม่ได้รับงบทดลองปี 2026
+    🆕 <strong>ข้อมูลค่าใช้จ่ายปี 2026</strong> — จากไฟล์ Expense Report ระบบ AccCloud | ม.ค. (1/1–31/1) | ก.พ. (1/2–28/2) | มี.ค. (1/3–31/3) เงินเดือนจาก Salary Pay Run (PAY-20260301, 36 คน) | Revenue จากระบบขาย | ดอกเบี้ย/ค่าเสื่อมราคา ยังรอยืนยัน
   </div>
 
   <!-- 2026 YTD KPI -->
@@ -830,7 +830,7 @@
     <div class="kpi-card dark">
       <div class="kpi-label">ยอดขาย YTD (ม.ค.–25 มี.ค.)</div>
       <div class="kpi-value" style="color:#2c3e50">฿15.1M</div>
-      <div class="kpi-sub">ม.ค. ฿4.89M | ก.พ. ฿5.24M | มี.ค.(1-25) ฿4.94M</div>
+      <div class="kpi-sub">ม.ค. ฿4.89M | ก.พ. ฿5.24M | มี.ค. ฿6.06M</div>
       <div class="kpi-icon">💰</div>
     </div>
     <div class="kpi-card orange">
@@ -848,7 +848,7 @@
     <div class="kpi-card purple">
       <div class="kpi-label">เงินเดือน YTD</div>
       <div class="kpi-value" style="color:#9b59b6">฿1.89M</div>
-      <div class="kpi-sub">ม.ค. ฿637K | ก.พ. ฿614K | มี.ค.* ฿636K (ประมาณการ)</div>
+      <div class="kpi-sub">ม.ค. ฿637K | ก.พ. ฿614K | มี.ค. ฿721K (จาก PAY-20260301)</div>
       <div class="kpi-icon">👥</div>
     </div>
     <div class="kpi-card blue">
@@ -858,7 +858,7 @@
       <div class="kpi-icon">💼</div>
     </div>
     <div class="kpi-card green">
-      <div class="kpi-label">Net Profit YTD (ประมาณการ)</div>
+      <div class="kpi-label">Net Profit YTD (ดอกเบี้ยยังรอยืนยัน)</div>
       <div class="kpi-value" style="color:#27ae60">฿1.79M</div>
       <div class="kpi-sub">ม.ค. ฿553K (11.3%) | ก.พ. ฿879K (16.8%) | มี.ค.* ฿362K (7.3%)</div>
       <div class="kpi-icon">🎯</div>
@@ -907,7 +907,7 @@
   <!-- 2026 P&L TABLE -->
   <div class="card">
     <div class="card-header">
-      <h3>📋 P&L รายเดือน ปี 2026 (ประมาณการจาก Expense Report)</h3>
+      <h3>📋 P&L รายเดือน ปี 2026 (เงินเดือนจาก Payroll | ดอกเบี้ยยังรอยืนยัน)</h3>
       <span class="card-subtitle">หน่วย: บาท | ยังไม่รวมค่าเสื่อมราคา / ค่าประกัน</span>
     </div>
     <div class="card-body" style="padding:0;overflow-x:auto;">
@@ -941,7 +941,7 @@
         <select id="expMonthSelect" onchange="buildExpDetail()" style="padding:7px 14px;border:1px solid #dee2e6;border-radius:8px;font-size:13px;font-weight:600;background:#fff;cursor:pointer;color:#2c3e50;">
           <option value="jan">ม.ค. 2026</option>
           <option value="feb">ก.พ. 2026</option>
-          <option value="mar">มี.ค. 2026* (1–25)</option>
+          <option value="mar">มี.ค. 2026</option>
         </select>
         <span id="expMonthTotal" style="font-size:13px;color:#7f8c8d;"></span>
       </div>
@@ -986,7 +986,7 @@
             <th class="text-right">เปลี่ยนแปลง</th>
             <th class="text-right">ก.พ. 2026</th>
             <th class="text-right">เปลี่ยนแปลง</th>
-            <th class="text-right">มี.ค. 2026*</th>
+            <th class="text-right">มี.ค. 2026</th>
             <th class="text-right">เปลี่ยนแปลง*</th>
           </tr>
         </thead>
@@ -996,7 +996,7 @@
   </div>
 
   <div class="alert-box" style="border-left-color:#27ae60;background:#f0fff4;">
-    ✅ <strong>สัญญาณบวกปี 2026:</strong> เงินเดือนและ OpEx ลดลงอย่างมีนัยสำคัญจาก 2025 | ดอกเบี้ยลดลง ~36% | ยอดขาย ก.พ. เพิ่ม +7.1% จาก ม.ค. | Net Margin ก.พ. 16.8% ✅ | มี.ค.(1-25) ยอดขาย ฿4.94M สูงกว่า ScA แล้ว — ประมาณการเต็มเดือน ~฿6.1M (แข็งแกร่งที่สุดในปี) | ⚠️ มี.ค.* COGS pretax สูง ฿3.82M เนื่องจากมีออเดอร์ใหญ่หลายรายการ (Bigtree, บีบ๊อกซ์ฯ) ควรติดตามเมื่อข้อมูลครบเดือน
+    ✅ <strong>สัญญาณบวกปี 2026:</strong> เงินเดือนและ OpEx ลดลงอย่างมีนัยสำคัญจาก 2025 | ดอกเบี้ยลดลง ~36% | ยอดขาย มี.ค. ฿6.06M แข็งแกร่งที่สุดในปี (+15.7% จาก ก.พ.) | พนักงานเพิ่มเป็น 36 คน (+2 คน ฝ่ายผลิต) | ⚠️ COGS มี.ค. สูง ฿3.82M เนื่องจากมีออเดอร์ใหญ่หลายรายการ (Bigtree, บีบ๊อกซ์ฯ) ควรติดตาม Gross Margin ใน เม.ย.
   </div>
 </div>
 
@@ -1083,7 +1083,7 @@
     <div class="card">
       <div class="card-header">
         <h3>📈 Revenue per Employee รายเดือน</h3>
-        <span class="card-subtitle">ยอดขาย ÷ พนักงาน 32 คน | เส้นประ = เป้าหมาย (avg 2025)</span>
+        <span class="card-subtitle">ยอดขาย ÷ พนักงาน 36 คน (มี.ค. 69) | เส้นประ = เป้าหมาย (avg 2025)</span>
       </div>
       <div class="card-body"><canvas id="revPerHeadChart"></canvas></div>
     </div>
@@ -1092,7 +1092,7 @@
     <div class="card">
       <div class="card-header">
         <h3>🧩 สัดส่วนทีมงาน</h3>
-        <span class="card-subtitle">แบ่งตามฝ่าย — รวม 32 คน</span>
+        <span class="card-subtitle">แบ่งตามฝ่าย — รวม 36 คน (มี.ค. 2026)</span>
       </div>
       <div class="card-body"><canvas id="teamDonutChart"></canvas></div>
     </div>
@@ -1111,7 +1111,7 @@
     <!-- Revenue per Sales Person -->
     <div class="card">
       <div class="card-header">
-        <h3>🎯 Revenue per Sales Person (3 คน)</h3>
+        <h3>🎯 Revenue per Sales Person (6 คน)</h3>
         <span class="card-subtitle">เส้นประ = เป้าหมาย avg 2025 ต่อหัว</span>
       </div>
       <div class="card-body"><canvas id="revPerSalesChart"></canvas></div>
@@ -1443,15 +1443,15 @@ const expDetail2026 = {
     {acct:'530112', name:'ค่าสวัสดิการอื่นๆ', amt:135, grp:'opex'},
   ],
   mar: [
-    // มี.ค. 1–25 | ⚠️ เงินเดือน/ดอกเบี้ยยังไม่ครบ — ใช้ประมาณการ
+    // มี.ค. 1–31 | เงินเดือน: จาก Salary Pay Run Report PAY-20260301 (36 คน) | ดอกเบี้ย: ประมาณการ
     {acct:'114102', name:'ซื้อสินค้า/วัตถุดิบ (COGS)', amt:3815773, grp:'cogs'},
-    {acct:'530101', name:'เงินเดือน ค่าจ้าง (ประมาณการ)', amt:613000, grp:'salary'},
+    {acct:'530101', name:'เงินเดือน ค่าจ้าง', amt:699952, grp:'salary'},
     {acct:'580101', name:'ดอกเบี้ยจ่าย (ประมาณการ)', amt:87000, grp:'interest'},
     {acct:'510107', name:'ค่าขนส่งสินค้า', amt:50400, grp:'opex'},
     {acct:'520312', name:'ค่าขนส่งเอกชน (Delivery)', amt:41298, grp:'opex'},
     {acct:'530116', name:'ค่าเช่าซื้อรถ/Toyota', amt:38414, grp:'car_lease'},
     {acct:'530110', name:'ค่าประกันชีวิตกลุ่ม (กรุงไทย-แอกซ่า)', amt:33120, grp:'opex'},
-    {acct:'530104', name:'เงินสมทบประกันสังคม', amt:23000, grp:'salary'},
+    {acct:'530104', name:'เงินสมทบประกันสังคม', amt:21136, grp:'salary'},
     {acct:'520303', name:'ค่าน้ำมัน', amt:14880, grp:'opex'},
     {acct:'540107', name:'ค่าใช้จ่ายเบ็ดเตล็ด', amt:10600, grp:'opex'},
     {acct:'530301', name:'ค่าไฟฟ้า', amt:6186, grp:'opex'},
@@ -1469,17 +1469,17 @@ const expDetail2026 = {
 
 // ===== 2026 YTD DATA (from AccCloud Expense Reports) =====
 // มี.ค. = 1–25 มี.ค. 2026 (ข้อมูลบางส่วน: เงินเดือน/ดอกเบี้ยยังไม่ครบ)
-const rev2026    = [4889375, 5235852, 4938063];  // ม.ค. ก.พ. มี.ค.(1-25) จาก Sales Dashboard
+const rev2026    = [4889375, 5235852, 6061498];  // ม.ค. ก.พ. มี.ค.(1-31) จาก Sales Dashboard
 const cogs2026   = [2986009, 3224583, 3815773];  // จาก Expense Report ค่าสินค้า/วัตถุดิบ (pretax)
-const sal2026    = [636942,  613545,  636000];   // มี.ค. = ประมาณการ (ยังไม่มีข้อมูลจากระบบ)
+const sal2026    = [636942,  613545,  721088];   // มี.ค. = จาก Salary Pay Run Report PAY-20260301 (699,952 + SSO 21,136)
 const opex2026   = [563465,  468009,  310449];   // มี.ค. = คชจ.ทั่วไปที่บันทึกแล้ว (ไม่รวมเงินเดือน)
-const int2026    = [114129,  86918,   87000];    // มี.ค. = ประมาณการ
+const int2026    = [114129,  86918,   87000];    // มี.ค. = ประมาณการ (รอยืนยัน)
 const car2026x   = [36000,   36000,   38414];    // มี.ค. = Toyota ลีสซิ่ง (ยืนยันแล้ว)
 const gp2026     = rev2026.map((r,i) => r - cogs2026[i]);
 const np2026     = gp2026.map((g,i) => g - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i]);
 const gm2026     = rev2026.map((r,i) => (r - cogs2026[i]) / r * 100);
 const nm2026     = rev2026.map((r,i) => np2026[i] / r * 100);
-const MONTHS_2026 = ['ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026*'];
+const MONTHS_2026 = ['ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026'];
 
 // ===== NEW: Financial & Accounting items from งบทดลอง 2568 =====
 const loanInt2025  = [331731, 95512, 40033, 188898, 45338, 94904, 97095, 41174, 96462, 99847, 50586, 31548];
@@ -1637,20 +1637,21 @@ const CF_DATA = {
 };
 
 // ==================== PRODUCTIVITY DATA ====================
+// ข้อมูล ณ มี.ค. 2026 (PAY-20260301) — 36 คน จาก Salary Pay Run Report
 const HEADCOUNT = {
-  total: 32,
+  total: 36,
   teams: [
-    { name: 'Sales',       count: 3,  color: '#3498db' },
-    { name: 'Operations',  count: 8,  color: '#27ae60' },
-    { name: 'โรงงาน',     count: 10, color: '#e67e22' },
-    { name: 'ขนส่ง',      count: 3,  color: '#9b59b6' },
-    { name: 'คลัง',       count: 3,  color: '#1abc9c' },
-    { name: 'บริหาร',     count: 3,  color: '#e74c3c' },
-    { name: 'Admin',       count: 1,  color: '#f39c12' },
-    { name: 'อื่นๆ',      count: 1,  color: '#95a5a6' },
+    { name: 'การขาย',          count: 6,  color: '#3498db' },
+    { name: 'ผลิต',            count: 15, color: '#27ae60' },
+    { name: 'ทั่วไป',          count: 3,  color: '#e67e22' },
+    { name: 'วิจัย&พัฒนา',    count: 3,  color: '#9b59b6' },
+    { name: 'บริหาร',          count: 2,  color: '#e74c3c' },
+    { name: 'บัญชี/การเงิน',   count: 3,  color: '#f39c12' },
+    { name: 'จัดซื้อ',         count: 2,  color: '#1abc9c' },
+    { name: 'การตลาด',         count: 2,  color: '#95a5a6' },
   ]
 };
-const SALES_COUNT = 3;
+const SALES_COUNT = 6;  // พนักงานฝ่ายการขาย (มี.ค. 2026)
 
 // ==================== DEBT & BREAK-EVEN DATA ====================
 const loans = [
@@ -2058,7 +2059,7 @@ function buildYTD2026Charts() {
   charts.ytd2026Stack = new Chart(document.getElementById('ytd2026StackChart'), {
     type: 'bar',
     data: {
-      labels: ['2025 เฉลี่ย/เดือน', 'ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026*'],
+      labels: ['2025 เฉลี่ย/เดือน', 'ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026'],
       datasets: [
         { label: 'COGS', data: [avg25_cogs/1e6, cogs2026[0]/1e6, cogs2026[1]/1e6, cogs2026[2]/1e6], backgroundColor: '#e67e22bb', borderRadius: 0 },
         { label: 'เงินเดือน', data: [avg25_sal/1e6, sal2026[0]/1e6, sal2026[1]/1e6, sal2026[2]/1e6], backgroundColor: '#9b59b6bb', borderRadius: 0 },
@@ -2402,8 +2403,8 @@ function buildProductivityTab() {
   const targetRevPerSales = Math.round(avgRev2025 / SC);
   const targetSalPct      = (avgSal2025 / avgRev2025 * 100).toFixed(1);
 
-  // Latest month values (Feb 2026)
-  const latestRev = rev2026[1], latestSal = sal2026[1];
+  // Latest month values (Mar 2026)
+  const latestRev = rev2026[2], latestSal = sal2026[2];
   const latestRevPerHead  = Math.round(latestRev / HC);
   const latestRevPerSales = Math.round(latestRev / SC);
   const latestSalPct      = (latestSal / latestRev * 100).toFixed(1);
@@ -2413,9 +2414,9 @@ function buildProductivityTab() {
   const vsHead  = ((latestRevPerHead  / targetRevPerHead  - 1) * 100).toFixed(1);
   const vsSales = ((latestRevPerSales / targetRevPerSales - 1) * 100).toFixed(1);
   const kpis = [
-    { label:'Revenue per Employee (ก.พ. 69)', value:'฿'+fmt(latestRevPerHead),
+    { label:'Revenue per Employee (มี.ค. 69)', value:'฿'+fmt(latestRevPerHead),
       sub:(vsHead>=0?'▲ +':'▼ ')+Math.abs(vsHead)+'% vs เป้า (฿'+fmt(targetRevPerHead)+')', color: vsHead>=0?'green':'red', icon:'👤' },
-    { label:'Revenue per Sales Person (ก.พ. 69)', value:'฿'+fmt(latestRevPerSales),
+    { label:'Revenue per Sales Person (มี.ค. 69)', value:'฿'+fmt(latestRevPerSales),
       sub:(vsSales>=0?'▲ +':'▼ ')+Math.abs(vsSales)+'% vs เป้า (฿'+fmt(targetRevPerSales)+')', color: vsSales>=0?'green':'red', icon:'🎯' },
     { label:'เงินเดือน % ยอดขาย (ก.พ. 69)', value:latestSalPct+'%',
       sub:'เป้า ≤ '+targetSalPct+'% | '+(parseFloat(latestSalPct)<=parseFloat(targetSalPct)?'✅ ดีกว่าเป้า':'⚠️ สูงกว่าเป้า'), color: parseFloat(latestSalPct)<=parseFloat(targetSalPct)?'green':'orange', icon:'💰' },
@@ -2691,8 +2692,8 @@ function buildExpDetail() {
   const mKey  = document.getElementById('expMonthSelect').value; // 'jan', 'feb', or 'mar'
   const mIdx  = mKey === 'jan' ? 0 : mKey === 'feb' ? 1 : 2;
   const otherKey = mKey === 'jan' ? 'feb' : mKey === 'feb' ? 'mar' : 'feb';
-  const monthLabel = mKey === 'jan' ? 'ม.ค. 2026' : mKey === 'feb' ? 'ก.พ. 2026' : 'มี.ค. 2026* (1-25)';
-  const otherLabel = mKey === 'jan' ? 'ก.พ. 2026' : mKey === 'feb' ? 'มี.ค. 2026*' : 'ก.พ. 2026';
+  const monthLabel = mKey === 'jan' ? 'ม.ค. 2026' : mKey === 'feb' ? 'ก.พ. 2026' : 'มี.ค. 2026';
+  const otherLabel = mKey === 'jan' ? 'ก.พ. 2026' : mKey === 'feb' ? 'มี.ค. 2026' : 'ก.พ. 2026';
 
   const rev      = rev2026[mIdx];
   const rows     = expDetail2026[mKey];
