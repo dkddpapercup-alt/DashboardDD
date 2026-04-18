@@ -1238,14 +1238,14 @@
     <div class="card">
       <div class="card-header">
         <h3>📦 สต็อกตามความเคลื่อนไหว (Velocity)</h3>
-        <span class="card-subtitle">ณ 6 เม.ย. 2569 | รวม 717 SKU | มูลค่า ฿7,477,114</span>
+        <span class="card-subtitle">ณ 6 เม.ย. 2569 | รวม 716 SKU | มูลค่า ฿4,102,486</span>
       </div>
       <div class="card-body"><canvas id="invVelocityChart"></canvas></div>
     </div>
     <div class="card">
       <div class="card-header">
         <h3>🔴 Top 10 สต็อกไม่มียอดขาย (Cash Locked)</h3>
-        <span class="card-subtitle">476 รายการ | มูลค่ารวม ฿1,737,927 | ล้างได้ = ลด OD</span>
+        <span class="card-subtitle">488 รายการ | มูลค่ารวม ฿1,865,118 | ล้างได้ = ลด OD</span>
       </div>
       <div class="card-body" style="padding:0;overflow-x:auto;">
         <table class="data-table">
@@ -1656,34 +1656,33 @@ const CF_DATA = {
   inventoryTotal: 7477114,
   inventoryDate: '6 เม.ย. 2569',
   inventoryBreakdown: [
-    { label: '🐢 Slow-Moving (ไม่มียอดขาย 2569)', count: 476, value: 1737927, color: '#e74c3c' },
-    { label: '✅ ขายดี (มียอดขาย 2569)',           count: 241, value: 5739187, color: '#27ae60' },
+    { label: '🐢 Slow-Moving (ไม่มียอดขาย 2569)', count: 488, value: 1865118, color: '#e74c3c' },
+    { label: '✅ ขายดี (มียอดขาย 2569)',           count: 228, value: 2237368, color: '#27ae60' },
   ],
   // อัพเดต ณ 6 เม.ย. 2569 — จำแนกจากชื่อสินค้า (รายงานมูลค่าสินค้าคงเหลือ)
   inventoryByType: [
-    { label: 'วัตถุดิบ/อื่นๆ',             count: 24,  value: 3658542, color: '#1F618D' },
-    { label: 'แก้วพลาสติก',                count: 299, value: 1285825, color: '#196F3D' },
-    { label: 'แก้วกระดาษ / Bio',           count: 119, value: 1034491, color: '#784212' },
-    { label: 'ฝาแก้ว',                     count: 77,  value: 372578,  color: '#1A5276' },
-    { label: 'วัตถุดิบกระดาษ',             count: 47,  value: 360553,  color: '#B7950B' },
-    { label: 'ถ้วย (Bowl)',                 count: 58,  value: 335663,  color: '#6C3483' },
-    { label: 'กล่อง/ถุง/บรรจุภัณฑ์',      count: 53,  value: 277220,  color: '#0E6655' },
-    { label: 'หลอด/ช้อน/อุปกรณ์',         count: 34,  value: 108664,  color: '#922B21' },
-    { label: 'สิ่งพิมพ์/เครื่องเขียน',    count: 6,   value: 43579,   color: '#117A65' },
-  ],
+      { label: 'แก้วพลาสติก',             count: 314, value: 1382799, color: '#196F3D' },
+      { label: 'แก้วกระดาษ / Bio',        count: 115, value:  846988, color: '#784212' },
+      { label: 'วัตถุดิบกระดาษ',          count: 109, value:  744043, color: '#B7950B' },
+      { label: 'ถ้วย (Bowl)',              count:  39, value:  303916, color: '#6C3483' },
+      { label: 'วัตถุดิบ/อื่นๆ',          count:  16, value:  276795, color: '#1F618D' },
+      { label: 'กล่อง/ถุง/บรรจุภัณฑ์',   count:  37, value:  200404, color: '#0E6655' },
+      { label: 'ฝาแก้ว',                  count:  51, value:  169586, color: '#1A5276' },
+      { label: 'หลอด/ช้อน/อุปกรณ์',      count:  24, value:   94002, color: '#922B21' },
+      { label: 'สิ่งพิมพ์/เครื่องเขียน', count:  11, value:   83952, color: '#117A65' },
+    ],
   noSalesTop: [
-    // อัพเดต ณ 6 เม.ย. 2569 — จาก รายงานมูลค่าสินค้าคงเหลือ
-    { name: 'MOLYVAL-FOODPRO SERVE #68 (ถัง 20ลิตร)',         value: 236500 },
-    { name: 'กระดาษเคลือบ PE 2ด้าน 240g 750×595mm',          value: 77610  },
-    { name: 'ม้วนกระดาษเคลือบ PE 2ด้าน 240g 77mm',           value: 37629  },
-    { name: 'กล่องกระดาษลูกฟูก W359×L457×H592mm',            value: 34639  },
-    { name: 'กระดาษเคลือบ PE 1ด้าน 240g 750×595mm',          value: 32706  },
-    { name: 'แก้วกระดาษ DW16oz. คราฟท์ ไม่พิมพ์ลาย',        value: 29900  },
-    { name: 'แก้วพลาสติก PP 22oz. สีขาว โลโก้ เซ็นได',      value: 29700  },
-    { name: 'ช้อนไม้หัวตัด 9.5ซม. (100ชิ้น/แพ็ค)',           value: 24549  },
-    { name: 'แก้วพลาสติก PP 16oz.K90 สีเงิน ไม่พิมพ์ลาย',   value: 23920  },
-    { name: 'กระดาษเคลือบ PE 2ด้าน 210g 750×595mm',          value: 20520  },
-  ],
+      { name: 'MOLYVAL-FOODPRO SERVE #68 (ถัง 20ลิตร) 20,000ml.', value: 236500 },
+      { name: 'กระดาษเคลือบ PE 2ด้าน (C2PE/G13M15) 240g ตัด 750*595mm.', value: 77610 },
+      { name: 'ถาดรังไข่ 2 หลุม 110*220mm. (600ชิ้น/ลัง)', value: 51480 },
+      { name: 'ม้วนกระดาษเคลือบ PE 2ด้าน (C2PE/G13M15) 240g ตัด 77mm.', value: 37629 },
+      { name: 'กล่องกระดาษลูกฟูก W359*L457*H592mm. (KI150/CA150/KI150)', value: 34639 },
+      { name: 'กระดาษเคลือบ PE 1ด้าน (C1PE/M18) 240g ตัด 750*595mm.', value: 32706 },
+      { name: 'แก้วกระดาษ DW16oz. คราฟท์ ไม่พิมพ์ลาย (500ชิ้น/ลัง)', value: 29900 },
+      { name: 'แก้วพลาสติก PP 22oz.TN90 สีขาว (ขัดทราย) โลโก้เซ็นได', value: 29700 },
+      { name: 'ช้อนไม้หัวตัด 9.5ซม. (100ชิ้น/แพ็ค)', value: 24549 },
+      { name: 'แก้วพลาสติก PP 16oz.K90 สีเงิน ไม่พิมพ์ลาย (500ใบ/ลัง)', value: 23920 },
+    ],
   od: { balance: 8000000, rate: 0.07, monthlyInterest: 46667, netProfitMonthly: 157076 },
 };
 
@@ -2335,7 +2334,7 @@ function buildCashFlowTab() {
     { label:'CCC — Cash Conversion Cycle', value:ccc.toFixed(1)+' วัน',
       sub:cccIcon+' '+cccSub, color:cccColor, icon:'⚡' },
     { label:'สต็อกสินค้า (DIO — Days Inventory Outstanding)', value:'฿'+fmt(Math.round(d.inventoryTotal)),
-      sub:'DIO '+d.dio+' วัน | '+d.inventoryDate+' | ⚠️ 66% Slow-Moving', color:'red', icon:'📦' },
+      sub:'DIO '+d.dio+' วัน | '+d.inventoryDate+' | ⚠️ 68% Slow-Moving', color:'red', icon:'📦' },
   ];
   document.getElementById('cfKpiRow').innerHTML = kpis.map(k=>`
     <div class="kpi-card ${k.color}">
