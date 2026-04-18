@@ -1191,14 +1191,14 @@
     <div class="card">
       <div class="card-header">
         <h3>📦 สต็อกตามความเคลื่อนไหว (Velocity)</h3>
-        <span class="card-subtitle">ณ 25 ก.พ. 2569 | รวม 944 SKU | มูลค่า ฿4,115,866</span>
+        <span class="card-subtitle">ณ 6 เม.ย. 2569 | รวม 717 SKU | มูลค่า ฿7,477,114</span>
       </div>
       <div class="card-body"><canvas id="invVelocityChart"></canvas></div>
     </div>
     <div class="card">
       <div class="card-header">
         <h3>🔴 Top 10 สต็อกไม่มียอดขาย (Cash Locked)</h3>
-        <span class="card-subtitle">604 รายการ | มูลค่ารวม ฿2,594,091 | ล้างได้ = ลด OD</span>
+        <span class="card-subtitle">476 รายการ | มูลค่ารวม ฿1,737,927 | ล้างได้ = ลด OD</span>
       </div>
       <div class="card-body" style="padding:0;overflow-x:auto;">
         <table class="data-table">
@@ -1214,7 +1214,7 @@
     <div class="card">
       <div class="card-header">
         <h3>🗂️ สต็อกแยกตามประเภทสินค้า</h3>
-        <span class="card-subtitle">7 ประเภท | มูลค่ารวม ฿4,115,866</span>
+        <span class="card-subtitle">9 กลุ่ม | มูลค่ารวม ฿7,477,114 | 6 เม.ย. 2569</span>
       </div>
       <div class="card-body"><canvas id="invTypeChart"></canvas></div>
     </div>
@@ -1611,14 +1611,17 @@ const CF_DATA = {
     { label: '🐢 Slow-Moving (ไม่มียอดขาย 2569)', count: 476, value: 1737927, color: '#e74c3c' },
     { label: '✅ ขายดี (มียอดขาย 2569)',           count: 241, value: 5739187, color: '#27ae60' },
   ],
+  // อัพเดต ณ 6 เม.ย. 2569 — จำแนกจากชื่อสินค้า (รายงานมูลค่าสินค้าคงเหลือ)
   inventoryByType: [
-    { label: 'สินค้าซื้อมาขายไป',   count: 607, value: 1690203, color: '#196F3D' },
-    { label: 'สินค้ารอส่ง/สต็อค',   count: 193, value: 1190508, color: '#1F618D' },
-    { label: 'วัตถุดิบขึ้นรูป',      count: 37,  value: 619026,  color: '#1A5276' },
-    { label: 'ขึ้นรูป/สต็อค',        count: 28,  value: 400275,  color: '#784212' },
-    { label: 'วัตถุดิบฝ่ายผลิต',     count: 21,  value: 101254,  color: '#6C3483' },
-    { label: 'สินค้ารอผลิต',         count: 50,  value: 86008,   color: '#B7950B' },
-    { label: 'วัตถุดิบสกรีน',        count: 8,   value: 28593,   color: '#0E6655' },
+    { label: 'วัตถุดิบ/อื่นๆ',             count: 24,  value: 3658542, color: '#1F618D' },
+    { label: 'แก้วพลาสติก',                count: 299, value: 1285825, color: '#196F3D' },
+    { label: 'แก้วกระดาษ / Bio',           count: 119, value: 1034491, color: '#784212' },
+    { label: 'ฝาแก้ว',                     count: 77,  value: 372578,  color: '#1A5276' },
+    { label: 'วัตถุดิบกระดาษ',             count: 47,  value: 360553,  color: '#B7950B' },
+    { label: 'ถ้วย (Bowl)',                 count: 58,  value: 335663,  color: '#6C3483' },
+    { label: 'กล่อง/ถุง/บรรจุภัณฑ์',      count: 53,  value: 277220,  color: '#0E6655' },
+    { label: 'หลอด/ช้อน/อุปกรณ์',         count: 34,  value: 108664,  color: '#922B21' },
+    { label: 'สิ่งพิมพ์/เครื่องเขียน',    count: 6,   value: 43579,   color: '#117A65' },
   ],
   noSalesTop: [
     // อัพเดต ณ 6 เม.ย. 2569 — จาก รายงานมูลค่าสินค้าคงเหลือ
