@@ -1148,8 +1148,8 @@
 <div class="tab-content" id="tab-cashflow">
 
   <div class="alert-box info" style="border-left-color:#2471a3">
-    📅 <strong>ข้อมูล ณ วันที่ 8 มีนาคม 2569</strong> — นำเข้าจาก FlowAccount (รายงานอายุลูกหนี้ + อายุเจ้าหนี้)
-    &nbsp;|&nbsp; AR: 213 รายการ &nbsp;|&nbsp; AP: 319 รายการ
+    📅 <strong>ข้อมูล ณ วันที่ 17 เมษายน 2569</strong> — AP นำเข้าจาก AccCloud (รายงานอายุเจ้าหนี้) | AR ข้อมูล ณ 8 มี.ค. 2569 (ยังไม่อัพเดต)
+    &nbsp;|&nbsp; AR: 213 รายการ (8 มี.ค.) &nbsp;|&nbsp; AP: 326 รายการ (17 เม.ย.)
   </div>
 
   <!-- KPI Row -->
@@ -1565,8 +1565,9 @@ function buildTabCharts(name) {
 
 // ==================== PAYMENT DATA (AccCloud/FlowAccount, 25 Mar 2026) ==================== (FlowAccount, 8 Mar 2026) ====================
 const CF_DATA = {
-  asOfDate: '8 มี.ค. 2569',
+  asOfDate: '17 เม.ย. 2569',
   ar: {
+    // AR ยังไม่มีข้อมูลใหม่ — ใช้ข้อมูล ณ 8 มี.ค. 2569
     total: 2824355.56,
     aging: { not_due: 2566675.93, d30: 242716.03, d60: 14963.60, d90: 0, d180: 0, d360p: 0 },
     top10: [
@@ -1583,32 +1584,32 @@ const CF_DATA = {
     ]
   },
   ap: {
-    total: 6219726.83,
-    aging: { not_due: 4987694.10, d30: 725832.31, d60: 3620.00, d90: 402553.72, d180: 100026.70, d360p: 0 },
+    // อัพเดต ณ 17 เม.ย. 2569 — รายงานอายุเจ้าหนี้ AccCloud | 326 ใบ | 51 Supplier
+    total: 7793766.39,
+    aging: { not_due: 7496423.68, d30: 81555.25, d60: 46108.81, d90: 3620.00, d180: 166058.65, d360p: 0 },
     top10: [
-      { name: 'บ. เอฟพีซี อินเตอร์ ซัพพลาย',     amt: 2123556 },
-      { name: 'บ. อัพ ทู ยู แพ็ค จำกัด',          amt: 810974  },
-      { name: 'บ. เอส.เอ็ม.เค.พริ้นติ้ง',         amt: 702557  },
-      { name: 'บ. ซี.พี.อุตสาหกรรมบรรจุภัณฑ์',   amt: 422864  },
-      { name: 'บ. เบลล์ วอคเกอร์ จำกัด',          amt: 300322  },
-      { name: 'บ. ไทย เคเค อุตสาหกรรม',           amt: 267029  },
-      { name: 'บ. เอเอ็มพี คอร์เปอเรชั่น',        amt: 201160  },
-      { name: 'บ. โอเชี่ยน สกรีน พริ้นติ้ง',      amt: 129042  },
-      { name: 'บ. เอพีซี เฟล็ก-ซี่ แพ็ค',         amt: 89974   },
-      { name: 'บ. เกษมอนันต์ พริ้นติ้ง',           amt: 88328   },
+      { name: 'บ. เอฟพีซี อินเตอร์ ซัพพลาย จำกัด',      amt: 3037881 },
+      { name: 'บ. ซี.พี.อุตสาหกรรมบรรจุภัณฑ์ จำกัด',    amt: 821172  },
+      { name: 'บ. อัพ ทู ยู แพ็ค จำกัด',                amt: 667431  },
+      { name: 'บ. เอส.เอ็ม.เค.พริ้นติ้ง จำกัด',          amt: 601207  },
+      { name: 'บ. เบลล์ วอคเกอร์ จำกัด',                 amt: 386110  },
+      { name: 'บ. โอเชี่ยน สกรีน พริ้นติ้ง จำกัด',       amt: 227910  },
+      { name: 'บ. เจ.ที.แพ็ค ออฟ ฟู้ดส์ จำกัด',          amt: 191675  },
+      { name: 'บ. เอเอ็มพี คอร์เปอเรชั่น จำกัด',         amt: 169809  },
+      { name: 'บ. เกษมอนันต์ พริ้นติ้ง จำกัด',            amt: 156916  },
+      { name: 'บ. เอ็กซ์เซลแพคเกจจิ้ง จำกัด',             amt: 113710  },
     ]
   },
-  dso: 16.2,
-  dpo: 57.9,
-  dio: 38.3,
-  revFeb: 5235852,
-  cogsFeb: 3224583,
-  inventoryTotal: 4115866,
-  inventoryDate: '25 ก.พ. 2569',
+  dso: 16.2,   // AR ยังไม่อัพเดต — ใช้ค่า 8 มี.ค. 2569
+  dpo: 49.2,   // อัพเดต: AP ฿7.79M / COGS มี.ค. ฿4.75M × 30 วัน
+  dio: 47.2,   // อัพเดต: สต็อก ฿7.48M (6 เม.ย.) / COGS มี.ค. ฿4.75M × 30 วัน
+  revFeb: 6061498,   // อัพเดต: รายได้ มี.ค. 2569 (actual)
+  cogsFeb: 4748957,  // อัพเดต: COGS มี.ค. 2569 (actual จาก AccCloud)
+  inventoryTotal: 7477114,
+  inventoryDate: '6 เม.ย. 2569',
   inventoryBreakdown: [
-    { label: '❌ ไม่มียอดขาย',   count: 602, value: 2499516, color: '#e74c3c' },
-    { label: '🐢 ขายช้า',         count: 59,  value: 1031073, color: '#f39c12' },
-    { label: '✅ ขายดี (Fast)',    count: 77,  value: 602498,  color: '#27ae60' },
+    { label: '🐢 Slow-Moving (ไม่มียอดขาย 2569)', count: 476, value: 1737927, color: '#e74c3c' },
+    { label: '✅ ขายดี (มียอดขาย 2569)',           count: 241, value: 5739187, color: '#27ae60' },
   ],
   inventoryByType: [
     { label: 'สินค้าซื้อมาขายไป',   count: 607, value: 1690203, color: '#196F3D' },
@@ -1620,16 +1621,17 @@ const CF_DATA = {
     { label: 'วัตถุดิบสกรีน',        count: 8,   value: 28593,   color: '#0E6655' },
   ],
   noSalesTop: [
-    { name: 'กระดาษเคลือบ PE 2ด้าน 240g ตัดแผ่น 750mm',    value: 269880 },
-    { name: 'ถาดรังไข่ 2 หลุม 110×220mm',                    value: 80340  },
-    { name: 'ถ้วยกระดาษ 520ml โลโก้ Select',                 value: 52670  },
-    { name: 'ม้วนกระดาษเคลือบ PE 2ด้าน 240g 750mm',          value: 41680  },
-    { name: 'กล่องกระดาษลูกฟูก W359×L457×H592mm',            value: 35673  },
-    { name: 'แก้วพลาสติก PET 16oz.X98 ไม่พิมพ์ลาย',          value: 31205  },
-    { name: 'กระดาษเคลือบ PE 2ด้าน 210g ตัดแผ่น 750mm',    value: 30240  },
+    // อัพเดต ณ 6 เม.ย. 2569 — จาก รายงานมูลค่าสินค้าคงเหลือ
+    { name: 'MOLYVAL-FOODPRO SERVE #68 (ถัง 20ลิตร)',         value: 236500 },
+    { name: 'กระดาษเคลือบ PE 2ด้าน 240g 750×595mm',          value: 77610  },
+    { name: 'ม้วนกระดาษเคลือบ PE 2ด้าน 240g 77mm',           value: 37629  },
+    { name: 'กล่องกระดาษลูกฟูก W359×L457×H592mm',            value: 34639  },
+    { name: 'กระดาษเคลือบ PE 1ด้าน 240g 750×595mm',          value: 32706  },
     { name: 'แก้วกระดาษ DW16oz. คราฟท์ ไม่พิมพ์ลาย',        value: 29900  },
-    { name: 'แก้วพลาสติก PP 22oz. สีขาว โลโก้ลูกค้า',        value: 29700  },
-    { name: 'แก้วกระดาษ DW 8oz.G80 สีดำ ไม่พิมพ์ลาย',       value: 29046  },
+    { name: 'แก้วพลาสติก PP 22oz. สีขาว โลโก้ เซ็นได',      value: 29700  },
+    { name: 'ช้อนไม้หัวตัด 9.5ซม. (100ชิ้น/แพ็ค)',           value: 24549  },
+    { name: 'แก้วพลาสติก PP 16oz.K90 สีเงิน ไม่พิมพ์ลาย',   value: 23920  },
+    { name: 'กระดาษเคลือบ PE 2ด้าน 210g 750×595mm',          value: 20520  },
   ],
   od: { balance: 8000000, rate: 0.07, monthlyInterest: 46667, netProfitMonthly: 157076 },
 };
@@ -2175,7 +2177,7 @@ function buildCashFlowTab() {
     { label:'CCC — Cash Conversion Cycle', value:ccc.toFixed(1)+' วัน',
       sub:cccIcon+' '+cccSub, color:cccColor, icon:'⚡' },
     { label:'สต็อกสินค้า (DIO — Days Inventory Outstanding)', value:'฿'+fmt(Math.round(d.inventoryTotal)),
-      sub:'DIO '+d.dio+' วัน | '+d.inventoryDate+' | ⚠️ 60% ไม่มียอดขาย', color:'red', icon:'📦' },
+      sub:'DIO '+d.dio+' วัน | '+d.inventoryDate+' | ⚠️ 66% Slow-Moving', color:'red', icon:'📦' },
   ];
   document.getElementById('cfKpiRow').innerHTML = kpis.map(k=>`
     <div class="kpi-card ${k.color}">
