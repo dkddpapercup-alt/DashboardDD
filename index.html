@@ -228,8 +228,8 @@
   <div class="header-right">
     <a href="finance_dashboard.html" class="nav-link">💰 Finance Dashboard →</a>
     <div>
-      <strong>ข้อมูล: ม.ค. 2023 – มี.ค. 2026</strong>
-      <span>อัปเดต: 1 เมษายน 2026 | 🟢 2026 Actual: ม.ค.–มี.ค. ครบ 3 เดือน</span>
+      <strong>ข้อมูล: ม.ค. 2023 – เม.ย. 2026</strong>
+      <span>อัปเดต: 27 เมษายน 2026 | 🟢 2026 Actual: ม.ค.–มี.ค. ครบเดือน | เม.ย.(1-27) บางส่วน</span>
     </div>
   </div>
 </div>
@@ -1050,7 +1050,7 @@
 <div class="tab-content" id="tab-progress2026">
   <div style="margin: 24px 0 16px; display:flex; align-items:center; gap:12px;">
     <h2 style="font-size:18px;">🟢 2026 Progress – Actual vs Forecast</h2>
-    <span class="badge badge-green" style="font-size:12px; padding:5px 14px;">อัพเดต: 16 เม.ย. 2026 | ม.ค.–มี.ค. ครบเดือน | เม.ย. ข้อมูล 1–16 เม.ย.</span>
+    <span class="badge badge-green" style="font-size:12px; padding:5px 14px;">อัพเดต: 27 เม.ย. 2026 | ม.ค.–มี.ค. ครบเดือน | เม.ย. ข้อมูล 1–27 เม.ย.</span>
   </div>
 
   <!-- KPI CARDS — updated with Scenario A/B -->
@@ -1076,7 +1076,7 @@
     <div class="kpi-card red">
       <div class="kpi-label">เป้าที่ต้องทำอีก (เม.ย.–ธ.ค. 2026)</div>
       <div class="kpi-value">46.4M</div>
-      <div class="kpi-sub">ScA: ฿62.6M – YTD incl เม.ย.1-16 ฿19.39M = ฿43.25M | เม.ย. 61.8% ของ ScA (฿5.19M)</div>
+      <div class="kpi-sub">ScA: ฿62.6M – YTD incl เม.ย.1-27 ฿20.88M = ฿41.76M | เม.ย. 90.5% ของ ScA (฿5.19M)</div>
       <div class="kpi-icon">🎯</div>
     </div>
   </div>
@@ -1218,7 +1218,7 @@
       <li><strong>ธชนัย ฿1.20M มี.ค.</strong> — ฟอร์มดีต่อเนื่อง ติด Top 3 ทุกเดือน</li>
       <li><strong>ธีรตา ฿1.16M มี.ค.</strong> — ยังคงฟอร์มดีต่อเนื่อง</li>
       <li><strong>Bigtree ลูกค้าใหม่ Top 1</strong> — ฿694K ในมี.ค. เพียงเดือนเดียว น่าติดตามเป็น Key Account</li>
-      <li><strong>YTD ม.ค.–เม.ย.(1-16): ฿19.39M</strong> | เม.ย. ทำได้ ฿3.21M (61.8% ของ ScA เม.ย. ฿5.19M) | เหลือเป้า ScA อีก ฿43.25M</li>
+      <li><strong>YTD ม.ค.–เม.ย.(1-27): ฿20.88M</strong> | เม.ย. ทำได้ ฿4.70M (90.5% ของ ScA เม.ย. ฿5.19M) | เหลือเป้า ScA อีก ฿41.76M</li>
     </ul>
   </div>
 </div>
@@ -1992,10 +1992,10 @@ const actual2026 = {
   1: 4889375,
   2: 5235852,
   3: 6061498,  // มี.ค. 2026 เต็มเดือน (1–31 มี.ค.)
-  4: 3208145,  // เม.ย. 2026 ข้อมูล 1–16 เม.ย. (ยังไม่ครบเดือน)
+  4: 4698178,  // เม.ย. 2026 ข้อมูล 1–27 เม.ย. (Sale Report_27APR)
 };
 const months2026HasData = [1, 2, 3, 4];
-const partial2026 = { 4: '1–16 เม.ย.' };
+const partial2026 = { 4: '1–27 เม.ย.' };
 
 // ==================== FORECAST TAB ====================
 let forecastViewMode = 'monthly';
@@ -2155,7 +2155,7 @@ const sp2026Names = ['ธีรตา', 'ปุณณภา', 'ธชนัย',
 const sp2026Jan  = [1434615, 1151971, 950250, 819351, 474338, 58850, 0];
 const sp2026Feb  = [1383488, 1266227, 1050785, 1006588, 321766, 59529, 147468];
 const sp2026Mar  = [1157314, 1781232, 1202144, 1078580, 674974, 0, 167254]; // มี.ค. 2026 เต็มเดือน (1–31 มี.ค.)
-const sp2026Apr  = [842359, 755963, 573090, 768000, 181084, 27900, 59750];  // เม.ย. 2026 ข้อมูล 1–16 เม.ย. (ยังไม่ครบเดือน)
+const sp2026Apr  = [999535, 1169544, 790393, 1458692, 211293, 40446, 29853];  // เม.ย. 2026 ข้อมูล 1–27 เม.ย. (Sale Report_27APR)
 
 charts.sp2026 = new Chart(document.getElementById('sp2026Chart'), {
   type: 'bar',
@@ -2165,7 +2165,7 @@ charts.sp2026 = new Chart(document.getElementById('sp2026Chart'), {
       { label: 'ม.ค. 2026', data: sp2026Jan.map(v=>v/1e6), backgroundColor: '#2980b9aa', borderRadius: 4 },
       { label: 'ก.พ. 2026', data: sp2026Feb.map(v=>v/1e6), backgroundColor: '#27ae60aa', borderRadius: 4 },
       { label: 'มี.ค. 2026 (เต็มเดือน)', data: sp2026Mar.map(v=>v/1e6), backgroundColor: '#e67e22aa', borderRadius: 4 },
-      { label: 'เม.ย. 2026 (1–16 เม.ย.)', data: sp2026Apr.map(v=>v/1e6), backgroundColor: '#9b59b6aa', borderRadius: 4 },
+      { label: 'เม.ย. 2026 (1–27 เม.ย.)', data: sp2026Apr.map(v=>v/1e6), backgroundColor: '#9b59b6aa', borderRadius: 4 },
     ]
   },
   options: {
@@ -3566,7 +3566,7 @@ function showSP2026Modal(idx) {
   const spJ = [1434615,1151971,950250,819351,474338,58850,0];
   const spF = [1383488,1266227,1050785,1006588,321766,59529,147468];
   const spM = [1157314,1781232,1202144,1078580,674974,0,167254];
-  const spA = [842359,755963,573090,768000,181084,27900,59750]; // เม.ย. 1–16 เม.ย.
+  const spA = [999535,1169544,790393,1458692,211293,40446,29853]; // เม.ย. 1–27 เม.ย.
   const colors=['#2980b9','#27ae60','#8e44ad','#e67e22','#e74c3c','#16a085','#f39c12'];
   const n=spN[idx]; const j=spJ[idx]; const f=spF[idx]; const m=spM[idx]; const a=spA[idx];
   const tot=j+f+m+a;
@@ -3625,7 +3625,7 @@ function showSP2026Modal(idx) {
             ${a?`<span style="color:white;font-size:11px;font-weight:700">฿${(a/1e6).toFixed(2)}M</span>`:''}
           </div></div>
       </div>
-      <div style="font-size:10px;color:var(--muted);margin-top:4px">* เม.ย. = ข้อมูล 1–16 เม.ย. 2026 (ยังไม่ครบเดือน)</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">* เม.ย. = ข้อมูล 1–27 เม.ย. 2026 (ยังไม่ครบเดือน)</div>
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px">
