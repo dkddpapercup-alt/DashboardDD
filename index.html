@@ -1319,7 +1319,7 @@
   <div style="background:linear-gradient(135deg,#e67e22,#f39c12);color:white;border-radius:12px;padding:16px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
     <div style="font-size:32px;">🔍</div>
     <div>
-      <div style="font-size:16px;font-weight:800;">วิเคราะห์เชิงลึก ม.ค.–มี.ค. 2026</div>
+      <div style="font-size:16px;font-weight:800;">วิเคราะห์เชิงลึก ม.ค.–เม.ย. 2026 (1-27 เม.ย.)</div>
       <div style="font-size:12px;opacity:0.9;margin-top:3px;">ข้อมูลจาก 1,606 รายการ | ลูกค้า 576 ราย | รวม DRT+RT+IVT (pretax)</div>
     </div>
   </div>
@@ -3087,47 +3087,66 @@ let analysis2026Built = false;
 
 /* ── Embedded customer data (Jan/Feb/Mar pretax, DRT amounts) — sorted by total ── */
 const cust2026 = [
-  {name:'Central Group Thailand',jan:481278,feb:484710,mar:317040,total:1283028,txn1:53,txn2:59,txn3:39,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'Bigtree',jan:0,feb:158550,mar:693950,total:852500,txn1:0,txn2:2,txn3:2,drt1:158550,drt2:693950,drt3:232450,months:[2,3]},
-  {name:'แพ็คเวิร์คส์',jan:257700,feb:140000,mar:184675,total:582375,txn1:17,txn2:15,txn3:17,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'ACE TECHNOLOGY',jan:468000,feb:0,mar:0,total:468000,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
-  {name:'เวนดิ้ง เซอร์วิสเซส',jan:116025,feb:155590,mar:135424,total:407038,txn1:5,txn2:8,txn3:5,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'บีบ์อกซ์ ปริ้นติ้ง อินเตอร์เนชั่นแนล',jan:0,feb:0,mar:365500,total:365500,txn1:0,txn2:0,txn3:3,drt1:0,drt2:0,drt3:0,months:[3]},
-  {name:'Bwell Group (จีพีซีเอ็ม+บีเวล)',jan:150900,feb:132700,mar:68000,total:351600,txn1:4,txn2:4,txn3:3,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'แพชชั่น เรสเตอรองท์ กรุ๊ป',jan:116850,feb:149800,mar:58590,total:325240,txn1:10,txn2:19,txn3:10,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'Shopee (รวม)',jan:95462,feb:94031,mar:94766,total:284259,txn1:142,txn2:155,txn3:152,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'สยาม แฟรนไชส์ ธุรกิจ',jan:91395,feb:29008,mar:99191,total:219594,txn1:4,txn2:5,txn3:10,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'โนมิมาโช',jan:0,feb:215665,mar:0,total:215665,txn1:0,txn2:2,txn3:0,drt1:0,drt2:0,drt3:0,months:[2]},
-  {name:'เจพี สปา แอนด์ เดคคอร์',jan:104730,feb:17500,mar:63400,total:185630,txn1:4,txn2:1,txn3:2,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'Juice bomb',jan:89750,feb:89750,mar:0,total:179500,txn1:1,txn2:1,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
-  {name:'โนส ที (ประเทศไทย)',jan:0,feb:176300,mar:0,total:176300,txn1:0,txn2:2,txn3:0,drt1:0,drt2:0,drt3:0,months:[2]},
-  {name:'ทีพี โปรเจค',jan:0,feb:0,mar:142000,total:142000,txn1:0,txn2:0,txn3:1,drt1:0,drt2:0,drt3:0,months:[3]},
-  {name:'สวนลุม พร็อพเพอร์ตี้',jan:48240,feb:9700,mar:57340,total:115280,txn1:1,txn2:1,txn3:1,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'บอททอมเลส 2020',jan:40916,feb:35800,mar:32000,total:108716,txn1:2,txn2:2,txn3:1,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'เวิลด์ ฟูด เซ็นเตอร์',jan:37200,feb:34900,mar:35000,total:107100,txn1:2,txn2:2,txn3:2,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'เพ็น เค อินเตอร์เทรดดิ้ง',jan:33000,feb:66000,mar:0,total:99000,txn1:1,txn2:2,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
-  {name:'แอล แอนด์ เอช โฮเทล แมเนจเมนท์',jan:23080,feb:36520,mar:37750,total:97350,txn1:3,txn2:3,txn3:3,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'แฮปปี้ ฟู้ด อินเตอร์คิทเช่น',jan:50280,feb:0,mar:44900,total:95180,txn1:1,txn2:0,txn3:1,drt1:44900,drt2:0,drt3:47590,months:[1,3]},
-  {name:'นมสดพระนคร',jan:93458,feb:0,mar:0,total:93458,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
-  {name:'ทรู คอฟฟี่',jan:23800,feb:39900,mar:25900,total:89600,txn1:1,txn2:2,txn3:1,drt1:0,drt2:0,drt3:0,months:[1,2,3]},
-  {name:'อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ',jan:91950,feb:0,mar:0,total:91950,txn1:3,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
-  {name:'เฟิสต์ มีเดีย แอดเวอไทซิง',jan:38000,feb:38000,mar:0,total:76000,txn1:1,txn2:1,txn3:0,drt1:0,drt2:0,drt3:0,months:[1,2]},
-  {name:'Gold Café (ปั๊มเชลล์)',jan:62593,feb:0,mar:0,total:62593,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
-  {name:'อุทยานแห่งชาติดอยอินทนนท์',jan:57300,feb:0,mar:0,total:57300,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
-  {name:'ทู ธันเดอร์ คอฟฟี่',jan:56100,feb:0,mar:0,total:56100,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
-  {name:'วีไอคิว กรุ๊ป',jan:55000,feb:0,mar:0,total:55000,txn1:1,txn2:0,txn3:0,drt1:0,drt2:0,drt3:0,months:[1]},
+  {name:'Bigtree',jan:0,feb:158550,mar:693950,apr:1347750,total:2200250,txn1:0,txn2:2,txn3:2,txn4:5,drt1:158550,drt2:693950,drt3:232450,drt4:669500,months:[2,3,4]},
+  {name:'Central Group Thailand',jan:481278,feb:484710,mar:317040,apr:401155,total:1684183,txn1:53,txn2:59,txn3:39,txn4:47,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
+  {name:'แพ็คเวิร์คส์',jan:257700,feb:140000,mar:184675,apr:265745,total:848120,txn1:17,txn2:15,txn3:17,txn4:11,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
+  {name:'เวนดิ้ง เซอร์วิสเซส',jan:116025,feb:155590,mar:135424,apr:135750,total:542789,txn1:5,txn2:8,txn3:5,txn4:4,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
+  {name:'แพชชั่น เรสเตอรองท์ กรุ๊ป',jan:116850,feb:149800,mar:58590,apr:206810,total:532050,txn1:10,txn2:19,txn3:10,txn4:17,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
+  {name:'Bwell Group (จีพีซีเอ็ม+บีเวล)',jan:150900,feb:132700,mar:68000,apr:168000,total:519600,txn1:4,txn2:4,txn3:3,txn4:4,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
+  {name:'ACE TECHNOLOGY',jan:468000,feb:0,mar:0,apr:0,total:468000,txn1:1,txn2:0,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1]},
+  {name:'สยาม แฟรนไชส์ ธุรกิจ',jan:91395,feb:29008,mar:99191,apr:208430,total:428024,txn1:4,txn2:5,txn3:10,txn4:6,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
+  {name:'บีบ์อกซ์ ปริ้นติ้ง อินเตอร์เนชั่นแนล',jan:0,feb:0,mar:365500,apr:0,total:365500,txn1:0,txn2:0,txn3:3,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[3]},
+  {name:'Shopee (รวม)',jan:95462,feb:94031,mar:94766,apr:71007,total:355266,txn1:142,txn2:155,txn3:152,txn4:112,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
+  {name:'โนส ที (ประเทศไทย)',jan:0,feb:176300,mar:0,apr:120750,total:297050,txn1:0,txn2:2,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[2,4]},
+  {name:'การไฟฟ้าฝ่ายผลิต (กฟผ.)',jan:0,feb:0,mar:0,apr:233000,total:233000,txn1:0,txn2:0,txn3:0,txn4:3,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
+  {name:'โนมิมาโช',jan:0,feb:215665,mar:0,apr:0,total:215665,txn1:0,txn2:2,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[2]},
+  {name:'นมสดพระนคร',jan:93458,feb:0,mar:0,apr:95442,total:188900,txn1:1,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,4]},
+  {name:'เจพี สปา แอนด์ เดคคอร์',jan:104730,feb:17500,mar:63400,apr:0,total:185630,txn1:4,txn2:1,txn3:2,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
+  {name:'Juice bomb',jan:89750,feb:89750,mar:0,apr:0,total:179500,txn1:1,txn2:1,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2]},
+  {name:'ทีพี โปรเจค',jan:0,feb:0,mar:142000,apr:0,total:142000,txn1:0,txn2:0,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[3]},
+  {name:'อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ',jan:91950,feb:0,mar:0,apr:43000,total:134950,txn1:3,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,4]},
+  {name:'เพ็น เค อินเตอร์เทรดดิ้ง',jan:33000,feb:66000,mar:0,apr:32588,total:131588,txn1:1,txn2:2,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,4]},
+  {name:'สวนลุม พร็อพเพอร์ตี้',jan:48240,feb:9700,mar:57340,apr:0,total:115280,txn1:1,txn2:1,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
+  {name:'บอททอมเลส 2020',jan:40916,feb:35800,mar:32000,apr:0,total:108716,txn1:2,txn2:2,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
+  {name:'เวิลด์ ฟูด เซ็นเตอร์',jan:37200,feb:34900,mar:35000,apr:0,total:107100,txn1:2,txn2:2,txn3:2,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
+  {name:'แอล แอนด์ เอช โฮเทล แมเนจเมนท์',jan:23080,feb:36520,mar:37750,apr:0,total:97350,txn1:3,txn2:3,txn3:3,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
+  {name:'แฮปปี้ ฟู้ด อินเตอร์คิทเช่น',jan:50280,feb:0,mar:44900,apr:0,total:95180,txn1:1,txn2:0,txn3:1,txn4:0,drt1:44900,drt2:0,drt3:47590,drt4:0,months:[1,3]},
+  {name:'ทรู คอฟฟี่',jan:23800,feb:39900,mar:25900,apr:0,total:89600,txn1:1,txn2:2,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
+  {name:'เฟิสต์ มีเดีย แอดเวอไทซิง',jan:38000,feb:38000,mar:0,apr:0,total:76000,txn1:1,txn2:1,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2]},
+  {name:'กระบี่การพิมพ์',jan:0,feb:0,mar:0,apr:75760,total:75760,txn1:0,txn2:0,txn3:0,txn4:3,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
+  {name:'เอสเอสพี เซ็นเตอร์แพ็ค',jan:0,feb:0,mar:0,apr:74375,total:74375,txn1:0,txn2:0,txn3:0,txn4:4,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
+  {name:'วันทูทูว์',jan:0,feb:0,mar:0,apr:71440,total:71440,txn1:0,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
+  {name:'ทรัพย์ไพศาลโปรดักส์',jan:0,feb:0,mar:0,apr:70000,total:70000,txn1:0,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
+  {name:'สังขยา',jan:0,feb:0,mar:0,apr:64800,total:64800,txn1:0,txn2:0,txn3:0,txn4:2,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
+  {name:'Gold Café (ปั๊มเชลล์)',jan:62593,feb:0,mar:0,apr:0,total:62593,txn1:1,txn2:0,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1]},
+  {name:'อุทยานแห่งชาติดอยอินทนนท์',jan:57300,feb:0,mar:0,apr:0,total:57300,txn1:1,txn2:0,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1]},
+  {name:'ทู ธันเดอร์ คอฟฟี่',jan:56100,feb:0,mar:0,apr:0,total:56100,txn1:1,txn2:0,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1]},
+  {name:'วีไอคิว กรุ๊ป',jan:55000,feb:0,mar:0,apr:0,total:55000,txn1:1,txn2:0,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1]},
 ];
 
-/* ── DRT pending → April forecast ── */
+/* ── DRT pending → May forecast (จาก เม.ย. DRT รอหักมัดจำ) ── */
 const drtPendingMar = [
-  {cust:'Bigtree',pre:193750},{cust:'คุณ ลัดดาวัลย์ ชุติมาพาณิชย์',pre:40680},
-  {cust:'Time square',pre:40460},{cust:'Bigtree',pre:38700},
-  {cust:'นางสาว อภิรัตน์ ทยานุกูล',pre:37383},{cust:'SINOUK CAFÉ GOURMET LAO',pre:33458},
-  {cust:'แฮปปี้ ฟู้ด อินเตอร์คิทเช่น',pre:31450},{cust:'เจเอ็นซีดี',pre:26000},
-  {cust:'แฟมิลี่สุกี้',pre:24900},{cust:'คุณ อารีวรรณ ไมหมาด',pre:22575},
-  {cust:'บริษัท โอเอซิส แอนด์ โค',pre:22500},{cust:'TREASURE',pre:21875},
-  {cust:'บ.ฟิกา แอนด์ โค',pre:12725},{cust:'ห้างขนมแม่ส้ม',pre:15150},
-  {cust:'คลินิกบ้านหมอฟัน',pre:2056},{cust:'อื่นๆ รวม',pre:207799},
+  {cust:'Bigtree',pre:669500},
+  {cust:'โน มอร์ สโนว์',pre:31992},
+  {cust:'อาร์แอนด์บี อินเตอร์เนชั่นแนล',pre:31780},
+  {cust:'ฟอร์เรสทีเรีย',pre:29820},
+  {cust:'แบล็คฮิลส์ บีเคเค',pre:24750},
+  {cust:'นาย กัณณพัศส์ หวังโนนสูง',pre:21105},
+  {cust:'เกรทแอนด์แกรนด์สวีทเดสทิเนชั่น',pre:21025},
+  {cust:'ร้าน Mogul Gelato',pre:19179},
+  {cust:'คุรุ คอฟฟี่ เฮาส์',pre:18900},
+  {cust:'พรีเมียม ไทย แบรนด์',pre:18500},
+  {cust:'คุณ สิปปกร ม่วงโพธิ์',pre:17500},
+  {cust:'ริชสไมล์',pre:16625},
+  {cust:'นับทอง',pre:16100},
+  {cust:'คุณ ธนาภรณ์ พงศ์สุวรรณ',pre:15514},
+  {cust:'คมปัน',pre:15050},
+  {cust:'รอยัล โปรโม',pre:14070},
+  {cust:'ชาดีออร์แกนิค',pre:13325},
+  {cust:'ร้าน Simon says',pre:12250},
+  {cust:'คุณ ชาตกานต์ ปะกังพะลัง',pre:11675},
+  {cust:'โพรเจคเฮลธ์',pre:10850},
+  {cust:'อื่นๆ',pre:40315},
 ];
 
 /* ── Document type summary ── */
@@ -3135,6 +3154,7 @@ const docTypeSummary = {
   1:{RT:1794146,IVT:1938523,DRT_done:42296,DRT_pending:923363},
   2:{RT:1377310,IVT:2362179,DRT_done:0,DRT_pending:1162722},
   3:{RT:1387051,IVT:2701001,DRT_done:0,DRT_pending:851501},
+  4:{RT:1088242,IVT:3295401,DRT_done:0,DRT_pending:1096896},
 };
 
 function buildAnalysis2026() {
@@ -3146,7 +3166,8 @@ function buildAnalysis2026() {
   const spJan   = [1434615, 1151971, 950250, 819351, 474338, 58850, 0];
   const spFeb   = [1383488, 1266227, 1050785, 1006588, 321766, 59529, 147468];
   const spMar   = [1157314, 1781232, 1202144, 1078580, 674974, 0, 167254];
-  const spTotal = spNames.map((_,i) => spJan[i]+spFeb[i]+spMar[i]);
+  const spApr   = [1497060, 1103309, 1004810, 1372514, 325739, 37800, 139308];
+  const spTotal = spNames.map((_,i) => spJan[i]+spFeb[i]+spMar[i]+spApr[i]);
   const grandTotal = spTotal.reduce((a,b)=>a+b,0);
 
   // ── FREQUENCY DATA ────────────────────────────────────────
@@ -3179,7 +3200,7 @@ function buildAnalysis2026() {
   }).join('');
 
   // ── RENDER SP TABLE ──────────────────────────────────────
-  const spRanked = spNames.map((n,i)=>({n,j:spJan[i],f:spFeb[i],m:spMar[i],t:spTotal[i]}))
+  const spRanked = spNames.map((n,i)=>({n,j:spJan[i],f:spFeb[i],m:spMar[i],a:spApr[i],t:spTotal[i]}))
     .sort((a,b)=>b.t-a.t);
   document.getElementById('a26SpTable').innerHTML = `
     <table class="data-table" style="min-width:520px">
@@ -3188,6 +3209,7 @@ function buildAnalysis2026() {
         <th style="text-align:right">ม.ค.</th>
         <th style="text-align:right">ก.พ.</th>
         <th style="text-align:right">มี.ค.</th>
+        <th style="text-align:right">เม.ย.*</th>
         <th style="text-align:right">รวม YTD</th>
         <th style="text-align:right">%</th>
       </tr></thead>
@@ -3200,6 +3222,7 @@ function buildAnalysis2026() {
             <td style="text-align:right">${s.j?'฿'+Math.round(s.j/1000)+'K':'–'}</td>
             <td style="text-align:right">${s.f?'฿'+Math.round(s.f/1000)+'K':'–'}</td>
             <td style="text-align:right">${s.m?'฿'+Math.round(s.m/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:#9b59b6">${s.a?'฿'+Math.round(s.a/1000)+'K':'–'}</td>
             <td style="text-align:right;font-weight:700;color:var(--primary)">฿${(s.t/1e6).toFixed(2)}M</td>
             <td style="text-align:right">
               <span style="background:#ebf5fb;color:#2980b9;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">${pct}%</span>
@@ -3211,12 +3234,13 @@ function buildAnalysis2026() {
           <td style="text-align:right">฿${Math.round(spJan.reduce((a,b)=>a+b,0)/1000)}K</td>
           <td style="text-align:right">฿${Math.round(spFeb.reduce((a,b)=>a+b,0)/1000)}K</td>
           <td style="text-align:right">฿${Math.round(spMar.reduce((a,b)=>a+b,0)/1000)}K</td>
+          <td style="text-align:right;color:#9b59b6">฿${Math.round(spApr.reduce((a,b)=>a+b,0)/1000)}K</td>
           <td style="text-align:right;color:var(--primary)">฿${(grandTotal/1e6).toFixed(2)}M</td>
           <td style="text-align:right">100%</td>
         </tr>
       </tbody>
     </table>
-    <div style="font-size:11px;color:var(--muted);margin-top:6px">* มี.ค. = ข้อมูลเต็มเดือน 1–31 มี.ค. 2026</div>`;
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">* มี.ค. = เต็มเดือน | เม.ย.* = ข้อมูล 1–27 เม.ย. 2026 (ยังไม่ครบเดือน)</div>`;
 
   // ── SP MONTHLY STACKED BAR CHART ─────────────────────────
   const ctx26sp = document.getElementById('a26SpChart').getContext('2d');
@@ -3228,6 +3252,7 @@ function buildAnalysis2026() {
         {label:'ม.ค.',data:spJan.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#2980b9cc',borderRadius:3},
         {label:'ก.พ.',data:spFeb.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#27ae60cc',borderRadius:3},
         {label:'มี.ค.',data:spMar.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#e67e22cc',borderRadius:3},
+        {label:'เม.ย.*',data:spApr.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#9b59b6cc',borderRadius:3},
       ]
     },
     options:{
@@ -3248,14 +3273,14 @@ function buildAnalysis2026() {
       <div style="font-size:11px;opacity:.8;margin-top:4px">pretax | 48 ออเดอร์ confirmed</div>
     </div>
     <div style="flex:1;min-width:180px;background:linear-gradient(135deg,#27ae60,#1abc9c);color:white;border-radius:12px;padding:18px 22px;text-align:center">
-      <div style="font-size:11px;opacity:.8;letter-spacing:.5px;margin-bottom:6px">🎯 FORECAST เม.ษ. (incl VAT)</div>
+      <div style="font-size:11px;opacity:.8;letter-spacing:.5px;margin-bottom:6px">🎯 FORECAST พ.ค. (incl VAT)</div>
       <div style="font-size:26px;font-weight:800">฿${(aprForecastIncVat/1e6).toFixed(2)}M</div>
-      <div style="font-size:11px;opacity:.8;margin-top:4px">confirmed minimum จาก DRT pending</div>
+      <div style="font-size:11px;opacity:.8;margin-top:4px">confirmed minimum จาก DRT pending เม.ย.</div>
     </div>
     <div style="flex:1;min-width:180px;background:#fff;border-radius:12px;padding:18px 22px;border:2px solid #e67e22;text-align:center">
-      <div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">📊 DRT/Total Ratio มี.ค.</div>
-      <div style="font-size:26px;font-weight:800;color:#e67e22">${(totalDrtPendingMar/(4939553)*100).toFixed(1)}%</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">851K / 4.94M pretax</div>
+      <div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">📊 DRT/Total Ratio เม.ย.</div>
+      <div style="font-size:26px;font-weight:800;color:#e67e22">${(totalDrtPendingMar/(5480540)*100).toFixed(1)}%</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">1,097K / 5.48M pretax</div>
     </div>
     <div style="flex:1;min-width:220px;background:#fff8e1;border-radius:12px;padding:18px 22px;border-left:4px solid #f39c12">
       <div style="font-size:12px;font-weight:700;color:#e67e22;margin-bottom:6px">💡 วิธีอ่านค่า DRT</div>
@@ -3271,12 +3296,12 @@ function buildAnalysis2026() {
   new Chart(ctx26drt,{
     type:'bar',
     data:{
-      labels:['ม.ค.','ก.พ.','มี.ค.'],
+      labels:['ม.ค.','ก.พ.','มี.ค.','เม.ย.*'],
       datasets:[
-        {label:'RT (ใบเสร็จ)',data:[docTypeSummary[1].RT,docTypeSummary[2].RT,docTypeSummary[3].RT].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#2980b9cc',borderRadius:3},
-        {label:'IVT (ใบแจ้งหนี้)',data:[docTypeSummary[1].IVT,docTypeSummary[2].IVT,docTypeSummary[3].IVT].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#27ae60cc',borderRadius:3},
-        {label:'DRT หักแล้ว',data:[docTypeSummary[1].DRT_done,docTypeSummary[2].DRT_done,docTypeSummary[3].DRT_done].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#f39c12cc',borderRadius:3},
-        {label:'DRT pending → forecast',data:[docTypeSummary[1].DRT_pending,docTypeSummary[2].DRT_pending,docTypeSummary[3].DRT_pending].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#e74c3ccc',borderRadius:3},
+        {label:'RT (ใบเสร็จ)',data:[docTypeSummary[1].RT,docTypeSummary[2].RT,docTypeSummary[3].RT,docTypeSummary[4].RT].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#2980b9cc',borderRadius:3},
+        {label:'IVT (ใบแจ้งหนี้)',data:[docTypeSummary[1].IVT,docTypeSummary[2].IVT,docTypeSummary[3].IVT,docTypeSummary[4].IVT].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#27ae60cc',borderRadius:3},
+        {label:'DRT หักแล้ว',data:[docTypeSummary[1].DRT_done,docTypeSummary[2].DRT_done,docTypeSummary[3].DRT_done,docTypeSummary[4].DRT_done].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#f39c12cc',borderRadius:3},
+        {label:'DRT pending → forecast',data:[docTypeSummary[1].DRT_pending,docTypeSummary[2].DRT_pending,docTypeSummary[3].DRT_pending,docTypeSummary[4].DRT_pending].map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#e74c3ccc',borderRadius:3},
       ]
     },
     options:{
@@ -3307,18 +3332,19 @@ function buildAnalysis2026() {
           <td style="text-align:right;color:var(--muted)">฿${Math.round(pre*1.07).toLocaleString()}</td>
         </tr>`).join('')}
         <tr style="background:#fff8e1;font-weight:800">
-          <td>รวม Forecast เม.ษ.</td>
+          <td>รวม Forecast พ.ค.</td>
           <td style="text-align:right;color:#e74c3c">฿${totalDrtPendingMar.toLocaleString()}</td>
           <td style="text-align:right;color:#e67e22">฿${aprForecastIncVat.toLocaleString()}</td>
         </tr>
       </tbody>
     </table>
-    <div style="font-size:10px;color:var(--muted);margin-top:5px">*ยังไม่รวมออเดอร์ใหม่เดือน เม.ษ.</div>`;
+    <div style="font-size:10px;color:var(--muted);margin-top:5px">*ยังไม่รวมออเดอร์ใหม่เดือน พ.ค.</div>`;
 
   // ── TOP CUSTOMERS TABLE (clickable) ──────────────────────
-  const segOf = c => c.months.length===3?'VIP':c.months.length===2?'Regular':'ใหม่';
-  const segColor = {VIP:'#8e44ad',Regular:'#27ae60','ใหม่':'#2980b9'};
-  const segIcon  = {VIP:'👑',Regular:'⭐','ใหม่':'🆕'};
+  const segOf = c => c.months.length>=4?'VIP':c.months.length>=3?'Regular':c.months.length===2?'ลูกค้าประจำ':'ใหม่';
+  const segColorMap = {VIP:'#8e44ad',Regular:'#27ae60',ลูกค้าประจำ:'#e67e22',ใหม่:'#2980b9'};
+  const segIconMap  = {VIP:'👑',Regular:'⭐',ลูกค้าประจำ:'🔄',ใหม่:'🆕'};
+
   document.getElementById('a26CustTable').innerHTML = `
     <table class="data-table" style="min-width:640px">
       <thead><tr>
@@ -3328,15 +3354,16 @@ function buildAnalysis2026() {
         <th style="text-align:right">ม.ค.</th>
         <th style="text-align:right">ก.พ.</th>
         <th style="text-align:right">มี.ค.</th>
+        <th style="text-align:right">เม.ย.*</th>
         <th style="text-align:center">กลุ่ม</th>
         <th style="text-align:center">DRT pending</th>
       </tr></thead>
       <tbody>
         ${cust2026.map((c,i)=>{
-          const seg=segOf(c); const sc=segColor[seg]; const si=segIcon[seg];
+          const seg=segOf(c); const sc=segColorMap[seg]; const si=segIconMap[seg];
           const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
-          const drtTotal=c.drt1+c.drt2+c.drt3;
-          const txnTotal=c.txn1+c.txn2+c.txn3;
+          const drtTotal=(c.drt1||0)+(c.drt2||0)+(c.drt3||0)+(c.drt4||0);
+          const txnTotal=(c.txn1||0)+(c.txn2||0)+(c.txn3||0)+(c.txn4||0);
           return `<tr onclick="showCust2026Modal(${i})" style="cursor:pointer" title="คลิกดูรายละเอียด">
             <td style="text-align:center;font-weight:800">${medal}</td>
             <td><strong>${c.name}</strong><span style="font-size:10px;color:var(--muted);margin-left:6px">${txnTotal} ออเดอร์</span></td>
@@ -3344,13 +3371,14 @@ function buildAnalysis2026() {
             <td style="text-align:right;color:${c.jan?'#2980b9':'#ccc'}">${c.jan?'฿'+Math.round(c.jan/1000)+'K':'–'}</td>
             <td style="text-align:right;color:${c.feb?'#27ae60':'#ccc'}">${c.feb?'฿'+Math.round(c.feb/1000)+'K':'–'}</td>
             <td style="text-align:right;color:${c.mar?'#e67e22':'#ccc'}">${c.mar?'฿'+Math.round(c.mar/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:${c.apr?'#9b59b6':'#ccc'}">${c.apr?'฿'+Math.round(c.apr/1000)+'K':'–'}</td>
             <td style="text-align:center"><span style="background:${sc}20;color:${sc};padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">${si} ${seg}</span></td>
             <td style="text-align:center">${drtTotal?`<span style="background:#fdecea;color:#e74c3c;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">฿${Math.round(drtTotal/1000)}K</span>`:'<span style="color:#ccc">–</span>'}</td>
           </tr>`;
         }).join('')}
       </tbody>
     </table>
-    <div style="font-size:11px;color:var(--muted);margin-top:6px">* มี.ค. = 1–31 มี.ค. | คลิกแถวเพื่อดูรายละเอียด | DRT pending = มัดจำรอส่งมอบ</div>`;
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">* มี.ค. = เต็มเดือน | เม.ย.* = 1–27 เม.ย. | คลิกแถวเพื่อดูรายละเอียด | DRT = มัดจำ (สีแดง = pending รอส่ง)</div>`;
 
   // ── FREQUENCY CHART ──────────────────────────────────────
   const ctx26fr = document.getElementById('a26FreqChart').getContext('2d');
