@@ -1241,14 +1241,14 @@
     <div class="card">
       <div class="card-header">
         <h3>📦 สต็อกตามความเคลื่อนไหว (Velocity)</h3>
-        <span class="card-subtitle">ณ 6 เม.ย. 2569 | รวม 716 SKU | มูลค่า ฿4,102,486</span>
+        <span class="card-subtitle">ณ 4 พ.ค. 2569 | รวม 736 SKU | มูลค่า ฿5,512,711 | ⚠️ Slow 74.8%</span>
       </div>
       <div class="card-body"><canvas id="invVelocityChart"></canvas></div>
     </div>
     <div class="card">
       <div class="card-header">
         <h3>🔴 Top 10 สต็อกไม่มียอดขาย (Cash Locked)</h3>
-        <span class="card-subtitle">488 รายการ | มูลค่ารวม ฿1,865,118 | ล้างได้ = ลด OD</span>
+        <span class="card-subtitle">609 รายการ | มูลค่ารวม ฿4,122,155 | ⚠️ วัตถุดิบกระดาษกอง ฿1.99M</span>
       </div>
       <div class="card-body" style="padding:0;overflow-x:auto;">
         <table class="data-table">
@@ -1653,38 +1653,38 @@ const CF_DATA = {
   },
   dso: 16.2,   // AR ยังไม่อัพเดต — ใช้ค่า 8 มี.ค. 2569
   dpo: 49.2,   // อัพเดต: AP ฿7.79M / COGS มี.ค. ฿4.75M × 30 วัน
-  dio: 47.2,   // อัพเดต: สต็อก ฿7.48M (6 เม.ย.) / COGS มี.ค. ฿4.75M × 30 วัน
+  dio: 46.3,   // อัพเดต: สต็อก ฿5.51M (4 พ.ค.) / COGS avg Jan-Apr × 30 วัน → CCC = +13.3 วัน ⚠️
   revFeb: 6061498,   // อัพเดต: รายได้ มี.ค. 2569 (actual)
   cogsFeb: 4748957,  // อัพเดต: COGS มี.ค. 2569 (actual จาก AccCloud)
-  inventoryTotal: 7477114,
-  inventoryDate: '6 เม.ย. 2569',
+  inventoryTotal: 5512711,
+  inventoryDate: '4 พ.ค. 2569',
   inventoryBreakdown: [
-    { label: '🐢 Slow-Moving (ไม่มียอดขาย 2569)', count: 488, value: 1865118, color: '#e74c3c' },
-    { label: '✅ ขายดี (มียอดขาย 2569)',           count: 228, value: 2237368, color: '#27ae60' },
+    { label: '🐢 Slow-Moving (ไม่มียอดขาย 2569)', count: 609, value: 4122155, color: '#e74c3c' },
+    { label: '✅ ขายดี (มียอดขาย 2569)',           count: 127, value: 1390556, color: '#27ae60' },
   ],
-  // อัพเดต ณ 6 เม.ย. 2569 — จำแนกจากชื่อสินค้า (รายงานมูลค่าสินค้าคงเหลือ)
+  // อัพเดต ณ 4 พ.ค. 2569 — จำแนกจากชื่อสินค้า (รายงานมูลค่าสินค้าคงเหลือ 04.05.26)
   inventoryByType: [
-      { label: 'แก้วพลาสติก',             count: 314, value: 1382799, color: '#196F3D' },
-      { label: 'แก้วกระดาษ / Bio',        count: 115, value:  846988, color: '#784212' },
-      { label: 'วัตถุดิบกระดาษ',          count: 109, value:  744043, color: '#B7950B' },
-      { label: 'ถ้วย (Bowl)',              count:  39, value:  303916, color: '#6C3483' },
-      { label: 'วัตถุดิบ/อื่นๆ',          count:  16, value:  276795, color: '#1F618D' },
-      { label: 'กล่อง/ถุง/บรรจุภัณฑ์',   count:  37, value:  200404, color: '#0E6655' },
-      { label: 'ฝาแก้ว',                  count:  51, value:  169586, color: '#1A5276' },
-      { label: 'หลอด/ช้อน/อุปกรณ์',      count:  24, value:   94002, color: '#922B21' },
-      { label: 'สิ่งพิมพ์/เครื่องเขียน', count:  11, value:   83952, color: '#117A65' },
+      { label: 'วัตถุดิบกระดาษ',          count:  38, value: 1988146, color: '#B7950B' },
+      { label: 'แก้วพลาสติก',             count: 328, value: 1412448, color: '#196F3D' },
+      { label: 'แก้วกระดาษ / Bio',        count: 122, value: 1087104, color: '#784212' },
+      { label: 'ฝาแก้ว',                  count:  91, value:  316403, color: '#1A5276' },
+      { label: 'ถ้วย (Bowl)',              count:  49, value:  264411, color: '#6C3483' },
+      { label: 'กล่อง/ถุง/บรรจุภัณฑ์',   count:  46, value:  201055, color: '#0E6655' },
+      { label: 'วัตถุดิบ/อื่นๆ',          count:  31, value:  168406, color: '#1F618D' },
+      { label: 'หลอด/ช้อน/อุปกรณ์',      count:  28, value:   66159, color: '#922B21' },
+      { label: 'สิ่งพิมพ์/เครื่องเขียน', count:   3, value:    8579, color: '#117A65' },
     ],
   noSalesTop: [
-      { name: 'MOLYVAL-FOODPRO SERVE #68 (ถัง 20ลิตร) 20,000ml.', value: 236500 },
-      { name: 'กระดาษเคลือบ PE 2ด้าน (C2PE/G13M15) 240g ตัด 750*595mm.', value: 77610 },
-      { name: 'ถาดรังไข่ 2 หลุม 110*220mm. (600ชิ้น/ลัง)', value: 51480 },
-      { name: 'ม้วนกระดาษเคลือบ PE 2ด้าน (C2PE/G13M15) 240g ตัด 77mm.', value: 37629 },
-      { name: 'กล่องกระดาษลูกฟูก W359*L457*H592mm. (KI150/CA150/KI150)', value: 34639 },
-      { name: 'กระดาษเคลือบ PE 1ด้าน (C1PE/M18) 240g ตัด 750*595mm.', value: 32706 },
-      { name: 'แก้วกระดาษ DW16oz. คราฟท์ ไม่พิมพ์ลาย (500ชิ้น/ลัง)', value: 29900 },
-      { name: 'แก้วพลาสติก PP 22oz.TN90 สีขาว (ขัดทราย) โลโก้เซ็นได', value: 29700 },
-      { name: 'ช้อนไม้หัวตัด 9.5ซม. (100ชิ้น/แพ็ค)', value: 24549 },
-      { name: 'แก้วพลาสติก PP 16oz.K90 สีเงิน ไม่พิมพ์ลาย (500ใบ/ลัง)', value: 23920 },
+      { name: 'กระดาษเคลือบ PE 2ด้าน (C2PE/G13M15) หนา240แกรม ตัดขนาด 750*595mm.', value: 684450 },
+      { name: 'กระดาษเคลือบ PE 2ด้าน (C2PE/G13M15) หนา240แกรม ตัดขนาด 742*490mm.', value: 572715 },
+      { name: 'กระดาษเคลือบ PE 2ด้าน (C2PE/G13M15) หนา210แกรม ตัดขนาด 750*595mm.', value: 361440 },
+      { name: 'แก้วพลาสติก PET CS16oz.F98 พิมพ์ 1สี โลโก้ PINO LATTE (1,000ชิ้น/ลัง)', value: 74500 },
+      { name: 'กระดาษเคลือบ PE 1ด้าน (C1PE/M18) หนา240แกรม ตัดขนาด 750*595mm.', value: 72819 },
+      { name: 'แก้วกระดาษ SW 6.5oz. 210แกรม โลโก้ Grande Centre Point สีทอง (200ชิ้น/ลัง)', value: 65320 },
+      { name: 'แก้วกระดาษ SW 16oz.C2 พิมพ์ 4สี โลโก้ กาฝาก ver.03/2026 (1,000ชิ้น/ลัง)', value: 46560 },
+      { name: 'แก้วกระดาษ DW 16oz.U90 สีขาว ไม่พิมพ์ลาย (500ชิ้น/ลัง)', value: 41580 },
+      { name: 'กระดาษเคลือบ PE1ด้าน (HB/M18) หนา210แกรม ตัดขนาด 636*620mm.-AP', value: 41089 },
+      { name: 'ม้วนกระดาษเคลือบ PE 2ด้าน (C2PE/G13M15) หนา240แกรม ตัดขนาด 77mm.', value: 40071 },
     ],
   od: { balance: 8000000, rate: 0.07, monthlyInterest: 46667, netProfitMonthly: 157076 },
 };
@@ -2335,7 +2335,7 @@ function buildCashFlowTab() {
     { label:'CCC — Cash Conversion Cycle', value:ccc.toFixed(1)+' วัน',
       sub:cccIcon+' '+cccSub, color:cccColor, icon:'⚡' },
     { label:'สต็อกสินค้า (DIO — Days Inventory Outstanding)', value:'฿'+fmt(Math.round(d.inventoryTotal)),
-      sub:'DIO '+d.dio+' วัน | '+d.inventoryDate+' | ⚠️ 68% Slow-Moving', color:'red', icon:'📦' },
+      sub:'DIO '+d.dio+' วัน | '+d.inventoryDate+' | ⚠️ 74.8% Slow-Moving', color:'red', icon:'📦' },
   ];
   document.getElementById('cfKpiRow').innerHTML = kpis.map(k=>`
     <div class="kpi-card ${k.color}">
