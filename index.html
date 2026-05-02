@@ -541,14 +541,14 @@
   <div class="kpi-row" style="margin-top:24px;">
     <div class="kpi-card" style="border-left:4px solid #8e44ad;">
       <div class="kpi-label">ยอดรวม Central Group (รวม VAT)</div>
-      <div class="kpi-value" style="color:#8e44ad;">16.5M</div>
-      <div class="kpi-sub">฿16,485,346 | ทุกปี 2023–2026 YTD</div>
+      <div class="kpi-value" style="color:#8e44ad;">17.6M</div>
+      <div class="kpi-sub">฿17,552,251 | ทุกปี 2023–2026 (เม.ย.)</div>
       <div class="kpi-icon">🏬</div>
     </div>
     <div class="kpi-card" style="border-left:4px solid #2980b9;">
       <div class="kpi-label">ยอดก่อน VAT (รวมทุกปี)</div>
-      <div class="kpi-value" style="color:#2980b9;">15.4M</div>
-      <div class="kpi-sub">฿15,406,619 | VAT: ฿1,078,908</div>
+      <div class="kpi-value" style="color:#2980b9;">16.4M</div>
+      <div class="kpi-sub">฿16,403,975 | VAT: ฿1,148,706</div>
       <div class="kpi-icon">📋</div>
     </div>
     <div class="kpi-card" style="border-left:4px solid #e74c3c;">
@@ -558,9 +558,9 @@
       <div class="kpi-icon">📉</div>
     </div>
     <div class="kpi-card" style="border-left:4px solid #e67e22;">
-      <div class="kpi-label">2026 YTD (ม.ค.–มี.ค.)</div>
-      <div class="kpi-value" style="color:#e67e22;">1.5M</div>
-      <div class="kpi-sub">฿1,543,034 | ม.ค.–มี.ค. (incl VAT)</div>
+      <div class="kpi-label">2026 YTD (ม.ค.–เม.ย.)</div>
+      <div class="kpi-value" style="color:#e67e22;">2.1M</div>
+      <div class="kpi-sub">฿2,100,512 | ม.ค.–เม.ย. (incl VAT)</div>
       <div class="kpi-icon">🟢</div>
     </div>
   </div>
@@ -1539,7 +1539,7 @@ const topCustomers = {
     {name: 'บ. สกายเรสเตอรองท์', val: 548277, seg: 'บริษัท'},
   ],
   2025: [
-    {name: 'Central Group Thailand (รวมทุกบริษัท)', val: 5078506, seg: 'Central Group'},
+    {name: 'Central Group Thailand (รวมทุกบริษัท)', val: 5078506, seg: 'Central Group'},  // 2025
     {name: 'บ. Bigtree', val: 4097993, seg: 'บริษัท'},
     {name: 'บ. แพ็คเวิร์คส์', val: 4030593, seg: 'บริษัท'},
     {name: 'ACE TECHNOLOGY CO.,LTD.', val: 1404000, seg: 'บริษัท'},
@@ -2237,11 +2237,11 @@ buildActualForecastTable();
 
 // ==================== CENTRAL GROUP TAB ====================
 const centralAnnual = {
-  pretax: [4461117, 5233494, 4746268, 1442088],
-  vat:    [312278,  366345,  332666,  100946],
-  total:  [4773395, 5599838, 5078506, 1543034],
+  pretax: [4461117, 5233494, 4746268, 1963096],
+  vat:    [312278,  366345,  332666,  137417],
+  total:  [4773395, 5599838, 5078506, 2100512],
 };
-const centralLabels = ['2023', '2024', '2025', '2026 (ม.ค.–มี.ค.)'];
+const centralLabels = ['2023', '2024', '2025', '2026 (ม.ค.–เม.ย.)'];
 charts.centralAnnual = new Chart(document.getElementById('centralAnnualChart'), {
   type: 'bar',
   data: {
@@ -2265,14 +2265,14 @@ charts.centralAnnual = new Chart(document.getElementById('centralAnnualChart'), 
 });
 
 const centralSubgroups = [
-  { name: 'เซ็นทรัลพัฒนา สาขา',           total: 10491112, pretax: 9804778, vat: 686628 },
-  { name: 'ซีพีเอ็น (CPN) กรุ๊ป',          total:  2563443, pretax: 2395741, vat: 167836 },
-  { name: 'Central Food',                    total:  1073189, pretax: 1002980, vat:  70209 },
-  { name: 'เซ็นทรัล พระราม',               total:   757715, pretax:  708145, vat:  49570 },
-  { name: 'Central Group อื่นๆ',            total:   720877, pretax:  673717, vat:  47160 },
-  { name: 'เซ็นทรัล เวิลด์',               total:   603801, pretax:  564300, vat:  39501 },
-  { name: 'เซ็นทรัลพัฒนา (มหาชน) สนง.ใหญ่', total: 224844, pretax:  210135, vat:  14709 },
-  { name: 'เซ็นทรัล บางนา',                total:    50365, pretax:   47070, vat:   3295 },
+  { name: 'เซ็นทรัลพัฒนา สาขา',             total: 10606736, pretax:  9912838, vat: 694192 },
+  { name: 'ซีพีเอ็น (CPN) กรุ๊ป',            total:  2598173, pretax:  2428199, vat: 170108 },
+  { name: 'Central Food',                      total:  1091679, pretax:  1020260, vat:  71419 },
+  { name: 'เซ็นทรัล พระราม',                 total:   768827, pretax:   718530, vat:  50297 },
+  { name: 'Central Group อื่นๆ',              total:   720877, pretax:   673717, vat:  47160 },
+  { name: 'เซ็นทรัล เวิลด์',                 total:   646408, pretax:   604120, vat:  42288 },
+  { name: 'เซ็นทรัลพัฒนา (มหาชน) สนง.ใหญ่', total:   559759, pretax:   523140, vat:  36619 },
+  { name: 'เซ็นทรัล บางนา',                  total:    50365, pretax:    47070, vat:   3295 },
 ];
 const grandCentral = centralSubgroups.reduce((a,s)=>a+s.total, 0);
 const donutColors = ['#8e44ad','#2980b9','#27ae60','#e67e22','#e74c3c','#1abc9c','#f39c12','#34495e'];
@@ -2888,7 +2888,7 @@ const SALES_DATA = {
   ],
   retention: { r2324:596, r2425:272, r2526:119, y3:133, y4:41 },
   topCustomers: [
-    { name:"Central Group Thailand (รวมทุกบริษัท)", total:6753349, years:"2023,2024,2025,2026", ly:4 },
+    { name:"Central Group Thailand (รวมทุกบริษัท)", total:6870781, years:"2023,2024,2025,2026", ly:4 },
     { name:"บ. แพ็คเวิร์คส์ จำกัด",           total:2914803, years:"2023,2024,2025,2026", ly:4 },
     { name:"บ. โนส ที (ประเทศไทย) จำกัด",      total:2748910, years:"2023,2024,2025",      ly:3 },
     { name:"บ. เวนดิ้ง เซอร์วิสเซส จำกัด",     total:2531407, years:"2023,2024,2025,2026", ly:4 },
