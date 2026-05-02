@@ -228,7 +228,7 @@
   <div class="header-right">
     <a href="finance_dashboard.html" class="nav-link">💰 Finance Dashboard →</a>
     <div>
-      <strong>ข้อมูล: ม.ค. 2023 – เม.ย. 2026</strong>
+      <strong>ข้อมูล: ม.ค. 2023 – เม.ย. 2026 (เต็มเดือน)</strong>
       <span>อัปเดต: 27 เมษายน 2026 | 🟢 2026 Actual: ม.ค.–มี.ค. ครบเดือน | เม.ย.(1-27) บางส่วน</span>
     </div>
   </div>
@@ -1050,7 +1050,7 @@
 <div class="tab-content" id="tab-progress2026">
   <div style="margin: 24px 0 16px; display:flex; align-items:center; gap:12px;">
     <h2 style="font-size:18px;">🟢 2026 Progress – Actual vs Forecast</h2>
-    <span class="badge badge-green" style="font-size:12px; padding:5px 14px;">อัพเดต: 27 เม.ย. 2026 | ม.ค.–มี.ค. ครบเดือน | เม.ย. ข้อมูล 1–27 เม.ย.</span>
+    <span class="badge badge-green" style="font-size:12px; padding:5px 14px;">อัพเดต: 30 เม.ย. 2026 | ม.ค.–เม.ย. ครบ 4 เดือน ✅</span>
   </div>
 
   <!-- KPI CARDS — updated with Scenario A/B -->
@@ -1076,7 +1076,7 @@
     <div class="kpi-card red">
       <div class="kpi-label">เป้าที่ต้องทำอีก (เม.ย.–ธ.ค. 2026)</div>
       <div class="kpi-value">46.4M</div>
-      <div class="kpi-sub">ScA: ฿62.6M – YTD incl เม.ย.1-27 ฿21.67M = ฿40.98M | เม.ย. ✅ 105.5% ของ ScA (฿5.19M)</div>
+      <div class="kpi-sub">ScA: ฿62.6M – YTD incl เม.ย. ฿23.07M = ฿39.58M | เม.ย. 🎉 132.5% ของ ScA (฿5.19M)</div>
       <div class="kpi-icon">🎯</div>
     </div>
   </div>
@@ -1319,7 +1319,7 @@
   <div style="background:linear-gradient(135deg,#e67e22,#f39c12);color:white;border-radius:12px;padding:16px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
     <div style="font-size:32px;">🔍</div>
     <div>
-      <div style="font-size:16px;font-weight:800;">วิเคราะห์เชิงลึก ม.ค.–เม.ย. 2026 (1-27 เม.ย.)</div>
+      <div style="font-size:16px;font-weight:800;">วิเคราะห์เชิงลึก ม.ค.–เม.ย. 2026 (เต็มเดือน)</div>
       <div style="font-size:12px;opacity:0.9;margin-top:3px;">ข้อมูลจาก 1,606 รายการ | ลูกค้า 576 ราย | รวม DRT+RT+IVT (pretax)</div>
     </div>
   </div>
@@ -1992,10 +1992,10 @@ const actual2026 = {
   1: 4889375,
   2: 5235852,
   3: 6061498,  // มี.ค. 2026 เต็มเดือน (1–31 มี.ค.)
-  4: 5480540,  // เม.ย. 2026 ข้อมูล 1–27 เม.ย. ก่อน VAT (Sale Report_27APR)
+  4: 6881875,  // เม.ย. 2026 เต็มเดือน ก่อน VAT (Sale Report_30APR)
 };
 const months2026HasData = [1, 2, 3, 4];
-const partial2026 = { 4: '1–27 เม.ย.' };
+const partial2026 = {};  // เม.ย. เต็มเดือนแล้ว
 
 // ==================== FORECAST TAB ====================
 let forecastViewMode = 'monthly';
@@ -2155,7 +2155,7 @@ const sp2026Names = ['ธีรตา', 'ปุณณภา', 'ธชนัย',
 const sp2026Jan  = [1434615, 1151971, 950250, 819351, 474338, 58850, 0];
 const sp2026Feb  = [1383488, 1266227, 1050785, 1006588, 321766, 59529, 147468];
 const sp2026Mar  = [1157314, 1781232, 1202144, 1078580, 674974, 0, 167254]; // มี.ค. 2026 เต็มเดือน (1–31 มี.ค.)
-const sp2026Apr  = [1497060, 1103309, 1004810, 1372514, 325739, 37800, 139308];  // เม.ย. 2026 ก่อน VAT ข้อมูล 1–27 เม.ย. (Sale Report_27APR)
+const sp2026Apr  = [1604917, 1255469, 1282389, 2081539, 464847, 64050, 130323];  // เม.ย. 2026 ก่อน VAT เต็มเดือน (Sale Report_30APR)
 
 charts.sp2026 = new Chart(document.getElementById('sp2026Chart'), {
   type: 'bar',
@@ -2165,7 +2165,7 @@ charts.sp2026 = new Chart(document.getElementById('sp2026Chart'), {
       { label: 'ม.ค. 2026', data: sp2026Jan.map(v=>v/1e6), backgroundColor: '#2980b9aa', borderRadius: 4 },
       { label: 'ก.พ. 2026', data: sp2026Feb.map(v=>v/1e6), backgroundColor: '#27ae60aa', borderRadius: 4 },
       { label: 'มี.ค. 2026 (เต็มเดือน)', data: sp2026Mar.map(v=>v/1e6), backgroundColor: '#e67e22aa', borderRadius: 4 },
-      { label: 'เม.ย. 2026 (1–27 เม.ย.)', data: sp2026Apr.map(v=>v/1e6), backgroundColor: '#9b59b6aa', borderRadius: 4 },
+      { label: 'เม.ย. 2026 (เต็มเดือน)', data: sp2026Apr.map(v=>v/1e6), backgroundColor: '#9b59b6aa', borderRadius: 4 },
     ]
   },
   options: {
@@ -3087,24 +3087,24 @@ let analysis2026Built = false;
 
 /* ── Embedded customer data (Jan/Feb/Mar pretax, DRT amounts) — sorted by total ── */
 const cust2026 = [
-  {name:'Bigtree',jan:0,feb:158550,mar:693950,apr:1347750,total:2200250,txn1:0,txn2:2,txn3:2,txn4:5,drt1:158550,drt2:693950,drt3:232450,drt4:669500,months:[2,3,4]},
-  {name:'Central Group Thailand',jan:481278,feb:484710,mar:317040,apr:401155,total:1684183,txn1:53,txn2:59,txn3:39,txn4:47,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
-  {name:'แพ็คเวิร์คส์',jan:257700,feb:140000,mar:184675,apr:265745,total:848120,txn1:17,txn2:15,txn3:17,txn4:11,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
-  {name:'เวนดิ้ง เซอร์วิสเซส',jan:116025,feb:155590,mar:135424,apr:135750,total:542789,txn1:5,txn2:8,txn3:5,txn4:4,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
+  {name:'Bigtree',jan:0,feb:158550,mar:693950,apr:2045250,total:2897750,txn1:0,txn2:2,txn3:2,txn4:6,drt1:158550,drt2:693950,drt3:232450,drt4:822000,months:[2,3,4]},
+  {name:'Central Group Thailand',jan:481278,feb:484710,mar:317040,apr:488550,total:1771578,txn1:53,txn2:59,txn3:39,txn4:57,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
+  {name:'แพ็คเวิร์คส์',jan:257700,feb:140000,mar:184675,apr:276495,total:858870,txn1:17,txn2:15,txn3:17,txn4:12,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
+  {name:'เวนดิ้ง เซอร์วิสเซส',jan:116025,feb:155590,mar:135424,apr:135750,total:542789,txn1:5,txn2:8,txn3:5,txn4:5,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
   {name:'แพชชั่น เรสเตอรองท์ กรุ๊ป',jan:116850,feb:149800,mar:58590,apr:206810,total:532050,txn1:10,txn2:19,txn3:10,txn4:17,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
   {name:'Bwell Group (จีพีซีเอ็ม+บีเวล)',jan:150900,feb:132700,mar:68000,apr:168000,total:519600,txn1:4,txn2:4,txn3:3,txn4:4,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
   {name:'ACE TECHNOLOGY',jan:468000,feb:0,mar:0,apr:0,total:468000,txn1:1,txn2:0,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1]},
   {name:'สยาม แฟรนไชส์ ธุรกิจ',jan:91395,feb:29008,mar:99191,apr:208430,total:428024,txn1:4,txn2:5,txn3:10,txn4:6,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
   {name:'บีบ์อกซ์ ปริ้นติ้ง อินเตอร์เนชั่นแนล',jan:0,feb:0,mar:365500,apr:0,total:365500,txn1:0,txn2:0,txn3:3,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[3]},
-  {name:'Shopee (รวม)',jan:95462,feb:94031,mar:94766,apr:71007,total:355266,txn1:142,txn2:155,txn3:152,txn4:112,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
-  {name:'โนส ที (ประเทศไทย)',jan:0,feb:176300,mar:0,apr:120750,total:297050,txn1:0,txn2:2,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[2,4]},
+  {name:'Shopee (รวม)',jan:95462,feb:94031,mar:94766,apr:86354,total:370613,txn1:142,txn2:155,txn3:152,txn4:138,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
+  {name:'โนส ที (ประเทศไทย)',jan:0,feb:176300,mar:0,apr:249750,total:426050,txn1:0,txn2:2,txn3:0,txn4:2,drt1:0,drt2:0,drt3:0,drt4:0,months:[2,4]},
   {name:'การไฟฟ้าฝ่ายผลิต (กฟผ.)',jan:0,feb:0,mar:0,apr:233000,total:233000,txn1:0,txn2:0,txn3:0,txn4:3,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
   {name:'โนมิมาโช',jan:0,feb:215665,mar:0,apr:0,total:215665,txn1:0,txn2:2,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[2]},
-  {name:'นมสดพระนคร',jan:93458,feb:0,mar:0,apr:95442,total:188900,txn1:1,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,4]},
+  {name:'นมสดพระนคร',jan:93458,feb:0,mar:0,apr:95442,total:188900,txn1:1,txn2:0,txn3:0,txn4:2,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,4]},
   {name:'เจพี สปา แอนด์ เดคคอร์',jan:104730,feb:17500,mar:63400,apr:0,total:185630,txn1:4,txn2:1,txn3:2,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
   {name:'Juice bomb',jan:89750,feb:89750,mar:0,apr:0,total:179500,txn1:1,txn2:1,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2]},
   {name:'ทีพี โปรเจค',jan:0,feb:0,mar:142000,apr:0,total:142000,txn1:0,txn2:0,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[3]},
-  {name:'อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ',jan:91950,feb:0,mar:0,apr:43000,total:134950,txn1:3,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,4]},
+  {name:'อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ',jan:91950,feb:0,mar:0,apr:61300,total:153250,txn1:3,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,4]},
   {name:'เพ็น เค อินเตอร์เทรดดิ้ง',jan:33000,feb:66000,mar:0,apr:32588,total:131588,txn1:1,txn2:2,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,4]},
   {name:'สวนลุม พร็อพเพอร์ตี้',jan:48240,feb:9700,mar:57340,apr:0,total:115280,txn1:1,txn2:1,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
   {name:'บอททอมเลส 2020',jan:40916,feb:35800,mar:32000,apr:0,total:108716,txn1:2,txn2:2,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
@@ -3114,7 +3114,7 @@ const cust2026 = [
   {name:'ทรู คอฟฟี่',jan:23800,feb:39900,mar:25900,apr:0,total:89600,txn1:1,txn2:2,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
   {name:'เฟิสต์ มีเดีย แอดเวอไทซิง',jan:38000,feb:38000,mar:0,apr:0,total:76000,txn1:1,txn2:1,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2]},
   {name:'กระบี่การพิมพ์',jan:0,feb:0,mar:0,apr:75760,total:75760,txn1:0,txn2:0,txn3:0,txn4:3,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
-  {name:'เอสเอสพี เซ็นเตอร์แพ็ค',jan:0,feb:0,mar:0,apr:74375,total:74375,txn1:0,txn2:0,txn3:0,txn4:4,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
+  {name:'เอสเอสพี เซ็นเตอร์แพ็ค',jan:0,feb:0,mar:0,apr:73100,total:73100,txn1:0,txn2:0,txn3:0,txn4:4,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
   {name:'วันทูทูว์',jan:0,feb:0,mar:0,apr:71440,total:71440,txn1:0,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
   {name:'ทรัพย์ไพศาลโปรดักส์',jan:0,feb:0,mar:0,apr:70000,total:70000,txn1:0,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
   {name:'สังขยา',jan:0,feb:0,mar:0,apr:64800,total:64800,txn1:0,txn2:0,txn3:0,txn4:2,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
@@ -3126,27 +3126,22 @@ const cust2026 = [
 
 /* ── DRT pending → May forecast (จาก เม.ย. DRT รอหักมัดจำ) ── */
 const drtPendingMar = [
-  {cust:'Bigtree',pre:669500},
+  {cust:'Bigtree',pre:822000},
+  {cust:'ร้าน วอเตอร์เวิร์ค คอฟฟี่',pre:52040},
   {cust:'โน มอร์ สโนว์',pre:31992},
   {cust:'อาร์แอนด์บี อินเตอร์เนชั่นแนล',pre:31780},
   {cust:'ฟอร์เรสทีเรีย',pre:29820},
+  {cust:'ธนาธร ช๊อป นนทบุรี',pre:26250},
   {cust:'แบล็คฮิลส์ บีเคเค',pre:24750},
+  {cust:'ชาดีออร์แกนิค',pre:23575},
   {cust:'นาย กัณณพัศส์ หวังโนนสูง',pre:21105},
   {cust:'เกรทแอนด์แกรนด์สวีทเดสทิเนชั่น',pre:21025},
   {cust:'ร้าน Mogul Gelato',pre:19179},
   {cust:'คุรุ คอฟฟี่ เฮาส์',pre:18900},
   {cust:'พรีเมียม ไทย แบรนด์',pre:18500},
-  {cust:'คุณ สิปปกร ม่วงโพธิ์',pre:17500},
-  {cust:'ริชสไมล์',pre:16625},
+  {cust:'ช้อนทอง',pre:16750},
   {cust:'นับทอง',pre:16100},
-  {cust:'คุณ ธนาภรณ์ พงศ์สุวรรณ',pre:15514},
-  {cust:'คมปัน',pre:15050},
-  {cust:'รอยัล โปรโม',pre:14070},
-  {cust:'ชาดีออร์แกนิค',pre:13325},
-  {cust:'ร้าน Simon says',pre:12250},
-  {cust:'คุณ ชาตกานต์ ปะกังพะลัง',pre:11675},
-  {cust:'โพรเจคเฮลธ์',pre:10850},
-  {cust:'อื่นๆ',pre:40315},
+  {cust:'อื่นๆ',pre:188040},
 ];
 
 /* ── Document type summary ── */
@@ -3154,7 +3149,7 @@ const docTypeSummary = {
   1:{RT:1794146,IVT:1938523,DRT_done:42296,DRT_pending:923363},
   2:{RT:1377310,IVT:2362179,DRT_done:0,DRT_pending:1162722},
   3:{RT:1387051,IVT:2701001,DRT_done:0,DRT_pending:851501},
-  4:{RT:1088242,IVT:3295401,DRT_done:0,DRT_pending:1096896},
+  4:{RT:1300951,IVT:3613981,DRT_done:606795,DRT_pending:1361806},
 };
 
 function buildAnalysis2026() {
@@ -3166,7 +3161,7 @@ function buildAnalysis2026() {
   const spJan   = [1434615, 1151971, 950250, 819351, 474338, 58850, 0];
   const spFeb   = [1383488, 1266227, 1050785, 1006588, 321766, 59529, 147468];
   const spMar   = [1157314, 1781232, 1202144, 1078580, 674974, 0, 167254];
-  const spApr   = [1497060, 1103309, 1004810, 1372514, 325739, 37800, 139308];
+  const spApr   = [1604917, 1255469, 1282389, 2081539, 464847, 64050, 130323];
   const spTotal = spNames.map((_,i) => spJan[i]+spFeb[i]+spMar[i]+spApr[i]);
   const grandTotal = spTotal.reduce((a,b)=>a+b,0);
 
@@ -3240,7 +3235,7 @@ function buildAnalysis2026() {
         </tr>
       </tbody>
     </table>
-    <div style="font-size:11px;color:var(--muted);margin-top:6px">* มี.ค. = เต็มเดือน | เม.ย.* = ข้อมูล 1–27 เม.ย. 2026 (ยังไม่ครบเดือน)</div>`;
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">✅ มี.ค. และ เม.ย. = เต็มเดือน | ข้อมูล Sale Report_30APR</div>`;
 
   // ── SP MONTHLY STACKED BAR CHART ─────────────────────────
   const ctx26sp = document.getElementById('a26SpChart').getContext('2d');
@@ -3252,7 +3247,7 @@ function buildAnalysis2026() {
         {label:'ม.ค.',data:spJan.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#2980b9cc',borderRadius:3},
         {label:'ก.พ.',data:spFeb.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#27ae60cc',borderRadius:3},
         {label:'มี.ค.',data:spMar.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#e67e22cc',borderRadius:3},
-        {label:'เม.ย.*',data:spApr.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#9b59b6cc',borderRadius:3},
+        {label:'เม.ย. (เต็มเดือน)',data:spApr.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#9b59b6cc',borderRadius:3},
       ]
     },
     options:{
@@ -3279,8 +3274,8 @@ function buildAnalysis2026() {
     </div>
     <div style="flex:1;min-width:180px;background:#fff;border-radius:12px;padding:18px 22px;border:2px solid #e67e22;text-align:center">
       <div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">📊 DRT/Total Ratio เม.ย.</div>
-      <div style="font-size:26px;font-weight:800;color:#e67e22">${(totalDrtPendingMar/(5480540)*100).toFixed(1)}%</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">1,097K / 5.48M pretax</div>
+      <div style="font-size:26px;font-weight:800;color:#e67e22">${(totalDrtPendingMar/(6881875)*100).toFixed(1)}%</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">1,362K / 6.88M pretax</div>
     </div>
     <div style="flex:1;min-width:220px;background:#fff8e1;border-radius:12px;padding:18px 22px;border-left:4px solid #f39c12">
       <div style="font-size:12px;font-weight:700;color:#e67e22;margin-bottom:6px">💡 วิธีอ่านค่า DRT</div>
@@ -3378,7 +3373,7 @@ function buildAnalysis2026() {
         }).join('')}
       </tbody>
     </table>
-    <div style="font-size:11px;color:var(--muted);margin-top:6px">* มี.ค. = เต็มเดือน | เม.ย.* = 1–27 เม.ย. | คลิกแถวเพื่อดูรายละเอียด | DRT = มัดจำ (สีแดง = pending รอส่ง)</div>`;
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">✅ มี.ค. และ เม.ย. = เต็มเดือน | คลิกแถวเพื่อดูรายละเอียด | DRT = มัดจำ (สีแดง = pending รอส่ง)</div>`;
 
   // ── FREQUENCY CHART ──────────────────────────────────────
   const ctx26fr = document.getElementById('a26FreqChart').getContext('2d');
@@ -3594,7 +3589,7 @@ function showSP2026Modal(idx) {
   const spJ = [1434615,1151971,950250,819351,474338,58850,0];
   const spF = [1383488,1266227,1050785,1006588,321766,59529,147468];
   const spM = [1157314,1781232,1202144,1078580,674974,0,167254];
-  const spA = [1497060,1103309,1004810,1372514,325739,37800,139308]; // เม.ย. 1–27 เม.ย. ก่อน VAT
+  const spA = [1604917,1255469,1282389,2081539,464847,64050,130323]; // เม.ย. เต็มเดือน ก่อน VAT
   const colors=['#2980b9','#27ae60','#8e44ad','#e67e22','#e74c3c','#16a085','#f39c12'];
   const n=spN[idx]; const j=spJ[idx]; const f=spF[idx]; const m=spM[idx]; const a=spA[idx];
   const tot=j+f+m+a;
@@ -3653,7 +3648,7 @@ function showSP2026Modal(idx) {
             ${a?`<span style="color:white;font-size:11px;font-weight:700">฿${(a/1e6).toFixed(2)}M</span>`:''}
           </div></div>
       </div>
-      <div style="font-size:10px;color:var(--muted);margin-top:4px">* เม.ย. = ข้อมูล 1–27 เม.ย. 2026 (ยังไม่ครบเดือน)</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">✅ เม.ย. = เต็มเดือน 1–30 เม.ย. 2026</div>
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px">
