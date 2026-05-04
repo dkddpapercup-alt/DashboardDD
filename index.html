@@ -315,7 +315,7 @@
   <!-- Top Churned Table -->
   <div class="card">
     <div class="card-header">
-      <h3>📋 ลูกค้า 3 ปีต่อเนื่อง (2023–2025) ที่ยังไม่ซื้อ 2026 — Win-back ด่วน!</h3>
+      <h3>📋 ลูกค้า 3 ปีต่อเนื่อง (2023–2025) ที่ยังไม่ซื้อ 2026 — Win-back ด่วน! <span style="font-size:12px;color:#27ae60;font-weight:400">✅ 4 รายกลับมาแล้วในเม.ย.</span></h3>
       <span class="card-subtitle" style="color:#e74c3c;">เรียงตาม 3-year cumulative | ยอดที่แสดงคือยอดปี 2025</span>
     </div>
     <div class="card-body" style="padding:0;">
@@ -2814,27 +2814,31 @@ charts.concentration = new Chart(document.getElementById('concentrationChart'), 
 
 // Build churn table — 2026: ลูกค้า 3 ปีต่อเนื่อง (2023–2025) ที่ยังไม่ซื้อ 2026
 (function buildChurnTable() {
+  // อัพเดต ณ เม.ย. 2569 — นำออก 4 รายที่กลับมาแล้วในเม.ย.:
+  // ✅ การไฟฟ้าฝ่ายผลิต (฿233K), เอสเอสพี (฿73K), อัลไพน์ (฿61K), โนส ที (฿250K)
   const churned = [
     {name:'ACE TECHNOLOGY CO.,LTD.',              val25:1373383, val3yr:3605383},
     {name:'บ. ทีพี โปรเจค',                       val25:467500,  val3yr:938520},
-    {name:'บ. เอสเอสพี เซ็นเตอร์แพ็ค',            val25:397750,  val3yr:1182876},
-    {name:'การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย',        val25:364090,  val3yr:1628260},
+    {name:'บ. ดอยช้าง แฟรนไชส์ แมเนจเม้นต์',     val25:420500,  val3yr:622750},
     {name:'BARTELS Co., Ltd.',                     val25:224542,  val3yr:1175037},
     {name:'บ. ชีสอีทเทอรี่',                      val25:282000,  val3yr:960950},
     {name:'บ. กอล์ฟเขาใหญ่',                      val25:275600,  val3yr:633000},
+    {name:'บ. สกายเรสเตอรองท์',                   val25:311442,  val3yr:540600},
     {name:'บ. มิตรสัมพันธ์การพิมพ์',              val25:233470,  val3yr:865429},
     {name:'บ. เวคอัพ (ประเทศไทย)',                 val25:154780,  val3yr:888320},
-    {name:'บ. ดอยช้าง แฟรนไชส์ แมเนจเม้นต์',     val25:420500,  val3yr:622750},
-    {name:'บ. อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ',   val25:346050,  val3yr:560050},
-    {name:'บ. สกายเรสเตอรองท์',                   val25:311442,  val3yr:540600},
-    {name:'บ. โนส ที (ประเทศไทย)',                 val25:276546,  val3yr:638377},
     {name:'หจก. มนเทียรรุ่งเรือง',                val25:27794,   val3yr:1591389},
     {name:'บ. นำรุ่งเรือง (1992)',                 val25:17810,   val3yr:1583481},
   ];
+  const returned = [
+    {name:'การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย', val25:364090, apr26:233000},
+    {name:'บ. เอสเอสพี เซ็นเตอร์แพ็ค',     val25:397750, apr26:73100},
+    {name:'บ. โนส ที (ประเทศไทย)',           val25:276546, apr26:249750},
+    {name:'บ. อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ', val25:346050, apr26:61300},
+  ];
   let html = '';
   churned.forEach((c,i) => {
-    const priority = i < 3 ? '<span class="badge badge-red">🔴 ด่วนมาก</span>' :
-                     i < 8 ? '<span class="badge badge-orange">🟠 ด่วน</span>' :
+    const priority = i < 2 ? '<span class="badge badge-red">🔴 ด่วนมาก</span>' :
+                     i < 6 ? '<span class="badge badge-orange">🟠 ด่วน</span>' :
                               '<span class="badge badge-blue">🔵 ติดตาม</span>';
     html += `<tr>
       <td class="rank">${i+1}</td>
@@ -2844,6 +2848,10 @@ charts.concentration = new Chart(document.getElementById('concentrationChart'), 
       <td>${priority}</td>
     </tr>`;
   });
+  // Show returned customers at bottom
+  html += `<tr style="background:#eafaf1"><td colspan="5" style="padding:8px 12px;font-size:12px;color:#27ae60;font-weight:700">
+    ✅ Win-back สำเร็จในเม.ย. 2569 — ${returned.map(r=>`${r.name} (฿${r.apr26.toLocaleString()})`).join(' | ')}
+  </td></tr>`;
   document.getElementById('churnTableBody').innerHTML = html;
 })();
 
@@ -3554,17 +3562,18 @@ function buildAnalysis2026() {
 /* ── CUSTOMER DRILL-DOWN MODAL ─────────────────────────── */
 function showCust2026Modal(idx) {
   const c = cust2026[idx];
-  const drtTotal = c.drt1+c.drt2+c.drt3;
-  const txnTotal = c.txn1+c.txn2+c.txn3;
-  const seg = c.months.length===3?'👑 VIP':c.months.length===2?'⭐ Regular':'🆕 ใหม่';
-  const maxVal = Math.max(c.jan,c.feb,c.mar,1);
+  const drtTotal = (c.drt1||0)+(c.drt2||0)+(c.drt3||0)+(c.drt4||0);
+  const txnTotal = (c.txn1||0)+(c.txn2||0)+(c.txn3||0)+(c.txn4||0);
+  const seg = c.months.length>=4?'👑 VIP':c.months.length>=3?'⭐ Regular':c.months.length===2?'🔄 ลูกค้าประจำ':'🆕 ใหม่';
+  const maxVal = Math.max(c.jan||0,c.feb||0,c.mar||0,c.apr||0,1);
 
-  function bar(v,color) {
+  function bar(v,color,lbl) {
     const pct = (v/maxVal*100).toFixed(0);
-    return v ? `<div style="background:#f0f2f5;border-radius:4px;height:20px;overflow:hidden;margin-top:4px">
+    return `<div style="font-size:12px;font-weight:700;color:${color}">${lbl}</div>` +
+      (v ? `<div style="background:#f0f2f5;border-radius:4px;height:20px;overflow:hidden;margin-top:4px">
       <div style="background:${color};height:100%;width:${pct}%;border-radius:4px;display:flex;align-items:center;padding-left:6px">
         <span style="color:white;font-size:10px;font-weight:700">฿${(v/1000).toFixed(0)}K</span>
-      </div></div>` : `<div style="color:#ccc;font-size:12px;padding:4px 0">ไม่มีข้อมูล</div>`;
+      </div></div>` : `<div style="color:#ccc;font-size:12px;padding:4px 0">ไม่มีข้อมูล</div>`);
   }
 
   document.getElementById('modalTitle').innerHTML = `👤 ${c.name} <span style="font-size:13px;color:var(--muted);font-weight:400">${seg}</span>`;
@@ -3580,70 +3589,70 @@ function showCust2026Modal(idx) {
         <div style="font-size:22px;font-weight:800;color:#27ae60">${txnTotal} ครั้ง</div>
       </div>
       <div style="background:${drtTotal?'#fdecea':'#f8f9fa'};border-radius:10px;padding:14px;text-align:center">
-        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">DRT pending</div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:4px">DRT pending (พ.ค.)</div>
         <div style="font-size:22px;font-weight:800;color:${drtTotal?'#e74c3c':'#ccc'}">${drtTotal?'฿'+(drtTotal/1000).toFixed(0)+'K':'–'}</div>
       </div>
     </div>
 
     <div style="margin-bottom:16px">
       <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px">📅 ยอดซื้อรายเดือน (RT+IVT pretax)</div>
-      <div style="display:grid;grid-template-columns:60px 1fr;gap:8px;align-items:center">
-        <div style="font-size:12px;font-weight:700;color:#2980b9">ม.ค.</div>
-        ${bar(c.jan,'#2980b9')}
-        <div style="font-size:12px;font-weight:700;color:#27ae60">ก.พ.</div>
-        ${bar(c.feb,'#27ae60')}
-        <div style="font-size:12px;font-weight:700;color:#e67e22">มี.ค.</div>
-        ${bar(c.mar,'#e67e22')}
+      <div style="display:grid;grid-template-columns:1fr;gap:6px">
+        ${bar(c.jan,'#2980b9','ม.ค.')}
+        ${bar(c.feb,'#27ae60','ก.พ.')}
+        ${bar(c.mar,'#e67e22','มี.ค.')}
+        ${bar(c.apr||0,'#9b59b6','เม.ย.')}
       </div>
-      <div style="font-size:10px;color:var(--muted);margin-top:6px">* มี.ค. = ข้อมูลเต็มเดือน 1–31 มี.ค. 2026</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px">ม.ค.–เม.ย. = เต็มเดือน | ก่อน VAT</div>
     </div>
 
     ${drtTotal ? `<div style="background:#fff8e1;border-left:4px solid #e74c3c;border-radius:6px;padding:12px 16px;font-size:12px">
-      <strong style="color:#e74c3c">📌 DRT Pending (รอส่งมอบ)</strong><br>
+      <strong style="color:#e74c3c">📌 DRT Pending → Forecast พ.ค.</strong><br>
       <span style="color:var(--text)">
-        ${c.drt1?`ม.ค.: ฿${c.drt1.toLocaleString()} `:''}
-        ${c.drt2?`ก.พ.: ฿${c.drt2.toLocaleString()} `:''}
-        ${c.drt3?`มี.ค.: ฿${c.drt3.toLocaleString()} `:''}
+        ${c.drt4?`เม.ย.: ฿${c.drt4.toLocaleString()} `:''}
+        ${c.drt3&&!c.drt4?`มี.ค.: ฿${c.drt3.toLocaleString()} `:''}
         → รวม ฿${drtTotal.toLocaleString()} pretax (฿${Math.round(drtTotal*1.07).toLocaleString()} incl VAT)
       </span>
     </div>` : ''}
 
     <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
       <div style="background:#f8f9fa;border-radius:8px;padding:10px 14px">
-        <strong>ม.ค.:</strong> ${c.txn1} ออเดอร์ ${c.jan?'| ฿'+c.jan.toLocaleString():'| –'}
+        <strong>ม.ค.:</strong> ${c.txn1||0} ออเดอร์ ${c.jan?'| ฿'+c.jan.toLocaleString():'| –'}
       </div>
       <div style="background:#f8f9fa;border-radius:8px;padding:10px 14px">
-        <strong>ก.พ.:</strong> ${c.txn2} ออเดอร์ ${c.feb?'| ฿'+c.feb.toLocaleString():'| –'}
+        <strong>ก.พ.:</strong> ${c.txn2||0} ออเดอร์ ${c.feb?'| ฿'+c.feb.toLocaleString():'| –'}
       </div>
       <div style="background:#f8f9fa;border-radius:8px;padding:10px 14px">
-        <strong>มี.ค.:</strong> ${c.txn3} ออเดอร์ ${c.mar?'| ฿'+c.mar.toLocaleString():'| –'}
+        <strong>มี.ค.:</strong> ${c.txn3||0} ออเดอร์ ${c.mar?'| ฿'+c.mar.toLocaleString():'| –'}
       </div>
-      <div style="background:${c.months.length===3?'#f5eef8':'#f8f9fa'};border-radius:8px;padding:10px 14px">
-        <strong>กลุ่ม:</strong> ${seg}
+      <div style="background:${(c.apr||0)>0?'#f5eef8':'#f8f9fa'};border-radius:8px;padding:10px 14px">
+        <strong>เม.ย.:</strong> ${c.txn4||0} ออเดอร์ ${c.apr?'| ฿'+c.apr.toLocaleString():'| –'}
       </div>
+    </div>
+    <div style="margin-top:8px;background:#f8f9fa;border-radius:8px;padding:10px 14px;font-size:12px">
+      <strong>กลุ่ม:</strong> ${seg}
     </div>`;
   document.getElementById('drillModal').classList.add('open');
 }
 
 /* ── SEGMENT DRILL-DOWN MODAL ──────────────────────────── */
 function showSegModal(segType) {
-  const segLabel = segType==='VIP'?'👑 VIP (ซื้อทุกเดือน)':segType==='Regular'?'⭐ Regular (2 เดือน)':'🆕 ใหม่/ครั้งเดียว';
-  const segColor = segType==='VIP'?'#8e44ad':segType==='Regular'?'#27ae60':'#2980b9';
-  const segBg    = segType==='VIP'?'#f5eef8':segType==='Regular'?'#eafaf1':'#ebf5fb';
+  const segLabel = segType==='VIP'?'👑 VIP (ซื้อ 4 เดือน)':segType==='Regular'?'⭐ Regular (3 เดือน)':segType==='ลูกค้าประจำ'?'🔄 ลูกค้าประจำ (2 เดือน)':'🆕 ใหม่/ครั้งเดียว';
+  const segColor = segType==='VIP'?'#8e44ad':segType==='Regular'?'#27ae60':segType==='ลูกค้าประจำ'?'#e67e22':'#2980b9';
+  const segBg    = segType==='VIP'?'#f5eef8':segType==='Regular'?'#eafaf1':segType==='ลูกค้าประจำ'?'#fef5e7':'#ebf5fb';
 
   const filtered = cust2026.filter(c => {
-    const s = c.months.length===3?'VIP':c.months.length===2?'Regular':'ใหม่';
+    const s = c.months.length>=4?'VIP':c.months.length>=3?'Regular':c.months.length===2?'ลูกค้าประจำ':'ใหม่';
     return s === segType;
   }).sort((a,b) => b.total - a.total);
 
   const totalSales = filtered.reduce((s,c)=>s+c.total,0);
-  const totalTxn   = filtered.reduce((s,c)=>s+(c.txn1+c.txn2+c.txn3),0);
+  const totalTxn   = filtered.reduce((s,c)=>s+(c.txn1||0)+(c.txn2||0)+(c.txn3||0)+(c.txn4||0),0);
 
   // Build rows
   const rows = filtered.map((c,i) => {
     const idx = cust2026.indexOf(c);
-    const hasJan = c.jan>0, hasFeb = c.feb>0, hasMar = c.mar>0;
-    const dots = `${hasJan?'<span style="color:#2980b9" title="ม.ค.">●</span>':'<span style="color:#ddd">●</span>'}${hasFeb?'<span style="color:#27ae60" title="ก.พ.">●</span>':'<span style="color:#ddd">●</span>'}${hasMar?'<span style="color:#e67e22" title="มี.ค.">●</span>':'<span style="color:#ddd">●</span>'}`;
+    const hasJan = c.jan>0, hasFeb = c.feb>0, hasMar = c.mar>0, hasApr = (c.apr||0)>0;
+    const dots = `${hasJan?'<span style="color:#2980b9" title="ม.ค.">●</span>':'<span style="color:#ddd">●</span>'}${hasFeb?'<span style="color:#27ae60" title="ก.พ.">●</span>':'<span style="color:#ddd">●</span>'}${hasMar?'<span style="color:#e67e22" title="มี.ค.">●</span>':'<span style="color:#ddd">●</span>'}${hasApr?'<span style="color:#9b59b6" title="เม.ย.">●</span>':'<span style="color:#ddd">●</span>'}`;
     return `<tr onclick="closeModal();setTimeout(()=>showCust2026Modal(${idx}),220)"
                style="cursor:pointer;transition:background 0.1s"
                onmouseover="this.style.background='${segBg}'" onmouseout="this.style.background=''">
@@ -3651,7 +3660,7 @@ function showSegModal(segType) {
       <td style="padding:8px 10px;font-size:13px;font-weight:600">${c.name}</td>
       <td style="padding:8px 10px;font-size:12px;text-align:center;letter-spacing:2px">${dots}</td>
       <td style="padding:8px 10px;font-size:13px;text-align:right;font-weight:700;color:${segColor}">฿${(c.total/1000).toFixed(0)}K</td>
-      <td style="padding:8px 10px;font-size:12px;text-align:center;color:var(--muted)">${c.txn1+c.txn2+c.txn3} ครั้ง</td>
+      <td style="padding:8px 10px;font-size:12px;text-align:center;color:var(--muted)">${(c.txn1||0)+(c.txn2||0)+(c.txn3||0)+(c.txn4||0)} ครั้ง</td>
     </tr>`;
   }).join('');
 
