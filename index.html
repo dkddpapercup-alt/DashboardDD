@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DD Paper Cup – Sales Dashboard 2023–2026 (อัพเดต เม.ย. 2026)</title>
+<title>DD Paper Cup – Sales Dashboard 2023–2026 (Live · Google Sheet)</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
@@ -228,8 +228,8 @@
   <div class="header-right">
     <a href="finance_dashboard.html" class="nav-link">💰 Finance Dashboard →</a>
     <div>
-      <strong>ข้อมูล: ม.ค. 2023 – เม.ย. 2026 (เต็มเดือน)</strong>
-      <span>อัปเดต: 30 เมษายน 2026 | 🟢 2026 Actual: ม.ค.–เม.ย. ครบ 4 เดือน | Run Rate ฿69.2M/yr ✅</span>
+      <strong>ข้อมูล: ม.ค. 2023 – พ.ค. 2026</strong>
+      <span>🟢 2026 Actual: ม.ค.–เม.ย. ครบ + พ.ค. MTD &nbsp;|&nbsp; <span id="live-data-stamp" style="color:#27ae60;font-size:11px;">⏳ กำลังดึงข้อมูลล่าสุด...</span></span>
     </div>
   </div>
 </div>
@@ -2140,13 +2140,83 @@ charts.teamTrend = new Chart(document.getElementById('teamTrendChart'), {
 
 // ==================== 2026 ACTUAL DATA (defined early — used by forecast chart) ====================
 const actual2026 = {
-  1: 4889375,
-  2: 5235852,
-  3: 6061498,  // มี.ค. 2026 เต็มเดือน (1–31 มี.ค.)
-  4: 6916975,  // เม.ย. 2026 เต็มเดือน ก่อน VAT (Sale Report 30APR26)
+  1: 4598077,  // ม.ค. 2026 ก่อน VAT (Google Sheet)
+  2: 4874871,  // ก.พ. 2026 ก่อน VAT (Google Sheet)
+  3: 6069955,  // มี.ค. 2026 ก่อน VAT (Google Sheet)
+  4: 7030084,  // เม.ย. 2026 ก่อน VAT (Google Sheet)
+  5: 2198119,  // พ.ค. 2026 ก่อน VAT (Google Sheet, อัพเดต realtime)
 };
-const months2026HasData = [1, 2, 3, 4];
-const partial2026 = {};  // เม.ย. เต็มเดือนแล้ว
+const months2026HasData = [1, 2, 3, 4, 5];
+const partial2026 = { 5: 'MTD' };  // พ.ค. ยังไม่ปิดเดือน — จะ update ด้วย Google Sheet
+
+
+// ==================== GOOGLE SHEETS LIVE DATA ====================
+const GSHEET_ID = '1mtdKekglNCJpS6SycEK0wTiJGRWu6fA7id0N17XEC-Y';
+const GSHEET_TAB = 'Dashboard';
+const GSHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${GSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(GSHEET_TAB)}`;
+
+async function fetchLiveData() {
+  try {
+    const res = await fetch(GSHEET_CSV_URL, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const text = await res.text();
+    const rows = text.trim().split('\n').slice(1);
+    const data = {};
+    rows.forEach(row => {
+      const cols = row.split(',').map(c => c.replace(/^"|"$/g, '').trim());
+      if (!cols[0] || !cols[0].match(/^2026-\d{2}$/)) return;
+      const monthNum = parseInt(cols[0].split('-')[1]);
+      const bef_vat = parseFloat(cols[1]);
+      if (monthNum >= 1 && monthNum <= 12 && !isNaN(bef_vat) && bef_vat > 0) {
+        data[monthNum] = Math.round(bef_vat);
+      }
+    });
+    return Object.keys(data).length > 0 ? data : null;
+  } catch(e) {
+    console.warn('[DD Dashboard] Google Sheet fetch failed:', e.message);
+    return null;
+  }
+}
+
+async function initLiveData() {
+  const el = document.getElementById('live-data-stamp');
+  const live = await fetchLiveData();
+  if (!live) {
+    if (el) el.innerHTML = '📋 ข้อมูลแคช (ตั้งค่า Google Sheet ก่อน)';
+    return;
+  }
+  // Update actual2026 with live figures
+  let changed = false;
+  Object.entries(live).forEach(([m, val]) => {
+    const mo = parseInt(m);
+    if (actual2026[mo] !== val) { actual2026[mo] = val; changed = true; }
+    if (!months2026HasData.includes(mo)) { months2026HasData.push(mo); months2026HasData.sort((a,b)=>a-b); }
+  });
+  // Partial flag: current month in progress
+  const today = new Date();
+  const curM = today.getMonth() + 1;
+  const liveMonths = Object.keys(live).map(Number);
+  liveMonths.forEach(m => {
+    if (m === curM) {
+      partial2026[m] = `${today.getDate()}/${m}`;
+    } else {
+      delete partial2026[m];
+    }
+  });
+  const stamp = today.toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
+  if (el) el.innerHTML = `🟢 Live · อัพเดต ${stamp} น. <span style="color:#888;font-size:10px;">(Google Sheet)</span>`;
+  if (changed) {
+    // Re-render charts that depend on actual2026
+    try { buildForecastChart(forecastViewMode || 'monthly'); } catch(e) {}
+    try { buildAnalysis2026(); } catch(e) {}
+    // Update YTD overview numbers
+    const ytdEl = document.querySelector('[data-ytd-rev]');
+    if (ytdEl) {
+      const ytd = months2026HasData.filter(m => !partial2026[m]).reduce((s,m) => s + (actual2026[m]||0), 0);
+      ytdEl.textContent = (ytd/1e6).toFixed(2) + ' ล้าน';
+    }
+  }
+}
 
 // ==================== FORECAST TAB ====================
 let forecastViewMode = 'monthly';
@@ -3824,6 +3894,14 @@ function showSP2026Modal(idx) {
     </div>`;
   document.getElementById('drillModal').classList.add('open');
 }
+
+// ==================== INIT LIVE DATA on page load ====================
+window.addEventListener('DOMContentLoaded', () => {
+  initLiveData();
+  // Auto-refresh every 5 minutes
+  setInterval(initLiveData, 5 * 60 * 1000);
+});
+
 </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DD Paper Cup – Finance Dashboard 2025 (P&L & Cost Analysis)</title>
+<title>DD Paper Cup – Finance Dashboard 2025–2026 (Live · Google Sheet)</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
@@ -225,10 +225,11 @@
 <div class="header">
   <div>
     <h1>📊 DD Paper Cup – Finance Dashboard 2025–2026</h1>
-    <div class="header-meta">P&L Analysis | Cost Structure | Margin Tracking | 2025 Full Year + 2026 YTD (ม.ค.–เม.ย.)</div>
+    <div class="header-meta">P&L Analysis | Cost Structure | Margin Tracking | 2025 Full Year + 2026 YTD (ม.ค.–พ.ค. MTD)</div>
   </div>
   <div class="header-right">
-    <span class="badge-year">2025 Full + 2026 YTD (ม.ค.–เม.ย.)</span>
+    <span class="badge-year">2025 Full + 2026 YTD</span>
+    <span id="fin-live-stamp" style="color:#27ae60;font-size:11px;margin-right:4px;">⏳ กำลังโหลด...</span>
     <a href="index.html" class="nav-link">📈 Sales Dashboard →</a>
   </div>
 </div>
@@ -1547,19 +1548,51 @@ const expDetail2026 = {
   ],
 };
 
-// ===== 2026 YTD DATA (from AccCloud Expense Reports) =====
-// อัพเดต: ม.ค.–มี.ค. 2026 ครบเดือน จาก "ค่าใช้จ่าย ม.ค.-มี.ค.xlsx" (AccCloud export 3 เม.ย. 2569)
-const rev2026    = [4889375, 5235852, 6061498, 6916975];  // เม.ย. เต็มเดือน ก่อน VAT จาก Sale Report 30APR26
-const cogs2026   = [2985459, 3208708, 4748957, 4233189];  // เม.ย. = ประมาณการ 61.2% (avg Jan-Feb, รอ AccCloud)
-const sal2026    = [636942,  613545,  721088,  650000];   // เม.ย. = ประมาณการ (รอ Payroll AccCloud)
-const opex2026   = [563465,  468009,   84428,  400000];   // เม.ย. = ประมาณการ (รอ AccCloud รอบเดือน)
-const int2026    = [114129,  86918,   87000,   87000];    // เม.ย. = ประมาณการ (รอยืนยัน AccCloud)
-const car2026x   = [36000,   36000,   36000,   36000];    // KIA ลีสซิ่ง (fixed monthly)
+// ===== 2026 YTD DATA — ยึดจาก Google Sheet เป็นหลัก (อัพเดต realtime) =====
+let rev2026    = [4598077, 4874871, 6069955, 7030084, 2198119];  // ม.ค.–เม.ย. ปิดเดือน | พ.ค. MTD (Google Sheet)
+const cogs2026   = [2985459, 3208708, 4748957, 4233189, 0];       // เม.ย. = AccCloud | พ.ค. TBD
+const sal2026    = [636942,  613545,  721088,  650000,  0];        // พ.ค. = ประมาณการ
+const opex2026   = [563465,  468009,   84428,  400000,  0];        // พ.ค. = ประมาณการ
+const int2026    = [114129,  86918,   87000,   87000,   87000];    // พ.ค. = ประมาณการ
+const car2026x   = [36000,   36000,   36000,   36000,   36000];    // KIA ลีสซิ่ง (fixed monthly)
 const gp2026     = rev2026.map((r,i) => r - cogs2026[i]);
 const np2026     = gp2026.map((g,i) => g - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i]);
-const gm2026     = rev2026.map((r,i) => (r - cogs2026[i]) / r * 100);
-const nm2026     = rev2026.map((r,i) => np2026[i] / r * 100);
-const MONTHS_2026 = ['ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026', 'เม.ย. 2026*'];
+const gm2026     = rev2026.map((r,i) => r > 0 ? (r - cogs2026[i]) / r * 100 : 0);
+const nm2026     = rev2026.map((r,i) => r > 0 ? np2026[i] / r * 100 : 0);
+const MONTHS_2026 = ['ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026', 'เม.ย. 2026', 'พ.ค. 2026 (MTD)'];
+
+// ===== GOOGLE SHEETS LIVE DATA (Finance) =====
+const _FIN_GSHEET_URL = 'https://docs.google.com/spreadsheets/d/1mtdKekglNCJpS6SycEK0wTiJGRWu6fA7id0N17XEC-Y/gviz/tq?tqx=out:csv&sheet=Dashboard';
+async function fetchFinLiveData() {
+  try {
+    const res = await fetch(_FIN_GSHEET_URL, { cache: 'no-store' });
+    if (!res.ok) return;
+    const text = await res.text();
+    const rows = text.trim().split('\n').slice(1);
+    let changed = false;
+    rows.forEach(row => {
+      const cols = row.split(',').map(c => c.replace(/^"|"$/g, '').trim());
+      if (!cols[0] || !cols[0].match(/^2026-\d{2}$/)) return;
+      const idx = parseInt(cols[0].split('-')[1]) - 1;
+      const val = parseFloat(cols[1]);
+      if (idx >= 0 && idx < 12 && !isNaN(val) && val > 0) {
+        if (rev2026[idx] !== Math.round(val)) { rev2026[idx] = Math.round(val); changed = true; }
+      }
+    });
+    if (changed) {
+      const stamp = new Date().toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
+      const el = document.getElementById('fin-live-stamp');
+      if (el) el.innerHTML = `🟢 Live · ${stamp} น.`;
+      // Recompute derived arrays
+      for(let i=0;i<rev2026.length;i++){
+        gp2026[i] = rev2026[i] - cogs2026[i];
+        np2026[i] = gp2026[i] - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i];
+        gm2026[i] = rev2026[i] > 0 ? (rev2026[i]-cogs2026[i])/rev2026[i]*100 : 0;
+        nm2026[i] = rev2026[i] > 0 ? np2026[i]/rev2026[i]*100 : 0;
+      }
+    }
+  } catch(e) { console.warn('[Finance] Sheet fetch failed:', e.message); }
+}
 
 // ===== NEW: Financial & Accounting items from งบทดลอง 2568 =====
 const loanInt2025  = [331731, 95512, 40033, 188898, 45338, 94904, 97095, 41174, 96462, 99847, 50586, 31548];
@@ -3149,6 +3182,13 @@ function togglePayGroup(uid) {
 
 // ==================== INIT ====================
 buildOverviewCharts();
+
+// ==================== INIT FINANCE LIVE DATA ====================
+window.addEventListener('DOMContentLoaded', () => {
+  fetchFinLiveData();
+  setInterval(fetchFinLiveData, 5 * 60 * 1000);
+});
+
 </script>
 </body>
 </html>
