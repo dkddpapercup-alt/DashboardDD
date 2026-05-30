@@ -1600,7 +1600,7 @@
   <!-- ── SECTION: DRT & FORECAST ── -->
   <div class="card" style="margin-bottom:20px">
     <div class="card-header">
-      <h3>📋 ยอดมัดจำ (DRT) & Forecast เม.ษ. 2026</h3>
+      <h3>📋 ยอดมัดจำ (DRT) & Forecast มิ.ย. 2026</h3>
       <span class="card-subtitle">DRT pending = ออเดอร์ยืนยันแล้ว รอส่งมอบ → forecast เดือนถัดไป</span>
     </div>
     <div class="card-body">
@@ -1614,7 +1614,7 @@
           <div style="height:240px"><canvas id="a26DrtChart"></canvas></div>
         </div>
         <div>
-          <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px">📌 DRT รอส่งมอบ มี.ค. → Forecast เม.ษ.</div>
+          <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px">📌 DRT รอส่งมอบ พ.ค. → Forecast มิ.ย.</div>
           <div id="a26ForecastTable" style="overflow-x:auto"></div>
         </div>
       </div>
@@ -1625,7 +1625,7 @@
   <div class="card" style="margin-bottom:20px">
     <div class="card-header">
       <h3>🏅 Top Customers 2026</h3>
-      <span class="card-subtitle">ยอดรวม pretax ม.ค.–เม.ย. | คลิกแถวเพื่อดูรายละเอียดรายเดือน</span>
+      <span class="card-subtitle">ยอดรวม pretax ม.ค.–พ.ค. | คลิกแถวเพื่อดูรายละเอียดรายเดือน</span>
     </div>
     <div class="card-body">
       <div id="a26CustTable" style="overflow-x:auto"></div>
@@ -3494,20 +3494,17 @@ cust2026.forEach(c=>{
 cust2026.sort((a,b)=>b.total-a.total);
 
 /* ── DRT pending → May forecast (จาก เม.ย. DRT รอหักมัดจำ) ── */
+/* DRT pending เดือน พ.ค. 2026 (รอหักมัดจำ → forecast มิ.ย.) — 29 ออเดอร์, รวม ฿1,288,731 */
 const drtPendingMar = [
-  {cust:'Bigtree',pre:822000},
-  {cust:'ร้าน วอเตอร์เวิร์ค คอฟฟี่',pre:52040},
-  {cust:'โน มอร์ สโนว์',pre:31992},
-  {cust:'อาร์แอนด์บี อินเตอร์เนชั่นแนล',pre:31780},
-  {cust:'ฟอร์เรสทีเรีย',pre:29820},
-  {cust:'คุณ พัฒนสัน อิ่มสุขสมวงษ์',pre:26350},
-  {cust:'ธนาธร ช๊อป นนทบุรี',pre:26250},
-  {cust:'แบล็คฮิลส์ บีเคเค',pre:24750},
-  {cust:'ชาดีออร์แกนิค',pre:23575},
-  {cust:'นาย กัณณพัศส์ หวังโนนสูง',pre:21105},
-  {cust:'เกรทแอนด์แกรนด์สวีทเดสทิเนชั่น',pre:21025},
-  {cust:'ร้าน Mogul Gelato',pre:19179},
-  {cust:'อื่นๆ',pre:223770},
+  {cust:'Big tree trading',pre:857044},
+  {cust:'ยามาโมริ เทรดดิ้ง',pre:97000},
+  {cust:'คุณ บุญชัย เกษมบุญชัย',pre:34500},
+  {cust:'แฟมิลี่สุกี้',pre:24900},
+  {cust:'วิศรา แอดเวอร์ไทซิ่ง',pre:21980},
+  {cust:'ดอกทอ ฟูด แอนด์ เบฟเวอเรจ',pre:20850},
+  {cust:'โอเจอาร์',pre:20560},
+  {cust:'บีกินอะไรก็อร่อย',pre:20500},
+  {cust:'อื่นๆ (21 ราย)',pre:191397},
 ];
 
 /* ── Document type summary ── */
@@ -3635,19 +3632,19 @@ function buildAnalysis2026() {
   const aprForecastIncVat  = Math.round(totalDrtPendingMar * 1.07);
   document.getElementById('a26ForecastCards').innerHTML = `
     <div style="flex:1;min-width:180px;background:linear-gradient(135deg,#1e3a5f,#2980b9);color:white;border-radius:12px;padding:18px 22px;text-align:center">
-      <div style="font-size:11px;opacity:.8;letter-spacing:.5px;margin-bottom:6px">📌 DRT PENDING (มี.ค.)</div>
+      <div style="font-size:11px;opacity:.8;letter-spacing:.5px;margin-bottom:6px">📌 DRT PENDING (พ.ค.)</div>
       <div style="font-size:26px;font-weight:800">฿${(totalDrtPendingMar/1e6).toFixed(2)}M</div>
-      <div style="font-size:11px;opacity:.8;margin-top:4px">pretax | 48 ออเดอร์ confirmed</div>
+      <div style="font-size:11px;opacity:.8;margin-top:4px">pretax | 29 ออเดอร์ confirmed</div>
     </div>
     <div style="flex:1;min-width:180px;background:linear-gradient(135deg,#27ae60,#1abc9c);color:white;border-radius:12px;padding:18px 22px;text-align:center">
-      <div style="font-size:11px;opacity:.8;letter-spacing:.5px;margin-bottom:6px">🎯 FORECAST พ.ค. (incl VAT)</div>
+      <div style="font-size:11px;opacity:.8;letter-spacing:.5px;margin-bottom:6px">🎯 FORECAST มิ.ย. (incl VAT)</div>
       <div style="font-size:26px;font-weight:800">฿${(aprForecastIncVat/1e6).toFixed(2)}M</div>
-      <div style="font-size:11px;opacity:.8;margin-top:4px">confirmed minimum จาก DRT pending เม.ย.</div>
+      <div style="font-size:11px;opacity:.8;margin-top:4px">confirmed minimum จาก DRT pending พ.ค.</div>
     </div>
     <div style="flex:1;min-width:180px;background:#fff;border-radius:12px;padding:18px 22px;border:2px solid #e67e22;text-align:center">
-      <div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">📊 DRT/Total Ratio เม.ย.</div>
-      <div style="font-size:26px;font-weight:800;color:#e67e22">${(totalDrtPendingMar/(6881875)*100).toFixed(1)}%</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">1,362K / 6.88M pretax</div>
+      <div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">📊 DRT/Total Ratio พ.ค.</div>
+      <div style="font-size:26px;font-weight:800;color:#e67e22">${(totalDrtPendingMar/(5856742)*100).toFixed(1)}%</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">1,289K / 5.86M pretax</div>
     </div>
     <div style="flex:1;min-width:220px;background:#fff8e1;border-radius:12px;padding:18px 22px;border-left:4px solid #f39c12">
       <div style="font-size:12px;font-weight:700;color:#e67e22;margin-bottom:6px">💡 วิธีอ่านค่า DRT</div>
@@ -3699,13 +3696,13 @@ function buildAnalysis2026() {
           <td style="text-align:right;color:var(--muted)">฿${Math.round(pre*1.07).toLocaleString()}</td>
         </tr>`).join('')}
         <tr style="background:#fff8e1;font-weight:800">
-          <td>รวม Forecast พ.ค.</td>
+          <td>รวม Forecast มิ.ย.</td>
           <td style="text-align:right;color:#e74c3c">฿${totalDrtPendingMar.toLocaleString()}</td>
           <td style="text-align:right;color:#e67e22">฿${aprForecastIncVat.toLocaleString()}</td>
         </tr>
       </tbody>
     </table>
-    <div style="font-size:10px;color:var(--muted);margin-top:5px">*ยังไม่รวมออเดอร์ใหม่เดือน พ.ค.</div>`;
+    <div style="font-size:10px;color:var(--muted);margin-top:5px">*DRT มัดจำรับแล้วใน พ.ค. รอส่งมอบ → รับรู้รายได้ มิ.ย. | ยังไม่รวมออเดอร์ใหม่ มิ.ย.</div>`;
 
   // ── TOP CUSTOMERS TABLE (clickable) ──────────────────────
   const segOf = c => c.months.length>=4?'VIP':c.months.length>=3?'Regular':c.months.length===2?'ลูกค้าประจำ':'ใหม่';
@@ -3791,7 +3788,7 @@ function buildAnalysis2026() {
       <div onclick="showSegModal('VIP')" style="flex:1;min-width:160px;background:#f5eef8;border-radius:10px;padding:16px 20px;border-left:4px solid #8e44ad;text-align:center;cursor:pointer;transition:box-shadow 0.15s,transform 0.15s" onmouseover="this.style.boxShadow='0 4px 16px rgba(142,68,173,0.25)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
         <div style="font-size:28px;font-weight:800;color:#8e44ad">7</div>
         <div style="font-weight:700;font-size:13px;margin:4px 0">👑 VIP (ซื้อทุกเดือน)</div>
-        <div style="font-size:11px;color:var(--muted)">3 เดือนต่อเนื่อง ม.ค.–มี.ค.</div>
+        <div style="font-size:11px;color:var(--muted)">ซื้อต่อเนื่องหลายเดือน (ฐาน ม.ค.–เม.ย.)</div>
         <div style="font-size:10px;color:#8e44ad;margin-top:6px;font-weight:600">คลิกดูรายชื่อ →</div>
       </div>
       <div onclick="showSegModal('Regular')" style="flex:1;min-width:160px;background:#eafaf1;border-radius:10px;padding:16px 20px;border-left:4px solid #27ae60;text-align:center;cursor:pointer;transition:box-shadow 0.15s,transform 0.15s" onmouseover="this.style.boxShadow='0 4px 16px rgba(39,174,96,0.25)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
@@ -3809,7 +3806,7 @@ function buildAnalysis2026() {
       <div style="flex:1;min-width:160px;background:#fef9e7;border-radius:10px;padding:16px 20px;border-left:4px solid #f39c12;text-align:center">
         <div style="font-size:28px;font-weight:800;color:#f39c12">576</div>
         <div style="font-weight:700;font-size:13px;margin:4px 0">👥 ลูกค้าทั้งหมด</div>
-        <div style="font-size:11px;color:var(--muted)">Unique customers ม.ค.–มี.ค.</div>
+        <div style="font-size:11px;color:var(--muted)">Unique ม.ค.–เม.ย. · พ.ค. +232 ราย</div>
       </div>
     </div>`;
 }
