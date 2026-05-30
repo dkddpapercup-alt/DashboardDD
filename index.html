@@ -891,6 +891,7 @@
       <button class="year-btn" onclick="filterMonthly(2024, this)">2024</button>
       <button class="year-btn" onclick="filterMonthly(2025, this)">2025</button>
       <button class="year-btn" onclick="filterMonthly(2026, this)">Forecast 2026</button>
+      <button class="year-btn" onclick="filterMonthly('act2026', this)" style="color:#16a085;font-weight:700">🟢 Actual 2026</button>
     </div>
   </div>
 
@@ -916,6 +917,7 @@
               <th>2024</th>
               <th>2025</th>
               <th>Forecast 2026</th>
+              <th style="color:#16a085">🟢 Actual 2026*</th>
             </tr>
           </thead>
           <tbody id="monthlyTableBody"></tbody>
@@ -943,6 +945,7 @@
       <button class="year-btn active" onclick="filterCust(2023, this)">2023</button>
       <button class="year-btn" onclick="filterCust(2024, this)">2024</button>
       <button class="year-btn" onclick="filterCust(2025, this)">2025</button>
+      <button class="year-btn" onclick="showTab('analysis2026')" style="color:#16a085;font-weight:700" title="ข้อมูลลูกค้า 2026 (ม.ค.–พ.ค.) อยู่ในแท็บวิเคราะห์ 2026">🟢 2026 →</button>
     </div>
   </div>
 
@@ -1005,6 +1008,7 @@
       <button class="year-btn active" onclick="filterTeam(2023, this)">2023</button>
       <button class="year-btn" onclick="filterTeam(2024, this)">2024</button>
       <button class="year-btn" onclick="filterTeam(2025, this)">2025</button>
+      <button class="year-btn" onclick="filterTeam(2026, this)" style="color:#16a085;font-weight:700">🟢 2026 YTD</button>
     </div>
   </div>
 
@@ -1154,7 +1158,7 @@
       <div class="card-header"><h3>⚠️ Risk Factors ที่ต้องระวัง</h3></div>
       <div class="card-body">
         <table class="data-table">
-          <thead><tr><th>ความเสี่ยง</th><th>ผลกระทบ</th><th>โอกาสเกิด</th><th>อัพเดต เม.ย.</th></tr></thead>
+          <thead><tr><th>ความเสี่ยง</th><th>ผลกระทบ</th><th>โอกาสเกิด</th><th>อัพเดต พ.ค.</th></tr></thead>
           <tbody>
             <tr><td>สูญเสียลูกค้า Bigtree (4.1M)</td><td><span class="badge badge-red">สูงมาก</span></td><td><span class="badge badge-orange">ปานกลาง</span></td></tr>
             <tr><td>สูญเสียลูกค้า Packworks (4.0M)</td><td><span class="badge badge-red">สูงมาก</span></td><td><span class="badge badge-orange">ปานกลาง</span></td></tr>
@@ -1840,6 +1844,15 @@ const salesperson = {
     {name: 'ดวงกมล โคตรพงศ์', val: 168921},
     {name: 'อื่นๆ', val: 143868},
   ],
+  2026: [   // YTD ม.ค.–พ.ค. (พ.ค. ถึง 29/5, ก่อน VAT) — รวม ฿28.96M
+    {name: 'ธีรตา งามสูงเนิน', val: 7124417},
+    {name: 'ศุภิสรา แสงสว่าง', val: 6821331},
+    {name: 'ปุณณภา ขำสำอางค์', val: 6423063},
+    {name: 'ธชนัย ภักดีนอก', val: 5446346},
+    {name: 'จุฑามาศ รัตนสูตร', val: 2510719},
+    {name: 'Shopee/Lazada', val: 445045},
+    {name: 'นิโลบล เพียรมานะกิจ', val: 191179},
+  ],
 };
 
 const loyalCustomers = [
@@ -1891,6 +1904,13 @@ charts.annualTrend = new Chart(document.getElementById('annualTrendChart'), {
         backgroundColor: '#e67e22',
         borderRadius: 6,
         order: 2,
+      },
+      {
+        label: '🟢 Actual 2026 YTD (ม.ค.–พ.ค.)',
+        data: [null, null, null, 28.962],
+        backgroundColor: '#16a085',
+        borderRadius: 6,
+        order: 1,
       },
       {
         label: 'เส้นแนวโน้ม',
@@ -1994,6 +2014,7 @@ function buildMonthlyChart(filter) {
   if (filter === 'all' || filter == 2024) datasets.push({ label: '2024', data: monthly[2024].map(v=>v/1e6), backgroundColor: colors[2024]+'99', borderColor: colors[2024], borderWidth: 1, borderRadius: 4 });
   if (filter === 'all' || filter == 2025) datasets.push({ label: '2025', data: monthly[2025].map(v=>v/1e6), backgroundColor: colors[2025]+'99', borderColor: colors[2025], borderWidth: 1, borderRadius: 4 });
   if (filter == 2026) datasets.push({ label: 'Forecast 2026 (Base)', data: forecast.base.map(v=>v/1e6), backgroundColor: colors[2026]+'99', borderColor: colors[2026], borderWidth: 1, borderRadius: 4 });
+  if (filter == 2026 || filter == 'act2026') datasets.push({ label: 'Actual 2026 (ม.ค.–พ.ค., ก่อน VAT)', data: MONTHS.map((_,i)=>actual2026[i+1]!=null?+(actual2026[i+1]/1e6).toFixed(3):null), type:'line', borderColor:'#16a085', backgroundColor:'#16a08533', borderWidth:2, pointRadius:3, pointBackgroundColor:'#16a085', tension:0.25, spanGaps:false });
 
   charts.monthly = new Chart(document.getElementById('monthlyChart'), {
     type: 'bar',
@@ -2017,10 +2038,11 @@ function filterMonthly(yr, btn) {
 function buildMonthlyTable() {
   const tbody = document.getElementById('monthlyTableBody');
   const tfoot = document.getElementById('monthlyTableFoot');
-  let rows = '', totals = [0,0,0,0];
+  let rows = '', totals = [0,0,0,0,0];
   MONTHS.forEach((m, i) => {
     const v23 = monthly[2023][i], v24 = monthly[2024][i], v25 = monthly[2025][i], vfc = forecast.base[i];
-    totals[0]+=v23; totals[1]+=v24; totals[2]+=v25; totals[3]+=vfc;
+    const va = (typeof actual2026!=='undefined' && actual2026[i+1]!=null) ? actual2026[i+1] : null;
+    totals[0]+=v23; totals[1]+=v24; totals[2]+=v25; totals[3]+=vfc; totals[4]+=(va||0);
     const best = Math.max(v23,v24,v25);
     rows += `<tr>
       <td><strong>${m}</strong></td>
@@ -2028,6 +2050,7 @@ function buildMonthlyTable() {
       <td style="color:#27ae60">${fmt(v24)}</td>
       <td style="color:${v25==best?'#27ae60':'#e74c3c'}">${fmt(v25)}</td>
       <td style="color:#e67e22;font-weight:700">${fmt(vfc)}</td>
+      <td style="color:#16a085;font-weight:700">${va!=null?fmt(va):'<span style=\"color:#ccc\">–</span>'}</td>
     </tr>`;
   });
   tbody.innerHTML = rows;
@@ -2037,9 +2060,10 @@ function buildMonthlyTable() {
     <td style="color:#27ae60">${fmt(totals[1])}</td>
     <td style="color:#e74c3c">${fmt(totals[2])}</td>
     <td style="color:#e67e22">${fmt(totals[3])}</td>
+    <td style="color:#16a085">${fmt(totals[4])} <span style="font-weight:400;color:#999;font-size:10px">(5 ด.)</span></td>
   </tr>`;
 }
-buildMonthlyTable();
+// buildMonthlyTable() ถูกเรียกหลัง actual2026 ถูกประกาศ (กัน TDZ)
 
 // Seasonality chart
 const avgMonthly = MONTHS.map((_, i) => (monthly[2023][i] + monthly[2024][i] + monthly[2025][i]) / 3);
@@ -2242,6 +2266,7 @@ const actual2026 = {
 };
 const months2026HasData = [1, 2, 3, 4, 5];
 const partial2026 = { 5: 'MTD' };  // พ.ค. ยังไม่ปิดเดือน — จะ update ด้วย Google Sheet
+try { buildMonthlyTable(); } catch(e){ console.warn('monthlyTable', e); }  // เรียกหลัง actual2026 พร้อม (กัน TDZ)
 
 
 // ==================== GOOGLE SHEETS LIVE DATA ====================
