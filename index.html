@@ -243,8 +243,7 @@
   <button class="tab-btn" onclick="showTab('forecast')">🎯 Forecast 2026</button>
   <button class="tab-btn" onclick="showTab('progress2026')" style="color:#27ae60;font-weight:800;">🟢 2026 Progress</button>
   <button class="tab-btn" onclick="showTab('central')" style="color:#8e44ad;font-weight:800;">🏬 Central Group</button>
-  <button class="tab-btn" onclick="showTab('risk')" style="color:#e74c3c;font-weight:800;">⚠️ ความเสี่ยง</button>
-  <button class="tab-btn" onclick="showTab('analysis')" style="color:#8e44ad;font-weight:800;">🔬 วิเคราะห์เชิงลึก</button>
+  <!-- ตัดออกตามคำขอ (ซ้ำกับ วิเคราะห์ 2026): ⚠️ ความเสี่ยง + 🔬 วิเคราะห์เชิงลึก — โค้ด/ข้อมูลยังอยู่ในไฟล์แต่ไม่แสดงในเมนู -->
   <button class="tab-btn" onclick="showTab('analysis2026')" style="color:#e67e22;font-weight:800;">🔍 วิเคราะห์ 2026</button>
 </div>
 
@@ -542,14 +541,14 @@
   <div class="kpi-row" style="margin-top:24px;">
     <div class="kpi-card" style="border-left:4px solid #8e44ad;">
       <div class="kpi-label">ยอดรวม Central Group (รวม VAT)</div>
-      <div class="kpi-value" style="color:#8e44ad;">17.6M</div>
-      <div class="kpi-sub">฿17,552,251 | ทุกปี 2023–2026 (เม.ย.)</div>
+      <div class="kpi-value" style="color:#8e44ad;">17.9M</div>
+      <div class="kpi-sub">฿17,925,526 | ทุกปี 2023–2026 (พ.ค.)</div>
       <div class="kpi-icon">🏬</div>
     </div>
     <div class="kpi-card" style="border-left:4px solid #2980b9;">
       <div class="kpi-label">ยอดก่อน VAT (รวมทุกปี)</div>
-      <div class="kpi-value" style="color:#2980b9;">16.4M</div>
-      <div class="kpi-sub">฿16,403,975 | VAT: ฿1,148,706</div>
+      <div class="kpi-value" style="color:#2980b9;">16.8M</div>
+      <div class="kpi-sub">฿16,752,830 | VAT: ฿1,173,126</div>
       <div class="kpi-icon">📋</div>
     </div>
     <div class="kpi-card" style="border-left:4px solid #e74c3c;">
@@ -559,9 +558,9 @@
       <div class="kpi-icon">📉</div>
     </div>
     <div class="kpi-card" style="border-left:4px solid #e67e22;">
-      <div class="kpi-label">2026 YTD (ม.ค.–เม.ย.)</div>
-      <div class="kpi-value" style="color:#e67e22;">2.1M</div>
-      <div class="kpi-sub">฿2,100,512 | ม.ค.–เม.ย. (incl VAT)</div>
+      <div class="kpi-label">2026 YTD (ม.ค.–พ.ค.)</div>
+      <div class="kpi-value" style="color:#e67e22;">2.47M</div>
+      <div class="kpi-sub">฿2,473,787 | ม.ค.–พ.ค. (incl VAT) | พ.ค. +฿373K</div>
       <div class="kpi-icon">🟢</div>
     </div>
   </div>
@@ -592,7 +591,7 @@
   <div class="card">
     <div class="card-header">
       <h3>📋 สรุปยอดขายตามกลุ่มย่อย Central Group</h3>
-      <span class="card-subtitle">รวมทุกปี 2023–2026 (Jan–Feb YTD) | รวม VAT</span>
+      <span class="card-subtitle">รวมทุกปี 2023–2026 (กลุ่มย่อยถึง เม.ย.; พ.ค. ดูตารางแยกด้านล่าง) | รวม VAT</span>
     </div>
     <div class="card-body">
       <table class="data-table">
@@ -611,11 +610,38 @@
     </div>
   </div>
 
+  <!-- CENTRAL MAY 2026 -->
+  <div class="card" style="margin-top:8px;">
+    <div class="card-header">
+      <h3>🆕 Central Group – พฤษภาคม 2026 (ถึง 29/5)</h3>
+      <span class="card-subtitle">รวม VAT ฿373,275 | ก่อน VAT ฿348,855 | 11 ราย</span>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <table class="data-table">
+        <thead><tr><th>#</th><th>บริษัท</th><th>รวม VAT (฿)</th></tr></thead>
+        <tbody>
+          <tr><td class="rank">1</td><td>เซ็นทรัลพัฒนา (มหาชน)</td><td style="font-weight:700">181,943</td></tr>
+          <tr><td class="rank">2</td><td>เซ็นทรัลฟู้ดอเวนิว</td><td style="font-weight:700">54,934</td></tr>
+          <tr><td class="rank">3</td><td>ซีพีเอ็น พัทยา</td><td style="font-weight:700">34,219</td></tr>
+          <tr><td class="rank">4</td><td>เซ็นทรัลพัฒนา ขอนแก่น</td><td style="font-weight:700">33,694</td></tr>
+          <tr><td class="rank">5</td><td>เซ็นทรัลพัฒนา ไนน์ สแควร์</td><td style="font-weight:700">19,560</td></tr>
+          <tr><td class="rank">6</td><td>เซ็นทรัลพัฒนา พระราม 3</td><td style="font-weight:700">11,888</td></tr>
+          <tr><td class="rank">7</td><td>เซ็นทรัลพัฒนา ดีเวลลอปเมนท์</td><td style="font-weight:700">10,935</td></tr>
+          <tr><td class="rank">8</td><td>เซ็นทรัลเวิลด์</td><td style="font-weight:700">10,887</td></tr>
+          <tr><td class="rank">9</td><td>ซีพีเอ็น ระยอง</td><td style="font-weight:700">7,116</td></tr>
+          <tr><td class="rank">10</td><td>เซ็นทรัลพัฒนา เรซซิเดนซ์</td><td style="font-weight:700">4,451</td></tr>
+          <tr><td class="rank">11</td><td>ซีพีเอ็น โคราช</td><td style="font-weight:700">3,649</td></tr>
+          <tr style="font-weight:700;background:#f3eafc"><td></td><td><strong>รวม พ.ค. 2026</strong></td><td style="color:#8e44ad"><strong>373,275</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="insight-box" style="margin-top:8px;">
     <h4>💡 หมายเหตุ</h4>
     <ul>
       <li>รวมชื่อบิลที่มีคีย์เวิร์ด: <strong>เซ็นทรัล / Central / เซนทรัล / ซีพีเอ็น / CPN</strong> ทุกรูปแบบ</li>
-      <li>2026 เป็นข้อมูล ม.ค.–เม.ย. รวม ฿2.1M incl VAT</li>
+      <li>2026 เป็นข้อมูล ม.ค.–พ.ค. รวม ฿2.47M incl VAT (พ.ค. +฿373K, 11 ราย — ดูตารางด้านล่าง)</li>
       <li>กลุ่ม "เซ็นทรัลพัฒนา สาขา" ครอบคลุมสาขาห้างทั่วประเทศ เช่น ลาดพร้าว, แจ้งวัฒนะ, รามอินทรา ฯลฯ</li>
     </ul>
   </div>
@@ -2528,11 +2554,11 @@ buildActualForecastTable();
 
 // ==================== CENTRAL GROUP TAB ====================
 const centralAnnual = {
-  pretax: [4461117, 5233494, 4746268, 1963096],
-  vat:    [312278,  366345,  332666,  137417],
-  total:  [4773395, 5599838, 5078506, 2100512],
+  pretax: [4461117, 5233494, 4746268, 2311951],
+  vat:    [312278,  366345,  332666,  161837],
+  total:  [4773395, 5599838, 5078506, 2473787],
 };
-const centralLabels = ['2023', '2024', '2025', '2026 (ม.ค.–เม.ย.)'];
+const centralLabels = ['2023', '2024', '2025', '2026 (ม.ค.–พ.ค.)'];
 charts.centralAnnual = new Chart(document.getElementById('centralAnnualChart'), {
   type: 'bar',
   data: {
