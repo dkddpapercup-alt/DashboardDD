@@ -62,6 +62,16 @@
   .data-table td { padding: 10px 12px; border-bottom: 1px solid #f0f2f5; }
   .data-table tr:last-child td { border-bottom: none; }
   .data-table tr:hover td { background: #f8f9fa; }
+  /* YoY table readability: zebra rows, sticky first column, month-group bands */
+  .yoy-table tbody tr:nth-child(odd) td { background: #f7f9fc; }
+  .yoy-table tbody tr:nth-child(even) td { background: #ffffff; }
+  .yoy-table tbody tr:hover td { background: #eef3fb; }
+  .yoy-table td:first-child, .yoy-table th:first-child { position: sticky; left: 0; z-index: 2; box-shadow: 1px 0 0 #e3e8ef; }
+  .yoy-table tbody tr:nth-child(odd) td:first-child { background: #eef1f5; }
+  .yoy-table tbody tr:nth-child(even) td:first-child { background: #f4f6f9; }
+  .yoy-table .col25 { color: #9aa5b1; }
+  .yoy-table .col26 { color: #1f3864; font-weight: 700; }
+  .yoy-table .mgsep { border-left: 2px solid #dbe2ea; }
   .rank { font-weight: 800; color: var(--muted); width: 36px; }
   .text-right { text-align: right; }
   .text-center { text-align: center; }
@@ -577,10 +587,10 @@
       <span class="card-subtitle">หน่วย: บาท | 2026 = Actual จาก AccCloud + Payroll</span>
     </div>
     <div class="card-body" style="padding:0;overflow-x:auto;">
-      <table class="data-table">
+      <table class="data-table yoy-table">
         <thead>
           <tr style="background:#1f3864;color:#fff;">
-            <th>รายการ</th>
+            <th style="position:sticky;left:0;background:#1f3864;z-index:3;">รายการ</th>
             <th class="text-right">ม.ค. 2025</th><th class="text-right">ม.ค. 2026</th><th class="text-right">Δ%</th>
             <th class="text-right">ก.พ. 2025</th><th class="text-right">ก.พ. 2026</th><th class="text-right">Δ%</th>
             <th class="text-right">มี.ค. 2025</th><th class="text-right">มี.ค. 2026</th><th class="text-right">Δ%</th>
@@ -1129,7 +1139,7 @@
 <div class="tab-content" id="tab-sum2025">
 <div class="section-title">📊 สรุปผลประกอบการ ปี 2025 (เต็มปี ม.ค.–ธ.ค.)</div>
 <div class="alert-box info" style="margin-bottom:16px;">รวมทุกหมวดของปี 2025 (รายเดือน / ต้นทุนสินค้า / OpEx / เงินเดือน / ค่าใช้จ่ายการเงิน) ไว้ในหน้าเดียว | หน่วย: บาท</div>
-<div class="kpi-grid" style="margin-bottom:18px;">
+<div class="kpi-row" style="margin-bottom:18px;">
 <div class="kpi-card"><div class="kpi-value" style="color:#2471a3">฿58.41M</div><div class="kpi-label">รายได้รวม</div><div class="kpi-sub">100%</div></div>
 <div class="kpi-card"><div class="kpi-value" style="color:#16a085">฿23.21M</div><div class="kpi-label">Gross Profit</div><div class="kpi-sub">GM 39.7%</div></div>
 <div class="kpi-card"><div class="kpi-value" style="color:#1e8449">฿4.75M</div><div class="kpi-label">กำไรจากการดำเนินงาน</div><div class="kpi-sub">8.1% ของรายได้</div></div>
@@ -1180,7 +1190,7 @@
 <div class="tab-content" id="tab-cmp2526">
 <div class="section-title">⚖️ เปรียบเทียบ 2025 vs 2026 — ฐานเดียวกัน ม.ค.–เม.ย. (4 เดือน)</div>
 <div class="alert-box warning" style="margin-bottom:16px;"><b>⚠️ หมายเหตุการเทียบ:</b> เทียบช่วง ม.ค.–เม.ย. ของทั้งสองปีเพื่อความยุติธรรม (2026 ยังไม่ปิดทั้งปี). ตัวเลข <b>รายได้ / COGS / Gross Margin</b> เชื่อถือได้สูง. ส่วน <b>OpEx และค่าใช้จ่ายการเงิน 2026</b> ยังเก็บข้อมูลได้ไม่ครบเท่างบทดลองปี 2025 (ขาดค่าเสื่อม/ประกัน/ค่าธรรมเนียมบางส่วน) — ตัวเลขกำไรสุทธิ 2026 จึงดู "สูงเกินจริง" ให้โฟกัสที่รายได้และอัตรากำไรขั้นต้นเป็นหลัก</div>
-<div class="kpi-grid" style="margin-bottom:18px;">
+<div class="kpi-row" style="margin-bottom:18px;">
 <div class="kpi-card"><div class="kpi-value" style="color:#2471a3">฿22.57M</div><div class="kpi-label">รายได้ 2026 (ม.ค.–เม.ย.)</div><div class="kpi-sub" style="color:#16a085">▲ +16.9% vs ฿19.31M ปี 2025</div></div>
 <div class="kpi-card"><div class="kpi-value" style="color:#16a085">32.8%</div><div class="kpi-label">Gross Margin 2026</div><div class="kpi-sub" style="color:#c0392b">-9.8 จุด vs 42.6% ปี 2025</div></div>
 <div class="kpi-card"><div class="kpi-value" style="color:#c0392b">฿15.18M</div><div class="kpi-label">COGS 2026</div><div class="kpi-sub" style="color:#16a085">▲ +36.9% vs ฿11.08M</div></div>
@@ -2124,7 +2134,7 @@ function buildYTD2026Charts() {
         const fmt25 = row.isPct ? (v25*100).toFixed(1)+'%' : '฿'+v25.toLocaleString('th-TH',{maximumFractionDigits:0});
         const fmt26 = row.isPct ? (v26*100).toFixed(1)+'%' : '฿'+v26.toLocaleString('th-TH',{maximumFractionDigits:0});
         const fmtD = (deltaPct>=0?'+':'')+deltaPct.toFixed(1)+'%';
-        cells += `<td class="text-right">${fmt25}</td><td class="text-right"><strong>${fmt26}</strong></td><td class="text-right ${cls}">${fmtD}</td>`;
+        cells += `<td class="text-right col25 mgsep">${fmt25}</td><td class="text-right col26">${fmt26}</td><td class="text-right ${cls}" style="font-weight:700">${fmtD}</td>`;
       }
       yoyHtml += `<tr>${cells}</tr>`;
     });
