@@ -242,8 +242,10 @@
   <button class="tab-btn" onclick="showTab('opex')">💼 ค่าใช้จ่าย OpEx</button>
   <button class="tab-btn" onclick="showTab('salary')">👥 เงินเดือน</button>
   <button class="tab-btn" onclick="showTab('finance')">💳 ค่าใช้จ่ายการเงิน</button>
+  <button class="tab-btn" onclick="showTab('sum2025')" style="color:#1e8449;font-weight:800;">📊 สรุป 2025</button>
   <button class="tab-btn" onclick="showTab('ytd2026')" style="color:#e74c3c;font-weight:800;">🆕 2026 YTD</button>
   <button class="tab-btn" onclick="showTab('exp2026')" style="color:#c0392b;font-weight:800;">📋 ค่าใช้จ่าย 2026</button>
+  <button class="tab-btn" onclick="showTab('cmp2526')" style="color:#b9770e;font-weight:800;">⚖️ 2025 vs 2026</button>
   <button class="tab-btn" onclick="showTab('debt')" style="color:#8e44ad;font-weight:800;">🏦 หนี้ & Break-even</button>
   <button class="tab-btn" onclick="showTab('productivity')" style="color:#16a085;font-weight:800;">👥 Productivity</button>
   <button class="tab-btn" onclick="showTab('cashflow')" style="color:#2471a3;font-weight:800;">💵 Cash Flow</button>
@@ -1521,6 +1523,91 @@
 </div>
 
 
+<!-- ==================== TAB: สรุป 2025 ==================== -->
+<div class="tab-content" id="tab-sum2025">
+<div class="section-title">📊 สรุปผลประกอบการ ปี 2025 (เต็มปี ม.ค.–ธ.ค.)</div>
+<div class="alert-box info" style="margin-bottom:16px;">ภาพรวมรวมทุกหมวดของปี 2025 ไว้ในหน้าเดียว — ตัวเลขตรงกับแท็บ ต้นทุนสินค้า / OpEx / เงินเดือน / ค่าใช้จ่ายการเงิน | หน่วย: บาท</div>
+<div class="kpi-grid" style="margin-bottom:18px;">
+<div class="kpi-card"><div class="kpi-value" style="color:#2471a3">฿58.41M</div><div class="kpi-label">รายได้รวม</div><div class="kpi-sub">100%</div></div>
+<div class="kpi-card"><div class="kpi-value" style="color:#16a085">฿23.21M</div><div class="kpi-label">Gross Profit</div><div class="kpi-sub">GM 39.7%</div></div>
+<div class="kpi-card"><div class="kpi-value" style="color:#1e8449">฿4.75M</div><div class="kpi-label">กำไรจากการดำเนินงาน</div><div class="kpi-sub">8.1% ของรายได้</div></div>
+<div class="kpi-card"><div class="kpi-value" style="color:#c0392b">฿0.64M</div><div class="kpi-label">กำไรสุทธิ (หลังการเงิน)</div><div class="kpi-sub">NM 1.1%</div></div>
+</div>
+<div class="card"><div class="card-header"><h3>📋 งบกำไรขาดทุนแบบสรุป (Common-size)</h3><span class="card-subtitle">% = สัดส่วนต่อรายได้รวม</span></div><div class="card-body">
+<table class="data-table"><thead><tr><th>รายการ</th><th class="text-right">จำนวนเงิน (฿)</th><th class="text-right">% รายได้</th></tr></thead><tbody>
+<tr style="font-weight:700"><td style="">รายได้รวม</td><td class="text-right" style="">58,411,227</td><td class="text-right" style="">100.0%</td></tr>
+<tr style="font-weight:400"><td style="color:#c0392b;">หัก: ต้นทุนสินค้า (COGS)</td><td class="text-right" style="color:#c0392b;">−35,197,753</td><td class="text-right" style="color:#c0392b;">60.3%</td></tr>
+<tr style="font-weight:700"><td style="color:#16a085;">= กำไรขั้นต้น (Gross Profit)</td><td class="text-right" style="color:#16a085;">23,213,474</td><td class="text-right" style="color:#16a085;">39.7%</td></tr>
+<tr style="font-weight:400"><td style="color:#c0392b;">หัก: เงินเดือน</td><td class="text-right" style="color:#c0392b;">−8,628,541</td><td class="text-right" style="color:#c0392b;">14.8%</td></tr>
+<tr style="font-weight:400"><td style="color:#c0392b;">หัก: ค่าใช้จ่ายดำเนินงาน (OpEx)</td><td class="text-right" style="color:#c0392b;">−9,838,453</td><td class="text-right" style="color:#c0392b;">16.8%</td></tr>
+<tr style="font-weight:700"><td style="color:#1e8449;">= กำไรจากการดำเนินงาน</td><td class="text-right" style="color:#1e8449;">4,746,480</td><td class="text-right" style="color:#1e8449;">8.1%</td></tr>
+<tr style="font-weight:400"><td style="color:#c0392b;">หัก: ค่าใช้จ่ายการเงิน+บัญชี</td><td class="text-right" style="color:#c0392b;">−4,107,912</td><td class="text-right" style="color:#c0392b;">7.0%</td></tr>
+<tr style="font-weight:800"><td style="color:#c0392b;">= กำไรสุทธิ</td><td class="text-right" style="color:#c0392b;">638,568</td><td class="text-right" style="color:#c0392b;">1.1%</td></tr>
+</tbody></table></div></div>
+<div class="card"><div class="card-header"><h3>📅 ตารางรายเดือน 2025 (12 เดือน)</h3><span class="card-subtitle">Net = กำไรหลังหักค่าใช้จ่ายการเงินแล้ว</span></div><div class="card-body" style="overflow-x:auto;">
+<table class="data-table"><thead><tr><th>เดือน</th><th class="text-right">รายได้</th><th class="text-right">COGS</th><th class="text-right">GP</th><th class="text-right">GM%</th><th class="text-right">เงินเดือน</th><th class="text-right">OpEx</th><th class="text-right">การเงิน</th><th class="text-right">Net</th><th class="text-right">NM%</th></tr></thead><tbody>
+<tr><td style="font-weight:600">ม.ค.</td><td class="text-right">5,340,694</td><td class="text-right">2,977,433</td><td class="text-right">2,363,261</td><td class="text-right">44.3%</td><td class="text-right">781,694</td><td class="text-right">2,049,237</td><td class="text-right">701,912</td><td class="text-right" style="color:#c0392b;font-weight:700">−1,169,582</td><td class="text-right" style="color:#c0392b">-21.9%</td></tr>
+<tr><td style="font-weight:600">ก.พ.</td><td class="text-right">5,269,849</td><td class="text-right">2,922,916</td><td class="text-right">2,346,933</td><td class="text-right">44.5%</td><td class="text-right">774,362</td><td class="text-right">725,355</td><td class="text-right">333,623</td><td class="text-right" style="color:#16a085;font-weight:700">513,593</td><td class="text-right" style="color:#16a085">9.7%</td></tr>
+<tr><td style="font-weight:600">มี.ค.</td><td class="text-right">3,882,755</td><td class="text-right">2,805,243</td><td class="text-right">1,077,512</td><td class="text-right">27.8%</td><td class="text-right">759,160</td><td class="text-right">533,786</td><td class="text-right">247,126</td><td class="text-right" style="color:#c0392b;font-weight:700">−462,560</td><td class="text-right" style="color:#c0392b">-11.9%</td></tr>
+<tr><td style="font-weight:600">เม.ย.</td><td class="text-right">4,812,425</td><td class="text-right">2,378,126</td><td class="text-right">2,434,299</td><td class="text-right">50.6%</td><td class="text-right">757,407</td><td class="text-right">423,990</td><td class="text-right">479,221</td><td class="text-right" style="color:#16a085;font-weight:700">773,681</td><td class="text-right" style="color:#16a085">16.1%</td></tr>
+<tr><td style="font-weight:600">พ.ค.</td><td class="text-right">4,283,557</td><td class="text-right">2,715,491</td><td class="text-right">1,568,066</td><td class="text-right">36.6%</td><td class="text-right">637,184</td><td class="text-right">568,638</td><td class="text-right">255,397</td><td class="text-right" style="color:#16a085;font-weight:700">106,847</td><td class="text-right" style="color:#16a085">2.5%</td></tr>
+<tr><td style="font-weight:600">มิ.ย.</td><td class="text-right">4,186,835</td><td class="text-right">2,510,549</td><td class="text-right">1,676,286</td><td class="text-right">40.0%</td><td class="text-right">687,092</td><td class="text-right">881,102</td><td class="text-right">332,675</td><td class="text-right" style="color:#c0392b;font-weight:700">−224,583</td><td class="text-right" style="color:#c0392b">-5.4%</td></tr>
+<tr><td style="font-weight:600">ก.ค.</td><td class="text-right">5,138,709</td><td class="text-right">3,128,762</td><td class="text-right">2,009,947</td><td class="text-right">39.1%</td><td class="text-right">687,356</td><td class="text-right">757,434</td><td class="text-right">336,091</td><td class="text-right" style="color:#16a085;font-weight:700">229,066</td><td class="text-right" style="color:#16a085">4.5%</td></tr>
+<tr><td style="font-weight:600">ส.ค.</td><td class="text-right">5,015,114</td><td class="text-right">3,376,844</td><td class="text-right">1,638,270</td><td class="text-right">32.7%</td><td class="text-right">696,596</td><td class="text-right">575,537</td><td class="text-right">248,905</td><td class="text-right" style="color:#16a085;font-weight:700">117,232</td><td class="text-right" style="color:#16a085">2.3%</td></tr>
+<tr><td style="font-weight:600">ก.ย.</td><td class="text-right">5,263,403</td><td class="text-right">3,400,226</td><td class="text-right">1,863,177</td><td class="text-right">35.4%</td><td class="text-right">720,640</td><td class="text-right">1,016,269</td><td class="text-right">335,104</td><td class="text-right" style="color:#c0392b;font-weight:700">−208,836</td><td class="text-right" style="color:#c0392b">-4.0%</td></tr>
+<tr><td style="font-weight:600">ต.ค.</td><td class="text-right">5,543,165</td><td class="text-right">3,102,182</td><td class="text-right">2,440,983</td><td class="text-right">44.0%</td><td class="text-right">707,474</td><td class="text-right">900,439</td><td class="text-right">340,382</td><td class="text-right" style="color:#16a085;font-weight:700">492,688</td><td class="text-right" style="color:#16a085">8.9%</td></tr>
+<tr><td style="font-weight:600">พ.ย.</td><td class="text-right">4,800,238</td><td class="text-right">3,617,042</td><td class="text-right">1,183,196</td><td class="text-right">24.6%</td><td class="text-right">700,503</td><td class="text-right">653,227</td><td class="text-right">263,579</td><td class="text-right" style="color:#c0392b;font-weight:700">−434,113</td><td class="text-right" style="color:#c0392b">-9.0%</td></tr>
+<tr><td style="font-weight:600">ธ.ค.</td><td class="text-right">4,874,483</td><td class="text-right">2,262,939</td><td class="text-right">2,611,544</td><td class="text-right">53.6%</td><td class="text-right">719,073</td><td class="text-right">753,439</td><td class="text-right">233,897</td><td class="text-right" style="color:#16a085;font-weight:700">905,135</td><td class="text-right" style="color:#16a085">18.6%</td></tr>
+<tr style="font-weight:800;background:#f0fff4;border-top:2px solid #16a085"><td>รวมทั้งปี</td><td class="text-right">58,411,227</td><td class="text-right">35,197,753</td><td class="text-right">23,213,474</td><td class="text-right">39.7%</td><td class="text-right">8,628,541</td><td class="text-right">9,838,453</td><td class="text-right">4,107,912</td><td class="text-right" style="color:#c0392b">638,568</td><td class="text-right">1.1%</td></tr>
+</tbody></table></div></div>
+<div class="card"><div class="card-header"><h3>💳 รายละเอียดค่าใช้จ่ายการเงิน+บัญชี 2025</h3></div><div class="card-body">
+<table class="data-table"><thead><tr><th>รายการ</th><th class="text-right">รวมทั้งปี (฿)</th></tr></thead><tbody>
+<tr><td>ดอกเบี้ยเงินกู้ธนาคาร</td><td class="text-right">1,213,128</td></tr>
+<tr><td>ดอกเบี้ยเบิกเกินบัญชี (OD)</td><td class="text-right">678,264</td></tr>
+<tr><td>ค่าเสื่อมราคา</td><td class="text-right">1,244,052</td></tr>
+<tr><td>ค่าเบี้ยประกัน</td><td class="text-right">285,396</td></tr>
+<tr><td>ค่าเช่าซื้อรถ (KIA)</td><td class="text-right">432,000</td></tr>
+<tr><td>ค่าธรรมเนียมธนาคาร</td><td class="text-right">154,440</td></tr>
+<tr><td>ภาษี/ค่าธรรมเนียม</td><td class="text-right">100,632</td></tr>
+<tr style="font-weight:800;background:#fff5f5"><td>รวมค่าใช้จ่ายการเงิน+บัญชี</td><td class="text-right" style="color:#c0392b">4,107,912</td></tr>
+</tbody></table></div></div>
+<div class="card"><div class="card-header"><h3>📈 รายได้ vs ต้นทุน รายเดือน 2025</h3></div><div class="card-body"><canvas id="sum2025Chart" style="max-height:340px;"></canvas></div></div>
+</div>
+
+<!-- ==================== TAB: 2025 vs 2026 ==================== -->
+<div class="tab-content" id="tab-cmp2526">
+<div class="section-title">⚖️ เปรียบเทียบ 2025 vs 2026 — ฐานเดียวกัน ม.ค.–เม.ย. (4 เดือน)</div>
+<div class="alert-box warning" style="margin-bottom:16px;"><b>⚠️ หมายเหตุการเทียบ:</b> เทียบช่วง ม.ค.–เม.ย. ของทั้งสองปีเพื่อความยุติธรรม (2026 ยังไม่ปิดทั้งปี). ตัวเลข <b>รายได้ / COGS / Gross Margin</b> เชื่อถือได้สูง. ส่วน <b>OpEx และค่าใช้จ่ายการเงิน 2026</b> ยังเก็บข้อมูลได้ไม่ครบเท่างบทดลองปี 2025 (ขาดค่าเสื่อม/ประกัน/ค่าธรรมเนียมบางส่วน) — ตัวเลขกำไรสุทธิ 2026 จึงดู "สูงเกินจริง" ให้โฟกัสที่รายได้และอัตรากำไรขั้นต้นเป็นหลัก</div>
+<div class="kpi-grid" style="margin-bottom:18px;">
+<div class="kpi-card"><div class="kpi-value" style="color:#2471a3">฿22.57M</div><div class="kpi-label">รายได้ 2026 (ม.ค.–เม.ย.)</div><div class="kpi-sub" style="color:#16a085">▲ +16.9% vs ฿19.31M ปี 2025</div></div>
+<div class="kpi-card"><div class="kpi-value" style="color:#16a085">32.8%</div><div class="kpi-label">Gross Margin 2026</div><div class="kpi-sub" style="color:#c0392b">-9.8 จุด vs 42.6% ปี 2025</div></div>
+<div class="kpi-card"><div class="kpi-value" style="color:#c0392b">฿15.18M</div><div class="kpi-label">COGS 2026</div><div class="kpi-sub" style="color:#16a085">▲ +36.9% vs ฿11.08M</div></div>
+<div class="kpi-card"><div class="kpi-value" style="color:#1e8449">฿7.40M</div><div class="kpi-label">Gross Profit 2026</div><div class="kpi-sub" style="color:#c0392b">▼ -10.0% vs ฿8.22M</div></div>
+</div>
+<div class="card"><div class="card-header"><h3>📊 ตารางเปรียบเทียบ ม.ค.–เม.ย.</h3><span class="card-subtitle">Δ = 2026 − 2025 | หน่วย: บาท</span></div><div class="card-body" style="overflow-x:auto;">
+<table class="data-table"><thead><tr><th>รายการ</th><th class="text-right">2025 (ม.ค.–เม.ย.)</th><th class="text-right">2026 (ม.ค.–เม.ย.)</th><th class="text-right">Δ บาท</th><th class="text-right">Δ %</th></tr></thead><tbody>
+<tr style="font-weight:800"><td>รายได้รวม</td><td class="text-right">19,305,723</td><td class="text-right">22,572,987</td><td class="text-right" style="color:#16a085">+3,267,264</td><td class="text-right" style="color:#16a085">+16.9%</td></tr>
+<tr style="font-weight:400"><td>ต้นทุนสินค้า (COGS)</td><td class="text-right">11,083,718</td><td class="text-right">15,176,313</td><td class="text-right" style="color:#16a085">+4,092,595</td><td class="text-right" style="color:#16a085">+36.9%</td></tr>
+<tr style="font-weight:800"><td>กำไรขั้นต้น (Gross Profit)</td><td class="text-right">8,222,005</td><td class="text-right">7,396,674</td><td class="text-right" style="color:#c0392b">−825,331</td><td class="text-right" style="color:#c0392b">-10.0%</td></tr>
+<tr style="font-weight:800"><td>Gross Margin %</td><td class="text-right">42.6%</td><td class="text-right">32.8%</td><td class="text-right" colspan="2" style="color:#c0392b">-9.8 จุด</td></tr>
+<tr style="font-weight:400"><td>เงินเดือน</td><td class="text-right">3,072,623</td><td class="text-right">2,621,575</td><td class="text-right" style="color:#c0392b">−451,048</td><td class="text-right" style="color:#c0392b">-14.7%</td></tr>
+<tr style="font-weight:400"><td>ค่าใช้จ่ายดำเนินงาน (OpEx) <span style="color:#b9770e">⚠️</span></td><td class="text-right">3,732,368</td><td class="text-right">1,515,902</td><td class="text-right" style="color:#c0392b">−2,216,466</td><td class="text-right" style="color:#c0392b">-59.4%</td></tr>
+<tr style="font-weight:400"><td>ค่าใช้จ่ายการเงิน <span style="color:#b9770e">⚠️</span></td><td class="text-right">1,761,882</td><td class="text-right">519,047</td><td class="text-right" style="color:#c0392b">−1,242,835</td><td class="text-right" style="color:#c0392b">-70.5%</td></tr>
+<tr style="font-weight:800"><td>กำไรสุทธิ (หลังการเงิน) <span style="color:#b9770e">⚠️</span></td><td class="text-right">-344,868</td><td class="text-right">2,740,150</td><td class="text-right" style="color:#16a085">+3,085,018</td><td class="text-right" style="color:#16a085">-894.6%</td></tr>
+</tbody></table>
+<div style="font-size:12px;color:#888;margin-top:8px;">⚠️ = หมวดที่ข้อมูล 2026 ยังเก็บไม่ครบเท่า 2025 — ใช้ดูแนวโน้มคร่าวๆ เท่านั้น</div>
+</div></div>
+<div class="card"><div class="card-header"><h3>📈 รายได้ / COGS / Gross Profit (ม.ค.–เม.ย.)</h3></div><div class="card-body"><canvas id="cmp2526Chart" style="max-height:340px;"></canvas></div></div>
+<div class="card"><div class="card-header"><h3>💡 อ่านผล</h3></div><div class="card-body" style="line-height:1.8;font-size:14px;">
+<p>📈 <b>รายได้โต +16.9%</b> (฿19.31M → ฿22.57M) — ยอดขาย 4 เดือนแรกปี 2026 สูงกว่าปีก่อนชัดเจน</p>
+<p>⚠️ <b>อัตรากำไรขั้นต้นหดตัว 9.8 จุด</b> (42.6% → 32.8%) — COGS โตเร็วกว่ารายได้ (+36.9% เทียบรายได้ +16.9%) สะท้อนต้นทุนวัตถุดิบ/กระดาษที่สูงขึ้น เป็นจุดที่ต้องจับตา</p>
+<p>✅ <b>เงินเดือนคุมได้ดี</b> (-14.7%) แม้รายได้โตขึ้น</p>
+<p style="color:#b9770e">📌 กำไรสุทธิ 2026 ที่แสดง <b>ยังไม่รวมค่าเสื่อม/ประกัน/ค่าธรรมเนียมเต็มจำนวน</b> เหมือนปี 2025 — อย่าเพิ่งสรุปว่ากำไรดีขึ้นจากตัวเลขสุทธิ ให้รอข้อมูลปิดงบครบก่อน</p>
+</div></div>
+</div>
+
+
+
 <script>
 // ==================== DATA ====================
 const MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
@@ -1773,6 +1860,43 @@ function buildTabCharts(name) {
   else if (name === 'productivity') buildProductivityTab();
   else if (name === 'cashflow') buildCashFlowTab();
   else if (name === 'payment') buildPaymentTab();
+  else if (name === 'sum2025') buildSum2025Charts();
+  else if (name === 'cmp2526') buildCmp2526Charts();
+}
+
+// ==================== NEW: สรุป 2025 + 2025 vs 2026 CHARTS ====================
+function buildSum2025Charts() {
+  destroyChart('sum2025');
+  const cogsArr = [2977433,2922916,2805243,2378126,2715491,2510549,3128762,3376844,3400226,3102182,3617042,2262939];
+  charts.sum2025 = new Chart(document.getElementById('sum2025Chart'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: 'รายได้', data: rev2025, backgroundColor: '#2471a3' },
+        { label: 'COGS', data: cogsArr, backgroundColor: '#e74c3c' }
+      ]
+    },
+    options: { ...chartDefaults, scales: { y: { ticks: { callback: v => (v/1e6).toFixed(1)+'M' } } } }
+  });
+}
+
+function buildCmp2526Charts() {
+  destroyChart('cmp2526');
+  // ม.ค.–เม.ย. รวม
+  const d2025 = [19305723, 11083718, 8222005];  // Rev, COGS, GP
+  const d2026 = [22572987, 15176313, 7396674];
+  charts.cmp2526 = new Chart(document.getElementById('cmp2526Chart'), {
+    type: 'bar',
+    data: {
+      labels: ['รายได้', 'COGS', 'Gross Profit'],
+      datasets: [
+        { label: '2025 (ม.ค.–เม.ย.)', data: d2025, backgroundColor: '#95a5a6' },
+        { label: '2026 (ม.ค.–เม.ย.)', data: d2026, backgroundColor: '#2471a3' }
+      ]
+    },
+    options: { ...chartDefaults, scales: { y: { ticks: { callback: v => (v/1e6).toFixed(1)+'M' } } } }
+  });
 }
 
 // ==================== PAYMENT DATA (AccCloud/FlowAccount, 25 Mar 2026) ==================== (FlowAccount, 8 Mar 2026) ====================
