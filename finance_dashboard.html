@@ -1380,30 +1380,30 @@
   <div class="section-title">📋 ค่าใช้จ่ายจริง ปี 2026 (ม.ค.–พ.ค.) — แยกตามหมวด</div>
   <div class="alert-box info" style="margin-bottom:14px;">
     📄 <strong>ที่มา:</strong> ไฟล์ "ค่าใช้จ่าย ม.ค.–พ.ค." (AccCloud) — ตัวเลข<strong>ก่อน VAT</strong> ตามวันที่ออกเอกสาร |
-    ⚠️ <strong>ยังไม่รวมเงินเดือน/payroll</strong> (อยู่คนละระบบ) | ใช้สำหรับกระทบยอดกับทีมต้นทุน/บัญชี
+    ✅ <strong>รวมเงินเดือน (530101) แล้ว</strong> | รวมทุกแถวที่มีผังบัญชี | ใช้กระทบยอดกับทีมต้นทุน/บัญชี
   </div>
 
   <!-- KPI -->
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
     <div style="background:linear-gradient(135deg,#1a3a5c,#2980b9);color:white;border-radius:12px;padding:14px 16px;text-align:center;">
       <div style="font-size:10px;opacity:.8;letter-spacing:.5px;margin-bottom:4px;">รวมทั้งหมด ม.ค.–พ.ค.</div>
-      <div style="font-size:22px;font-weight:800;">฿14.57M</div>
+      <div style="font-size:22px;font-weight:800;">฿28.02M</div>
       <div style="font-size:11px;opacity:.85;margin-top:3px;">ก่อน VAT | 5 เดือน</div>
     </div>
     <div style="background:linear-gradient(135deg,#7b3f00,#e67e22);color:white;border-radius:12px;padding:14px 16px;text-align:center;">
       <div style="font-size:10px;opacity:.8;letter-spacing:.5px;margin-bottom:4px;">ต้นทุนสินค้า/วัตถุดิบ</div>
-      <div style="font-size:22px;font-weight:800;">฿10.31M</div>
-      <div style="font-size:11px;opacity:.85;margin-top:3px;">70.8% | กระดาษปิดปากแก้ว ฿10.5M</div>
-    </div>
-    <div style="background:linear-gradient(135deg,#1a5c2a,#27ae60);color:white;border-radius:12px;padding:14px 16px;text-align:center;">
-      <div style="font-size:10px;opacity:.8;letter-spacing:.5px;margin-bottom:4px;">ค่าใช้จ่ายดำเนินงาน/ขาย</div>
-      <div style="font-size:22px;font-weight:800;">฿2.16M</div>
-      <div style="font-size:11px;opacity:.85;margin-top:3px;">14.8% | ขนส่ง/สำนักงาน/บูธ</div>
+      <div style="font-size:22px;font-weight:800;">฿19.32M</div>
+      <div style="font-size:11px;opacity:.85;margin-top:3px;">68.9% | ซื้อสินค้า/วัตถุดิบ (114102)</div>
     </div>
     <div style="background:linear-gradient(135deg,#4a235a,#8e44ad);color:white;border-radius:12px;padding:14px 16px;text-align:center;">
-      <div style="font-size:10px;opacity:.8;letter-spacing:.5px;margin-bottom:4px;">ชำระหนี้/เงินกู้</div>
-      <div style="font-size:22px;font-weight:800;">฿2.10M</div>
-      <div style="font-size:11px;opacity:.85;margin-top:3px;">14.4% | ออมสิน/SCB/โตโยต้า/KIA</div>
+      <div style="font-size:10px;opacity:.8;letter-spacing:.5px;margin-bottom:4px;">เงินเดือน/สวัสดิการ</div>
+      <div style="font-size:22px;font-weight:800;">฿3.29M</div>
+      <div style="font-size:11px;opacity:.85;margin-top:3px;">11.7% | 530101 ฿3.19M</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#1a5c2a,#27ae60);color:white;border-radius:12px;padding:14px 16px;text-align:center;">
+      <div style="font-size:10px;opacity:.8;letter-spacing:.5px;margin-bottom:4px;">ดำเนินงาน + ดอกเบี้ย</div>
+      <div style="font-size:22px;font-weight:800;">฿3.79M</div>
+      <div style="font-size:11px;opacity:.85;margin-top:3px;">13.5% | ขาย/บริหาร/ขนส่ง/ดบ. · ชำระหนี้ ฿1.63M แยก BS</div>
     </div>
   </div>
 
@@ -1415,45 +1415,46 @@
 
   <!-- ประเภทต้นทุน × month -->
   <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px;overflow-x:auto;">
-    <h3 style="margin:0 0 10px;font-size:15px;">📋 ค่าใช้จ่ายตาม "ประเภทต้นทุน" × เดือน (ก่อน VAT, ฿)</h3>
+    <h3 style="margin:0 0 10px;font-size:15px;">📋 ค่าใช้จ่ายแยกหมวดบัญชี × เดือน (ก่อน VAT, ฿)</h3>
     <table class="data-table" style="min-width:720px;">
       <thead><tr>
         <th>ประเภทต้นทุน</th><th class="text-right">ม.ค.</th><th class="text-right">ก.พ.</th><th class="text-right">มี.ค.</th><th class="text-right">เม.ย.</th><th class="text-right">พ.ค.</th><th class="text-right">รวม</th>
       </tr></thead>
       <tbody>
-        <tr><td>สินค้าสั่งผลิต</td><td class="text-right">767,959</td><td class="text-right">979,635</td><td class="text-right">1,826,589</td><td class="text-right">1,409,230</td><td class="text-right">1,508,839</td><td class="text-right font-bold">6,492,252</td></tr>
-        <tr><td>สินค้าซื้อมาขายไป</td><td class="text-right">159,070</td><td class="text-right">346,615</td><td class="text-right">1,217,286</td><td class="text-right">827,395</td><td class="text-right">438,932</td><td class="text-right font-bold">2,989,298</td></tr>
-        <tr style="background:#fdf2f8"><td>หนี้สิน (ชำระเงินกู้)</td><td class="text-right">387,471</td><td class="text-right">395,012</td><td class="text-right">527,230</td><td class="text-right">519,153</td><td class="text-right">269,596</td><td class="text-right font-bold">2,098,462</td></tr>
-        <tr><td>ต้นทุนขาย</td><td class="text-right">179,010</td><td class="text-right">102,972</td><td class="text-right">245,440</td><td class="text-right">164,165</td><td class="text-right">342,620</td><td class="text-right font-bold">1,034,207</td></tr>
-        <tr><td>Raw Material</td><td class="text-right">62,465</td><td class="text-right">183,932</td><td class="text-right">169,697</td><td class="text-right">138,773</td><td class="text-right">199,826</td><td class="text-right font-bold">754,692</td></tr>
-        <tr style="background:#eafaf1"><td>ต้นทุนสำนักงาน</td><td class="text-right">173,088</td><td class="text-right">87,830</td><td class="text-right">48,298</td><td class="text-right">97,141</td><td class="text-right">85,971</td><td class="text-right font-bold">492,327</td></tr>
-        <tr style="background:#eafaf1"><td>ค่าขนส่งในไทย</td><td class="text-right">59,600</td><td class="text-right">44,645</td><td class="text-right">66,224</td><td class="text-right">46,525</td><td class="text-right">46,419</td><td class="text-right font-bold">263,413</td></tr>
-        <tr><td>ค่าขนส่งระหว่างประเทศ</td><td class="text-right">4,000</td><td class="text-right">11,700</td><td class="text-right">24,040</td><td class="text-right">66,600</td><td class="text-right">59,175</td><td class="text-right font-bold">165,515</td></tr>
-        <tr><td>อุปกรณ์การผลิต</td><td class="text-right">15,702</td><td class="text-right">1,716</td><td class="text-right">3,690</td><td class="text-right">36,200</td><td class="text-right">15,929</td><td class="text-right font-bold">73,237</td></tr>
-        <tr><td>(ไม่ระบุประเภท)</td><td class="text-right">0</td><td class="text-right">2,286</td><td class="text-right">11,356</td><td class="text-right">0</td><td class="text-right">189,435</td><td class="text-right font-bold">203,077</td></tr>
-        <tr style="font-weight:800;background:#f0f4f8;border-top:2px solid #cfd8e3;"><td>รวมทั้งหมด</td><td class="text-right">1,808,364</td><td class="text-right">2,156,342</td><td class="text-right">4,139,850</td><td class="text-right">3,305,182</td><td class="text-right">3,156,742</td><td class="text-right">14,566,481</td></tr>
+        <tr><td>ต้นทุนสินค้า/วัตถุดิบ <span style="color:#999;font-size:11px">(114102)</span></td><td class="text-right">3,055,113</td><td class="text-right">3,215,028</td><td class="text-right">5,071,636</td><td class="text-right">4,080,749</td><td class="text-right">3,893,816</td><td class="text-right font-bold">19,316,343</td></tr>
+        <tr style="background:#eef7ff"><td>เงินเดือน/สวัสดิการ <span style="color:#999;font-size:11px">(530101/104)</span></td><td class="text-right">636,942</td><td class="text-right">613,545</td><td class="text-right">694,195</td><td class="text-right">670,461</td><td class="text-right">675,894</td><td class="text-right font-bold">3,291,036</td></tr>
+        <tr><td>ค่าใช้จ่ายในการขาย <span style="color:#999;font-size:11px">(520x)</span></td><td class="text-right">271,085</td><td class="text-right">233,944</td><td class="text-right">270,341</td><td class="text-right">439,596</td><td class="text-right">343,206</td><td class="text-right font-bold">1,558,172</td></tr>
+        <tr><td>ค่าใช้จ่ายบริหาร <span style="color:#999;font-size:11px">(530x)</span></td><td class="text-right">205,544</td><td class="text-right">136,715</td><td class="text-right">131,980</td><td class="text-right">131,360</td><td class="text-right">368,552</td><td class="text-right font-bold">974,152</td></tr>
+        <tr><td>ต้นทุนการผลิต/ขนส่ง <span style="color:#999;font-size:11px">(510x)</span></td><td class="text-right">127,351</td><td class="text-right">106,781</td><td class="text-right">182,046</td><td class="text-right">154,822</td><td class="text-right">180,020</td><td class="text-right font-bold">751,019</td></tr>
+        <tr><td>ค่าใช้จ่ายการเงิน-ดอกเบี้ย <span style="color:#999;font-size:11px">(580x)</span></td><td class="text-right">114,129</td><td class="text-right">92,566</td><td class="text-right">177,305</td><td class="text-right">91,855</td><td class="text-right">26,624</td><td class="text-right font-bold">502,479</td></tr>
+        <tr style="background:#fdf2f8"><td>ชำระหนี้/เจ้าหนี้ <span style="color:#999;font-size:11px">(21x/22x · BS)</span></td><td class="text-right">281,988</td><td class="text-right">295,528</td><td class="text-right">450,676</td><td class="text-right">415,524</td><td class="text-right">183,777</td><td class="text-right font-bold">1,627,493</td></tr>
+        <tr><td>อื่นๆ/ปรับปรุง</td><td class="text-right">2,608</td><td class="text-right">−17,364</td><td class="text-right">5,853</td><td class="text-right">3,328</td><td class="text-right">3,844</td><td class="text-right font-bold">−1,730</td></tr>
+        <tr style="font-weight:800;background:#f0f4f8;border-top:2px solid #cfd8e3;"><td>รวมทั้งหมด</td><td class="text-right">4,694,760</td><td class="text-right">4,676,742</td><td class="text-right">6,984,033</td><td class="text-right">5,987,695</td><td class="text-right">5,675,733</td><td class="text-right">28,018,964</td></tr>
       </tbody>
     </table>
   </div>
 
   <!-- Top accounts -->
   <div style="background:white;border-radius:12px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px;overflow-x:auto;">
-    <h3 style="margin:0 0 10px;font-size:15px;">🏦 Top 12 ผังบัญชี (ก่อน VAT, รวม ม.ค.–พ.ค.)</h3>
+    <h3 style="margin:0 0 10px;font-size:15px;">🏦 Top 15 ผังบัญชี (ก่อน VAT, รวม ม.ค.–พ.ค.)</h3>
     <table class="data-table" style="min-width:640px;">
       <thead><tr><th>#</th><th>รหัส</th><th>ชื่อบัญชี</th><th class="text-right">ยอด (฿)</th><th>หมวด</th></tr></thead>
       <tbody>
-        <tr><td class="rank">1</td><td>114102</td><td>กระดาษปิดปากแก้ว (วัตถุดิบหลัก)</td><td class="text-right font-bold" style="color:#e67e22">10,486,160</td><td><span class="pill" style="background:#fdebd0;color:#b9770e">ต้นทุนสินค้า</span></td></tr>
-        <tr><td class="rank">2</td><td>221106</td><td>เงินกู้ยืม-ธ.ไทยพาณิชย์</td><td class="text-right font-bold">529,775</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
-        <tr><td class="rank">3</td><td>510107</td><td>ค่าขนส่งสินค้า</td><td class="text-right font-bold">511,785</td><td><span class="pill" style="background:#d5f5e3;color:#1e8449">ดำเนินงาน</span></td></tr>
-        <tr><td class="rank">4</td><td>221107</td><td>เงินกู้ยืม-ธ.ออมสิน</td><td class="text-right font-bold">342,787</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
-        <tr><td class="rank">5</td><td>221111</td><td>เงินกู้ยืม-ธ.ออมสิน</td><td class="text-right font-bold">217,626</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
-        <tr><td class="rank">6</td><td>520312</td><td>ค่าขนส่งเอกชน-เดลิเวอรี่</td><td class="text-right font-bold">194,565</td><td><span class="pill" style="background:#d5f5e3;color:#1e8449">ดำเนินงาน</span></td></tr>
-        <tr><td class="rank">7</td><td>530407</td><td>ค่าติดตั้งบูธ/ชั้นวาง งาน WOC</td><td class="text-right font-bold">167,715</td><td><span class="pill" style="background:#d5f5e3;color:#1e8449">ดำเนินงาน</span></td></tr>
-        <tr><td class="rank">8</td><td>213104</td><td>เงินกู้ยืม-พัฒนาวิสาหกิจ</td><td class="text-right font-bold">147,102</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
-        <tr><td class="rank">9</td><td>212205</td><td>เจ้าหนี้-โตโยต้าลิสซิ่ง</td><td class="text-right font-bold">146,635</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
-        <tr><td class="rank">10</td><td>530116</td><td>ค่าเช่าซื้อรถ/KIA</td><td class="text-right font-bold">144,000</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
-        <tr><td class="rank">11</td><td>212301</td><td>ค่าใช้จ่ายเบิกคืน-คุณดวงกมล</td><td class="text-right font-bold">121,697</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
-        <tr><td class="rank">12</td><td>221108</td><td>เงินกู้ยืม-ธ.ออมสิน</td><td class="text-right font-bold">118,772</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
+        <tr><td class="rank">1</td><td>114102</td><td>ซื้อสินค้า/วัตถุดิบ (กระดาษ/PET ฯลฯ)</td><td class="text-right font-bold" style="color:#e67e22">19,186,220</td><td><span class="pill" style="background:#fdebd0;color:#b9770e">ต้นทุนสินค้า</span></td></tr>
+        <tr style="background:#eef7ff"><td class="rank">2</td><td>530101</td><td>เงินเดือน ค่าจ้าง</td><td class="text-right font-bold" style="color:#2980b9">3,185,499</td><td><span class="pill" style="background:#d6eaf8;color:#1f6391">เงินเดือน</span></td></tr>
+        <tr><td class="rank">3</td><td>520101</td><td>ค่านายหน้า/ส่วนแบ่งการขาย</td><td class="text-right font-bold">607,860</td><td><span class="pill" style="background:#d5f5e3;color:#1e8449">ขาย</span></td></tr>
+        <tr><td class="rank">4</td><td>510107</td><td>ค่าขนส่งสินค้า</td><td class="text-right font-bold">569,597</td><td><span class="pill" style="background:#d5f5e3;color:#1e8449">ขนส่ง</span></td></tr>
+        <tr><td class="rank">5</td><td>221106</td><td>เงินกู้ยืม-ธ.ไทยพาณิชย์</td><td class="text-right font-bold">529,775</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
+        <tr><td class="rank">6</td><td>580101</td><td>ดอกเบี้ยจ่าย</td><td class="text-right font-bold">454,208</td><td><span class="pill" style="background:#ebdef0;color:#7d3c98">ดอกเบี้ย</span></td></tr>
+        <tr><td class="rank">7</td><td>221107</td><td>เงินกู้ยืม-ธ.ออมสิน</td><td class="text-right font-bold">342,787</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
+        <tr><td class="rank">8</td><td>221111</td><td>เงินกู้ยืม-ธ.ออมสิน</td><td class="text-right font-bold">217,626</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
+        <tr><td class="rank">9</td><td>520312</td><td>ค่าขนส่งเอกชน-เดลิเวอรี่</td><td class="text-right font-bold">194,565</td><td><span class="pill" style="background:#d5f5e3;color:#1e8449">ขาย</span></td></tr>
+        <tr><td class="rank">10</td><td>213104</td><td>เงินกู้ยืม-พัฒนาวิสาหกิจ</td><td class="text-right font-bold">183,455</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
+        <tr><td class="rank">11</td><td>530116</td><td>ค่าเช่าซื้อรถ/KIA</td><td class="text-right font-bold">180,000</td><td><span class="pill" style="background:#d5f5e3;color:#1e8449">บริหาร</span></td></tr>
+        <tr><td class="rank">12</td><td>520314</td><td>ค่าใช้จ่ายขาย-ยอดยกมา</td><td class="text-right font-bold">175,631</td><td><span class="pill" style="background:#d5f5e3;color:#1e8449">ขาย</span></td></tr>
+        <tr><td class="rank">13</td><td>530407</td><td>ค่าติดตั้งบูธ/ชั้นวาง งาน WOC</td><td class="text-right font-bold">167,715</td><td><span class="pill" style="background:#d5f5e3;color:#1e8449">บริหาร</span></td></tr>
+        <tr><td class="rank">14</td><td>212205</td><td>เจ้าหนี้-โตโยต้าลิสซิ่ง</td><td class="text-right font-bold">146,635</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
+        <tr><td class="rank">15</td><td>212301</td><td>ค่าใช้จ่ายเบิกคืน-คุณดวงกมล</td><td class="text-right font-bold">121,697</td><td><span class="pill pill-red">ชำระหนี้</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -1461,11 +1462,11 @@
   <div class="alert-box" style="background:#fff8e1;border-color:#f0ad4e;">
     💡 <strong>ข้อสังเกตสำหรับทีมต้นทุน/บัญชี:</strong>
     <ul style="margin:6px 0 0;padding-left:20px;font-size:13px;line-height:1.7;">
-      <li><strong>กระดาษปิดปากแก้ว (114102) ฿10.49M = 72% ของค่าใช้จ่ายทั้งหมด</strong> — เป็นต้นทุนวัตถุดิบหลัก ควรจับตา price/qty ใกล้ชิด</li>
-      <li><strong>ชำระหนี้/เงินกู้ ฿2.10M</strong> (ออมสิน, SCB, โตโยต้า/KIA ลิสซิ่ง) — เป็นรายการ Balance Sheet ไม่ใช่ค่าใช้จ่าย P&L ควรแยกออกเมื่อทำงบกำไรขาดทุน</li>
-      <li><strong>OPEX ดำเนินงานจริง ~฿2.16M</strong> — ขนส่ง (฿0.97M), บูธ/การตลาด, สำนักงาน, บัญชี</li>
-      <li>⚠️ <strong>ยังไม่รวมเงินเดือน</strong> (~฿0.7M/เดือน อยู่ระบบ payroll แยก) — ต้องบวกเพิ่มเมื่อทำงบเต็ม</li>
-      <li>มี.ค. ค่าใช้จ่ายสูงสุด ฿4.14M (จัดซื้อสินค้าเยอะ — สั่งผลิต ฿1.83M + ซื้อมาขาย ฿1.22M)</li>
+      <li><strong>ซื้อสินค้า/วัตถุดิบ (114102) ฿19.19M = 68% ของค่าใช้จ่ายทั้งหมด</strong> — ต้นทุนหลัก (กระดาษปิดปากแก้ว/ขวด PET ฯลฯ) ควรจับตา price/qty ใกล้ชิด</li>
+      <li><strong>เงินเดือน/สวัสดิการ ฿3.29M</strong> (เฉลี่ย ~฿658K/เดือน, บัญชี 530101/530104) — รวมอยู่ในไฟล์นี้แล้ว</li>
+      <li><strong>ชำระหนี้/เจ้าหนี้ ฿1.63M + ดอกเบี้ยจ่าย ฿0.50M</strong> — เงินต้นเป็น Balance Sheet (แยกออกตอนทำ P&L) · ดอกเบี้ยเป็นค่าใช้จ่ายการเงิน</li>
+      <li><strong>ค่าใช้จ่ายดำเนินงาน (ขาย+บริหาร+ขนส่ง) ฿3.28M</strong> — นายหน้า ฿0.61M, ขนส่ง, บูธ/การตลาด, เช่าซื้อรถ</li>
+      <li>มี.ค. ค่าใช้จ่ายสูงสุด ฿6.98M (จัดซื้อวัตถุดิบ ฿5.07M) | ตัวเลข<strong>ก่อน VAT</strong> ตามวันที่ออกเอกสาร</li>
     </ul>
   </div>
 </div>
@@ -3287,9 +3288,11 @@ function buildExp2026Tab() {
     data: {
       labels: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.'],
       datasets: [
-        { label:'ต้นทุนสินค้า/วัตถุดิบ', data:[1.005,1.512,3.217,2.412,2.164], backgroundColor:'#e67e22cc', borderRadius:3 },
-        { label:'ค่าใช้จ่ายดำเนินงาน/ขาย', data:[0.416,0.249,0.395,0.374,0.724], backgroundColor:'#27ae60cc', borderRadius:3 },
-        { label:'ชำระหนี้/เงินกู้', data:[0.387,0.395,0.527,0.519,0.270], backgroundColor:'#8e44adcc', borderRadius:3 },
+        { label:'ต้นทุนสินค้า/วัตถุดิบ', data:[3.055,3.215,5.072,4.081,3.894], backgroundColor:'#e67e22cc', borderRadius:3 },
+        { label:'เงินเดือน/สวัสดิการ', data:[0.637,0.614,0.694,0.670,0.676], backgroundColor:'#2980b9cc', borderRadius:3 },
+        { label:'ดำเนินงาน (ขาย+บริหาร+ขนส่ง)', data:[0.604,0.477,0.584,0.726,0.892], backgroundColor:'#27ae60cc', borderRadius:3 },
+        { label:'ดอกเบี้ย/การเงิน', data:[0.114,0.093,0.177,0.092,0.027], backgroundColor:'#16a085cc', borderRadius:3 },
+        { label:'ชำระหนี้/เจ้าหนี้', data:[0.282,0.296,0.451,0.416,0.184], backgroundColor:'#8e44adcc', borderRadius:3 },
       ]
     },
     options: {
