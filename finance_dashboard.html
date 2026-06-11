@@ -1344,7 +1344,7 @@ const expDetail2026 = {
 };
 
 // ===== 2026 YTD DATA — ยึดจาก Google Sheet เป็นหลัก (อัพเดต realtime) =====
-let rev2026    = [4598077, 4874871, 6069955, 7030084, 2198119];  // ม.ค.–เม.ย. ปิดเดือน | พ.ค. MTD (Google Sheet)
+let rev2026    = [4598077, 4874871, 6069955, 7030084, 5871292];  // ม.ค.–พ.ค. ปิดเดือน final (Peak พ.ค. = ฿5,871,292)
 const cogs2026   = [3045621, 3214037, 4965296, 4067449, 3893816]; // ม.ค.–พ.ค. จาก ค่าใช้จ่าย ม.ค.-พ.ค.xlsx (114102)
 const sal2026    = [636942,  613545,  694195,  670461,  675894];   // ม.ค.–พ.ค. จาก ค่าใช้จ่าย ม.ค.-พ.ค.xlsx (530101+530104)
 const opex2026   = [563465,  468009,   84428,  400000,  0];        // พ.ค. = ประมาณการ
@@ -1354,7 +1354,7 @@ const gp2026     = rev2026.map((r,i) => r - cogs2026[i]);
 const np2026     = gp2026.map((g,i) => g - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i]);
 const gm2026     = rev2026.map((r,i) => r > 0 ? (r - cogs2026[i]) / r * 100 : 0);
 const nm2026     = rev2026.map((r,i) => r > 0 ? np2026[i] / r * 100 : 0);
-const MONTHS_2026 = ['ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026', 'เม.ย. 2026', 'พ.ค. 2026 (MTD)'];
+const MONTHS_2026 = ['ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026', 'เม.ย. 2026', 'พ.ค. 2026'];
 
 // ===== GOOGLE SHEETS LIVE DATA (Finance) =====
 const _FIN_GSHEET_URL = 'https://docs.google.com/spreadsheets/d/1mtdKekglNCJpS6SycEK0wTiJGRWu6fA7id0N17XEC-Y/gviz/tq?tqx=out:csv&sheet=Dashboard';
