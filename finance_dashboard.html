@@ -780,7 +780,7 @@
     <div class="card">
       <div class="card-header">
         <h3>📈 Revenue per Employee รายเดือน</h3>
-        <span class="card-subtitle">ยอดขาย ÷ พนักงาน 36 คน (มี.ค. 69) | เส้นประ = เป้าหมาย (avg 2025)</span>
+        <span class="card-subtitle">ยอดขาย ÷ พนักงาน 36 คน | เส้นประ = เป้าหมาย (avg 2025) | เดือนล่าสุดที่มีข้อมูลครบ = เม.ย. 69</span>
       </div>
       <div class="card-body"><canvas id="revPerHeadChart"></canvas></div>
     </div>
@@ -789,7 +789,7 @@
     <div class="card">
       <div class="card-header">
         <h3>🧩 สัดส่วนทีมงาน</h3>
-        <span class="card-subtitle">แบ่งตามฝ่าย — รวม 36 คน (มี.ค. 2026)</span>
+        <span class="card-subtitle">แบ่งตามฝ่าย — รวม 36 คน (ข้อมูล payroll ถึง 30 เม.ย. 69)</span>
       </div>
       <div class="card-body"><canvas id="teamDonutChart"></canvas></div>
     </div>
@@ -2441,9 +2441,18 @@ function buildProductivityTab() {
   const HC   = HEADCOUNT.total;
   const SC   = SALES_COUNT;
 
-  // Build combined 2025 + 2026 data arrays
-  const allRev = [...rev2025, ...rev2026];
-  const allSal = [...sal2025, ...rev2026.map((_,i) => sal2026[i])];
+  // ── Auto-detect latest 2026 month with complete data (sal>0 AND rev>0) ──
+  const TH_SHORT = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  let latestIdx = -1;
+  for (let i = sal2026.length - 1; i >= 0; i--) {
+    if (sal2026[i] > 0 && rev2026[i] > 0) { latestIdx = i; break; }
+  }
+  if (latestIdx < 0) latestIdx = 0;
+  const latestMonthLbl = TH_SHORT[latestIdx] + ' 69';
+
+  // Build combined 2025 + 2026 data arrays — null-out 2026 months with no salary data so charts skip them
+  const allRev = [...rev2025, ...rev2026.map((r,i) => sal2026[i] > 0 ? r : null)];
+  const allSal = [...sal2025, ...sal2026.map(s => s > 0 ? s : null)];
   const allLbl = [...MONTHS.map(m => m+' 68'), ...MONTHS_2026.map(m => m.replace(' 2026',' 69'))];
 
   // 2025 averages as benchmark
@@ -2453,8 +2462,8 @@ function buildProductivityTab() {
   const targetRevPerSales = Math.round(avgRev2025 / SC);
   const targetSalPct      = (avgSal2025 / avgRev2025 * 100).toFixed(1);
 
-  // Latest month values (Mar 2026)
-  const latestRev = rev2026[2], latestSal = sal2026[2];
+  // Latest month values (auto-detected — typically เม.ย. 2026 when sal2026[3] > 0)
+  const latestRev = rev2026[latestIdx], latestSal = sal2026[latestIdx];
   const latestRevPerHead  = Math.round(latestRev / HC);
   const latestRevPerSales = Math.round(latestRev / SC);
   const latestSalPct      = (latestSal / latestRev * 100).toFixed(1);
@@ -2464,13 +2473,13 @@ function buildProductivityTab() {
   const vsHead  = ((latestRevPerHead  / targetRevPerHead  - 1) * 100).toFixed(1);
   const vsSales = ((latestRevPerSales / targetRevPerSales - 1) * 100).toFixed(1);
   const kpis = [
-    { label:'Revenue per Employee (มี.ค. 69)', value:'฿'+fmt(latestRevPerHead),
+    { label:'Revenue per Employee ('+latestMonthLbl+')', value:'฿'+fmt(latestRevPerHead),
       sub:(vsHead>=0?'▲ +':'▼ ')+Math.abs(vsHead)+'% vs เป้า (฿'+fmt(targetRevPerHead)+')', color: vsHead>=0?'green':'red', icon:'👤' },
-    { label:'Revenue per Sales Person (มี.ค. 69)', value:'฿'+fmt(latestRevPerSales),
+    { label:'Revenue per Sales Person ('+latestMonthLbl+')', value:'฿'+fmt(latestRevPerSales),
       sub:(vsSales>=0?'▲ +':'▼ ')+Math.abs(vsSales)+'% vs เป้า (฿'+fmt(targetRevPerSales)+')', color: vsSales>=0?'green':'red', icon:'🎯' },
-    { label:'เงินเดือน % ยอดขาย (ก.พ. 69)', value:latestSalPct+'%',
+    { label:'เงินเดือน % ยอดขาย ('+latestMonthLbl+')', value:latestSalPct+'%',
       sub:'เป้า ≤ '+targetSalPct+'% | '+(parseFloat(latestSalPct)<=parseFloat(targetSalPct)?'✅ ดีกว่าเป้า':'⚠️ สูงกว่าเป้า'), color: parseFloat(latestSalPct)<=parseFloat(targetSalPct)?'green':'orange', icon:'💰' },
-    { label:'Revenue ÷ Salary Multiplier', value:latestRevPerSalary+'x',
+    { label:'Revenue ÷ Salary Multiplier ('+latestMonthLbl+')', value:latestRevPerSalary+'x',
       sub:'ทุก ฿1 เงินเดือน สร้างรายได้ ฿'+latestRevPerSalary, color:'blue', icon:'✖️' },
   ];
   document.getElementById('prodKpiRow').innerHTML = kpis.map(k=>`
@@ -2489,9 +2498,9 @@ function buildProductivityTab() {
       labels: allLbl,
       datasets: [
         { label: 'Rev/คน (฿)',
-          data: allRev.map(r => Math.round(r/HC/1000)),
-          backgroundColor: allRev.map(r => Math.round(r/HC) >= targetRevPerHead ? '#27ae6088':'#e74c3c55'),
-          borderColor:     allRev.map(r => Math.round(r/HC) >= targetRevPerHead ? '#27ae60':'#e74c3c'),
+          data: allRev.map(r => r==null ? null : Math.round(r/HC/1000)),
+          backgroundColor: allRev.map(r => r==null ? '#ccc' : (Math.round(r/HC) >= targetRevPerHead ? '#27ae6088':'#e74c3c55')),
+          borderColor:     allRev.map(r => r==null ? '#ccc' : (Math.round(r/HC) >= targetRevPerHead ? '#27ae60':'#e74c3c')),
           borderWidth: 1.5, borderRadius: 4 },
         { label: 'เป้าหมาย (avg 2025)',
           data: Array(allRev.length).fill(Math.round(targetRevPerHead/1000)),
@@ -2523,7 +2532,7 @@ function buildProductivityTab() {
 
   // ── Salary % of Revenue ──
   destroyChart('salaryPctChart');
-  const salPctData = allRev.map((r,i) => parseFloat((allSal[i]/r*100).toFixed(1)));
+  const salPctData = allRev.map((r,i) => (r==null || allSal[i]==null) ? null : parseFloat((allSal[i]/r*100).toFixed(1)));
   charts.salaryPctChart = new Chart(document.getElementById('salaryPctChart'), {
     type: 'line',
     data: {
@@ -2550,9 +2559,9 @@ function buildProductivityTab() {
       labels: allLbl,
       datasets: [
         { label: 'Rev/Sales Person (฿)',
-          data: allRev.map(r => Math.round(r/SC/1e6*10)/10),
-          backgroundColor: allRev.map(r => Math.round(r/SC) >= targetRevPerSales ? '#3498db66':'#e67e2255'),
-          borderColor:     allRev.map(r => Math.round(r/SC) >= targetRevPerSales ? '#3498db':'#e67e22'),
+          data: allRev.map(r => r==null ? null : Math.round(r/SC/1e6*10)/10),
+          backgroundColor: allRev.map(r => r==null ? '#ccc' : (Math.round(r/SC) >= targetRevPerSales ? '#3498db66':'#e67e2255')),
+          borderColor:     allRev.map(r => r==null ? '#ccc' : (Math.round(r/SC) >= targetRevPerSales ? '#3498db':'#e67e22')),
           borderWidth:1.5, borderRadius:4 },
         { label: 'เป้าหมาย (avg 2025)',
           data: Array(allRev.length).fill(Math.round(targetRevPerSales/1e6*10)/10),
@@ -2567,7 +2576,8 @@ function buildProductivityTab() {
 
   // ── Summary Table ──
   const tableRows = [...rev2025.map((r,i)=>({lbl:MONTHS[i]+' 2568', r, s:sal2025[i]})),
-                     ...rev2026.map((r,i)=>({lbl:MONTHS_2026[i],       r, s:sal2026[i]}))];
+                     ...rev2026.map((r,i)=>({lbl:MONTHS_2026[i],       r, s:sal2026[i]}))]
+                     .filter(row => row.r > 0 && row.s > 0);  // skip months without complete data
   let html = '';
   tableRows.forEach(row => {
     const rph  = Math.round(row.r / HC);
