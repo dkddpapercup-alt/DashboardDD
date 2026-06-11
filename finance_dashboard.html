@@ -1347,8 +1347,8 @@ const expDetail2026 = {
 let rev2026    = [4598077, 4874871, 6069955, 7030084, 5871292];  // ม.ค.–พ.ค. ปิดเดือน final (Peak พ.ค. = ฿5,871,292)
 const cogs2026   = [3045621, 3214037, 4965296, 4067449, 3893816]; // ม.ค.–พ.ค. จาก ค่าใช้จ่าย ม.ค.-พ.ค.xlsx (114102)
 const sal2026    = [636942,  613545,  694195,  670461,  675894];   // ม.ค.–พ.ค. จาก ค่าใช้จ่าย ม.ค.-พ.ค.xlsx (530101+530104)
-const opex2026   = [563465,  468009,   84428,  400000,  0];        // พ.ค. = ประมาณการ
-const int2026    = [114129,  86918,   87000,   87000,   87000];    // พ.ค. = ประมาณการ
+const opex2026   = [573481, 448747, 599598, 693107, 859622]; // ม.ค.–พ.ค. จาก ค่าใช้จ่าย ม.ค.-พ.ค.xlsx (5xxxxx ทั้งหมด, ยกเว้น sal/interest/car_lease)
+const int2026    = [111236,  92566, 131928,  91855,  26624]; // ม.ค.–พ.ค. จาก ค่าใช้จ่าย ม.ค.-พ.ค.xlsx (580101)
 const car2026x   = [36000,   36000,   36000,   36000,   36000];    // KIA ลีสซิ่ง (fixed monthly)
 const gp2026     = rev2026.map((r,i) => r - cogs2026[i]);
 const np2026     = gp2026.map((g,i) => g - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i]);
@@ -1611,17 +1611,17 @@ const loans = [
   { name:'TTB OD บ้านค้ำประกัน',      bank:'TTB',    type:'OD', credit:10300000, balance:8000000,  payment:55000  },
 ];
 
-// Break-even parameters (Feb 2026 basis)
+// Break-even parameters (Jan–May 2026 actual basis)
 const BE_FIXED = {
-  salary:    625000,  // avg Jan+Feb 2026
-  interest:  100524,  // avg Jan+Feb 2026
+  salary:    658207,  // avg Jan–May 2026 actual (฿3.29M / 5)
+  interest:   90842,  // avg Jan–May 2026 actual (฿454K / 5)
   carLease:   36000,
   deprec:    103671,  // from งบทดลอง ÷ 12
   insurance:  23783,
   bankFee:    12870,
   fixedOpEx:  60000,  // accounting, utilities, phone etc.
 };
-const BE_VAR_RATIO = 0.613; // COGS/Revenue avg Jan+Feb 2026
+const BE_VAR_RATIO = 0.675; // COGS/Revenue avg Jan–May 2026 (฿19.19M / ฿28.44M) — GM หดจาก 38.7% เหลือ 32.5%
 
 // ==================== OVERVIEW CHARTS ====================
 function buildOverviewCharts() {
