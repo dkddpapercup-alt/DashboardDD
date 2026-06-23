@@ -594,7 +594,9 @@
             <th class="text-right">ม.ค. 2025</th><th class="text-right">ม.ค. 2026</th><th class="text-right">Δ%</th>
             <th class="text-right">ก.พ. 2025</th><th class="text-right">ก.พ. 2026</th><th class="text-right">Δ%</th>
             <th class="text-right">มี.ค. 2025</th><th class="text-right">มี.ค. 2026</th><th class="text-right">Δ%</th>
-            <th class="text-right">เม.ย. 2025</th><th class="text-right">เม.ย. 2026*</th><th class="text-right">Δ%</th>
+            <th class="text-right">เม.ย. 2025</th><th class="text-right">เม.ย. 2026</th><th class="text-right">Δ%</th>
+            <th class="text-right">พ.ค. 2025</th><th class="text-right">พ.ค. 2026</th><th class="text-right">Δ%</th>
+            <th class="text-right">มิ.ย. 2025</th><th class="text-right">มิ.ย. 2026*</th><th class="text-right">Δ%</th>
           </tr>
         </thead>
         <tbody id="yoyBody"></tbody>
@@ -1344,17 +1346,18 @@ const expDetail2026 = {
 };
 
 // ===== 2026 YTD DATA — ยึดจาก Google Sheet เป็นหลัก (อัพเดต realtime) =====
-let rev2026    = [4598077, 4874871, 6069955, 7030084, 5871292];  // ม.ค.–พ.ค. ปิดเดือน final (Peak พ.ค. = ฿5,871,292)
-const cogs2026   = [3045621, 3214037, 4965296, 4067449, 3893816]; // ม.ค.–พ.ค. จาก ค่าใช้จ่าย ม.ค.-พ.ค.xlsx (114102)
-const sal2026    = [636942,  613545,  694195,  670461,  675894];   // ม.ค.–พ.ค. จาก ค่าใช้จ่าย ม.ค.-พ.ค.xlsx (530101+530104)
-const opex2026   = [573481, 448747, 599598, 693107, 859622]; // ม.ค.–พ.ค. จาก ค่าใช้จ่าย ม.ค.-พ.ค.xlsx (5xxxxx ทั้งหมด, ยกเว้น sal/interest/car_lease)
-const int2026    = [111236,  92566, 131928,  91855,  26624]; // ม.ค.–พ.ค. จาก ค่าใช้จ่าย ม.ค.-พ.ค.xlsx (580101)
-const car2026x   = [36000,   36000,   36000,   36000,   36000];    // KIA ลีสซิ่ง (fixed monthly)
-const gp2026     = rev2026.map((r,i) => r - cogs2026[i]);
-const np2026     = gp2026.map((g,i) => g - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i]);
-const gm2026     = rev2026.map((r,i) => r > 0 ? (r - cogs2026[i]) / r * 100 : 0);
-const nm2026     = rev2026.map((r,i) => r > 0 ? np2026[i] / r * 100 : 0);
-const MONTHS_2026 = ['ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026', 'เม.ย. 2026', 'พ.ค. 2026'];
+let rev2026    = [4598077, 4874871, 6069955, 7030084, 5871292, 3370814];  // ม.ค.–พ.ค. ปิด final | มิ.ย. MTD ถึง 22/6 (Peak ฿3,370,814)
+const cogs2026   = [3045621, 3214037, 4965296, 4067449, 3893816, 0]; // ม.ค.–พ.ค. จาก ค่าใช้จ่าย ม.ค.-พ.ค.xlsx | มิ.ย. รอข้อมูล
+const sal2026    = [636942,  613545,  694195,  670461,  675894,  0]; // ม.ค.–พ.ค. (530101+530104) | มิ.ย. รอ payroll
+const opex2026   = [573481, 448747, 599598, 693107, 859622, 0]; // ม.ค.–พ.ค. (5xxxxx ยกเว้น sal/interest/car) | มิ.ย. รอ
+const int2026    = [111236,  92566, 131928,  91855,  26624, 0]; // ม.ค.–พ.ค. (580101) | มิ.ย. รอ
+const car2026x   = [36000,   36000,   36000,   36000,   36000, 36000]; // KIA ลีสซิ่ง (fixed monthly)
+// derived: ใช้ null เมื่อข้อมูลค่าใช้จ่ายยังไม่ครบ — Chart.js จะ skip เดือนนั้นเอง
+const gp2026     = rev2026.map((r,i) => cogs2026[i] > 0 ? r - cogs2026[i] : null);
+const np2026     = rev2026.map((r,i) => (cogs2026[i] > 0 && sal2026[i] > 0) ? r - cogs2026[i] - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i] : null);
+const gm2026     = rev2026.map((r,i) => (r > 0 && cogs2026[i] > 0) ? (r - cogs2026[i]) / r * 100 : null);
+const nm2026     = rev2026.map((r,i) => (r > 0 && np2026[i] != null) ? np2026[i] / r * 100 : null);
+const MONTHS_2026 = ['ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026', 'เม.ย. 2026', 'พ.ค. 2026', 'มิ.ย. 2026 (MTD)'];
 
 // ===== GOOGLE SHEETS LIVE DATA (Finance) =====
 const _FIN_GSHEET_URL = 'https://docs.google.com/spreadsheets/d/1mtdKekglNCJpS6SycEK0wTiJGRWu6fA7id0N17XEC-Y/gviz/tq?tqx=out:csv&sheet=Dashboard';
@@ -1380,10 +1383,10 @@ async function fetchFinLiveData() {
       if (el) el.innerHTML = `🟢 Live · ${stamp} น.`;
       // Recompute derived arrays
       for(let i=0;i<rev2026.length;i++){
-        gp2026[i] = rev2026[i] - cogs2026[i];
-        np2026[i] = gp2026[i] - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i];
-        gm2026[i] = rev2026[i] > 0 ? (rev2026[i]-cogs2026[i])/rev2026[i]*100 : 0;
-        nm2026[i] = rev2026[i] > 0 ? np2026[i]/rev2026[i]*100 : 0;
+        gp2026[i] = cogs2026[i] > 0 ? rev2026[i] - cogs2026[i] : null;
+        np2026[i] = (cogs2026[i] > 0 && sal2026[i] > 0) ? rev2026[i] - cogs2026[i] - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i] : null;
+        gm2026[i] = (rev2026[i] > 0 && cogs2026[i] > 0) ? (rev2026[i]-cogs2026[i])/rev2026[i]*100 : null;
+        nm2026[i] = (rev2026[i] > 0 && np2026[i] != null) ? np2026[i]/rev2026[i]*100 : null;
       }
     }
   } catch(e) { console.warn('[Finance] Sheet fetch failed:', e.message); }
@@ -2004,13 +2007,13 @@ function buildYTD2026Charts() {
   charts.ytd2026Stack = new Chart(document.getElementById('ytd2026StackChart'), {
     type: 'bar',
     data: {
-      labels: ['2025 เฉลี่ย/เดือน', 'ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026', 'เม.ย. 2026*'],
+      labels: ['2025 เฉลี่ย/เดือน', ...MONTHS_2026],
       datasets: [
-        { label: 'COGS', data: [avg25_cogs/1e6, cogs2026[0]/1e6, cogs2026[1]/1e6, cogs2026[2]/1e6, cogs2026[3]/1e6], backgroundColor: '#e67e22bb', borderRadius: 0 },
-        { label: 'เงินเดือน', data: [avg25_sal/1e6, sal2026[0]/1e6, sal2026[1]/1e6, sal2026[2]/1e6, sal2026[3]/1e6], backgroundColor: '#9b59b6bb', borderRadius: 0 },
-        { label: 'OpEx', data: [avg25_opex/1e6, opex2026[0]/1e6, opex2026[1]/1e6, opex2026[2]/1e6, opex2026[3]/1e6], backgroundColor: '#3498dbbb', borderRadius: 0 },
-        { label: 'ดอกเบี้ย', data: [avg25_int/1e6, int2026[0]/1e6, int2026[1]/1e6, int2026[2]/1e6, int2026[3]/1e6], backgroundColor: '#e74c3cbb', borderRadius: 0 },
-        { label: 'Revenue (Line)', data: [avg25_rev/1e6, rev2026[0]/1e6, rev2026[1]/1e6, rev2026[2]/1e6, rev2026[3]/1e6], type: 'line', borderColor: '#2c3e50', backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 6, borderDash: [5,3] }
+        { label: 'COGS', data: [avg25_cogs/1e6, ...cogs2026.map(v => v>0 ? v/1e6 : null)], backgroundColor: '#e67e22bb', borderRadius: 0 },
+        { label: 'เงินเดือน', data: [avg25_sal/1e6, ...sal2026.map(v => v>0 ? v/1e6 : null)], backgroundColor: '#9b59b6bb', borderRadius: 0 },
+        { label: 'OpEx', data: [avg25_opex/1e6, ...opex2026.map(v => v>0 ? v/1e6 : null)], backgroundColor: '#3498dbbb', borderRadius: 0 },
+        { label: 'ดอกเบี้ย', data: [avg25_int/1e6, ...int2026.map(v => v>0 ? v/1e6 : null)], backgroundColor: '#e74c3cbb', borderRadius: 0 },
+        { label: 'Revenue (Line)', data: [avg25_rev/1e6, ...rev2026.map(v => v/1e6)], type: 'line', borderColor: '#2c3e50', backgroundColor: 'transparent', borderWidth: 2.5, pointRadius: 6, borderDash: [5,3] }
       ]
     },
     options: {
@@ -2028,7 +2031,7 @@ function buildYTD2026Charts() {
       labels: MONTHS,
       datasets: [
         { label: 'Gross Margin 2025', data: gmPct2025, borderColor: '#3498db88', backgroundColor: 'transparent', borderWidth: 1.5, pointRadius: 3, tension: 0.3, borderDash: [4,3] },
-        { label: 'Gross Margin 2026', data: [...gm2026, ...Array(9).fill(null)], borderColor: '#27ae60', backgroundColor: '#27ae6022', fill: true, borderWidth: 2.5, pointRadius: 6, tension: 0.3 },
+        { label: 'Gross Margin 2026', data: [...gm2026, ...Array(Math.max(0,12-gm2026.length)).fill(null)], borderColor: '#27ae60', backgroundColor: '#27ae6022', fill: true, borderWidth: 2.5, pointRadius: 6, tension: 0.3 },
         { label: 'เป้า 40%', data: Array(12).fill(40), borderColor: '#e74c3c', borderDash: [5,4], borderWidth: 1.5, pointRadius: 0 }
       ]
     },
@@ -2043,9 +2046,18 @@ function buildYTD2026Charts() {
   let t = [0,0,0,0,0,0,0,0];
   MONTHS_2026.forEach((m, i) => {
     const r=rev2026[i], c=cogs2026[i], g=gp2026[i], gm=gm2026[i];
-    const s=sal2026[i], o=opex2026[i], intt=int2026[i]+car2026x[i], n=np2026[i], nm=nm2026[i];
+    const s=sal2026[i], o=opex2026[i], n=np2026[i], nm=nm2026[i];
+    // เดือนที่ข้อมูลค่าใช้จ่ายยังไม่ครบ — แสดงแค่รายได้ ไม่รวมในยอด YTD
+    if (g == null) {
+      html += `<tr>
+        <td><strong>${m}</strong></td>
+        <td class="text-right">${fmt(r)}</td>
+        <td class="text-right" colspan="8" style="color:#999;font-style:italic;text-align:center;">— รอข้อมูลค่าใช้จ่าย (sales side only) —</td>
+      </tr>`;
+      return;
+    }
+    const intt=int2026[i]+car2026x[i];
     t[0]+=r; t[1]+=c; t[2]+=g; t[3]+=s; t[4]+=o; t[5]+=intt; t[6]+=n;
-    const badge = n>=0 ? '<span class="pill pill-green">กำไร</span>' : '<span class="pill pill-red">ขาดทุน</span>';
     html += `<tr>
       <td><strong>${m}</strong></td>
       <td class="text-right">${fmt(r)}</td>
@@ -2062,7 +2074,7 @@ function buildYTD2026Charts() {
   document.getElementById('ytd2026Body').innerHTML = html;
   const ytdGMt = t[2]/t[0]*100, ytdNMt = t[6]/t[0]*100;
   document.getElementById('ytd2026Foot').innerHTML = `<tr style="font-weight:700;background:#f0fff4;border-top:2px solid #27ae60">
-    <td>YTD (ม.ค.–มี.ค.* 25 วัน)</td>
+    <td>YTD (ม.ค.–พ.ค. ครบ — มิ.ย. รายได้แสดงต่างหาก)</td>
     <td class="text-right">${fmt(t[0])}</td>
     <td class="text-right">${fmt(t[1])}</td>
     <td class="text-right profit-pos">${fmt(t[2])}</td>
@@ -2107,19 +2119,20 @@ function buildYTD2026Charts() {
   // YoY 2025 vs 2026 Table
   // ══════════════════════════════════════════════
   (function buildYoY() {
-    const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.*'];
-    const np2026_m = rev2026.map((r,i) => r - cogs2026[i] - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i]);
-    const gp2026_m = rev2026.map((r,i) => r - cogs2026[i]);
+    const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.*'];
+    // ใช้ null เมื่อเดือนนั้นข้อมูลค่าใช้จ่ายยังไม่ครบ
+    const np2026_m = rev2026.map((r,i) => (cogs2026[i] > 0 && sal2026[i] > 0) ? r - cogs2026[i] - sal2026[i] - opex2026[i] - int2026[i] - car2026x[i] : null);
+    const gp2026_m = rev2026.map((r,i) => cogs2026[i] > 0 ? r - cogs2026[i] : null);
     const gp2025_m = rev2026.map((_,i) => rev2025[i]-cogs2025[i]);
     const np2025_m = rev2026.map((_,i) => rev2025[i]-cogs2025[i]-sal2025[i]-opex2025[i]);
     const rows = [
       { label: '📈 รายได้ (Revenue)', vals25: rev2026.map((_,i)=>rev2025[i]), vals26: rev2026, isCost: false, isAmt: true },
-      { label: '🏭 COGS (บาท)', vals25: rev2026.map((_,i)=>cogs2025[i]), vals26: cogs2026, isCost: true, isAmt: true },
-      { label: '📊 COGS% ของรายได้', vals25: rev2026.map((_,i)=>cogs2025[i]/rev2025[i]), vals26: cogs2026.map((c,i)=>c/rev2026[i]), isCost: true, isAmt: false, isPct: true },
+      { label: '🏭 COGS (บาท)', vals25: rev2026.map((_,i)=>cogs2025[i]), vals26: cogs2026.map(c=>c>0?c:null), isCost: true, isAmt: true },
+      { label: '📊 COGS% ของรายได้', vals25: rev2026.map((_,i)=>cogs2025[i]/rev2025[i]), vals26: cogs2026.map((c,i)=>c>0?c/rev2026[i]:null), isCost: true, isAmt: false, isPct: true },
       { label: '💚 Gross Profit', vals25: gp2025_m, vals26: gp2026_m, isCost: false, isAmt: true },
-      { label: '📊 GP% ของรายได้', vals25: gp2025_m.map((g,i)=>g/rev2025[i]), vals26: gp2026_m.map((g,i)=>g/rev2026[i]), isCost: false, isAmt: false, isPct: true },
-      { label: '👥 เงินเดือน', vals25: rev2026.map((_,i)=>sal2025[i]), vals26: sal2026, isCost: true, isAmt: true },
-      { label: '🔧 OpEx', vals25: rev2026.map((_,i)=>opex2025[i]), vals26: opex2026, isCost: true, isAmt: true },
+      { label: '📊 GP% ของรายได้', vals25: gp2025_m.map((g,i)=>g/rev2025[i]), vals26: gp2026_m.map((g,i)=>g!=null?g/rev2026[i]:null), isCost: false, isAmt: false, isPct: true },
+      { label: '👥 เงินเดือน', vals25: rev2026.map((_,i)=>sal2025[i]), vals26: sal2026.map(s=>s>0?s:null), isCost: true, isAmt: true },
+      { label: '🔧 OpEx', vals25: rev2026.map((_,i)=>opex2025[i]), vals26: opex2026.map(o=>o>0?o:null), isCost: true, isAmt: true },
       { label: '💰 Net Profit (ประมาณ)', vals25: np2025_m, vals26: np2026_m, isCost: false, isAmt: true },
     ];
     let yoyHtml = '';
@@ -2127,11 +2140,15 @@ function buildYTD2026Charts() {
       let cells = `<td><strong>${row.label}</strong></td>`;
       for (let i = 0; i < rev2026.length; i++) {
         const v25 = row.vals25[i], v26 = row.vals26[i];
+        const fmt25 = (v25 == null) ? '—' : (row.isPct ? (v25*100).toFixed(1)+'%' : '฿'+v25.toLocaleString('th-TH',{maximumFractionDigits:0}));
+        if (v26 == null) {
+          cells += `<td class="text-right col25 mgsep">${fmt25}</td><td class="text-right" style="color:#bbb">—</td><td class="text-right" style="color:#bbb">—</td>`;
+          continue;
+        }
         const delta = v26 - v25;
         const deltaPct = v25 !== 0 ? delta / Math.abs(v25) * 100 : 0;
         const good = row.isCost ? delta <= 0 : delta >= 0;
         const cls = good ? 'profit-pos' : 'profit-neg';
-        const fmt25 = row.isPct ? (v25*100).toFixed(1)+'%' : '฿'+v25.toLocaleString('th-TH',{maximumFractionDigits:0});
         const fmt26 = row.isPct ? (v26*100).toFixed(1)+'%' : '฿'+v26.toLocaleString('th-TH',{maximumFractionDigits:0});
         const fmtD = (deltaPct>=0?'+':'')+deltaPct.toFixed(1)+'%';
         cells += `<td class="text-right col25 mgsep">${fmt25}</td><td class="text-right col26">${fmt26}</td><td class="text-right ${cls}" style="font-weight:700">${fmtD}</td>`;
@@ -2146,10 +2163,10 @@ function buildYTD2026Charts() {
   // ══════════════════════════════════════════════
   (function buildCF2026() {
     destroyChart('cashflow2026Chart');
-    const labels = ['ม.ค. 2026', 'ก.พ. 2026', 'มี.ค. 2026', 'เม.ย. 2026*'];
+    const labels = MONTHS_2026;
     const inflow  = rev2026.map(v => +(v/1e6).toFixed(2));
-    const outflow = rev2026.map((_,i) => +((cogs2026[i]+sal2026[i]+opex2026[i]+int2026[i]+car2026x[i])/1e6).toFixed(2));
-    const net     = inflow.map((v,i) => +(v - outflow[i]).toFixed(2));
+    const outflow = rev2026.map((_,i) => cogs2026[i] > 0 ? +((cogs2026[i]+sal2026[i]+opex2026[i]+int2026[i]+car2026x[i])/1e6).toFixed(2) : null);
+    const net     = inflow.map((v,i) => outflow[i] != null ? +(v - outflow[i]).toFixed(2) : null);
     charts.cashflow2026Chart = new Chart(document.getElementById('cashflow2026Chart'), {
       type: 'bar',
       data: {
