@@ -260,6 +260,166 @@
 <!-- ==================== TAB: OVERVIEW ==================== -->
 <div class="tab-content active" id="tab-overview">
 
+  <!-- YEAR SELECTOR -->
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;padding:12px 18px;background:linear-gradient(135deg,#f8f9fc,#eef2f7);border-radius:12px;border-left:5px solid #305496;">
+    <div style="font-size:14px;font-weight:800;color:#1a252f;">🗓 เลือกปีดู P&L Overview:</div>
+    <div style="display:flex;gap:8px;">
+      <button class="year-toggle-btn" data-year="2026" onclick="switchPLYear('2026')"
+              style="padding:8px 18px;border:2px solid #27ae60;background:#27ae60;color:white;border-radius:8px;cursor:pointer;font-weight:800;font-size:13px;transition:all 0.15s;">
+        📊 2026 (ปัจจุบัน — H1 ครบ + ก.ค. MTD)
+      </button>
+      <button class="year-toggle-btn" data-year="2025" onclick="switchPLYear('2025')"
+              style="padding:8px 18px;border:2px solid #305496;background:white;color:#305496;border-radius:8px;cursor:pointer;font-weight:800;font-size:13px;transition:all 0.15s;">
+        📜 2025 (เต็มปี — งบทดลอง)
+      </button>
+    </div>
+    <div style="margin-left:auto;font-size:11px;color:#7f8c8d;font-style:italic;">คลิกเปลี่ยนปีเพื่อดูข้อมูลย้อนหลัง</div>
+  </div>
+
+  <!-- ═════════════ YEAR 2026 (DEFAULT VIEW) ═════════════ -->
+  <div class="pl-year-view" data-year="2026">
+
+    <div class="alert-box info" style="background:#e8f5e9;border-color:#27ae60;">
+      ✅ <strong>P&L 2026 H1 (Actual ครบ) + ก.ค. MTD (20/7)</strong> — Sync กับ Excel audit จาก คชจ.-2026 tab (Google Sheet ณ 18/7/2026) | COGS+Salary+OpEx+Interest+Car ครบทุกรายการ
+    </div>
+
+    <!-- 2026 KPI HEADLINE -->
+    <div class="kpi-row">
+      <div class="kpi-card dark">
+        <div class="kpi-label">ยอดขาย H1 + ก.ค. MTD 2026</div>
+        <div class="kpi-value" style="color:#2c3e50">฿36.18M</div>
+        <div class="kpi-sub">H1 ฿33.67M (+21.2% YoY) + ก.ค. MTD ฿2.51M (20/7)</div>
+        <div class="kpi-icon">💰</div>
+      </div>
+      <div class="kpi-card orange">
+        <div class="kpi-label">COGS H1 2026</div>
+        <div class="kpi-value" style="color:#e67e22">฿23.37M</div>
+        <div class="kpi-sub">69.4% ของยอดขาย | มี.ค. 82.0% ⚠️ | มิ.ย. 78.7% ⚠️</div>
+        <div class="kpi-icon">🏭</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Gross Profit H1</div>
+        <div class="kpi-value" style="color:#27ae60">฿10.31M</div>
+        <div class="kpi-sub">GM 30.6% | เม.ย. 41.2% ✨ สูงสุด</div>
+        <div class="kpi-icon">📈</div>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-label">เงินเดือน H1 (530101+104)</div>
+        <div class="kpi-value" style="color:#9b59b6">฿4.43M</div>
+        <div class="kpi-sub">13.2% ของยอดขาย | avg ฿738K/เดือน</div>
+        <div class="kpi-icon">👥</div>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">OpEx H1 (ยกเว้น sal/int/car)</div>
+        <div class="kpi-value" style="color:#3498db">฿2.72M</div>
+        <div class="kpi-sub">8.1% ของยอดขาย | avg ฿454K/เดือน</div>
+        <div class="kpi-icon">💼</div>
+      </div>
+      <div class="kpi-card red">
+        <div class="kpi-label">Interest + Car (P&L)</div>
+        <div class="kpi-value" style="color:#e74c3c">฿0.41M</div>
+        <div class="kpi-sub">ดอกเบี้ย ฿143K + ค่ารถ ฿265K (H1)</div>
+        <div class="kpi-icon">💳</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Net Profit H1 2026 ✅</div>
+        <div class="kpi-value" style="color:#27ae60">฿2.75M</div>
+        <div class="kpi-sub">NM 8.2% | ก่อนภาษี+ค่าเสื่อม | +21.2% YoY on Rev, +∞% on NP</div>
+        <div class="kpi-icon">🎯</div>
+      </div>
+    </div>
+
+    <!-- 2026 COMPARISON ALERT -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div class="alert-box info" style="margin:0">
+        📊 <strong>YoY H1 2026 vs H1 2025:</strong><br>
+        Revenue: ฿27.78M → <strong>฿33.67M (+21.2%)</strong> 🚀<br>
+        COGS%: ~60% → 69.4% (+9pp) ⚠️ <br>
+        Salary: ฿772K → ฿738K (-4.4%) ✅<br>
+        NP: (ต่ำมากใน 2025 ~2%) → <strong>NM 8.2% H1 2026</strong> ✨
+      </div>
+      <div class="alert-box warning" style="margin:0">
+        ⚠️ <strong>ประเด็นสำคัญ H1 2026:</strong><br>
+        — <strong>มี.ค. GM 18.0%</strong> + <strong>มิ.ย. 21.3%</strong> = COGS ผิดปกติ (ซื้อสต็อกล่วงหน้า?)<br>
+        — พ.ค. OpEx สูง ฿627K (Lovable + Consulting)<br>
+        — ก.ค. MTD (20/7) ฿2.51M projection ฿3.89M = -24% YoY ⚠️
+      </div>
+    </div>
+
+    <!-- 2026 COST WATERFALL -->
+    <div class="card">
+      <div class="card-header">
+        <h3>🌊 Cost Waterfall — ยอดขาย → กำไรสุทธิ H1 2026</h3>
+        <span class="card-subtitle">ฐาน: ยอดขาย ฿33.67M (H1 ก่อน VAT) — sync กับ Excel audit</span>
+      </div>
+      <div class="card-body">
+        <div class="waterfall-bar">
+          <div class="wf-segment" style="width:69.4%;background:#e67e22;" title="COGS ฿23.37M">COGS 69.4%</div>
+          <div class="wf-segment" style="width:13.2%;background:#9b59b6;" title="Salary ฿4.43M">Salary 13.2%</div>
+          <div class="wf-segment" style="width:8.1%;background:#3498db;" title="OpEx ฿2.72M">OpEx 8.1%</div>
+          <div class="wf-segment" style="width:1.2%;background:#e74c3c;" title="Int+Car ฿0.41M">Fin 1.2%</div>
+          <div class="wf-segment" style="width:8.1%;background:#27ae60;" title="NP ฿2.75M">NP 8.2%</div>
+        </div>
+        <div style="display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;font-size:12px;">
+          <span>🟠 COGS ฿23.37M (69.4%)</span>
+          <span>🟣 เงินเดือน ฿4.43M (13.2%)</span>
+          <span>🔵 OpEx ฿2.72M (8.1%)</span>
+          <span>🔴 Interest+Car ฿0.41M (1.2%)</span>
+          <span>🟢 Net Profit ฿2.75M (8.2%) ✨</span>
+        </div>
+        <div style="margin-top:10px;padding:8px 12px;background:#e8f5e9;border-radius:6px;font-size:11px;color:#0e6655;">
+          💡 <strong>ยังไม่รวม</strong>: ค่าเสื่อมราคา (~฿104K/เดือน จากงบทดลอง 2025) + ค่าเบี้ยประกันบางรายการ + ภาษี → NP หลังหักจริงอาจต่ำกว่า 8.2% เล็กน้อย
+        </div>
+      </div>
+    </div>
+
+    <!-- 2026 P&L TABLE -->
+    <div class="card" style="margin-top:14px">
+      <div class="card-header">
+        <h3>📋 P&L รายเดือน 2026 H1 (Sync กับ คชจ. tab)</h3>
+        <span class="card-subtitle">หน่วย: บาท | ทุกรายการ sync จาก Google Sheet คชจ.-2026 tab</span>
+      </div>
+      <div class="card-body" style="padding:0;overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>เดือน</th>
+              <th class="text-right">ยอดขาย</th>
+              <th class="text-right">COGS</th>
+              <th class="text-right">GP</th>
+              <th class="text-right">GM%</th>
+              <th class="text-right">เงินเดือน</th>
+              <th class="text-right">OpEx</th>
+              <th class="text-right">Int+Car</th>
+              <th class="text-right">NP</th>
+              <th class="text-right">NM%</th>
+            </tr>
+          </thead>
+          <tbody id="pl2026TableBody"></tbody>
+          <tfoot id="pl2026TableFoot"></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2026 INSIGHTS -->
+    <div class="insight-box" style="margin-top:14px">
+      <h4>💡 C-Level Insights – H1 2026 (Sync กับ Excel audit)</h4>
+      <ul>
+        <li><strong>🎉 กำไรจริง H1 = ฿2.75M (NM 8.2%)</strong> — ดีกว่า dashboard เดิม ฿609K จากการแก้ผิดพลาดเก่า (Salary เดิม undercount, Interest overcount)</li>
+        <li><strong>🟢 Revenue เกินเป้า</strong> — H1 ฿33.67M (+21.2% YoY) | Run rate ฿67.34M เกิน ScA ฿62.6M</li>
+        <li><strong>⚠️ GM 30.6% ต่ำกว่า 2025 (39.7%)</strong> — COGS% เพิ่มจาก 60% → 69% เพราะ มี.ค./มิ.ย. COGS สูงผิดปกติ ควรตรวจสอบสาเหตุ</li>
+        <li><strong>✅ Salary/OpEx ควบคุมได้ดี</strong> — Salary -4.4% YoY, OpEx -15.3% YoY (การควบคุมต้นทุนคงที่ดี)</li>
+        <li><strong>📉 ก.ค. เริ่มช้า (MTD ฿2.51M projection ฿3.89M = -24% YoY)</strong> — ต้องเร่งครึ่งเดือนหลังให้ทัน</li>
+        <li><strong>💳 Interest จริง H1 ฿143K</strong> เท่านั้น — ต่ำกว่า estimate เดิมมาก (แสดงว่าใช้ OD Line น้อยกว่าที่คิด) ✅</li>
+      </ul>
+    </div>
+
+  </div>
+  <!-- ═════════════ END YEAR 2026 ═════════════ -->
+
+  <!-- ═════════════ YEAR 2025 (HISTORICAL — SAME AS BEFORE) ═════════════ -->
+  <div class="pl-year-view" data-year="2025" style="display:none;">
+
   <div class="alert-box info">
     📋 <strong>ข้อมูลจากงบทดลองบัญชีปี 2568 (ยืนยันโดยบัญชี)</strong> — เพิ่มค่าใช้จ่ายทางการเงิน: ดอกเบี้ย ฿1.89M | ค่าธรรมเนียมธนาคาร ฿154K | ค่าเสื่อมราคา ฿1.24M | ค่าเบี้ยประกัน ฿285K | ค่าเช่าซื้อรถ ฿432K | ค่าภาษีและค่าธรรมเนียม ฿101K
   </div>
@@ -432,6 +592,9 @@
       <li><strong>⚠️ Priority Actions:</strong> (1) ลดภาระดอกเบี้ย/หนี้ — กระทบ Margin โดยตรง 3.5% (2) Monitor COGS อย่างใกล้ชิด — COGS 60%+ ทำให้ Margin บางมาก (3) วางแผน Cash Flow ลด OD Line</li>
     </ul>
   </div>
+
+  </div>
+  <!-- ═════════════ END YEAR 2025 ═════════════ -->
 
 </div>
 
@@ -1463,6 +1626,77 @@ function showTab(name) {
   buildTabCharts(name);
 }
 
+// ==================== YEAR TOGGLE for P&L Overview ====================
+function switchPLYear(year) {
+  document.querySelectorAll('.pl-year-view').forEach(v => {
+    v.style.display = (v.dataset.year === year) ? '' : 'none';
+  });
+  document.querySelectorAll('.year-toggle-btn').forEach(b => {
+    const isActive = b.dataset.year === year;
+    if (isActive) {
+      b.style.background = '#27ae60';
+      b.style.color = 'white';
+      b.style.borderColor = '#27ae60';
+    } else {
+      b.style.background = 'white';
+      b.style.color = '#305496';
+      b.style.borderColor = '#305496';
+    }
+  });
+  // Rebuild charts for selected year if needed
+  if (year === '2025') {
+    buildOverviewCharts();  // 2025 charts (existing)
+  }
+}
+
+// Build the 2026 P&L table on Overview tab (uses arrays from top of file after they're defined)
+function buildPL2026Table() {
+  const tb = document.getElementById('pl2026TableBody');
+  const tf = document.getElementById('pl2026TableFoot');
+  if (!tb || typeof rev2026 === 'undefined') return;
+  const months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.'];
+  let html = '';
+  let sR=0,sC=0,sG=0,sS=0,sO=0,sX=0,sN=0;
+  for (let i=0; i<6; i++) {
+    const r = rev2026[i]||0, c = cogs2026[i]||0, s = sal2026[i]||0, o = opex2026[i]||0, it = int2026[i]||0, cr = car2026x[i]||0;
+    const gp = r - c;
+    const gm = r > 0 ? gp/r*100 : 0;
+    const intcar = it + cr;
+    const np = gp - s - o - intcar;
+    const nm = r > 0 ? np/r*100 : 0;
+    sR+=r; sC+=c; sG+=gp; sS+=s; sO+=o; sX+=intcar; sN+=np;
+    const gmClr = gm >= 35 ? '#27ae60' : gm >= 25 ? '#e67e22' : '#e74c3c';
+    const nmClr = nm >= 10 ? '#27ae60' : nm >= 5 ? '#e67e22' : '#e74c3c';
+    html += `<tr>
+      <td><strong>${months[i]}</strong></td>
+      <td class="text-right">${r.toLocaleString('th-TH')}</td>
+      <td class="text-right" style="color:#e67e22">${c.toLocaleString('th-TH')}</td>
+      <td class="text-right" style="color:#27ae60">${gp.toLocaleString('th-TH')}</td>
+      <td class="text-right" style="color:${gmClr};font-weight:700">${gm.toFixed(1)}%</td>
+      <td class="text-right" style="color:#9b59b6">${s.toLocaleString('th-TH')}</td>
+      <td class="text-right" style="color:#3498db">${o.toLocaleString('th-TH')}</td>
+      <td class="text-right" style="color:#e74c3c">${intcar.toLocaleString('th-TH')}</td>
+      <td class="text-right" style="color:${np>=0?'#27ae60':'#e74c3c'};font-weight:700">${np.toLocaleString('th-TH')}</td>
+      <td class="text-right" style="color:${nmClr};font-weight:700">${nm.toFixed(1)}%</td>
+    </tr>`;
+  }
+  tb.innerHTML = html;
+  const sGM = sR>0?sG/sR*100:0;
+  const sNM = sR>0?sN/sR*100:0;
+  tf.innerHTML = `<tr style="background:#f5eef8;font-weight:800;border-top:2px solid #305496">
+    <td><strong>H1 รวม ✅</strong></td>
+    <td class="text-right">${sR.toLocaleString('th-TH')}</td>
+    <td class="text-right" style="color:#e67e22">${sC.toLocaleString('th-TH')}</td>
+    <td class="text-right" style="color:#27ae60">${sG.toLocaleString('th-TH')}</td>
+    <td class="text-right" style="color:#e67e22">${sGM.toFixed(1)}%</td>
+    <td class="text-right" style="color:#9b59b6">${sS.toLocaleString('th-TH')}</td>
+    <td class="text-right" style="color:#3498db">${sO.toLocaleString('th-TH')}</td>
+    <td class="text-right" style="color:#e74c3c">${sX.toLocaleString('th-TH')}</td>
+    <td class="text-right" style="color:#27ae60">${sN.toLocaleString('th-TH')}</td>
+    <td class="text-right" style="color:#27ae60">${sNM.toFixed(1)}%</td>
+  </tr>`;
+}
+
 function buildTabCharts(name) {
   if (name === 'overview') buildOverviewCharts();
   else if (name === 'ytd2026') buildYTD2026Charts();
@@ -1675,6 +1909,8 @@ function buildOverviewCharts() {
 
   // Build P&L table
   buildPLTable();
+  // Build 2026 P&L table (default view)
+  try { buildPL2026Table(); } catch(e){ console.warn('pl2026Table', e); }
 }
 
 function buildPLTable() {
