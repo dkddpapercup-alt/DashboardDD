@@ -7,43 +7,52 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --primary: #1e3a5f;
-    --accent: #e67e22;
-    --success: #27ae60;
-    --danger: #e74c3c;
-    --warning: #f39c12;
-    --light: #f8f9fa;
-    --border: #dee2e6;
-    --text: #2c3e50;
-    --muted: #7f8c8d;
+    /* Pastel palette — soft, calm, professional */
+    --primary: #7c9dc0;        /* pastel blue (was navy) */
+    --primary-dark: #5a7fa3;   /* slightly deeper for text/borders */
+    --accent: #f5b183;         /* pastel peach (was orange) */
+    --accent-dark: #e89660;
+    --success: #a8d5a2;        /* pastel mint (was green) */
+    --success-dark: #7cb877;
+    --danger: #f4a6a0;         /* pastel coral (was red) */
+    --danger-dark: #e58079;
+    --warning: #f7d488;        /* pastel butter (was amber) */
+    --warning-dark: #e8b95a;
+    --purple: #c8b4d9;         /* pastel lavender */
+    --purple-dark: #9f83b6;
+    --info: #b8d4e3;           /* pastel sky */
+    --light: #fdfcfa;
+    --border: #ede8e3;
+    --text: #4a4a5e;           /* softer dark (was #4a4a5e) */
+    --muted: #9a9aa8;          /* softer muted */
     --card-bg: #ffffff;
-    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow: 0 2px 12px rgba(124,157,192,0.10);  /* pastel blue shadow */
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: var(--text); font-size: 14px; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #f7f3ee 0%, #eef4f8 100%); color: var(--text); font-size: 14px; }
 
   /* HEADER */
   .header {
-    background: linear-gradient(135deg, var(--primary) 0%, #2980b9 100%);
-    color: white; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, #a8c5db 0%, #d4b5c7 60%, #f0c4a8 100%);  /* pastel gradient: sky → mauve → peach */
+    color: #3a4a5c; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 4px 16px rgba(124,157,192,0.15);
   }
-  .header-left h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
-  .header-left p { font-size: 12px; opacity: 0.85; margin-top: 3px; }
-  .header-right { text-align: right; font-size: 12px; opacity: 0.85; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .header-left h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; color: #2d3e4f; }
+  .header-left p { font-size: 12px; opacity: 0.75; margin-top: 3px; color: #4a5a6c; }
+  .header-right { text-align: right; font-size: 12px; opacity: 0.85; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; color: #3a4a5c; }
   .header-right strong { font-size: 14px; display: block; }
-  .nav-link { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 7px 14px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 600; transition: background 0.2s; white-space: nowrap; }
-  .nav-link:hover { background: rgba(255,255,255,0.3); }
+  .nav-link { background: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.7); color: #3a4a5c; padding: 7px 14px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 600; transition: background 0.2s; white-space: nowrap; }
+  .nav-link:hover { background: rgba(255,255,255,0.85); }
 
   /* TABS */
-  .tabs { background: white; padding: 0 32px; border-bottom: 2px solid var(--border); display: flex; gap: 0; }
+  .tabs { background: rgba(255,255,255,0.75); padding: 0 32px; border-bottom: 2px solid var(--border); display: flex; gap: 0; backdrop-filter: blur(8px); }
   .tab-btn {
     padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--muted);
     border: none; background: none; cursor: pointer; border-bottom: 3px solid transparent;
     transition: all 0.2s; white-space: nowrap;
   }
-  .tab-btn:hover { color: var(--primary); }
-  .tab-btn.active { color: var(--primary); border-bottom-color: var(--accent); }
+  .tab-btn:hover { color: var(--primary-dark); }
+  .tab-btn.active { color: var(--primary-dark); border-bottom-color: var(--accent); }
   .tab-content { display: none; padding: 24px 32px; }
   .tab-content.active { display: block; }
 
@@ -57,15 +66,17 @@
     content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
     background: var(--accent);
   }
-  .kpi-card.blue::before { background: #2980b9; }
+  .kpi-card.blue::before { background: var(--info); }
   .kpi-card.green::before { background: var(--success); }
   .kpi-card.orange::before { background: var(--accent); }
   .kpi-card.red::before { background: var(--danger); }
+  .kpi-card.purple::before { background: var(--purple); }
+  .kpi-card.dark::before { background: var(--primary); }
   .kpi-card .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 8px; }
   .kpi-card .kpi-value { font-size: 26px; font-weight: 700; color: var(--text); }
   .kpi-card .kpi-sub { font-size: 12px; margin-top: 6px; }
-  .kpi-card .kpi-sub .up { color: var(--success); }
-  .kpi-card .kpi-sub .down { color: var(--danger); }
+  .kpi-card .kpi-sub .up { color: var(--success-dark); }
+  .kpi-card .kpi-sub .down { color: var(--danger-dark); }
   .kpi-card .kpi-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 36px; opacity: 0.12; }
 
   /* SECTION CARD */
@@ -86,44 +97,44 @@
     background: white; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted);
     transition: all 0.2s;
   }
-  .year-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .year-btn:hover { border-color: var(--primary-dark); color: var(--primary-dark); }
   .year-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
   /* TABLE */
   .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .data-table th { background: #f8f9fa; padding: 10px 14px; text-align: left; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); border-bottom: 2px solid var(--border); }
-  .data-table td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
-  .data-table tr:hover td { background: #fafbfc; }
+  .data-table th { background: #f6f0ea; padding: 10px 14px; text-align: left; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); border-bottom: 2px solid var(--border); }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid #f4ede6; vertical-align: middle; }
+  .data-table tr:hover td { background: #faf6f1; }
   .data-table .rank { font-weight: 700; color: var(--muted); font-size: 12px; }
   .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-  .badge-blue { background: #ebf5fb; color: #2980b9; }
-  .badge-green { background: #eafaf1; color: var(--success); }
-  .badge-orange { background: #fef9e7; color: var(--warning); }
-  .badge-red { background: #fdedec; color: var(--danger); }
+  .badge-blue { background: #e3ecf5; color: var(--primary-dark); }
+  .badge-green { background: #e5f1e2; color: var(--success-dark); }
+  .badge-orange { background: #faeadb; color: var(--accent-dark); }
+  .badge-red { background: #f9e2df; color: var(--danger-dark); }
 
   /* PROGRESS BAR */
-  .progress-bar-wrap { background: #f0f2f5; border-radius: 4px; height: 8px; overflow: hidden; }
+  .progress-bar-wrap { background: #f5efe8; border-radius: 4px; height: 8px; overflow: hidden; }
   .progress-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
 
   /* FORECAST SCENARIO */
   .scenario-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
   .scenario-card { border-radius: 12px; padding: 20px; text-align: center; border: 2px solid; }
-  .scenario-conservative { border-color: var(--danger); background: #fff8f8; }
-  .scenario-base { border-color: var(--accent); background: #fffbf5; }
-  .scenario-optimistic { border-color: var(--success); background: #f9fff9; }
+  .scenario-conservative { border-color: var(--danger); background: #fdf3f2; }
+  .scenario-base { border-color: var(--accent); background: #fdf6ef; }
+  .scenario-optimistic { border-color: var(--success); background: #f3f9f2; }
   .scenario-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
-  .scenario-conservative .scenario-label { color: var(--danger); }
-  .scenario-base .scenario-label { color: var(--accent); }
-  .scenario-optimistic .scenario-label { color: var(--success); }
+  .scenario-conservative .scenario-label { color: var(--danger-dark); }
+  .scenario-base .scenario-label { color: var(--accent-dark); }
+  .scenario-optimistic .scenario-label { color: var(--success-dark); }
   .scenario-value { font-size: 28px; font-weight: 800; }
-  .scenario-conservative .scenario-value { color: var(--danger); }
-  .scenario-base .scenario-value { color: var(--accent); }
-  .scenario-optimistic .scenario-value { color: var(--success); }
+  .scenario-conservative .scenario-value { color: var(--danger-dark); }
+  .scenario-base .scenario-value { color: var(--accent-dark); }
+  .scenario-optimistic .scenario-value { color: var(--success-dark); }
   .scenario-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
 
   /* INSIGHT BOX */
-  .insight-box { background: #f0f7ff; border-left: 4px solid #2980b9; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 16px; }
-  .insight-box h4 { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+  .insight-box { background: #f0f5fa; border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 16px; }
+  .insight-box h4 { font-size: 13px; font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; }
   .insight-box ul { padding-left: 16px; font-size: 12px; color: var(--text); line-height: 1.8; }
 
   /* LOYALTY TABLE */
@@ -135,7 +146,7 @@
   /* CHANNEL BARS */
   .channel-item { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
   .channel-name { width: 160px; font-size: 13px; font-weight: 600; flex-shrink: 0; }
-  .channel-bar-wrap { flex: 1; background: #f0f2f5; border-radius: 6px; height: 28px; overflow: hidden; }
+  .channel-bar-wrap { flex: 1; background: #f5efe8; border-radius: 6px; height: 28px; overflow: hidden; }
   .channel-bar { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 10px; color: white; font-size: 12px; font-weight: 700; transition: width 0.5s; }
   .channel-pct { width: 60px; text-align: right; font-size: 13px; font-weight: 700; }
 
@@ -152,13 +163,13 @@
   .note { font-size: 11px; color: var(--muted); margin-top: 8px; }
 
   /* DRILL-DOWN MODAL */
-  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:2000; align-items:flex-start; justify-content:center; padding:40px 16px; overflow-y:auto; }
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(74,74,94,0.45); z-index:2000; align-items:flex-start; justify-content:center; padding:40px 16px; overflow-y:auto; }
   .modal-overlay.open { display:flex; }
   .modal-box { background:#fff; border-radius:16px; padding:28px 32px; max-width:860px; width:100%; box-shadow:0 12px 48px rgba(0,0,0,0.28); }
   .modal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; border-bottom:2px solid var(--border); padding-bottom:14px; }
   .modal-header h2 { font-size:18px; font-weight:800; color:var(--text); }
   .modal-close { font-size:20px; cursor:pointer; color:var(--muted); border:none; background:none; padding:4px 10px; border-radius:8px; line-height:1; }
-  .modal-close:hover { background:#f0f2f5; color:var(--text); }
+  .modal-close:hover { background:#f5efe8; color:var(--text); }
   .modal-section { margin-bottom:24px; }
   .modal-section h4 { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; color:var(--muted); margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid #f0f0f0; }
   .modal-tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
@@ -229,7 +240,7 @@
     <a href="finance_dashboard.html" class="nav-link">💰 Finance Dashboard →</a>
     <div>
       <strong>ข้อมูล: ม.ค. 2023 – พ.ค. 2026</strong>
-      <span>🟢 2026 Actual: ม.ค.–พ.ค. ครบ + มิ.ย. MTD &nbsp;|&nbsp; <span id="live-data-stamp" style="color:#27ae60;font-size:11px;">⏳ กำลังดึงข้อมูลล่าสุด...</span></span>
+      <span>🟢 2026 Actual: ม.ค.–พ.ค. ครบ + มิ.ย. MTD &nbsp;|&nbsp; <span id="live-data-stamp" style="color:#8dc57e;font-size:11px;">⏳ กำลังดึงข้อมูลล่าสุด...</span></span>
     </div>
   </div>
 </div>
@@ -241,17 +252,17 @@
   <button class="tab-btn" onclick="showTab('customers')">👥 ลูกค้า</button>
   <button class="tab-btn" onclick="showTab('team')">🏆 ทีมขาย</button>
   <button class="tab-btn" onclick="showTab('forecast')">🎯 Forecast 2026</button>
-  <button class="tab-btn" onclick="showTab('progress2026')" style="color:#27ae60;font-weight:800;">🟢 2026 Progress</button>
-  <button class="tab-btn" onclick="showTab('central')" style="color:#8e44ad;font-weight:800;">🏬 Central Group</button>
+  <button class="tab-btn" onclick="showTab('progress2026')" style="color:#8dc57e;font-weight:800;">🟢 2026 Progress</button>
+  <button class="tab-btn" onclick="showTab('central')" style="color:#a888c4;font-weight:800;">🏬 Central Group</button>
   <!-- ตัดออกตามคำขอ (ซ้ำกับ วิเคราะห์ 2026): ⚠️ ความเสี่ยง + 🔬 วิเคราะห์เชิงลึก — โค้ด/ข้อมูลยังอยู่ในไฟล์แต่ไม่แสดงในเมนู -->
-  <button class="tab-btn" onclick="showTab('analysis2026')" style="color:#e67e22;font-weight:800;">🔍 วิเคราะห์ 2026</button>
+  <button class="tab-btn" onclick="showTab('analysis2026')" style="color:#e69a68;font-weight:800;">🔍 วิเคราะห์ 2026</button>
 </div>
 
 <!-- ============================== TAB: RISK & INSIGHTS ============================== -->
 <div class="tab-content" id="tab-risk">
 
   <!-- ALERT BANNER -->
-  <div style="margin-top:24px;background:linear-gradient(135deg,#c0392b,#e74c3c);color:white;border-radius:12px;padding:18px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
+  <div style="margin-top:24px;background:linear-gradient(135deg,#d16b62,#e58079);color:white;border-radius:12px;padding:18px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
     <div style="font-size:36px;">🚨</div>
     <div>
       <div style="font-size:16px;font-weight:800;margin-bottom:4px;">🟢 2026 (H1 ครบ + ก.ค. MTD ถึง 23/7): YTD ฿36.48M = 58.3% ของ ScA | Run Rate ฿64.9M/ปี | โมเมนตัมยังเกินเป้า ✅</div>
@@ -260,29 +271,29 @@
   </div>
 
   <!-- SECTION 1: CHURN -->
-  <div style="font-size:16px;font-weight:800;color:#e74c3c;margin-bottom:12px;">🔴 1. ลูกค้าที่หายไป (Churn Analysis)</div>
+  <div style="font-size:16px;font-weight:800;color:#e58079;margin-bottom:12px;">🔴 1. ลูกค้าที่หายไป (Churn Analysis)</div>
   <div class="kpi-row" style="margin-bottom:20px;">
-    <div class="kpi-card" style="border-left:4px solid #e74c3c;">
+    <div class="kpi-card" style="border-left:4px solid #e58079;">
       <div class="kpi-label">ลูกค้า 2025 ยังไม่กลับมา 2026*</div>
-      <div class="kpi-value" style="color:#e74c3c;">1,757 ราย</div>
+      <div class="kpi-value" style="color:#e58079;">1,757 ราย</div>
       <div class="kpi-sub">จาก 1,972 ราย ปี 2025 | ข้อมูล ม.ค.–เม.ย. 2026 (ประมาณการ)</div>
       <div class="kpi-icon">👤</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #c0392b;">
+    <div class="kpi-card" style="border-left:4px solid #d16b62;">
       <div class="kpi-label">มูลค่าเสี่ยงหาย (ยอด 2025 ของคนยังไม่ซื้อ)</div>
-      <div class="kpi-value" style="color:#c0392b;">29.3M</div>
+      <div class="kpi-value" style="color:#d16b62;">29.3M</div>
       <div class="kpi-sub">฿29.3M (ปรับลดได้เมื่อลูกค้ากลับมาเพิ่ม)</div>
       <div class="kpi-icon">💸</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #27ae60;">
+    <div class="kpi-card" style="border-left:4px solid #8dc57e;">
       <div class="kpi-label">ลูกค้าใหม่ 2026 ชดเชย (ม.ค.–มี.ค.)</div>
-      <div class="kpi-value" style="color:#27ae60;">370 ราย</div>
+      <div class="kpi-value" style="color:#8dc57e;">370 ราย</div>
       <div class="kpi-sub">YTD ม.ค.–เม.ย. ยอด ฿22.0M ✅</div>
       <div class="kpi-icon">🆕</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #e67e22;">
+    <div class="kpi-card" style="border-left:4px solid #e69a68;">
       <div class="kpi-label">Retention Rate 2025→2026*</div>
-      <div class="kpi-value" style="color:#e67e22;">~16.6%</div>
+      <div class="kpi-value" style="color:#e69a68;">~16.6%</div>
       <div class="kpi-sub">328 / 1,972 ราย | ม.ค.–เม.ย. 2026 (เพิ่มจาก 10.9% ใน Q1)</div>
       <div class="kpi-icon">📉</div>
     </div>
@@ -314,8 +325,8 @@
   <!-- Top Churned Table -->
   <div class="card">
     <div class="card-header">
-      <h3>📋 ลูกค้า 3 ปีต่อเนื่อง (2023–2025) ที่ยังไม่ซื้อ 2026 — Win-back ด่วน! <span style="font-size:12px;color:#27ae60;font-weight:400">✅ 4 รายกลับมาแล้วในเม.ย.</span></h3>
-      <span class="card-subtitle" style="color:#e74c3c;">เรียงตาม 3-year cumulative | ยอดที่แสดงคือยอดปี 2025</span>
+      <h3>📋 ลูกค้า 3 ปีต่อเนื่อง (2023–2025) ที่ยังไม่ซื้อ 2026 — Win-back ด่วน! <span style="font-size:12px;color:#8dc57e;font-weight:400">✅ 4 รายกลับมาแล้วในเม.ย.</span></h3>
+      <span class="card-subtitle" style="color:#e58079;">เรียงตาม 3-year cumulative | ยอดที่แสดงคือยอดปี 2025</span>
     </div>
     <div class="card-body" style="padding:0;">
       <table class="data-table">
@@ -328,7 +339,7 @@
   </div>
 
   <!-- SECTION 2: NEW vs RETURNING -->
-  <div style="font-size:16px;font-weight:800;color:#2980b9;margin:24px 0 12px;">🔵 2. ลูกค้าใหม่ vs ลูกค้าเก่า — ธุรกิจโต "จริง" ไหม?</div>
+  <div style="font-size:16px;font-weight:800;color:#7c9dc0;margin:24px 0 12px;">🔵 2. ลูกค้าใหม่ vs ลูกค้าเก่า — ธุรกิจโต "จริง" ไหม?</div>
   <div class="grid-2">
     <div class="card">
       <div class="card-header">
@@ -350,7 +361,7 @@
     </div>
   </div>
 
-  <div class="insight-box" style="border-left-color:#2980b9;">
+  <div class="insight-box" style="border-left-color:#7c9dc0;">
     <h4>💡 วิเคราะห์: ธุรกิจโต "จริง" ไหม?</h4>
     <ul>
       <li><strong>2024:</strong> ลูกค้าเก่ากลับมา 514 ราย (฿55.6M) + ลูกค้าใหม่ 2,175 ราย (฿13.2M) → ยอดรวมเติบโต +8.3% ✅</li>
@@ -361,26 +372,26 @@
   </div>
 
   <!-- SECTION 3: CONCENTRATION -->
-  <div style="font-size:16px;font-weight:800;color:#e67e22;margin:24px 0 12px;">🟠 3. ความเสี่ยงจากการกระจุกตัว (Revenue Concentration)</div>
+  <div style="font-size:16px;font-weight:800;color:#e69a68;margin:24px 0 12px;">🟠 3. ความเสี่ยงจากการกระจุกตัว (Revenue Concentration)</div>
   <div class="kpi-row" style="margin-bottom:20px;">
-    <div class="kpi-card" style="border-left:4px solid #2980b9;">
+    <div class="kpi-card" style="border-left:4px solid #7c9dc0;">
       <div class="kpi-label">Top 10 คิดเป็น % — ปี 2023</div>
-      <div class="kpi-value" style="color:#2980b9;">19.9%</div>
+      <div class="kpi-value" style="color:#7c9dc0;">19.9%</div>
       <div class="kpi-sub">301 ลูกค้า = 80% ของยอดรวม</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #e67e22;">
+    <div class="kpi-card" style="border-left:4px solid #e69a68;">
       <div class="kpi-label">Top 10 คิดเป็น % — ปี 2024</div>
-      <div class="kpi-value" style="color:#e67e22;">21.4%</div>
+      <div class="kpi-value" style="color:#e69a68;">21.4%</div>
       <div class="kpi-sub">297 ลูกค้า = 80% ของยอดรวม</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #e74c3c;">
+    <div class="kpi-card" style="border-left:4px solid #e58079;">
       <div class="kpi-label">Top 10 คิดเป็น % — ปี 2025 ⚠️</div>
-      <div class="kpi-value" style="color:#e74c3c;">29.1%</div>
+      <div class="kpi-value" style="color:#e58079;">29.1%</div>
       <div class="kpi-sub">270 ลูกค้า = 80% ของยอดรวม</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #c0392b;">
+    <div class="kpi-card" style="border-left:4px solid #d16b62;">
       <div class="kpi-label">ความเสี่ยงสูงสุด (2025)</div>
-      <div class="kpi-value" style="color:#c0392b;">Bigtree+แพ็คเวิร์คส์</div>
+      <div class="kpi-value" style="color:#d16b62;">Bigtree+แพ็คเวิร์คส์</div>
       <div class="kpi-sub">2 รายนี้รวมกัน = 13.9% ของยอดปี 2025</div>
     </div>
   </div>
@@ -409,7 +420,7 @@
     </div>
   </div>
 
-  <div class="insight-box" style="border-left-color:#e74c3c;background:#fff8f8;">
+  <div class="insight-box" style="border-left-color:#e58079;background:#fff8f8;">
     <h4>🚨 ความเสี่ยงที่ต้องแก้ไข</h4>
     <ul>
       <li><strong>Bigtree + แพ็คเวิร์คส์</strong> รวมกัน 13.9% ของยอดปี 2025 — ถ้าหายไปรายใดรายหนึ่ง ยอดจะหด ~7% ทันที</li>
@@ -420,26 +431,26 @@
   </div>
 
   <!-- SECTION 4: PARETO -->
-  <div style="font-size:16px;font-weight:800;color:#8e44ad;margin:28px 0 12px;">🟣 4. Pareto 80/20 — ลูกค้ากี่ % ทำยอด 80%?</div>
+  <div style="font-size:16px;font-weight:800;color:#a888c4;margin:28px 0 12px;">🟣 4. Pareto 80/20 — ลูกค้ากี่ % ทำยอด 80%?</div>
   <div class="kpi-row" style="margin-bottom:20px;">
-    <div class="kpi-card" style="border-left:4px solid #2980b9;">
+    <div class="kpi-card" style="border-left:4px solid #7c9dc0;">
       <div class="kpi-label">2023 — 80% จาก</div>
-      <div class="kpi-value" style="color:#2980b9;">301 ราย</div>
+      <div class="kpi-value" style="color:#7c9dc0;">301 ราย</div>
       <div class="kpi-sub">11.6% ของลูกค้าทั้งหมด (2,602 ราย)</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #e67e22;">
+    <div class="kpi-card" style="border-left:4px solid #e69a68;">
       <div class="kpi-label">2024 — 80% จาก</div>
-      <div class="kpi-value" style="color:#e67e22;">297 ราย</div>
+      <div class="kpi-value" style="color:#e69a68;">297 ราย</div>
       <div class="kpi-sub">10.6% ของลูกค้าทั้งหมด (2,795 ราย)</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #e74c3c;">
+    <div class="kpi-card" style="border-left:4px solid #e58079;">
       <div class="kpi-label">2025 — 80% จาก ⚠️</div>
-      <div class="kpi-value" style="color:#e74c3c;">270 ราย</div>
+      <div class="kpi-value" style="color:#e58079;">270 ราย</div>
       <div class="kpi-sub">13.6% ของลูกค้าทั้งหมด (1,991 ราย)</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #8e44ad;">
+    <div class="kpi-card" style="border-left:4px solid #a888c4;">
       <div class="kpi-label">50% มาจากเพียง</div>
-      <div class="kpi-value" style="color:#8e44ad;">2.4%</div>
+      <div class="kpi-value" style="color:#a888c4;">2.4%</div>
       <div class="kpi-sub">ปี 2025: แค่ 48 ราย ทำยอด 50% ทั้งปี</div>
     </div>
   </div>
@@ -463,10 +474,10 @@
         <table class="data-table">
           <thead><tr><th>ระดับยอด</th><th>ปี 2023</th><th>ปี 2024</th><th>ปี 2025</th></tr></thead>
           <tbody>
-            <tr><td><strong>50% ของรายได้</strong></td><td>77 ราย (3.0%)</td><td>69 ราย (2.5%)</td><td style="color:#e74c3c;font-weight:700">48 ราย (2.4%)</td></tr>
-            <tr><td><strong>70% ของรายได้</strong></td><td>195 ราย (7.5%)</td><td>185 ราย (6.6%)</td><td style="color:#e74c3c;font-weight:700">159 ราย (8.0%)</td></tr>
-            <tr><td><strong>80% ของรายได้</strong></td><td>301 ราย (11.6%)</td><td>297 ราย (10.6%)</td><td style="color:#e74c3c;font-weight:700">270 ราย (13.6%)</td></tr>
-            <tr><td><strong>90% ของรายได้</strong></td><td>481 ราย (18.5%)</td><td>489 ราย (17.5%)</td><td style="color:#e74c3c;font-weight:700">465 ราย (23.4%)</td></tr>
+            <tr><td><strong>50% ของรายได้</strong></td><td>77 ราย (3.0%)</td><td>69 ราย (2.5%)</td><td style="color:#e58079;font-weight:700">48 ราย (2.4%)</td></tr>
+            <tr><td><strong>70% ของรายได้</strong></td><td>195 ราย (7.5%)</td><td>185 ราย (6.6%)</td><td style="color:#e58079;font-weight:700">159 ราย (8.0%)</td></tr>
+            <tr><td><strong>80% ของรายได้</strong></td><td>301 ราย (11.6%)</td><td>297 ราย (10.6%)</td><td style="color:#e58079;font-weight:700">270 ราย (13.6%)</td></tr>
+            <tr><td><strong>90% ของรายได้</strong></td><td>481 ราย (18.5%)</td><td>489 ราย (17.5%)</td><td style="color:#e58079;font-weight:700">465 ราย (23.4%)</td></tr>
             <tr style="background:#f0f4f8;font-weight:700"><td><strong>ลูกค้าทั้งหมด</strong></td><td>2,602 ราย</td><td>2,795 ราย</td><td>1,991 ราย</td></tr>
           </tbody>
         </table>
@@ -475,26 +486,26 @@
   </div>
 
   <!-- SECTION 5: ORDER FREQUENCY -->
-  <div style="font-size:16px;font-weight:800;color:#1abc9c;margin:28px 0 12px;">🟢 5. Order Frequency — ลูกค้าซื้อบ่อยแค่ไหน?</div>
+  <div style="font-size:16px;font-weight:800;color:#a0d9c7;margin:28px 0 12px;">🟢 5. Order Frequency — ลูกค้าซื้อบ่อยแค่ไหน?</div>
   <div class="kpi-row" style="margin-bottom:20px;">
-    <div class="kpi-card" style="border-left:4px solid #2980b9;">
+    <div class="kpi-card" style="border-left:4px solid #7c9dc0;">
       <div class="kpi-label">เฉลี่ยต่อลูกค้า ปี 2023</div>
-      <div class="kpi-value" style="color:#2980b9;">2.9 ครั้ง</div>
+      <div class="kpi-value" style="color:#7c9dc0;">2.9 ครั้ง</div>
       <div class="kpi-sub">Median: 1 ครั้ง | ซื้อครั้งเดียว 68.8%</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #e67e22;">
+    <div class="kpi-card" style="border-left:4px solid #e69a68;">
       <div class="kpi-label">เฉลี่ยต่อลูกค้า ปี 2024</div>
-      <div class="kpi-value" style="color:#e67e22;">3.0 ครั้ง</div>
+      <div class="kpi-value" style="color:#e69a68;">3.0 ครั้ง</div>
       <div class="kpi-sub">Median: 1 ครั้ง | ซื้อครั้งเดียว 68.2%</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #27ae60;">
+    <div class="kpi-card" style="border-left:4px solid #8dc57e;">
       <div class="kpi-label">เฉลี่ยต่อลูกค้า ปี 2025</div>
-      <div class="kpi-value" style="color:#27ae60;">3.3 ครั้ง</div>
+      <div class="kpi-value" style="color:#8dc57e;">3.3 ครั้ง</div>
       <div class="kpi-sub">Median: 1 ครั้ง | ซื้อครั้งเดียว 58.5% ✅</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #e74c3c;">
+    <div class="kpi-card" style="border-left:4px solid #e58079;">
       <div class="kpi-label">ลูกค้าซื้อ >12 ครั้ง (2025)</div>
-      <div class="kpi-value" style="color:#e74c3c;">49 ราย</div>
+      <div class="kpi-value" style="color:#e58079;">49 ราย</div>
       <div class="kpi-sub">ลดลงจาก 102→111→49 ราย ⚠️ VIP หาย</div>
     </div>
   </div>
@@ -523,7 +534,7 @@
     </div>
   </div>
 
-  <div class="insight-box" style="border-left-color:#1abc9c;background:#f0fff9;margin-top:4px;">
+  <div class="insight-box" style="border-left-color:#a0d9c7;background:#f0fff9;margin-top:4px;">
     <h4>💡 อ่านข้อมูลนี้ยังไง?</h4>
     <ul>
       <li><strong>ดีขึ้น:</strong> ปี 2025 ลูกค้าซื้อครั้งเดียวลดลงจาก 68% → 58% แสดงว่าลูกค้าที่เหลือมี Loyalty สูงกว่า</li>
@@ -539,27 +550,27 @@
 
   <!-- KPI CARDS -->
   <div class="kpi-row" style="margin-top:24px;">
-    <div class="kpi-card" style="border-left:4px solid #8e44ad;">
+    <div class="kpi-card" style="border-left:4px solid #a888c4;">
       <div class="kpi-label">ยอดรวม Central Group (รวม VAT)</div>
-      <div class="kpi-value" style="color:#8e44ad;">18.55M</div>
+      <div class="kpi-value" style="color:#a888c4;">18.55M</div>
       <div class="kpi-sub">฿18,550,562 | ทุกปี 2023–2026 (H1 + ก.ค. MTD)</div>
       <div class="kpi-icon">🏬</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #2980b9;">
+    <div class="kpi-card" style="border-left:4px solid #7c9dc0;">
       <div class="kpi-label">ยอดก่อน VAT (รวมทุกปี)</div>
-      <div class="kpi-value" style="color:#2980b9;">17.34M</div>
+      <div class="kpi-value" style="color:#7c9dc0;">17.34M</div>
       <div class="kpi-sub">฿17,336,807 | VAT: ฿1,213,755</div>
       <div class="kpi-icon">📋</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #e74c3c;">
+    <div class="kpi-card" style="border-left:4px solid #e58079;">
       <div class="kpi-label">ยอดขาย 2025</div>
-      <div class="kpi-value" style="color:#e74c3c;">5.1M</div>
+      <div class="kpi-value" style="color:#e58079;">5.1M</div>
       <div class="kpi-sub">฿5,078,506 | <span class="down">▼ -9.3%</span> จากปี 2024</div>
       <div class="kpi-icon">📉</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #e67e22;">
+    <div class="kpi-card" style="border-left:4px solid #e69a68;">
       <div class="kpi-label">2026 YTD (H1 + ก.ค. MTD)</div>
-      <div class="kpi-value" style="color:#e67e22;">3.10M</div>
+      <div class="kpi-value" style="color:#e69a68;">3.10M</div>
       <div class="kpi-sub">฿3,098,823 (incl VAT) | พ.ค. ฿373K · มิ.ย. ฿303K · ก.ค. MTD ฿294K</div>
       <div class="kpi-icon">🟢</div>
     </div>
@@ -631,7 +642,7 @@
           <tr><td class="rank">9</td><td>ซีพีเอ็น ระยอง</td><td style="font-weight:700">7,116</td></tr>
           <tr><td class="rank">10</td><td>เซ็นทรัลพัฒนา เรซซิเดนซ์</td><td style="font-weight:700">4,451</td></tr>
           <tr><td class="rank">11</td><td>ซีพีเอ็น โคราช</td><td style="font-weight:700">3,649</td></tr>
-          <tr style="font-weight:700;background:#f3eafc"><td></td><td><strong>รวม พ.ค. 2026</strong></td><td style="color:#8e44ad"><strong>373,275</strong></td></tr>
+          <tr style="font-weight:700;background:#f3eafc"><td></td><td><strong>รวม พ.ค. 2026</strong></td><td style="color:#a888c4"><strong>373,275</strong></td></tr>
         </tbody>
       </table>
     </div>
@@ -651,7 +662,7 @@
             <tr><td class="rank">1</td><td>เซ็นทรัลพัฒนา (มหาชน)</td><td style="font-weight:700">203,113</td></tr>
             <tr><td class="rank">2</td><td>ซีพีเอ็น พัทยา</td><td style="font-weight:700">54,156</td></tr>
             <tr><td class="rank">3</td><td>เซ็นทรัลพัฒนา ขอนแก่น</td><td style="font-weight:700">45,957</td></tr>
-            <tr style="font-weight:700;background:#e8f5e9"><td></td><td><strong>รวม มิ.ย. 2026</strong></td><td style="color:#27ae60"><strong>~303,225</strong></td></tr>
+            <tr style="font-weight:700;background:#eaf4e2"><td></td><td><strong>รวม มิ.ย. 2026</strong></td><td style="color:#8dc57e"><strong>~303,225</strong></td></tr>
           </tbody>
         </table>
         <div style="padding:8px 12px;font-size:11px;color:var(--muted);border-top:1px solid #eee">
@@ -671,7 +682,7 @@
             <tr><td class="rank">1</td><td>เซ็นทรัลพัฒนา (มหาชน)</td><td style="font-weight:700">199,063</td></tr>
             <tr><td class="rank">2</td><td>ซีพีเอ็น พัทยา</td><td style="font-weight:700">52,740</td></tr>
             <tr><td class="rank">3</td><td>เซ็นทรัลฟู้ดอเวนิว</td><td style="font-weight:700">42,008</td></tr>
-            <tr style="font-weight:700;background:#fff3e0"><td></td><td><strong>รวม ก.ค. MTD (20/7)</strong></td><td style="color:#e67e22"><strong>~293,811</strong></td></tr>
+            <tr style="font-weight:700;background:#fff3e0"><td></td><td><strong>รวม ก.ค. MTD (20/7)</strong></td><td style="color:#e69a68"><strong>~293,811</strong></td></tr>
           </tbody>
         </table>
         <div style="padding:8px 12px;font-size:11px;color:var(--muted);border-top:1px solid #eee">
@@ -698,29 +709,29 @@
   <!-- ═══════════════════════ CEO/CFO EXECUTIVE SCORECARD ═══════════════════════ -->
   <div style="margin-top:24px;margin-bottom:20px;">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-      <div style="font-size:18px;font-weight:800;color:#1a252f;">📋 Executive Scorecard</div>
-      <div style="background:#e8f5e9;color:#2e7d32;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;">YTD ม.ค.–พ.ค. ครบ + มิ.ย. MTD 2026</div>
-      <div style="background:#fff8e1;color:#f57f17;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;">อัพเดต มิ.ย. 2569 (พ.ค. ปิดเดือน + มิ.ย. MTD)</div>
+      <div style="font-size:18px;font-weight:800;color:#4a5a6c;">📋 Executive Scorecard</div>
+      <div style="background:#eaf4e2;color:#2e7d32;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;">YTD ม.ค.–พ.ค. ครบ + มิ.ย. MTD 2026</div>
+      <div style="background:#faf1e0;color:#c99a5a;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;">อัพเดต มิ.ย. 2569 (พ.ค. ปิดเดือน + มิ.ย. MTD)</div>
     </div>
 
     <!-- Row 1: Revenue -->
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;">
-      <div style="background:linear-gradient(135deg,#1a3a5c,#2980b9);color:white;border-radius:12px;padding:14px 16px;">
+      <div style="background:linear-gradient(135deg,#6b8ba8,#7c9dc0);color:white;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;opacity:.75;letter-spacing:.5px;margin-bottom:4px;">REVENUE YTD (H1 + ก.ค. MTD)</div>
         <div style="font-size:22px;font-weight:800;">฿36.48M</div>
         <div style="font-size:11px;opacity:.85;margin-top:3px;">58.3% of ScA | Run Rate ฿64.9M/yr</div>
       </div>
-      <div style="background:linear-gradient(135deg,#1a5c2a,#27ae60);color:white;border-radius:12px;padding:14px 16px;">
+      <div style="background:linear-gradient(135deg,#7cb877,#8dc57e);color:white;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;opacity:.75;letter-spacing:.5px;margin-bottom:4px;">GROSS PROFIT H1</div>
         <div style="font-size:22px;font-weight:800;">฿10.31M</div>
         <div style="font-size:11px;opacity:.85;margin-top:3px;">GM 30.6% | เม.ย. 41.2% ↑ · มิ.ย. 21.3% ⚠️</div>
       </div>
-      <div style="background:linear-gradient(135deg,#4a235a,#8e44ad);color:white;border-radius:12px;padding:14px 16px;">
+      <div style="background:linear-gradient(135deg,#8a6ba5,#a888c4);color:white;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;opacity:.75;letter-spacing:.5px;margin-bottom:4px;">NET PROFIT H1</div>
         <div style="font-size:22px;font-weight:800;">฿2.75M</div>
         <div style="font-size:11px;opacity:.85;margin-top:3px;">NM 8.2% | sync คชจ. tab audit</div>
       </div>
-      <div style="background:linear-gradient(135deg,#7b3a00,#e67e22);color:white;border-radius:12px;padding:14px 16px;">
+      <div style="background:linear-gradient(135deg,#b8865c,#e69a68);color:white;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;opacity:.75;letter-spacing:.5px;margin-bottom:4px;">JUL MTD ⚠️</div>
         <div style="font-size:22px;font-weight:800;">฿2.81M</div>
         <div style="font-size:11px;opacity:.85;margin-top:3px;">ถึง 23/7 | projection ~฿3.79M | -26.2% YoY</div>
@@ -729,24 +740,24 @@
 
     <!-- Row 2: Cash & Risk -->
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;">
-      <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #e74c3c;border-radius:12px;padding:14px 16px;">
+      <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #e58079;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;color:#888;letter-spacing:.5px;margin-bottom:4px;">CCC (เงินทุนหมุน)</div>
-        <div style="font-size:20px;font-weight:800;color:#e74c3c;">+13.3 วัน ⚠️</div>
+        <div style="font-size:20px;font-weight:800;color:#e58079;">+13.3 วัน ⚠️</div>
         <div style="font-size:11px;color:#888;margin-top:3px;">DSO 16.2 | DIO 46.3 | DPO 49.2</div>
       </div>
-      <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #e74c3c;border-radius:12px;padding:14px 16px;">
+      <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #e58079;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;color:#888;letter-spacing:.5px;margin-bottom:4px;">INVENTORY (สต็อก)</div>
-        <div style="font-size:20px;font-weight:800;color:#e74c3c;">฿5.51M ⚠️</div>
+        <div style="font-size:20px;font-weight:800;color:#e58079;">฿5.51M ⚠️</div>
         <div style="font-size:11px;color:#888;margin-top:3px;">DIO 46.3 วัน | Slow 74.8% | ฿4.12M</div>
       </div>
-      <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #e67e22;border-radius:12px;padding:14px 16px;">
+      <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #e69a68;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;color:#888;letter-spacing:.5px;margin-bottom:4px;">AR / AP OUTSTANDING</div>
-        <div style="font-size:20px;font-weight:800;color:#e67e22;">฿4.9M / ฿11M</div>
+        <div style="font-size:20px;font-weight:800;color:#e69a68;">฿4.9M / ฿11M</div>
         <div style="font-size:11px;color:#888;margin-top:3px;">Cash Gap −฿6.1M | DPO 49.2 วัน</div>
       </div>
-      <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #8e44ad;border-radius:12px;padding:14px 16px;">
+      <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #a888c4;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;color:#888;letter-spacing:.5px;margin-bottom:4px;">CUSTOMER CONCENTRATION</div>
-        <div style="font-size:20px;font-weight:800;color:#8e44ad;">Bigtree 9.5%</div>
+        <div style="font-size:20px;font-weight:800;color:#a888c4;">Bigtree 9.5%</div>
         <div style="font-size:11px;color:#888;margin-top:3px;">ต้องทำ Win-back ~1,644 ราย จาก 2025</div>
       </div>
     </div>
@@ -754,21 +765,21 @@
     <!-- Row 3: Progress bar to ScA -->
     <div style="background:white;border:1.5px solid #e0e0e0;border-radius:12px;padding:14px 18px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <div style="font-size:13px;font-weight:700;color:#1a252f;">🎯 Revenue Progress — ScA Target ฿62.6M</div>
-        <div style="font-size:12px;color:#27ae60;font-weight:700;">58.3% achieved (H1 ครบ + ก.ค. MTD 23/7) | Run Rate: ฿64.9M ✅ เกินเป้า</div>
+        <div style="font-size:13px;font-weight:700;color:#4a5a6c;">🎯 Revenue Progress — ScA Target ฿62.6M</div>
+        <div style="font-size:12px;color:#8dc57e;font-weight:700;">58.3% achieved (H1 ครบ + ก.ค. MTD 23/7) | Run Rate: ฿64.9M ✅ เกินเป้า</div>
       </div>
-      <div style="background:#f0f2f5;border-radius:6px;height:14px;overflow:hidden;position:relative;">
-        <div style="background:linear-gradient(90deg,#27ae60,#2ecc71);height:100%;width:58.3%;border-radius:6px;"></div>
-        <div style="position:absolute;top:0;left:58.3%;height:100%;width:1.5px;background:#e74c3c;"></div>
+      <div style="background:#f5efe8;border-radius:6px;height:14px;overflow:hidden;position:relative;">
+        <div style="background:linear-gradient(90deg,#8dc57e,#a8d5a2);height:100%;width:58.3%;border-radius:6px;"></div>
+        <div style="position:absolute;top:0;left:58.3%;height:100%;width:1.5px;background:#e58079;"></div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-top:8px;font-size:11px;color:#888;text-align:center;">
-        <div><strong style="color:#2980b9">ม.ค.</strong><br>฿4.89M</div>
-        <div><strong style="color:#2980b9">ก.พ.</strong><br>฿5.24M</div>
-        <div><strong style="color:#2980b9">มี.ค.</strong><br>฿6.06M</div>
-        <div><strong style="color:#27ae60">เม.ย. 🎉</strong><br>฿6.88M</div>
-        <div><strong style="color:#27ae60">พ.ค.</strong><br>฿5.87M</div>
-        <div><strong style="color:#27ae60">มิ.ย. ✅</strong><br>฿5.23M</div>
-        <div><strong style="color:#e67e22">ก.ค. MTD</strong><br>฿2.81M</div>
+        <div><strong style="color:#7c9dc0">ม.ค.</strong><br>฿4.89M</div>
+        <div><strong style="color:#7c9dc0">ก.พ.</strong><br>฿5.24M</div>
+        <div><strong style="color:#7c9dc0">มี.ค.</strong><br>฿6.06M</div>
+        <div><strong style="color:#8dc57e">เม.ย. 🎉</strong><br>฿6.88M</div>
+        <div><strong style="color:#8dc57e">พ.ค.</strong><br>฿5.87M</div>
+        <div><strong style="color:#8dc57e">มิ.ย. ✅</strong><br>฿5.23M</div>
+        <div><strong style="color:#e69a68">ก.ค. MTD</strong><br>฿2.81M</div>
       </div>
     </div>
 
@@ -777,32 +788,32 @@
       <div style="text-align:center;background:white;border-radius:10px;padding:10px 8px;border:1px solid #e0e0e0;">
         <div style="font-size:20px;">🟢</div>
         <div style="font-size:10px;font-weight:700;color:#333;margin-top:4px;">Revenue Growth</div>
-        <div style="font-size:10px;color:#27ae60;font-weight:700;">+41% vs ScA Pace</div>
+        <div style="font-size:10px;color:#8dc57e;font-weight:700;">+41% vs ScA Pace</div>
       </div>
       <div style="text-align:center;background:white;border-radius:10px;padding:10px 8px;border:1px solid #e0e0e0;">
         <div style="font-size:20px;">🟡</div>
         <div style="font-size:10px;font-weight:700;color:#333;margin-top:4px;">Gross Margin</div>
-        <div style="font-size:10px;color:#e67e22;font-weight:700;">34.3% (เป้า >40%)</div>
+        <div style="font-size:10px;color:#e69a68;font-weight:700;">34.3% (เป้า >40%)</div>
       </div>
       <div style="text-align:center;background:white;border-radius:10px;padding:10px 8px;border:1px solid #e0e0e0;">
         <div style="font-size:20px;">🟡</div>
         <div style="font-size:10px;font-weight:700;color:#333;margin-top:4px;">Cash Cycle</div>
-        <div style="font-size:10px;color:#e67e22;font-weight:700;">+13.3 วัน (เป้า <0)</div>
+        <div style="font-size:10px;color:#e69a68;font-weight:700;">+13.3 วัน (เป้า <0)</div>
       </div>
       <div style="text-align:center;background:white;border-radius:10px;padding:10px 8px;border:1px solid #e0e0e0;">
         <div style="font-size:20px;">🔴</div>
         <div style="font-size:10px;font-weight:700;color:#333;margin-top:4px;">Inventory</div>
-        <div style="font-size:10px;color:#e74c3c;font-weight:700;">DIO 46.3 วัน ⚠️</div>
+        <div style="font-size:10px;color:#e58079;font-weight:700;">DIO 46.3 วัน ⚠️</div>
       </div>
       <div style="text-align:center;background:white;border-radius:10px;padding:10px 8px;border:1px solid #e0e0e0;">
         <div style="font-size:20px;">🟡</div>
         <div style="font-size:10px;font-weight:700;color:#333;margin-top:4px;">Retention</div>
-        <div style="font-size:10px;color:#e67e22;font-weight:700;">16.6% (เป้า >30%)</div>
+        <div style="font-size:10px;color:#e69a68;font-weight:700;">16.6% (เป้า >30%)</div>
       </div>
       <div style="text-align:center;background:white;border-radius:10px;padding:10px 8px;border:1px solid #e0e0e0;">
         <div style="font-size:20px;">🟡</div>
         <div style="font-size:10px;font-weight:700;color:#333;margin-top:4px;">Concentration</div>
-        <div style="font-size:10px;color:#e67e22;font-weight:700;">Bigtree 9.5% YTD</div>
+        <div style="font-size:10px;color:#e69a68;font-weight:700;">Bigtree 9.5% YTD</div>
       </div>
     </div>
   </div>
@@ -814,7 +825,7 @@
       <div class="kpi-label">ยอดขายรวม 2023 🔍</div>
       <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
         <div class="kpi-value">62.2M</div>
-        <div style="font-size:13px;color:#7f8c8d;font-weight:600;">ก่อน VAT: <span style="color:#2980b9;font-weight:700;">58.1M</span></div>
+        <div style="font-size:13px;color:#7f8c8d;font-weight:600;">ก่อน VAT: <span style="color:#7c9dc0;font-weight:700;">58.1M</span></div>
       </div>
       <div class="kpi-sub">รวม VAT ฿62,158,502 | ก่อน VAT ฿58,091,123 | 7,366 รายการ</div>
       <div class="kpi-icon">📦</div>
@@ -823,7 +834,7 @@
       <div class="kpi-label">ยอดขายรวม 2024 🔍</div>
       <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
         <div class="kpi-value">67.3M</div>
-        <div style="font-size:13px;color:#7f8c8d;font-weight:600;">ก่อน VAT: <span style="color:#27ae60;font-weight:700;">62.9M</span></div>
+        <div style="font-size:13px;color:#7f8c8d;font-weight:600;">ก่อน VAT: <span style="color:#8dc57e;font-weight:700;">62.9M</span></div>
       </div>
       <div class="kpi-sub"><span class="up">▲ +8.3%</span> จากปี 2023 | ก่อน VAT ฿62,945,061 | 8,210 รายการ</div>
       <div class="kpi-icon">📈</div>
@@ -832,7 +843,7 @@
       <div class="kpi-label">ยอดขายรวม 2025 🔍</div>
       <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
         <div class="kpi-value">58.4M</div>
-        <div style="font-size:13px;color:#7f8c8d;font-weight:600;">ก่อน VAT: <span style="color:#e74c3c;font-weight:700;">54.6M</span></div>
+        <div style="font-size:13px;color:#7f8c8d;font-weight:600;">ก่อน VAT: <span style="color:#e58079;font-weight:700;">54.6M</span></div>
       </div>
       <div class="kpi-sub"><span class="down">▼ -13.2%</span> จากปี 2024 | ก่อน VAT ฿54,589,930 | 6,480 รายการ</div>
       <div class="kpi-icon">📉</div>
@@ -938,7 +949,7 @@
       <button class="year-btn" onclick="filterMonthly(2024, this)">2024</button>
       <button class="year-btn" onclick="filterMonthly(2025, this)">2025</button>
       <button class="year-btn" onclick="filterMonthly(2026, this)">Forecast 2026</button>
-      <button class="year-btn" onclick="filterMonthly('act2026', this)" style="color:#16a085;font-weight:700">🟢 Actual 2026</button>
+      <button class="year-btn" onclick="filterMonthly('act2026', this)" style="color:#8dc9b7;font-weight:700">🟢 Actual 2026</button>
     </div>
   </div>
 
@@ -964,7 +975,7 @@
               <th>2024</th>
               <th>2025</th>
               <th>Forecast 2026</th>
-              <th style="color:#16a085">🟢 Actual 2026*</th>
+              <th style="color:#8dc9b7">🟢 Actual 2026*</th>
             </tr>
           </thead>
           <tbody id="monthlyTableBody"></tbody>
@@ -992,7 +1003,7 @@
       <button class="year-btn active" onclick="filterCust(2023, this)">2023</button>
       <button class="year-btn" onclick="filterCust(2024, this)">2024</button>
       <button class="year-btn" onclick="filterCust(2025, this)">2025</button>
-      <button class="year-btn" onclick="showTab('analysis2026')" style="color:#16a085;font-weight:700" title="ข้อมูลลูกค้า 2026 (ม.ค.–พ.ค.) อยู่ในแท็บวิเคราะห์ 2026">🟢 2026 →</button>
+      <button class="year-btn" onclick="showTab('analysis2026')" style="color:#8dc9b7;font-weight:700" title="ข้อมูลลูกค้า 2026 (ม.ค.–พ.ค.) อยู่ในแท็บวิเคราะห์ 2026">🟢 2026 →</button>
     </div>
   </div>
 
@@ -1055,7 +1066,7 @@
       <button class="year-btn active" onclick="filterTeam(2023, this)">2023</button>
       <button class="year-btn" onclick="filterTeam(2024, this)">2024</button>
       <button class="year-btn" onclick="filterTeam(2025, this)">2025</button>
-      <button class="year-btn" onclick="filterTeam(2026, this)" style="color:#16a085;font-weight:700">🟢 2026 YTD</button>
+      <button class="year-btn" onclick="filterTeam(2026, this)" style="color:#8dc9b7;font-weight:700">🟢 2026 YTD</button>
     </div>
   </div>
 
@@ -1146,9 +1157,9 @@
           <tr>
             <th>เดือน</th>
             <th>2025 (Actual)</th>
-            <th style="color:#27ae60">✅ Scenario A (+15%)</th>
-            <th style="color:#e67e22">⚠️ Scenario B (+3%)</th>
-            <th style="color:#2980b9">Actual 2026</th>
+            <th style="color:#8dc57e">✅ Scenario A (+15%)</th>
+            <th style="color:#e69a68">⚠️ Scenario B (+3%)</th>
+            <th style="color:#7c9dc0">Actual 2026</th>
             <th>vs Scenario A</th>
           </tr>
         </thead>
@@ -1273,7 +1284,7 @@
   <div class="card">
     <div class="card-header">
       <h3>📊 Actual vs Forecast 2026 รายเดือน</h3>
-      <span class="card-subtitle" style="color:#27ae60;">🟩 สีเขียว = ข้อมูลจริง | 🟠 สีส้ม = Forecast</span>
+      <span class="card-subtitle" style="color:#8dc57e;">🟩 สีเขียว = ข้อมูลจริง | 🟠 สีส้ม = Forecast</span>
     </div>
     <div class="card-body">
       <canvas id="actualVsForecastChart" style="max-height:380px;"></canvas>
@@ -1299,8 +1310,8 @@
             <tr>
               <th>เดือน</th>
               <th>Actual 2026 (฿)</th>
-              <th style="color:#27ae60">ScA Target (+15%)</th>
-              <th style="color:#e67e22">ScB Target (+3%)</th>
+              <th style="color:#8dc57e">ScA Target (+15%)</th>
+              <th style="color:#e69a68">ScB Target (+3%)</th>
               <th>vs ScA</th>
               <th>สถานะ</th>
             </tr>
@@ -1339,7 +1350,7 @@
         <table class="data-table">
           <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอดขาย (฿)</th></tr></thead>
           <tbody>
-            <tr><td class="rank">1</td><td>บ. Bigtree <span class="badge badge-red">🔥 Top</span></td><td style="font-weight:700;color:#e74c3c">฿912,175</td></tr>
+            <tr><td class="rank">1</td><td>บ. Bigtree <span class="badge badge-red">🔥 Top</span></td><td style="font-weight:700;color:#e58079">฿912,175</td></tr>
             <tr><td class="rank">2</td><td>บ. เซ็นทรัลพัฒนา (มหาชน)</td><td style="font-weight:700">฿246,154</td></tr>
             <tr><td class="rank">3</td><td>บ. โนมิมาโช</td><td style="font-weight:700">฿230,762</td></tr>
             <tr><td class="rank">4</td><td>บ. โนส ที (ประเทศไทย)</td><td style="font-weight:700">฿188,641</td></tr>
@@ -1363,9 +1374,9 @@
         <table class="data-table">
           <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอดขาย (฿)</th></tr></thead>
           <tbody>
-            <tr><td class="rank">1</td><td>บ. Bigtree จำกัด</td><td style="font-weight:700;color:#e74c3c">฿693,950</td></tr>
+            <tr><td class="rank">1</td><td>บ. Bigtree จำกัด</td><td style="font-weight:700;color:#e58079">฿693,950</td></tr>
             <tr><td class="rank">2</td><td>บ. บีบ็อกซ์ ปริ้นติ้ง อินเตอร์เนชั่นแนล จำกัด</td><td style="font-weight:700">฿365,500</td></tr>
-            <tr><td class="rank">3</td><td>Central Group (รวม) <span class="badge badge-blue">🏢</span></td><td style="font-weight:700;color:#2980b9">฿317,040</td></tr>
+            <tr><td class="rank">3</td><td>Central Group (รวม) <span class="badge badge-blue">🏢</span></td><td style="font-weight:700;color:#7c9dc0">฿317,040</td></tr>
             <tr><td class="rank">4</td><td>บ. แพ็คเวิร์คส์ จำกัด</td><td style="font-weight:700">฿184,675</td></tr>
             <tr><td class="rank">5</td><td>บ. ทีพี โปรเจค จำกัด</td><td style="font-weight:700">฿142,000</td></tr>
             <tr><td class="rank">6</td><td>บ. เวนดิ้ง เซอร์วิสเซส จำกัด</td><td style="font-weight:700">฿135,424</td></tr>
@@ -1383,8 +1394,8 @@
         <table class="data-table">
           <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอดขาย (฿)</th><th>%</th></tr></thead>
           <tbody>
-            <tr><td class="rank">1</td><td>บ. Bigtree จำกัด <span class="badge badge-red">🔥 29.7%</span></td><td style="font-weight:700;color:#e74c3c">฿2,045,250</td><td style="color:#e74c3c;font-weight:700">29.7%</td></tr>
-            <tr><td class="rank">2</td><td>Central Group (รวม) <span class="badge badge-blue">🏢</span></td><td style="font-weight:700;color:#2980b9">฿488,550</td><td style="color:#7f8c8d">7.1%</td></tr>
+            <tr><td class="rank">1</td><td>บ. Bigtree จำกัด <span class="badge badge-red">🔥 29.7%</span></td><td style="font-weight:700;color:#e58079">฿2,045,250</td><td style="color:#e58079;font-weight:700">29.7%</td></tr>
+            <tr><td class="rank">2</td><td>Central Group (รวม) <span class="badge badge-blue">🏢</span></td><td style="font-weight:700;color:#7c9dc0">฿488,550</td><td style="color:#7f8c8d">7.1%</td></tr>
             <tr><td class="rank">3</td><td>บ. แพ็คเวิร์คส์ จำกัด</td><td style="font-weight:700">฿276,495</td><td style="color:#7f8c8d">4.0%</td></tr>
             <tr><td class="rank">4</td><td>บ. โนส ที (ประเทศไทย) จำกัด ✅</td><td style="font-weight:700">฿249,750</td><td style="color:#7f8c8d">3.6%</td></tr>
             <tr><td class="rank">5</td><td>การไฟฟ้าฝ่ายผลิต (กฟผ.) ✅</td><td style="font-weight:700">฿233,000</td><td style="color:#7f8c8d">3.4%</td></tr>
@@ -1395,7 +1406,7 @@
             <tr><td class="rank">10</td><td>บ. นมสดพระนคร จำกัด</td><td style="font-weight:700">฿95,442</td><td style="color:#7f8c8d">1.4%</td></tr>
           </tbody>
         </table>
-        <div style="padding:10px 12px;font-size:11px;color:#7f8c8d;border-top:1px solid #f0f2f5">✅ = Win-back สำเร็จ | ⚠️ Bigtree 29.7% — concentration risk สูง</div>
+        <div style="padding:10px 12px;font-size:11px;color:#7f8c8d;border-top:1px solid #f5efe8">✅ = Win-back สำเร็จ | ⚠️ Bigtree 29.7% — concentration risk สูง</div>
       </div>
     </div>
   </div>
@@ -1407,12 +1418,12 @@
         <table class="data-table">
           <thead><tr><th>#</th><th>พนักงานขาย</th><th>ยอดขาย (฿)</th><th>%</th></tr></thead>
           <tbody>
-            <tr><td class="rank">1</td><td>ศุภิสรา <span class="badge badge-red">🔥 #1</span></td><td style="font-weight:700;color:#e74c3c">฿1,835,273</td><td style="color:#7f8c8d">31.3%</td></tr>
-            <tr><td class="rank">2</td><td>ธีรตา</td><td style="font-weight:700;color:#2980b9">฿1,539,483</td><td style="color:#7f8c8d">26.2%</td></tr>
+            <tr><td class="rank">1</td><td>ศุภิสรา <span class="badge badge-red">🔥 #1</span></td><td style="font-weight:700;color:#e58079">฿1,835,273</td><td style="color:#7f8c8d">31.3%</td></tr>
+            <tr><td class="rank">2</td><td>ธีรตา</td><td style="font-weight:700;color:#7c9dc0">฿1,539,483</td><td style="color:#7f8c8d">26.2%</td></tr>
             <tr><td class="rank">3</td><td>ธชนัย</td><td style="font-weight:700">฿976,810</td><td style="color:#7f8c8d">16.6%</td></tr>
             <tr><td class="rank">4</td><td>ปุณณภา</td><td style="font-weight:700">฿968,164</td><td style="color:#7f8c8d">16.5%</td></tr>
             <tr><td class="rank">5</td><td>จุฑามาศ <span style="color:#7f8c8d;font-size:11px">(รวม Shopee)</span></td><td style="font-weight:700">฿551,561</td><td style="color:#7f8c8d">9.4%</td></tr>
-            <tr style="font-weight:700;background:#f0f7ff"><td></td><td><strong>รวม พ.ค. (final)</strong></td><td style="color:#2980b9"><strong>฿5,871,292</strong></td><td>100%</td></tr>
+            <tr style="font-weight:700;background:#f0f7ff"><td></td><td><strong>รวม พ.ค. (final)</strong></td><td style="color:#7c9dc0"><strong>฿5,871,292</strong></td><td>100%</td></tr>
           </tbody>
         </table>
       </div>
@@ -1426,19 +1437,19 @@
             <tr><td>IVT ใบส่งของ/ใบกำกับ</td><td>3,150,708</td><td style="font-weight:700">3,371,258</td></tr>
             <tr><td>RT ขายสด</td><td>1,323,671</td><td style="font-weight:700">1,416,531</td></tr>
             <tr><td>RT Shopee</td><td>95,581</td><td style="font-weight:700">102,435</td></tr>
-            <tr><td>DRT มัดจำ <span style="color:#27ae60;font-size:11px">▲ จาก ฿0.42M</span></td><td>1,288,731</td><td style="font-weight:700">1,378,943</td></tr>
-            <tr><td style="color:#e74c3c">CNT ใบลดหนี้</td><td style="color:#e74c3c">−1,949</td><td style="color:#e74c3c;font-weight:700">−2,164</td></tr>
-            <tr style="font-weight:700;background:#f0fff4"><td><strong>รวม พ.ค. MTD</strong></td><td><strong>5,856,742</strong></td><td style="color:#27ae60"><strong>6,267,002</strong></td></tr>
+            <tr><td>DRT มัดจำ <span style="color:#8dc57e;font-size:11px">▲ จาก ฿0.42M</span></td><td>1,288,731</td><td style="font-weight:700">1,378,943</td></tr>
+            <tr><td style="color:#e58079">CNT ใบลดหนี้</td><td style="color:#e58079">−1,949</td><td style="color:#e58079;font-weight:700">−2,164</td></tr>
+            <tr style="font-weight:700;background:#f2f8ee"><td><strong>รวม พ.ค. MTD</strong></td><td><strong>5,856,742</strong></td><td style="color:#8dc57e"><strong>6,267,002</strong></td></tr>
           </tbody>
         </table>
-        <div style="margin-top:10px;padding:8px 10px;background:#f0fff4;border-radius:6px;font-size:11px;color:#2e7d32;">✅ ครบจาก Peak พ.ค. (PDF) ณ 29/5 — 254 รายธุรกรรม | Top Customers ดูด้านล่าง</div>
+        <div style="margin-top:10px;padding:8px 10px;background:#f2f8ee;border-radius:6px;font-size:11px;color:#2e7d32;">✅ ครบจาก Peak พ.ค. (PDF) ณ 29/5 — 254 รายธุรกรรม | Top Customers ดูด้านล่าง</div>
       </div>
     </div>
   </div>
 
   <!-- KAROKUL — JULY DOC TYPE -->
-  <div class="card" style="margin-top:14px;border-left:3px solid #e67e22;">
-    <div class="card-header"><h3>📊 กรกฎาคม 2026 — สรุปตามประเภทเอกสาร <span style="font-size:11px;color:#e67e22;font-weight:600">(MTD ถึง 23/7 จาก Peak ก.ค.)</span></h3></div>
+  <div class="card" style="margin-top:14px;border-left:3px solid #e69a68;">
+    <div class="card-header"><h3>📊 กรกฎาคม 2026 — สรุปตามประเภทเอกสาร <span style="font-size:11px;color:#e69a68;font-weight:600">(MTD ถึง 23/7 จาก Peak ก.ค.)</span></h3></div>
     <div class="card-body" style="padding:12px 16px;">
       <table class="data-table">
         <thead><tr><th>ประเภท</th><th>ก่อน VAT (฿)</th><th>VAT (฿)</th><th>รวม VAT (฿)</th><th>จำนวน</th></tr></thead>
@@ -1447,11 +1458,11 @@
           <tr><td>RT ขายสด</td><td>781,339</td><td>54,694</td><td style="font-weight:700">836,033</td><td>~190</td></tr>
           <tr><td>DRT มัดจำ</td><td>634,621</td><td>44,423</td><td style="font-weight:700">679,044</td><td>~35</td></tr>
           <tr><td>อื่นๆ (misc)</td><td>190</td><td>13</td><td style="font-weight:700">203</td><td>1</td></tr>
-          <tr><td style="color:#e74c3c">CNT ใบลดหนี้ <span style="font-size:10px">(Bigtree refund)</span></td><td style="color:#e74c3c">−91,133</td><td style="color:#e74c3c">−6,379</td><td style="color:#e74c3c;font-weight:700">−97,512</td><td>~6</td></tr>
-          <tr style="font-weight:700;background:#fff3e0"><td><strong>รวม ก.ค. MTD (23/7)</strong></td><td><strong>2,814,207</strong></td><td><strong>196,995</strong></td><td style="color:#e67e22"><strong>3,011,202</strong></td><td><strong>372</strong></td></tr>
+          <tr><td style="color:#e58079">CNT ใบลดหนี้ <span style="font-size:10px">(Bigtree refund)</span></td><td style="color:#e58079">−91,133</td><td style="color:#e58079">−6,379</td><td style="color:#e58079;font-weight:700">−97,512</td><td>~6</td></tr>
+          <tr style="font-weight:700;background:#fff3e0"><td><strong>รวม ก.ค. MTD (23/7)</strong></td><td><strong>2,814,207</strong></td><td><strong>196,995</strong></td><td style="color:#e69a68"><strong>3,011,202</strong></td><td><strong>372</strong></td></tr>
         </tbody>
       </table>
-      <div style="margin-top:10px;padding:8px 10px;background:#fff3e0;border-radius:6px;font-size:11px;color:#7f4f00;">
+      <div style="margin-top:10px;padding:8px 10px;background:#fff3e0;border-radius:6px;font-size:11px;color:#8a6b45;">
         ⚠️ <strong>MTD ก.ค. (ถึง 23/7 = 23 วัน)</strong> — IVT 52.9% | RT 27.8% | DRT 22.5% (pipeline ส.ค. แข็งขึ้น +฿98K) | ก.ค. projection full-month ~฿3.79M <strong>(-26.2% YoY vs ก.ค. 2025 ฿5.14M)</strong> ⚠️ ต้องเร่งช่วง 8 วันสุดท้าย<br>Top sellers MTD: Punnapha ฿814K · Teerata ฿640K · Tachanai ฿516K · Supisara ฿486K · Jutamat ฿246K
       </div>
     </div>
@@ -1465,7 +1476,7 @@
         <table class="data-table">
           <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอดขาย (฿)</th><th>%</th></tr></thead>
           <tbody>
-            <tr><td class="rank">1</td><td>Big Tree (รวม 2 ชื่อ) <span class="badge badge-red">🔥</span></td><td style="font-weight:700;color:#e74c3c">฿1,680,544</td><td style="color:#e74c3c;font-weight:700">28.7%</td></tr>
+            <tr><td class="rank">1</td><td>Big Tree (รวม 2 ชื่อ) <span class="badge badge-red">🔥</span></td><td style="font-weight:700;color:#e58079">฿1,680,544</td><td style="color:#e58079;font-weight:700">28.7%</td></tr>
             <tr><td class="rank">2</td><td>บ. สยาม แฟรนไชส์ ธุรกิจ</td><td style="font-weight:700">฿429,152</td><td style="color:#7f8c8d">7.3%</td></tr>
             <tr><td class="rank">3</td><td>บ. เซ็นทรัลพัฒนา (มหาชน)</td><td style="font-weight:700">฿170,040</td><td style="color:#7f8c8d">2.9%</td></tr>
             <tr><td class="rank">4</td><td>บ. ดัฟฟ์ ดีไซน์ เฮาส์</td><td style="font-weight:700">฿170,000</td><td style="color:#7f8c8d">2.9%</td></tr>
@@ -1477,16 +1488,16 @@
             <tr><td class="rank">10</td><td>บ. จีพีซีเอ็ม กรุ๊ป</td><td style="font-weight:700">฿101,100</td><td style="color:#7f8c8d">1.7%</td></tr>
           </tbody>
         </table>
-        <div style="padding:10px 12px;font-size:11px;color:#7f8c8d;border-top:1px solid #f0f2f5">⚠️ Big Tree 28.7% ของเดือน (ส่วนใหญ่เป็นมัดจำ ฿917K วันที่ 28/5) — concentration risk สูง</div>
+        <div style="padding:10px 12px;font-size:11px;color:#7f8c8d;border-top:1px solid #f5efe8">⚠️ Big Tree 28.7% ของเดือน (ส่วนใหญ่เป็นมัดจำ ฿917K วันที่ 28/5) — concentration risk สูง</div>
       </div>
     </div>
     <div class="card">
       <div class="card-header"><h3>💡 ไฮไลต์ พ.ค. 2026 (29/5)</h3></div>
       <div class="card-body" style="padding:14px 16px;font-size:13px;line-height:1.8;">
-        <strong style="color:#e74c3c">ศุภิสรา ขึ้น #1 ของเดือน ฿1.84M</strong> — ปิดดีล Big Tree มัดจำก้อนใหญ่ ฿917K (28/5)<br/>
+        <strong style="color:#e58079">ศุภิสรา ขึ้น #1 ของเดือน ฿1.84M</strong> — ปิดดีล Big Tree มัดจำก้อนใหญ่ ฿917K (28/5)<br/>
         <strong>ธีรตา #2 ฿1.54M</strong> ฟอร์มสม่ำเสมอ | ปุณณภา ฿0.97M · ธชนัย ฿0.96M สูสีกัน<br/>
         <strong>โครงสร้างยอด:</strong> IVT ฿3.15M (54%) · ขายสด+Shopee ฿1.42M (24%) · มัดจำ DRT ฿1.29M (22%)<br/>
-        <span style="color:#e74c3c"><strong>⚠️ กระจุกตัว:</strong> Big Tree 28.7% — ถ้าตัดออก ยอด พ.ค. เหลือ ~฿4.18M ควรเร่งกระจายฐานลูกค้า</span>
+        <span style="color:#e58079"><strong>⚠️ กระจุกตัว:</strong> Big Tree 28.7% — ถ้าตัดออก ยอด พ.ค. เหลือ ~฿4.18M ควรเร่งกระจายฐานลูกค้า</span>
       </div>
     </div>
   </div>
@@ -1500,7 +1511,7 @@
           <tbody>
             <tr><td>IVT ใบส่งของ/ใบกำกับ</td><td>2,701,001</td><td style="font-weight:700">2,890,071</td></tr>
             <tr><td>RT ขายสด + Shopee</td><td>1,387,051</td><td style="font-weight:700">1,484,145</td></tr>
-            <tr style="font-weight:700;background:#f0f7ff"><td><strong>รวม มี.ค.</strong></td><td><strong>4,088,052</strong></td><td style="color:#2980b9"><strong>4,374,216</strong></td></tr>
+            <tr style="font-weight:700;background:#f0f7ff"><td><strong>รวม มี.ค.</strong></td><td><strong>4,088,052</strong></td><td style="color:#7c9dc0"><strong>4,374,216</strong></td></tr>
           </tbody>
         </table>
       </div>
@@ -1514,13 +1525,13 @@
             <tr><td>IVT ใบส่งของ/ใบกำกับ</td><td>3,613,981</td><td style="font-weight:700">3,866,960</td></tr>
             <tr><td>RT ขายสด + Shopee</td><td>1,300,951</td><td style="font-weight:700">1,392,018</td></tr>
             <tr><td>DRT หักมัดจำแล้ว</td><td>606,795</td><td style="font-weight:700">649,271</td></tr>
-            <tr><td style="color:#e74c3c">CNT ใบลดหนี้</td><td style="color:#e74c3c">−1,658</td><td style="color:#e74c3c;font-weight:700">−1,773</td></tr>
-            <tr style="font-weight:700;background:#f0fff4"><td><strong>รวม เม.ย. 🎉</strong></td><td><strong>6,520,069</strong></td><td style="color:#27ae60"><strong>7,906,476</strong></td></tr>
+            <tr><td style="color:#e58079">CNT ใบลดหนี้</td><td style="color:#e58079">−1,658</td><td style="color:#e58079;font-weight:700">−1,773</td></tr>
+            <tr style="font-weight:700;background:#f2f8ee"><td><strong>รวม เม.ย. 🎉</strong></td><td><strong>6,520,069</strong></td><td style="color:#8dc57e"><strong>7,906,476</strong></td></tr>
           </tbody>
         </table>
-        <div style="margin-top:10px;padding:10px;background:#f0fff4;border-radius:8px;font-size:13px;">
-          <strong>🎉 เม.ย. vs ScA ฿5.19M: +132.5%</strong> | vs มี.ค. ฿6.06M: <strong style="color:#27ae60">+13.6% MoM</strong><br/>
-          vs เม.ย. 2025 ฿4.81M: <strong style="color:#27ae60">+43.0% YoY</strong> | DRT pending พ.ค.: ฿1.36M (Bigtree ฿822K)
+        <div style="margin-top:10px;padding:10px;background:#f2f8ee;border-radius:8px;font-size:13px;">
+          <strong>🎉 เม.ย. vs ScA ฿5.19M: +132.5%</strong> | vs มี.ค. ฿6.06M: <strong style="color:#8dc57e">+13.6% MoM</strong><br/>
+          vs เม.ย. 2025 ฿4.81M: <strong style="color:#8dc57e">+43.0% YoY</strong> | DRT pending พ.ค.: ฿1.36M (Bigtree ฿822K)
         </div>
       </div>
     </div>
@@ -1530,7 +1541,7 @@
   <div class="insight-box">
     <h4>💡 2026 Insights — ม.ค.–พ.ค. ครบ + มิ.ย. MTD</h4>
     <ul>
-      <li><strong>YTD H1 ฿33.68M</strong> = ม.ค.–มิ.ย. ครบ ✅ | H1 2025 ฿27.78M → <strong>+21.2% YoY</strong> 🚀 | Run Rate ฿67.4M/ปี <span style="color:#27ae60">✅ เกิน ScA ฿62.6M</span> | 53.8% ของเป้าทั้งปี | H2 เหลืออีก ฿28.92M เฉลี่ย ~฿4.82M/เดือน</li>
+      <li><strong>YTD H1 ฿33.68M</strong> = ม.ค.–มิ.ย. ครบ ✅ | H1 2025 ฿27.78M → <strong>+21.2% YoY</strong> 🚀 | Run Rate ฿67.4M/ปี <span style="color:#8dc57e">✅ เกิน ScA ฿62.6M</span> | 53.8% ของเป้าทั้งปี | H2 เหลืออีก ฿28.92M เฉลี่ย ~฿4.82M/เดือน</li>
       <li><strong>🟢 พ.ค. ปิดเดือน ฿5.87M (+37.1% YoY) · มิ.ย. ปิดเดือน ฿5.23M (+24.8% YoY)</strong> — 2 เดือนติดขยายเกิน มิ.ย./พ.ค. 2025 | Momentum entering H2 แข็งแรง</li>
       <li><strong>โครงสร้างยอด พ.ค. (ก่อน VAT):</strong> IVT ฿3.15M + ขายสด ฿1.32M + Shopee ฿0.10M + มัดจำ DRT ฿1.29M (พุ่งจาก ฿0.42M = มีออเดอร์มัดจำใหญ่เข้า 29/5)</li>
       <li><strong>🎉 เม.ย. ปิดเดือน ฿6.88M — สูงสุดของปี</strong> | +13.6% MoM | +43.0% YoY | +132.5% vs ScA</li>
@@ -1568,7 +1579,7 @@
       <div style="width:200px;height:200px;flex-shrink:0"><canvas id="saSpChart"></canvas></div>
       <div style="flex:1;min-width:280px;overflow-x:auto">
         <table style="width:100%;border-collapse:collapse;font-size:13px">
-          <thead><tr style="background:#f8f9fa">
+          <thead><tr style="background:#faf6f1">
             <th style="padding:8px 10px;text-align:left;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:2px solid #dee2e6">พนักงานขาย</th>
             <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:2px solid #dee2e6">ยอดรวม</th>
             <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:2px solid #dee2e6">Txn</th>
@@ -1589,7 +1600,7 @@
       <div style="height:200px"><canvas id="saBuChart"></canvas></div>
       <div style="overflow-x:auto;margin-top:12px">
         <table style="width:100%;border-collapse:collapse;font-size:12px">
-          <thead><tr style="background:#f8f9fa">
+          <thead><tr style="background:#faf6f1">
             <th style="padding:6px 8px;text-align:left;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">กลุ่ม</th>
             <th style="padding:6px 8px;text-align:right;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">ยอด</th>
             <th style="padding:6px 8px;text-align:right;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">%</th>
@@ -1617,7 +1628,7 @@
     <div style="font-weight:700;font-size:14px;color:var(--primary);margin-bottom:14px">🏆 Top 10 ลูกค้า — ยอดสะสม 2023–2026</div>
     <div style="overflow-x:auto">
       <table style="width:100%;border-collapse:collapse;font-size:13px">
-        <thead><tr style="background:#f8f9fa">
+        <thead><tr style="background:#faf6f1">
           <th style="padding:8px 10px;text-align:center;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">#</th>
           <th style="padding:8px 10px;text-align:left;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">ชื่อลูกค้า</th>
           <th style="padding:8px 10px;text-align:right;border-bottom:2px solid #dee2e6;font-size:11px;color:var(--muted)">ยอดสะสม</th>
@@ -1634,7 +1645,7 @@
 <!-- ============================== TAB: 2026 ANALYSIS ============================== -->
 <div class="tab-content" id="tab-analysis2026">
 
-  <div style="background:linear-gradient(135deg,#e67e22,#f39c12);color:white;border-radius:12px;padding:16px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
+  <div style="background:linear-gradient(135deg,#e69a68,#e8b95a);color:white;border-radius:12px;padding:16px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
     <div style="font-size:32px;">🔍</div>
     <div>
       <div style="font-size:16px;font-weight:800;">วิเคราะห์เชิงลึก ม.ค.–มิ.ย. 2026 ครบ ✅ + ก.ค. MTD (ถึง 23/7)</div>
@@ -1709,8 +1720,8 @@
       <div class="card-header"><h3>📊 ความถี่การซื้อ (Frequency)</h3></div>
       <div class="card-body">
         <div style="height:220px"><canvas id="a26FreqChart"></canvas></div>
-        <div style="margin-top:14px;padding:10px 14px;background:#ebf5fb;border-radius:8px;font-size:12px">
-          <strong style="color:#2980b9">💡 Insight:</strong> ลูกค้า ~70% ซื้อเพียง 1 ครั้ง
+        <div style="margin-top:14px;padding:10px 14px;background:#e3ecf5;border-radius:8px;font-size:12px">
+          <strong style="color:#7c9dc0">💡 Insight:</strong> ลูกค้า ~70% ซื้อเพียง 1 ครั้ง
           — โอกาสใหญ่ในการทำ retention campaign เพื่อดึงกลุ่มนี้มาซื้อซ้ำ
         </div>
       </div>
@@ -1739,8 +1750,8 @@
             <li>หากต้องการวิเคราะห์สินค้า ควรเพิ่มคอลัมน์<br><strong>รหัสสินค้า</strong> ในรายงานรายเดือน</li>
           </ul>
         </div>
-        <div class="insight-box" style="background:#f0fff4;border-color:#27ae60">
-          <h4 style="color:#27ae60">✅ จุดแข็ง 2026 (H1 ครบ + ก.ค. MTD)</h4>
+        <div class="insight-box" style="background:#f2f8ee;border-color:#8dc57e">
+          <h4 style="color:#8dc57e">✅ จุดแข็ง 2026 (H1 ครบ + ก.ค. MTD)</h4>
           <ul>
             <li>YTD H1 ฿33.68M ✅ = <strong>+21.2% YoY</strong> vs ฿27.78M | เม.ย. ปิดสูงสุด ฿7.03M | พ.ค. ฿5.87M (+37.1%) | มิ.ย. ฿5.22M (+24.8%)</li>
             <li>Bigtree เติบโตแรง: ฿6.34M ใน H1 (เม.ย. ฿2.05M · พ.ค. ฿1.68M · มิ.ย. ฿937K) + ก.ค. MTD ฿246K</li>
@@ -1748,16 +1759,16 @@
             <li>DRT pending ก.ค. MTD ฿537K = pipeline ส.ค. confirmed ≥฿574K (รวม VAT)</li>
           </ul>
         </div>
-        <div class="insight-box" style="background:#fff8e1;border-color:#f39c12">
-          <h4 style="color:#e67e22">⚠️ จุดที่ต้องระวัง</h4>
+        <div class="insight-box" style="background:#faf1e0;border-color:#e8b95a">
+          <h4 style="color:#e69a68">⚠️ จุดที่ต้องระวัง</h4>
           <ul>
             <li><strong>ก.ค. MTD ฿2.81M (20/7) → projection ~฿3.89M ทั้งเดือน = -24.3% YoY</strong> vs ก.ค.2025 ฿5.14M ⚠️ ต้องเร่ง 11 วันสุดท้าย</li>
             <li>Bigtree กระจุก H1: 18.8% ของยอด H1 + CNT refund ก.ค. -฿89K → ต้องกระจายฐาน</li>
             <li>จุฑามาศ H1 ฿2.44M ต่ำสุดในทีม (~9% ต่ำกว่าค่าเฉลี่ย) | นิโลบล เดือนเว้นเดือน (พ.ค. = 0, มิ.ย. ฿35K)</li>
           </ul>
         </div>
-        <div class="insight-box" style="background:#fdf2f8;border-color:#8e44ad">
-          <h4 style="color:#8e44ad">🎯 คำแนะนำ</h4>
+        <div class="insight-box" style="background:#f5eef9;border-color:#a888c4">
+          <h4 style="color:#a888c4">🎯 คำแนะนำ</h4>
           <ul>
             <li>ทำ Win-back campaign กลุ่ม 1-ครั้ง (378 ราย)</li>
             <li>ดูแล VIP 7 รายให้พิเศษ — ป้องกันหลุด</li>
@@ -1945,7 +1956,7 @@ const loyalCustomers = [
 const fmt = (v) => (v/1e6).toFixed(2) + 'M';
 const fmtK = (v) => v >= 1e6 ? (v/1e6).toFixed(2)+'M' : v >= 1e3 ? (v/1e3).toFixed(0)+'K' : v.toFixed(0);
 const fmtFull = (v) => '฿' + Math.round(v).toLocaleString('th-TH');
-const COLORS = ['#2980b9','#e67e22','#27ae60','#e74c3c','#9b59b6','#1abc9c','#f39c12','#34495e','#16a085','#8e44ad'];
+const COLORS = ['#7c9dc0','#e69a68','#8dc57e','#e58079','#b89ecf','#a0d9c7','#e8b95a','#5a6a7c','#8dc9b7','#a888c4'];
 const chartDefaults = { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { font: { family: 'Segoe UI', size: 12 } } } } };
 
 // ==================== CHART REFS ====================
@@ -1963,21 +1974,21 @@ charts.annualTrend = new Chart(document.getElementById('annualTrendChart'), {
       {
         label: 'ยอดขายจริง',
         data: [62158502/1e6, 67321215/1e6, 58411226/1e6, null],
-        backgroundColor: ['#2980b9','#27ae60','#e74c3c','transparent'],
+        backgroundColor: ['#7c9dc0','#8dc57e','#e58079','transparent'],
         borderRadius: 6,
         order: 2,
       },
       {
         label: 'Forecast 2026',
         data: [null, null, null, 63084124/1e6],
-        backgroundColor: '#e67e22',
+        backgroundColor: '#e69a68',
         borderRadius: 6,
         order: 2,
       },
       {
         label: '🟢 Actual 2026 YTD (ม.ค.–พ.ค. + มิ.ย. MTD)',
         data: [null, null, null, 31.815],
-        backgroundColor: '#16a085',
+        backgroundColor: '#8dc9b7',
         borderRadius: 6,
         order: 1,
       },
@@ -1985,12 +1996,12 @@ charts.annualTrend = new Chart(document.getElementById('annualTrendChart'), {
         label: 'เส้นแนวโน้ม',
         data: [62158502/1e6, 67321215/1e6, 58411226/1e6, 63084124/1e6],
         type: 'line',
-        borderColor: '#e67e22',
+        borderColor: '#e69a68',
         backgroundColor: 'transparent',
         borderWidth: 2,
         borderDash: [5, 5],
         pointRadius: 5,
-        pointBackgroundColor: '#e67e22',
+        pointBackgroundColor: '#e69a68',
         order: 1,
       }
     ]
@@ -1998,7 +2009,7 @@ charts.annualTrend = new Chart(document.getElementById('annualTrendChart'), {
   options: {
     ...chartDefaults,
     scales: {
-      y: { beginAtZero: false, min: 50, ticks: { callback: v => v.toFixed(0)+'M' }, grid: { color: '#f0f2f5' } },
+      y: { beginAtZero: false, min: 50, ticks: { callback: v => v.toFixed(0)+'M' }, grid: { color: '#f5efe8' } },
       x: { grid: { display: false } }
     },
     plugins: {
@@ -2034,13 +2045,13 @@ charts.retention = new Chart(document.getElementById('retentionChart'), {
     datasets: [{
       label: 'จำนวนลูกค้า',
       data: [2575, 593, 2191, 2784, 536, 1439, 1975],
-      backgroundColor: ['#2980b9','#27ae60','#f39c12','#27ae60','#27ae60','#f39c12','#e74c3c'],
+      backgroundColor: ['#7c9dc0','#8dc57e','#e8b95a','#8dc57e','#8dc57e','#e8b95a','#e58079'],
       borderRadius: 6,
     }]
   },
   options: {
     ...chartDefaults,
-    scales: { y: { beginAtZero: true, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+    scales: { y: { beginAtZero: true, grid: { color: '#f5efe8' } }, x: { grid: { display: false } } },
     plugins: { ...chartDefaults.plugins, legend: { display: false } }
   }
 });
@@ -2077,20 +2088,20 @@ let monthlyChart;
 function buildMonthlyChart(filter) {
   destroyChart('monthly');
   let datasets = [];
-  const colors = { 2023: '#2980b9', 2024: '#27ae60', 2025: '#e74c3c', 2026: '#e67e22' };
+  const colors = { 2023: '#7c9dc0', 2024: '#8dc57e', 2025: '#e58079', 2026: '#e69a68' };
 
   if (filter === 'all' || filter == 2023) datasets.push({ label: '2023', data: monthly[2023].map(v=>v/1e6), backgroundColor: colors[2023]+'99', borderColor: colors[2023], borderWidth: 1, borderRadius: 4 });
   if (filter === 'all' || filter == 2024) datasets.push({ label: '2024', data: monthly[2024].map(v=>v/1e6), backgroundColor: colors[2024]+'99', borderColor: colors[2024], borderWidth: 1, borderRadius: 4 });
   if (filter === 'all' || filter == 2025) datasets.push({ label: '2025', data: monthly[2025].map(v=>v/1e6), backgroundColor: colors[2025]+'99', borderColor: colors[2025], borderWidth: 1, borderRadius: 4 });
   if (filter == 2026) datasets.push({ label: 'Forecast 2026 (Base)', data: forecast.base.map(v=>v/1e6), backgroundColor: colors[2026]+'99', borderColor: colors[2026], borderWidth: 1, borderRadius: 4 });
-  if (filter == 2026 || filter == 'act2026') datasets.push({ label: 'Actual 2026 (ม.ค.–พ.ค., ก่อน VAT)', data: MONTHS.map((_,i)=>actual2026[i+1]!=null?+(actual2026[i+1]/1e6).toFixed(3):null), type:'line', borderColor:'#16a085', backgroundColor:'#16a08533', borderWidth:2, pointRadius:3, pointBackgroundColor:'#16a085', tension:0.25, spanGaps:false });
+  if (filter == 2026 || filter == 'act2026') datasets.push({ label: 'Actual 2026 (ม.ค.–พ.ค., ก่อน VAT)', data: MONTHS.map((_,i)=>actual2026[i+1]!=null?+(actual2026[i+1]/1e6).toFixed(3):null), type:'line', borderColor:'#8dc9b7', backgroundColor:'#8dc9b733', borderWidth:2, pointRadius:3, pointBackgroundColor:'#8dc9b7', tension:0.25, spanGaps:false });
 
   charts.monthly = new Chart(document.getElementById('monthlyChart'), {
     type: 'bar',
     data: { labels: MONTHS, datasets },
     options: {
       ...chartDefaults,
-      scales: { y: { beginAtZero: false, ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+      scales: { y: { beginAtZero: false, ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f5efe8' } }, x: { grid: { display: false } } },
       plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } } }
     }
   });
@@ -2115,21 +2126,21 @@ function buildMonthlyTable() {
     const best = Math.max(v23,v24,v25);
     rows += `<tr>
       <td><strong>${m}</strong></td>
-      <td style="color:#2980b9">${fmt(v23)}</td>
-      <td style="color:#27ae60">${fmt(v24)}</td>
-      <td style="color:${v25==best?'#27ae60':'#e74c3c'}">${fmt(v25)}</td>
-      <td style="color:#e67e22;font-weight:700">${fmt(vfc)}</td>
-      <td style="color:#16a085;font-weight:700">${va!=null?fmt(va):'<span style=\"color:#ccc\">–</span>'}</td>
+      <td style="color:#7c9dc0">${fmt(v23)}</td>
+      <td style="color:#8dc57e">${fmt(v24)}</td>
+      <td style="color:${v25==best?'#8dc57e':'#e58079'}">${fmt(v25)}</td>
+      <td style="color:#e69a68;font-weight:700">${fmt(vfc)}</td>
+      <td style="color:#8dc9b7;font-weight:700">${va!=null?fmt(va):'<span style=\"color:#ccc\">–</span>'}</td>
     </tr>`;
   });
   tbody.innerHTML = rows;
-  tfoot.innerHTML = `<tr style="font-weight:700;background:#f8f9fa">
+  tfoot.innerHTML = `<tr style="font-weight:700;background:#faf6f1">
     <td>รวม</td>
-    <td style="color:#2980b9">${fmt(totals[0])}</td>
-    <td style="color:#27ae60">${fmt(totals[1])}</td>
-    <td style="color:#e74c3c">${fmt(totals[2])}</td>
-    <td style="color:#e67e22">${fmt(totals[3])}</td>
-    <td style="color:#16a085">${fmt(totals[4])} <span style="font-weight:400;color:#999;font-size:10px">(6 ด., มิ.ย. MTD)</span></td>
+    <td style="color:#7c9dc0">${fmt(totals[0])}</td>
+    <td style="color:#8dc57e">${fmt(totals[1])}</td>
+    <td style="color:#e58079">${fmt(totals[2])}</td>
+    <td style="color:#e69a68">${fmt(totals[3])}</td>
+    <td style="color:#8dc9b7">${fmt(totals[4])} <span style="font-weight:400;color:#999;font-size:10px">(6 ด., มิ.ย. MTD)</span></td>
   </tr>`;
 }
 // buildMonthlyTable() ถูกเรียกหลัง actual2026 ถูกประกาศ (กัน TDZ)
@@ -2143,13 +2154,13 @@ charts.seasonality = new Chart(document.getElementById('seasonalityChart'), {
     datasets: [{
       label: 'ค่าเฉลี่ยรายเดือน (3 ปี)',
       data: avgMonthly.map(v => v/1e6),
-      backgroundColor: avgMonthly.map(v => v === Math.max(...avgMonthly) ? '#27ae60' : v === Math.min(...avgMonthly) ? '#e74c3c' : '#2980b9aa'),
+      backgroundColor: avgMonthly.map(v => v === Math.max(...avgMonthly) ? '#8dc57e' : v === Math.min(...avgMonthly) ? '#e58079' : '#7c9dc0aa'),
       borderRadius: 4,
     }]
   },
   options: {
     ...chartDefaults,
-    scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+    scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f5efe8' } }, x: { grid: { display: false } } },
     plugins: { ...chartDefaults.plugins, legend: { display: false }, tooltip: { callbacks: { label: ctx => 'เฉลี่ย: ฿' + (ctx.raw*1e6).toLocaleString('th-TH') + ' (' + (seasonalIndex[MONTHS.indexOf(ctx.label)]*100).toFixed(1) + '%)' } } }
   }
 });
@@ -2169,7 +2180,7 @@ function buildCustView(yr) {
   // Channel bars
   const ch = channels[yr];
   const total = Object.values(ch).reduce((a,b)=>a+b,0);
-  const chColors = {'Direct Sales':'#2980b9','Shopee':'#e74c3c','Lazada':'#e67e22','TikTok':'#9b59b6'};
+  const chColors = {'Direct Sales':'#7c9dc0','Shopee':'#e58079','Lazada':'#e69a68','TikTok':'#b89ecf'};
   let html = '';
   Object.entries(ch).forEach(([name, val]) => {
     if (val <= 0) return;
@@ -2196,7 +2207,7 @@ function buildCustView(yr) {
       <td style="font-weight:700">${fmtFull(c.val)}</td>
       <td>
         <div style="display:flex;align-items:center;gap:8px;">
-          <div class="progress-bar-wrap" style="width:100px"><div class="progress-bar-fill" style="width:${pct}%;background:#2980b9"></div></div>
+          <div class="progress-bar-wrap" style="width:100px"><div class="progress-bar-fill" style="width:${pct}%;background:#7c9dc0"></div></div>
           <span>${pct}%</span>
         </div>
       </td>
@@ -2219,15 +2230,15 @@ charts.loyal = new Chart(document.getElementById('loyalChart'), {
   data: {
     labels: loyalCustomers.map(c => c.name),
     datasets: [
-      { label: '2023', data: loyalCustomers.map(c => c.y23/1e6), backgroundColor: '#2980b9aa', borderRadius: 4 },
-      { label: '2024', data: loyalCustomers.map(c => c.y24/1e6), backgroundColor: '#27ae60aa', borderRadius: 4 },
-      { label: '2025', data: loyalCustomers.map(c => c.y25/1e6), backgroundColor: '#e74c3caa', borderRadius: 4 },
+      { label: '2023', data: loyalCustomers.map(c => c.y23/1e6), backgroundColor: '#7c9dc0aa', borderRadius: 4 },
+      { label: '2024', data: loyalCustomers.map(c => c.y24/1e6), backgroundColor: '#8dc57eaa', borderRadius: 4 },
+      { label: '2025', data: loyalCustomers.map(c => c.y25/1e6), backgroundColor: '#e58079aa', borderRadius: 4 },
     ]
   },
   options: {
     ...chartDefaults,
     indexAxis: 'y',
-    scales: { x: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, y: { grid: { display: false } } },
+    scales: { x: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f5efe8' } }, y: { grid: { display: false } } },
     plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtFull(ctx.raw*1e6) } } }
   }
 });
@@ -2241,9 +2252,9 @@ function buildLoyalTable() {
     html += `<tr>
       <td class="rank">${i+1}</td>
       <td>${c.name}</td>
-      <td style="color:#2980b9">${fmtFull(c.y23)}</td>
-      <td style="color:#27ae60">${fmtFull(c.y24)}</td>
-      <td style="color:#e74c3c">${fmtFull(c.y25)}</td>
+      <td style="color:#7c9dc0">${fmtFull(c.y23)}</td>
+      <td style="color:#8dc57e">${fmtFull(c.y24)}</td>
+      <td style="color:#e58079">${fmtFull(c.y25)}</td>
       <td style="font-weight:700">${fmtFull(total)}</td>
       <td>${trend}</td>
     </tr>`;
@@ -2267,7 +2278,7 @@ function buildTeamView(yr) {
     options: {
       ...chartDefaults,
       indexAxis: 'y',
-      scales: { x: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, y: { grid: { display: false } } },
+      scales: { x: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f5efe8' } }, y: { grid: { display: false } } },
       plugins: { ...chartDefaults.plugins, legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtFull(ctx.raw*1e6) + ' (' + (ctx.raw/total*1e6/1e4).toFixed(1) + '%)' } } }
     }
   });
@@ -2287,7 +2298,7 @@ function buildTeamView(yr) {
       <td><strong>${s.name}</strong></td>
       <td style="font-weight:700">${fmtFull(s.val)}</td>
       <td>${pct}%</td>
-      <td style="min-width:150px"><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%;background:${COLORS[i]||'#2980b9'}"></div></div></td>
+      <td style="min-width:150px"><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%;background:${COLORS[i]||'#7c9dc0'}"></div></div></td>
     </tr>`;
   });
   document.getElementById('teamTableBody').innerHTML = html;
@@ -2302,7 +2313,7 @@ function filterTeam(yr, btn) {
 
 // Team trend (top 6 across years)
 const top6 = ['ปุณณภา ขำสำอางค์','ธีรตา งามสูงเนิน','ธชนัย ภักดีนอก','ศุภิสรา แสงสว่าง','จุฑามาศ (Jutamat) — E-com','นิโลบล เพียรมานะกิจ'];
-const top6Colors = ['#4472C4','#2980b9','#70AD47','#e74c3c','#27ae60','#8e44ad'];
+const top6Colors = ['#4472C4','#7c9dc0','#70AD47','#e58079','#8dc57e','#a888c4'];
 function getSpVal(yr, name) {
   const sp = salesperson[yr];
   const found = sp.find(s => s.name === name);
@@ -2320,7 +2331,7 @@ charts.teamTrend = new Chart(document.getElementById('teamTrendChart'), {
   },
   options: {
     ...chartDefaults,
-    scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+    scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f5efe8' } }, x: { grid: { display: false } } },
     plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtFull(ctx.raw*1e6) } } }
   }
 });
@@ -2433,14 +2444,14 @@ function buildForecastChart(mode) {
       labels: MONTHS,
       datasets: [
         { label: '2025 Actual', data: data25, borderColor: '#95a5a6', backgroundColor: '#95a5a699', borderWidth: 2, pointRadius: 4, fill: mode==='cumulative', borderDash: [5,5] },
-        { label: 'Scenario A (+15%) ฿62.6M', data: dataCons, borderColor: '#27ae60', backgroundColor: '#27ae6015', borderWidth: 2.5, pointRadius: 4, fill: mode==='cumulative' },
-        { label: 'Scenario B (+3%) ฿56.1M', data: dataBase, borderColor: '#e67e22', backgroundColor: '#e67e2215', borderWidth: 2.5, pointRadius: 5, fill: mode==='cumulative' },
-        { label: 'Actual 2026 🟢', data: dataOpt, borderColor: '#2980b9', backgroundColor: '#2980b9cc', borderWidth: 3, pointRadius: 6, fill: false, borderDash: [0] },
+        { label: 'Scenario A (+15%) ฿62.6M', data: dataCons, borderColor: '#8dc57e', backgroundColor: '#8dc57e15', borderWidth: 2.5, pointRadius: 4, fill: mode==='cumulative' },
+        { label: 'Scenario B (+3%) ฿56.1M', data: dataBase, borderColor: '#e69a68', backgroundColor: '#e69a6815', borderWidth: 2.5, pointRadius: 5, fill: mode==='cumulative' },
+        { label: 'Actual 2026 🟢', data: dataOpt, borderColor: '#7c9dc0', backgroundColor: '#7c9dc0cc', borderWidth: 3, pointRadius: 6, fill: false, borderDash: [0] },
       ]
     },
     options: {
       ...chartDefaults,
-      scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+      scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f5efe8' } }, x: { grid: { display: false } } },
       plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } } }
     }
   });
@@ -2464,23 +2475,23 @@ function buildForecastTable() {
     const vAct = actual2026Arr[i];
     totals[0]+=v25; totals[1]+=vA; totals[2]+=vB; if(vAct) totals[3]+=vAct;
     const vsA = vAct != null ? ((vAct/vA-1)*100).toFixed(1) : null;
-    const vsAColor = vsA != null ? (parseFloat(vsA)>=0?'#27ae60':'#e74c3c') : '#aaa';
+    const vsAColor = vsA != null ? (parseFloat(vsA)>=0?'#8dc57e':'#e58079') : '#aaa';
     html += `<tr>
       <td><strong>${m}</strong></td>
       <td style="color:#7f8c8d">${fmt(v25)}</td>
-      <td style="color:#27ae60;font-weight:700">${fmt(vA)}</td>
-      <td style="color:#e67e22">${fmt(vB)}</td>
-      <td style="color:#2980b9;font-weight:${vAct?'700':'400'}">${vAct ? fmt(vAct) : '<span style="color:#ccc">ยังไม่มี</span>'}</td>
+      <td style="color:#8dc57e;font-weight:700">${fmt(vA)}</td>
+      <td style="color:#e69a68">${fmt(vB)}</td>
+      <td style="color:#7c9dc0;font-weight:${vAct?'700':'400'}">${vAct ? fmt(vAct) : '<span style="color:#ccc">ยังไม่มี</span>'}</td>
       <td style="color:${vsAColor};font-weight:700">${vsA != null ? (parseFloat(vsA)>=0?'+':'')+vsA+'%' : '—'}</td>
     </tr>`;
   });
   document.getElementById('forecastTableBody').innerHTML = html;
-  document.getElementById('forecastTableFoot').innerHTML = `<tr style="font-weight:700;background:#f8f9fa">
+  document.getElementById('forecastTableFoot').innerHTML = `<tr style="font-weight:700;background:#faf6f1">
     <td>รวม</td>
     <td style="color:#7f8c8d">${fmt(totals[0])}</td>
-    <td style="color:#27ae60">${fmt(totals[1])}</td>
-    <td style="color:#e67e22">${fmt(totals[2])}</td>
-    <td style="color:#2980b9">${totals[3]>0 ? fmt(totals[3]) : '—'}</td>
+    <td style="color:#8dc57e">${fmt(totals[1])}</td>
+    <td style="color:#e69a68">${fmt(totals[2])}</td>
+    <td style="color:#7c9dc0">${totals[3]>0 ? fmt(totals[3]) : '—'}</td>
     <td>${totals[3]>0 ? ((totals[3]/totals[1]-1)*100).toFixed(1)+'%' : '—'}</td>
   </tr>`;
 }
@@ -2493,13 +2504,13 @@ charts.targetVsActual = new Chart(document.getElementById('targetVsActualChart')
     labels: MONTHS,
     datasets: [
       { label: '2025 Actual', data: monthly[2025].map(v=>v/1e6), backgroundColor: '#95a5a6aa', borderRadius: 4 },
-      { label: '✅ Scenario A (+15%)', data: forecast.scenarioA.map(v=>v/1e6), backgroundColor: '#27ae6066', borderColor:'#27ae60', borderWidth:1, borderRadius: 4 },
-      { label: '⚠️ Scenario B (+3%)', data: forecast.scenarioB.map(v=>v/1e6), backgroundColor: '#e67e2266', borderColor:'#e67e22', borderWidth:1, borderRadius: 4 },
+      { label: '✅ Scenario A (+15%)', data: forecast.scenarioA.map(v=>v/1e6), backgroundColor: '#8dc57e66', borderColor:'#8dc57e', borderWidth:1, borderRadius: 4 },
+      { label: '⚠️ Scenario B (+3%)', data: forecast.scenarioB.map(v=>v/1e6), backgroundColor: '#e69a6866', borderColor:'#e69a68', borderWidth:1, borderRadius: 4 },
     ]
   },
   options: {
     ...chartDefaults,
-    scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+    scales: { y: { ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f5efe8' } }, x: { grid: { display: false } } },
     plugins: { ...chartDefaults.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } } }
   }
 });
@@ -2517,8 +2528,8 @@ charts.actualVsForecast = new Chart(document.getElementById('actualVsForecastCha
       {
         label: 'Actual 2026 🟢',
         data: avfActualData,
-        backgroundColor: '#2980b9cc',
-        borderColor: '#2980b9',
+        backgroundColor: '#7c9dc0cc',
+        borderColor: '#7c9dc0',
         borderWidth: 1,
         borderRadius: 6,
         order: 1,
@@ -2526,8 +2537,8 @@ charts.actualVsForecast = new Chart(document.getElementById('actualVsForecastCha
       {
         label: '✅ Scenario A (+15%) ฿62.6M',
         data: forecast.scenarioA.map(v => v/1e6),
-        backgroundColor: '#27ae6033',
-        borderColor: '#27ae60',
+        backgroundColor: '#8dc57e33',
+        borderColor: '#8dc57e',
         borderWidth: 2,
         borderRadius: 6,
         type: 'bar',
@@ -2536,8 +2547,8 @@ charts.actualVsForecast = new Chart(document.getElementById('actualVsForecastCha
       {
         label: '⚠️ Scenario B (+3%) ฿56.1M',
         data: forecast.scenarioB.map(v => v/1e6),
-        backgroundColor: '#e67e2233',
-        borderColor: '#e67e22',
+        backgroundColor: '#e69a6833',
+        borderColor: '#e69a68',
         borderWidth: 2,
         borderDash: [5,3],
         type: 'line',
@@ -2551,7 +2562,7 @@ charts.actualVsForecast = new Chart(document.getElementById('actualVsForecastCha
     responsive: true,
     maintainAspectRatio: true,
     scales: {
-      y: { beginAtZero: false, min: 3, ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' }, title: { display: true, text: 'ยอดขาย (M฿)' } },
+      y: { beginAtZero: false, min: 3, ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f5efe8' }, title: { display: true, text: 'ยอดขาย (M฿)' } },
       x: { grid: { display: false } }
     },
     plugins: {
@@ -2574,16 +2585,16 @@ charts.sp2026 = new Chart(document.getElementById('sp2026Chart'), {
   data: {
     labels: sp2026Names,
     datasets: [
-      { label: 'ม.ค. 2026', data: sp2026Jan.map(v=>v/1e6), backgroundColor: '#2980b9aa', borderRadius: 4 },
-      { label: 'ก.พ. 2026', data: sp2026Feb.map(v=>v/1e6), backgroundColor: '#27ae60aa', borderRadius: 4 },
-      { label: 'มี.ค. 2026 (เต็มเดือน)', data: sp2026Mar.map(v=>v/1e6), backgroundColor: '#e67e22aa', borderRadius: 4 },
-      { label: 'เม.ย. 2026 (เต็มเดือน)', data: sp2026Apr.map(v=>v/1e6), backgroundColor: '#9b59b6aa', borderRadius: 4 },
-      { label: 'พ.ค. 2026 (ปิดเดือน)', data: sp2026May.map(v=>v/1e6), backgroundColor: '#e74c3caa', borderRadius: 4 },
+      { label: 'ม.ค. 2026', data: sp2026Jan.map(v=>v/1e6), backgroundColor: '#7c9dc0aa', borderRadius: 4 },
+      { label: 'ก.พ. 2026', data: sp2026Feb.map(v=>v/1e6), backgroundColor: '#8dc57eaa', borderRadius: 4 },
+      { label: 'มี.ค. 2026 (เต็มเดือน)', data: sp2026Mar.map(v=>v/1e6), backgroundColor: '#e69a68aa', borderRadius: 4 },
+      { label: 'เม.ย. 2026 (เต็มเดือน)', data: sp2026Apr.map(v=>v/1e6), backgroundColor: '#b89ecfaa', borderRadius: 4 },
+      { label: 'พ.ค. 2026 (ปิดเดือน)', data: sp2026May.map(v=>v/1e6), backgroundColor: '#e58079aa', borderRadius: 4 },
     ]
   },
   options: {
     responsive: true, maintainAspectRatio: true,
-    scales: { y: { ticks: { callback: v => v.toFixed(2)+'M' }, grid: { color: '#f0f2f5' } }, x: { grid: { display: false } } },
+    scales: { y: { ticks: { callback: v => v.toFixed(2)+'M' }, grid: { color: '#f5efe8' } }, x: { grid: { display: false } } },
     plugins: { legend: { labels: { font: { family:'Segoe UI', size:12 } } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ฿' + (ctx.raw*1e6).toLocaleString('th-TH') } } }
   }
 });
@@ -2600,10 +2611,10 @@ function buildActualForecastTable() {
     if (act != null) {
       ytdAct += act;
       const isPartial = partial2026 && partial2026[i+1];
-      const monthLabel = isPartial ? `${m} <span style="color:#e67e22;font-size:11px;">(${partial2026[i+1]})</span>` : m;
+      const monthLabel = isPartial ? `${m} <span style="color:#e69a68;font-size:11px;">(${partial2026[i+1]})</span>` : m;
       const diffA = act - fcA;
       const pctA = (diffA/fcA*100).toFixed(1);
-      const colA = diffA >= 0 ? '#27ae60' : '#e74c3c';
+      const colA = diffA >= 0 ? '#8dc57e' : '#e58079';
       let badge;
       if (isPartial) {
         badge = '<span class="badge badge-orange">📅 ข้อมูลบางส่วน</span>';
@@ -2612,9 +2623,9 @@ function buildActualForecastTable() {
       }
       html += `<tr>
         <td><strong>${monthLabel}</strong></td>
-        <td style="color:#2980b9;font-weight:700">฿${act.toLocaleString('th-TH')}</td>
-        <td style="color:#27ae60">฿${fcA.toLocaleString('th-TH')}</td>
-        <td style="color:#e67e22">฿${fcB.toLocaleString('th-TH')}</td>
+        <td style="color:#7c9dc0;font-weight:700">฿${act.toLocaleString('th-TH')}</td>
+        <td style="color:#8dc57e">฿${fcA.toLocaleString('th-TH')}</td>
+        <td style="color:#e69a68">฿${fcB.toLocaleString('th-TH')}</td>
         <td style="color:${colA};font-weight:700">${isPartial ? '<span style="color:#aaa;font-size:11px;">ข้อมูลยังไม่ครบ</span>' : (diffA>=0?'+':'')+'฿'+diffA.toLocaleString('th-TH')+' ('+pctA+'%)'}</td>
         <td>${badge}</td>
       </tr>`;
@@ -2622,8 +2633,8 @@ function buildActualForecastTable() {
       html += `<tr>
         <td><strong>${m}</strong></td>
         <td style="color:#aaa;font-style:italic">รอข้อมูล...</td>
-        <td style="color:#27ae60">฿${fcA.toLocaleString('th-TH')}</td>
-        <td style="color:#e67e22">฿${fcB.toLocaleString('th-TH')}</td>
+        <td style="color:#8dc57e">฿${fcA.toLocaleString('th-TH')}</td>
+        <td style="color:#e69a68">฿${fcB.toLocaleString('th-TH')}</td>
         <td>–</td>
         <td><span class="badge badge-blue">📅 Forecast</span></td>
       </tr>`;
@@ -2636,12 +2647,12 @@ function buildActualForecastTable() {
   const ytdActCompleted = completedMonths.reduce((s, m) => s + (actual2026[m] || 0), 0);
   const diffA = ytdActCompleted - ytdA;
   const ytdLabel = completedMonths.length === 2 ? 'YTD (ม.ค.–ก.พ. ครบเดือน)' : `YTD (${completedMonths.length} เดือนครบ)`;
-  html += `<tr style="font-weight:700;background:#f8f9fa;border-top:2px solid #dee2e6">
+  html += `<tr style="font-weight:700;background:#faf6f1;border-top:2px solid #dee2e6">
     <td>${ytdLabel}</td>
-    <td style="color:#2980b9">฿${ytdActCompleted.toLocaleString('th-TH')}</td>
-    <td style="color:#27ae60">฿${ytdA.toLocaleString('th-TH')}</td>
-    <td style="color:#e67e22">฿${ytdB.toLocaleString('th-TH')}</td>
-    <td style="color:${diffA>=0?'#27ae60':'#e74c3c'}">${diffA>=0?'+':''}฿${diffA.toLocaleString('th-TH')} (${(diffA/ytdA*100).toFixed(1)}%)</td>
+    <td style="color:#7c9dc0">฿${ytdActCompleted.toLocaleString('th-TH')}</td>
+    <td style="color:#8dc57e">฿${ytdA.toLocaleString('th-TH')}</td>
+    <td style="color:#e69a68">฿${ytdB.toLocaleString('th-TH')}</td>
+    <td style="color:${diffA>=0?'#8dc57e':'#e58079'}">${diffA>=0?'+':''}฿${diffA.toLocaleString('th-TH')} (${(diffA/ytdA*100).toFixed(1)}%)</td>
     <td><span class="badge badge-orange">📊 YTD</span></td>
   </tr>`;
   document.getElementById('actualForecastTableBody').innerHTML = html;
@@ -2660,7 +2671,7 @@ charts.centralAnnual = new Chart(document.getElementById('centralAnnualChart'), 
   data: {
     labels: centralLabels,
     datasets: [
-      { label: 'ก่อน VAT', data: centralAnnual.pretax.map(v=>v/1e6), backgroundColor: '#8e44adbb', borderRadius: 4 },
+      { label: 'ก่อน VAT', data: centralAnnual.pretax.map(v=>v/1e6), backgroundColor: '#a888c4bb', borderRadius: 4 },
       { label: 'VAT 7%',   data: centralAnnual.vat.map(v=>v/1e6),    backgroundColor: '#d7bde2bb', borderRadius: 4 }
     ]
   },
@@ -2668,7 +2679,7 @@ charts.centralAnnual = new Chart(document.getElementById('centralAnnualChart'), 
     responsive: true, maintainAspectRatio: true,
     scales: {
       x: { stacked: true, grid: { display: false } },
-      y: { stacked: true, ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }
+      y: { stacked: true, ticks: { callback: v => v.toFixed(1)+'M' }, grid: { color: '#f5efe8' } }
     },
     plugins: {
       legend: { labels: { font: { family:'Segoe UI', size:12 } } },
@@ -2688,7 +2699,7 @@ const centralSubgroups = [
   { name: 'เซ็นทรัล บางนา',                  total:    50365, pretax:    47070, vat:   3295 },
 ];
 const grandCentral = centralSubgroups.reduce((a,s)=>a+s.total, 0);
-const donutColors = ['#8e44ad','#2980b9','#27ae60','#e67e22','#e74c3c','#1abc9c','#f39c12','#34495e'];
+const donutColors = ['#a888c4','#7c9dc0','#8dc57e','#e69a68','#e58079','#a0d9c7','#e8b95a','#5a6a7c'];
 
 charts.centralDonut = new Chart(document.getElementById('centralDonutChart'), {
   type: 'doughnut',
@@ -2715,16 +2726,16 @@ charts.centralDonut = new Chart(document.getElementById('centralDonutChart'), {
     html += `<tr>
       <td class="rank">${i+1}</td>
       <td><strong>${s.name}</strong></td>
-      <td style="color:#8e44ad;font-weight:600">฿${s.pretax.toLocaleString('th-TH')}</td>
+      <td style="color:#a888c4;font-weight:600">฿${s.pretax.toLocaleString('th-TH')}</td>
       <td style="color:#7f8c8d">฿${s.vat.toLocaleString('th-TH')}</td>
       <td style="font-weight:700">฿${s.total.toLocaleString('th-TH')}</td>
-      <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar-wrap" style="width:80px;height:6px"><div class="progress-bar-fill" style="width:${pct}%;background:${donutColors[i]||'#8e44ad'}"></div></div><span>${pct}%</span></div></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar-wrap" style="width:80px;height:6px"><div class="progress-bar-fill" style="width:${pct}%;background:${donutColors[i]||'#a888c4'}"></div></div><span>${pct}%</span></div></td>
     </tr>`;
   });
-  html += `<tr style="font-weight:800;background:#f5eef8;border-top:2px solid #8e44ad">
+  html += `<tr style="font-weight:800;background:#f5eef8;border-top:2px solid #a888c4">
     <td></td>
     <td><strong>รวมทั้งหมด</strong></td>
-    <td style="color:#8e44ad;font-weight:800">฿${totalPretax.toLocaleString('th-TH')}</td>
+    <td style="color:#a888c4;font-weight:800">฿${totalPretax.toLocaleString('th-TH')}</td>
     <td style="color:#7f8c8d;font-weight:800">฿${totalVat.toLocaleString('th-TH')}</td>
     <td style="font-weight:800">฿${grandCentral.toLocaleString('th-TH')}</td>
     <td>100.0%</td>
@@ -2745,7 +2756,7 @@ function handleModalClick(e) { if (e.target.id === 'drillModal') closeModal(); }
 function closeModal() { document.getElementById('drillModal').classList.remove('open'); }
 
 const MONTH_NAMES_TH = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-const DRILL_COLORS = ['#1e3a5f','#2980b9','#27ae60','#8e44ad','#e67e22','#e74c3c','#1abc9c','#f39c12','#34495e','#c0392b','#16a085'];
+const DRILL_COLORS = ['#6b8ba8','#7c9dc0','#8dc57e','#a888c4','#e69a68','#e58079','#a0d9c7','#e8b95a','#5a6a7c','#d16b62','#8dc9b7'];
 
 function switchModalTab(id) {
   document.querySelectorAll('.modal-section-content').forEach(s => s.classList.remove('active'));
@@ -2770,15 +2781,15 @@ function openYearModal(yr) {
   s1 += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
     <div style="background:#f0f7ff;border-radius:10px;padding:14px 16px;">
       <div style="font-size:11px;color:#7f8c8d;font-weight:600;text-transform:uppercase;margin-bottom:4px;">ยอดรวมทั้งปี (VAT)</div>
-      <div style="font-size:20px;font-weight:800;color:#1e3a5f;">฿${(total/1e6).toFixed(2)}M</div>
+      <div style="font-size:20px;font-weight:800;color:#6b8ba8;">฿${(total/1e6).toFixed(2)}M</div>
     </div>
     <div style="background:#f9fff9;border-radius:10px;padding:14px 16px;">
       <div style="font-size:11px;color:#7f8c8d;font-weight:600;text-transform:uppercase;margin-bottom:4px;">ก่อน VAT</div>
-      <div style="font-size:20px;font-weight:800;color:#27ae60;">฿${(pretaxTotal/1e6).toFixed(2)}M</div>
+      <div style="font-size:20px;font-weight:800;color:#8dc57e;">฿${(pretaxTotal/1e6).toFixed(2)}M</div>
     </div>
     <div style="background:#fff8f0;border-radius:10px;padding:14px 16px;">
       <div style="font-size:11px;color:#7f8c8d;font-weight:600;text-transform:uppercase;margin-bottom:4px;">${pctYoY ? 'เทียบปีก่อน' : 'จำนวนรายการ'}</div>
-      <div style="font-size:20px;font-weight:800;color:${pctYoY ? (parseFloat(pctYoY)>=0?'#27ae60':'#e74c3c') : '#e67e22'};">${pctYoY ? (parseFloat(pctYoY)>=0?'▲ +':'▼ ')+pctYoY+'%' : '7,000+ รายการ'}</div>
+      <div style="font-size:20px;font-weight:800;color:${pctYoY ? (parseFloat(pctYoY)>=0?'#8dc57e':'#e58079') : '#e69a68'};">${pctYoY ? (parseFloat(pctYoY)>=0?'▲ +':'▼ ')+pctYoY+'%' : '7,000+ รายการ'}</div>
     </div>
   </div>`;
   s1 += `<table class="data-table"><thead><tr><th>เดือน</th><th>ยอด (รวม VAT)</th><th>ก่อน VAT</th><th>% ปี</th><th style="width:120px">สัดส่วน</th></tr></thead><tbody>`;
@@ -2788,16 +2799,16 @@ function openYearModal(yr) {
     const isBest = v === maxMon;
     s1 += `<tr${isBest ? ' style="background:#fffbf0;"' : ''}>
       <td><strong>${MONTH_NAMES_TH[i]}</strong>${isBest ? ' <span class="badge badge-orange">🔥 สูงสุด</span>' : ''}</td>
-      <td style="font-weight:700;color:#2980b9">฿${v.toLocaleString('th-TH')}</td>
-      <td style="color:#27ae60;">฿${Math.round(v/1.07).toLocaleString('th-TH')}</td>
+      <td style="font-weight:700;color:#7c9dc0">฿${v.toLocaleString('th-TH')}</td>
+      <td style="color:#8dc57e;">฿${Math.round(v/1.07).toLocaleString('th-TH')}</td>
       <td>${pct}%</td>
-      <td><div class="progress-bar-wrap" style="height:6px"><div class="progress-bar-fill" style="width:${barW}%;background:#2980b9"></div></div></td>
+      <td><div class="progress-bar-wrap" style="height:6px"><div class="progress-bar-fill" style="width:${barW}%;background:#7c9dc0"></div></div></td>
     </tr>`;
   });
   s1 += `<tr style="font-weight:800;background:#f0f4f8;border-top:2px solid #dee2e6">
     <td><strong>รวมทั้งปี</strong></td>
-    <td style="color:#1e3a5f;font-weight:800">฿${total.toLocaleString('th-TH')}</td>
-    <td style="color:#27ae60;font-weight:800">฿${pretaxTotal.toLocaleString('th-TH')}</td>
+    <td style="color:#6b8ba8;font-weight:800">฿${total.toLocaleString('th-TH')}</td>
+    <td style="color:#8dc57e;font-weight:800">฿${pretaxTotal.toLocaleString('th-TH')}</td>
     <td>100%</td><td></td>
   </tr></tbody></table></div>`;
 
@@ -2810,16 +2821,16 @@ function openYearModal(yr) {
       <td class="rank">${i+1}</td>
       <td><strong>${c.name}</strong></td>
       <td><span class="badge badge-blue">${c.seg}</span></td>
-      <td style="font-weight:700;color:#2980b9">฿${c.val.toLocaleString('th-TH')}</td>
-      <td style="color:#27ae60">฿${Math.round(c.val/1.07).toLocaleString('th-TH')}</td>
+      <td style="font-weight:700;color:#7c9dc0">฿${c.val.toLocaleString('th-TH')}</td>
+      <td style="color:#8dc57e">฿${Math.round(c.val/1.07).toLocaleString('th-TH')}</td>
       <td>${pct}%</td>
     </tr>`;
   });
   const top15Total = topC.reduce((a,c)=>a+c.val,0);
   s2 += `<tr style="font-weight:800;background:#f0f4f8;border-top:2px solid #dee2e6">
     <td></td><td><strong>รวม Top 15</strong></td><td></td>
-    <td style="font-weight:800;color:#1e3a5f">฿${top15Total.toLocaleString('th-TH')}</td>
-    <td style="color:#27ae60;font-weight:800">฿${Math.round(top15Total/1.07).toLocaleString('th-TH')}</td>
+    <td style="font-weight:800;color:#6b8ba8">฿${top15Total.toLocaleString('th-TH')}</td>
+    <td style="color:#8dc57e;font-weight:800">฿${Math.round(top15Total/1.07).toLocaleString('th-TH')}</td>
     <td>${(top15Total/total*100).toFixed(1)}%</td>
   </tr></tbody></table></div>`;
 
@@ -2831,8 +2842,8 @@ function openYearModal(yr) {
     const pct = (v/segTotal*100).toFixed(1);
     s3 += `<tr>
       <td><strong>${k}</strong></td>
-      <td style="font-weight:700;color:#2980b9">฿${v.toLocaleString('th-TH')}</td>
-      <td style="color:#27ae60">฿${Math.round(v/1.07).toLocaleString('th-TH')}</td>
+      <td style="font-weight:700;color:#7c9dc0">฿${v.toLocaleString('th-TH')}</td>
+      <td style="color:#8dc57e">฿${Math.round(v/1.07).toLocaleString('th-TH')}</td>
       <td>${pct}%</td>
       <td><div class="progress-bar-wrap" style="height:6px"><div class="progress-bar-fill" style="width:${pct}%;background:${DRILL_COLORS[i]||'#888'}"></div></div></td>
     </tr>`;
@@ -2848,8 +2859,8 @@ function openYearModal(yr) {
     s4 += `<tr>
       <td class="rank">${i+1}</td>
       <td><strong>${s.name}</strong></td>
-      <td style="font-weight:700;color:#2980b9">฿${s.val.toLocaleString('th-TH')}</td>
-      <td style="color:#27ae60">฿${Math.round(s.val/1.07).toLocaleString('th-TH')}</td>
+      <td style="font-weight:700;color:#7c9dc0">฿${s.val.toLocaleString('th-TH')}</td>
+      <td style="color:#8dc57e">฿${Math.round(s.val/1.07).toLocaleString('th-TH')}</td>
       <td>${pct}%</td>
       <td><div class="progress-bar-wrap" style="height:6px"><div class="progress-bar-fill" style="width:${pct}%;background:${DRILL_COLORS[i]||'#888'}"></div></div></td>
     </tr>`;
@@ -2881,10 +2892,10 @@ function openLoyalModal() {
   const shown = loyalCustomers.length;
 
   function getTrend(c) {
-    if (c.y25 > c.y24 && c.y24 > c.y23) return { label:'🚀 เติบโตต่อเนื่อง', color:'#27ae60' };
-    if (c.y25 > c.y24) return { label:'📈 ฟื้นตัวปี 2025', color:'#1abc9c' };
-    if (c.y25 < c.y24 && c.y24 > c.y23) return { label:'📉 ลดลงปี 2025', color:'#e74c3c' };
-    if (c.y25 < c.y23) return { label:'⚠️ ต่ำกว่าปี 2023', color:'#e67e22' };
+    if (c.y25 > c.y24 && c.y24 > c.y23) return { label:'🚀 เติบโตต่อเนื่อง', color:'#8dc57e' };
+    if (c.y25 > c.y24) return { label:'📈 ฟื้นตัวปี 2025', color:'#a0d9c7' };
+    if (c.y25 < c.y24 && c.y24 > c.y23) return { label:'📉 ลดลงปี 2025', color:'#e58079' };
+    if (c.y25 < c.y23) return { label:'⚠️ ต่ำกว่าปี 2023', color:'#e69a68' };
     return { label:'➡️ ทรงตัว', color:'#7f8c8d' };
   }
 
@@ -2897,22 +2908,22 @@ function openLoyalModal() {
   let kpiHtml = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
     <div style="background:#f0f7ff;border-radius:10px;padding:14px 16px;text-align:center;">
       <div style="font-size:10px;color:#7f8c8d;font-weight:700;text-transform:uppercase;margin-bottom:4px;">ลูกค้าซื่อสัตย์ทั้งหมด</div>
-      <div style="font-size:24px;font-weight:800;color:#1e3a5f;">298</div>
+      <div style="font-size:24px;font-weight:800;color:#6b8ba8;">298</div>
       <div style="font-size:11px;color:#7f8c8d;">ซื้อทุกปี 2023–2025</div>
     </div>
     <div style="background:#f9fff9;border-radius:10px;padding:14px 16px;text-align:center;">
       <div style="font-size:10px;color:#7f8c8d;font-weight:700;text-transform:uppercase;margin-bottom:4px;">ยอดรวม Top 15 (3 ปี)</div>
-      <div style="font-size:24px;font-weight:800;color:#27ae60;">฿${(grandTotal/1e6).toFixed(1)}M</div>
+      <div style="font-size:24px;font-weight:800;color:#8dc57e;">฿${(grandTotal/1e6).toFixed(1)}M</div>
       <div style="font-size:11px;color:#7f8c8d;">ก่อน VAT: ฿${(grandTotal/1.07/1e6).toFixed(1)}M</div>
     </div>
     <div style="background:#f9fff9;border-radius:10px;padding:14px 16px;text-align:center;">
       <div style="font-size:10px;color:#7f8c8d;font-weight:700;text-transform:uppercase;margin-bottom:4px;">เติบโต/ฟื้นตัว</div>
-      <div style="font-size:24px;font-weight:800;color:#27ae60;">${growing} ราย</div>
+      <div style="font-size:24px;font-weight:800;color:#8dc57e;">${growing} ราย</div>
       <div style="font-size:11px;color:#7f8c8d;">2025 มากกว่า 2024</div>
     </div>
     <div style="background:#fff8f8;border-radius:10px;padding:14px 16px;text-align:center;">
       <div style="font-size:10px;color:#7f8c8d;font-weight:700;text-transform:uppercase;margin-bottom:4px;">ต้องเฝ้าระวัง</div>
-      <div style="font-size:24px;font-weight:800;color:#e74c3c;">${declining} ราย</div>
+      <div style="font-size:24px;font-weight:800;color:#e58079;">${declining} ราย</div>
       <div style="font-size:11px;color:#7f8c8d;">2025 น้อยกว่า 2024</div>
     </div>
   </div>`;
@@ -2927,20 +2938,20 @@ function openLoyalModal() {
     s1 += `<tr>
       <td class="rank">${i+1}</td>
       <td><strong>${c.name}</strong></td>
-      <td style="color:#2980b9">฿${c.y23.toLocaleString('th-TH')}</td>
-      <td style="color:#27ae60">฿${c.y24.toLocaleString('th-TH')}</td>
-      <td style="color:${c.y25>=c.y24?'#27ae60':'#e74c3c'};font-weight:700">
+      <td style="color:#7c9dc0">฿${c.y23.toLocaleString('th-TH')}</td>
+      <td style="color:#8dc57e">฿${c.y24.toLocaleString('th-TH')}</td>
+      <td style="color:${c.y25>=c.y24?'#8dc57e':'#e58079'};font-weight:700">
         ฿${c.y25.toLocaleString('th-TH')} <span style="font-size:11px">(${pct>=0?'+':''}${pct}%)</span>
       </td>
-      <td style="font-weight:700;color:#1e3a5f">฿${total3.toLocaleString('th-TH')}</td>
+      <td style="font-weight:700;color:#6b8ba8">฿${total3.toLocaleString('th-TH')}</td>
       <td><span style="font-size:12px;font-weight:600;color:${trend.color}">${trend.label}</span></td>
     </tr>`;
   });
   const t23=sorted.reduce((s,c)=>s+c.y23,0), t24=sorted.reduce((s,c)=>s+c.y24,0), t25=sorted.reduce((s,c)=>s+c.y25,0);
   s1 += `<tr style="font-weight:800;background:#f0f4f8;border-top:2px solid #dee2e6">
     <td></td><td><strong>รวม Top 15</strong></td>
-    <td style="color:#2980b9;font-weight:800">฿${t23.toLocaleString('th-TH')}</td>
-    <td style="color:#27ae60;font-weight:800">฿${t24.toLocaleString('th-TH')}</td>
+    <td style="color:#7c9dc0;font-weight:800">฿${t23.toLocaleString('th-TH')}</td>
+    <td style="color:#8dc57e;font-weight:800">฿${t24.toLocaleString('th-TH')}</td>
     <td style="font-weight:800">฿${t25.toLocaleString('th-TH')}</td>
     <td style="font-weight:800">฿${grandTotal.toLocaleString('th-TH')}</td><td></td>
   </tr></tbody></table></div>`;
@@ -2951,24 +2962,24 @@ function openLoyalModal() {
   let s2 = `<div class="modal-section-content" id="ms-loyal-watch">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
     <div>
-      <h4 style="font-size:12px;font-weight:700;text-transform:uppercase;color:#27ae60;margin-bottom:10px;">📈 เติบโต/ฟื้นตัว (${growList.length} ราย)</h4>
+      <h4 style="font-size:12px;font-weight:700;text-transform:uppercase;color:#8dc57e;margin-bottom:10px;">📈 เติบโต/ฟื้นตัว (${growList.length} ราย)</h4>
       <table class="data-table"><thead><tr><th>ลูกค้า</th><th>2024</th><th>2025</th><th>เพิ่มขึ้น</th></tr></thead><tbody>`;
   growList.forEach(c => {
     const diff = c.y25-c.y24;
     s2 += `<tr><td><strong>${c.name}</strong></td>
       <td>฿${(c.y24/1e3).toFixed(0)}K</td>
-      <td style="color:#27ae60;font-weight:700">฿${(c.y25/1e3).toFixed(0)}K</td>
-      <td style="color:#27ae60;font-weight:600">+฿${(diff/1e3).toFixed(0)}K</td></tr>`;
+      <td style="color:#8dc57e;font-weight:700">฿${(c.y25/1e3).toFixed(0)}K</td>
+      <td style="color:#8dc57e;font-weight:600">+฿${(diff/1e3).toFixed(0)}K</td></tr>`;
   });
   s2 += `</tbody></table></div><div>
-      <h4 style="font-size:12px;font-weight:700;text-transform:uppercase;color:#e74c3c;margin-bottom:10px;">⚠️ ต้องดูแลพิเศษ (${declList.length} ราย)</h4>
+      <h4 style="font-size:12px;font-weight:700;text-transform:uppercase;color:#e58079;margin-bottom:10px;">⚠️ ต้องดูแลพิเศษ (${declList.length} ราย)</h4>
       <table class="data-table"><thead><tr><th>ลูกค้า</th><th>2024</th><th>2025</th><th>ลดลง</th></tr></thead><tbody>`;
   declList.forEach(c => {
     const diff = c.y25-c.y24;
     s2 += `<tr><td><strong>${c.name}</strong></td>
       <td>฿${(c.y24/1e3).toFixed(0)}K</td>
-      <td style="color:#e74c3c;font-weight:700">฿${(c.y25/1e3).toFixed(0)}K</td>
-      <td style="color:#e74c3c;font-weight:600">฿${(diff/1e3).toFixed(0)}K</td></tr>`;
+      <td style="color:#e58079;font-weight:700">฿${(c.y25/1e3).toFixed(0)}K</td>
+      <td style="color:#e58079;font-weight:600">฿${(diff/1e3).toFixed(0)}K</td></tr>`;
   });
   s2 += `</tbody></table></div></div></div>`;
 
@@ -3001,16 +3012,16 @@ charts.churn = new Chart(document.getElementById('churnChart'), {
   data: {
     labels: ['2024','2025','2026 (ม.ค.–เม.ย.)'],
     datasets: [
-      { label: '🆕 ลูกค้าใหม่',    data: [2175, 1413, 252], backgroundColor: '#27ae60bb', borderRadius: 4 },
-      { label: '🔄 ลูกค้าเก่ากลับมา', data: [514, 504, 215], backgroundColor: '#2980b9bb', borderRadius: 4 },
-      { label: '❌ ยังไม่ซื้อ/หายไป', data: [-1982,-2185,-1757], backgroundColor: '#e74c3cbb', borderRadius: 4 },
+      { label: '🆕 ลูกค้าใหม่',    data: [2175, 1413, 252], backgroundColor: '#8dc57ebb', borderRadius: 4 },
+      { label: '🔄 ลูกค้าเก่ากลับมา', data: [514, 504, 215], backgroundColor: '#7c9dc0bb', borderRadius: 4 },
+      { label: '❌ ยังไม่ซื้อ/หายไป', data: [-1982,-2185,-1757], backgroundColor: '#e58079bb', borderRadius: 4 },
     ]
   },
   options: {
     responsive: true, maintainAspectRatio: true,
     scales: {
       x: { stacked: false, grid: { display: false } },
-      y: { ticks: { callback: v => Math.abs(v).toLocaleString() + ' ราย' }, grid: { color: '#f0f2f5' } }
+      y: { ticks: { callback: v => Math.abs(v).toLocaleString() + ' ราย' }, grid: { color: '#f5efe8' } }
     },
     plugins: {
       legend: { labels: { font: { family:'Segoe UI', size:12 } } },
@@ -3025,16 +3036,16 @@ charts.churnRevenue = new Chart(document.getElementById('churnRevenueChart'), {
   data: {
     labels: ['2024','2025','2026 (ม.ค.–เม.ย.)'],
     datasets: [
-      { label: '🆕 ยอดลูกค้าใหม่ (฿M)',      data: [13.21, 19.57, 20.47], backgroundColor: '#27ae60bb', borderRadius: 4 },
-      { label: '🔄 ยอดลูกค้าเก่ากลับมา (฿M)', data: [55.64, 38.91, 13.51], backgroundColor: '#2980b9bb', borderRadius: 4 },
-      { label: '⚠️ มูลค่าเสี่ยงหาย (ยอด 2025)',  data: [-9.51,-14.92,-29.29], backgroundColor: '#e74c3cbb', borderRadius: 4 },
+      { label: '🆕 ยอดลูกค้าใหม่ (฿M)',      data: [13.21, 19.57, 20.47], backgroundColor: '#8dc57ebb', borderRadius: 4 },
+      { label: '🔄 ยอดลูกค้าเก่ากลับมา (฿M)', data: [55.64, 38.91, 13.51], backgroundColor: '#7c9dc0bb', borderRadius: 4 },
+      { label: '⚠️ มูลค่าเสี่ยงหาย (ยอด 2025)',  data: [-9.51,-14.92,-29.29], backgroundColor: '#e58079bb', borderRadius: 4 },
     ]
   },
   options: {
     responsive: true, maintainAspectRatio: true,
     scales: {
       x: { grid: { display: false } },
-      y: { ticks: { callback: v => (v>=0?'+':'')+v.toFixed(1)+'M' }, grid: { color: '#f0f2f5' } }
+      y: { ticks: { callback: v => (v>=0?'+':'')+v.toFixed(1)+'M' }, grid: { color: '#f5efe8' } }
     },
     plugins: {
       legend: { labels: { font: { family:'Segoe UI', size:12 } } },
@@ -3049,15 +3060,15 @@ charts.custMix = new Chart(document.getElementById('custMixChart'), {
   data: {
     labels: ['2024','2025','2026 (ม.ค.–เม.ย.)'],
     datasets: [
-      { label: '🆕 ลูกค้าใหม่',       data: [2175, 1413, 252], backgroundColor: '#27ae60bb', borderRadius: 4 },
-      { label: '🔄 ลูกค้าเก่ากลับมา', data: [514,  504,  215], backgroundColor: '#2980b9bb', borderRadius: 4 },
+      { label: '🆕 ลูกค้าใหม่',       data: [2175, 1413, 252], backgroundColor: '#8dc57ebb', borderRadius: 4 },
+      { label: '🔄 ลูกค้าเก่ากลับมา', data: [514,  504,  215], backgroundColor: '#7c9dc0bb', borderRadius: 4 },
     ]
   },
   options: {
     responsive: true, maintainAspectRatio: true,
     scales: {
       x: { stacked: true, grid: { display: false } },
-      y: { stacked: true, ticks: { callback: v => v.toLocaleString() + ' ราย' }, grid: { color: '#f0f2f5' } }
+      y: { stacked: true, ticks: { callback: v => v.toLocaleString() + ' ราย' }, grid: { color: '#f5efe8' } }
     },
     plugins: {
       legend: { labels: { font: { family:'Segoe UI', size:12 } } },
@@ -3072,15 +3083,15 @@ charts.custRevMix = new Chart(document.getElementById('custRevMixChart'), {
   data: {
     labels: ['2024','2025','2026 (ม.ค.–เม.ย.)'],
     datasets: [
-      { label: '🆕 ยอดลูกค้าใหม่ (฿M)',       data: [13.21, 19.57, 20.47], backgroundColor: '#27ae60bb', borderRadius: 4 },
-      { label: '🔄 ยอดลูกค้าเก่ากลับมา (฿M)', data: [55.64, 38.91, 13.51], backgroundColor: '#2980b9bb', borderRadius: 4 },
+      { label: '🆕 ยอดลูกค้าใหม่ (฿M)',       data: [13.21, 19.57, 20.47], backgroundColor: '#8dc57ebb', borderRadius: 4 },
+      { label: '🔄 ยอดลูกค้าเก่ากลับมา (฿M)', data: [55.64, 38.91, 13.51], backgroundColor: '#7c9dc0bb', borderRadius: 4 },
     ]
   },
   options: {
     responsive: true, maintainAspectRatio: true,
     scales: {
       x: { stacked: true, grid: { display: false } },
-      y: { stacked: true, ticks: { callback: v => v.toFixed(0)+'M' }, grid: { color: '#f0f2f5' } }
+      y: { stacked: true, ticks: { callback: v => v.toFixed(0)+'M' }, grid: { color: '#f5efe8' } }
     },
     plugins: {
       legend: { labels: { font: { family:'Segoe UI', size:12 } } },
@@ -3095,17 +3106,17 @@ charts.concentration = new Chart(document.getElementById('concentrationChart'), 
   data: {
     labels: ['2023','2024','2025'],
     datasets: [
-      { label: 'Top 1',  data: [21.7, 18.5, 8.7],  backgroundColor: '#c0392bcc', borderRadius: 3 },
-      { label: 'Top 5',  data: [38.0, 35.9, 27.4],  backgroundColor: '#e74c3ccc', borderRadius: 3 },
-      { label: 'Top 10', data: [43.9, 42.5, 36.0],  backgroundColor: '#e67e22cc', borderRadius: 3 },
-      { label: 'Top 15', data: [49.7, 46.8, 39.7],  backgroundColor: '#f39c12cc', borderRadius: 3 },
+      { label: 'Top 1',  data: [21.7, 18.5, 8.7],  backgroundColor: '#d16b62cc', borderRadius: 3 },
+      { label: 'Top 5',  data: [38.0, 35.9, 27.4],  backgroundColor: '#e58079cc', borderRadius: 3 },
+      { label: 'Top 10', data: [43.9, 42.5, 36.0],  backgroundColor: '#e69a68cc', borderRadius: 3 },
+      { label: 'Top 15', data: [49.7, 46.8, 39.7],  backgroundColor: '#e8b95acc', borderRadius: 3 },
     ]
   },
   options: {
     responsive: true, maintainAspectRatio: true,
     scales: {
       x: { grid: { display: false } },
-      y: { ticks: { callback: v => v+'%' }, max: 55, grid: { color: '#f0f2f5' } }
+      y: { ticks: { callback: v => v+'%' }, max: 55, grid: { color: '#f5efe8' } }
     },
     plugins: {
       legend: { labels: { font: { family:'Segoe UI', size:12 } } },
@@ -3145,13 +3156,13 @@ charts.concentration = new Chart(document.getElementById('concentrationChart'), 
     html += `<tr>
       <td class="rank">${i+1}</td>
       <td><strong>${c.name}</strong></td>
-      <td style="color:#e74c3c;font-weight:700">฿${c.val25.toLocaleString('th-TH')}</td>
+      <td style="color:#e58079;font-weight:700">฿${c.val25.toLocaleString('th-TH')}</td>
       <td style="color:#7f8c8d">฿${c.val3yr.toLocaleString('th-TH')}</td>
       <td>${priority}</td>
     </tr>`;
   });
   // Show returned customers at bottom
-  html += `<tr style="background:#eafaf1"><td colspan="5" style="padding:8px 12px;font-size:12px;color:#27ae60;font-weight:700">
+  html += `<tr style="background:#eafaf1"><td colspan="5" style="padding:8px 12px;font-size:12px;color:#8dc57e;font-weight:700">
     ✅ Win-back สำเร็จในเม.ย. 2569 — ${returned.map(r=>`${r.name} (฿${r.apr26.toLocaleString()})`).join(' | ')}
   </td></tr>`;
   document.getElementById('churnTableBody').innerHTML = html;
@@ -3163,16 +3174,16 @@ charts.pareto = new Chart(document.getElementById('paretoChart'), {
   data: {
     labels: ['50% รายได้','70% รายได้','80% รายได้','90% รายได้'],
     datasets: [
-      { label: '2023', data: [3.0, 7.5, 11.6, 18.5], backgroundColor: '#2980b9bb', borderRadius: 4 },
-      { label: '2024', data: [2.5, 6.6, 10.6, 17.5], backgroundColor: '#27ae60bb', borderRadius: 4 },
-      { label: '2025', data: [2.4, 8.0, 13.6, 23.4], backgroundColor: '#e74c3cbb', borderRadius: 4 },
+      { label: '2023', data: [3.0, 7.5, 11.6, 18.5], backgroundColor: '#7c9dc0bb', borderRadius: 4 },
+      { label: '2024', data: [2.5, 6.6, 10.6, 17.5], backgroundColor: '#8dc57ebb', borderRadius: 4 },
+      { label: '2025', data: [2.4, 8.0, 13.6, 23.4], backgroundColor: '#e58079bb', borderRadius: 4 },
     ]
   },
   options: {
     responsive: true, maintainAspectRatio: true,
     scales: {
       x: { grid: { display: false } },
-      y: { ticks: { callback: v => v+'%' }, title: { display: true, text: '% ของลูกค้าทั้งหมด' }, grid: { color: '#f0f2f5' } }
+      y: { ticks: { callback: v => v+'%' }, title: { display: true, text: '% ของลูกค้าทั้งหมด' }, grid: { color: '#f5efe8' } }
     },
     plugins: {
       legend: { labels: { font: { family:'Segoe UI', size:12 } } },
@@ -3187,16 +3198,16 @@ charts.freq = new Chart(document.getElementById('freqChart'), {
   data: {
     labels: ['ซื้อ 1 ครั้ง','ซื้อ 2–5 ครั้ง','ซื้อ 6–12 ครั้ง','ซื้อ >12 ครั้ง'],
     datasets: [
-      { label: '2023', data: [68.8, 20.8, 6.5, 3.9], backgroundColor: '#2980b9bb', borderRadius: 4 },
-      { label: '2024', data: [68.2, 21.5, 6.3, 4.0], backgroundColor: '#27ae60bb', borderRadius: 4 },
-      { label: '2025', data: [58.5, 30.5, 8.6, 2.5], backgroundColor: '#e74c3cbb', borderRadius: 4 },
+      { label: '2023', data: [68.8, 20.8, 6.5, 3.9], backgroundColor: '#7c9dc0bb', borderRadius: 4 },
+      { label: '2024', data: [68.2, 21.5, 6.3, 4.0], backgroundColor: '#8dc57ebb', borderRadius: 4 },
+      { label: '2025', data: [58.5, 30.5, 8.6, 2.5], backgroundColor: '#e58079bb', borderRadius: 4 },
     ]
   },
   options: {
     responsive: true, maintainAspectRatio: true,
     scales: {
       x: { grid: { display: false } },
-      y: { ticks: { callback: v => v+'%' }, title: { display: true, text: '% ของลูกค้า' }, grid: { color: '#f0f2f5' } }
+      y: { ticks: { callback: v => v+'%' }, title: { display: true, text: '% ของลูกค้า' }, grid: { color: '#f5efe8' } }
     },
     plugins: {
       legend: { labels: { font: { family:'Segoe UI', size:12 } } },
@@ -3225,8 +3236,8 @@ charts.freq = new Chart(document.getElementById('freqChart'), {
     html += `<tr>
       <td class="rank">${i+1}</td>
       <td><strong>${c.name}</strong></td>
-      <td style="text-align:center;font-weight:700;color:#8e44ad">${star} ${c.orders} ครั้ง</td>
-      <td style="font-weight:700;color:#27ae60">฿${c.revenue.toLocaleString('th-TH')}</td>
+      <td style="text-align:center;font-weight:700;color:#a888c4">${star} ${c.orders} ครั้ง</td>
+      <td style="font-weight:700;color:#8dc57e">฿${c.revenue.toLocaleString('th-TH')}</td>
     </tr>`;
   });
   document.getElementById('freqTableBody').innerHTML = html;
@@ -3250,7 +3261,7 @@ charts.freq = new Chart(document.getElementById('freqChart'), {
   let html = '';
   top10_2025.forEach((c,i) => {
     const pct = (c.val/total2025*100).toFixed(1);
-    const risk = i < 2 ? 'color:#e74c3c;font-weight:800' : i < 5 ? 'color:#e67e22;font-weight:700' : 'color:#2980b9';
+    const risk = i < 2 ? 'color:#e58079;font-weight:800' : i < 5 ? 'color:#e69a68;font-weight:700' : 'color:#7c9dc0';
     html += `<tr>
       <td class="rank">${i+1}</td>
       <td><strong>${c.name}</strong></td>
@@ -3286,18 +3297,18 @@ const SALES_DATA = {
   ],
   salesperson2025: [
     { name:"ปุณณภา",   total:14715651, txn:null, customers:135,  color:"#4472C4" },
-    { name:"Theerata",  total:13221859, txn:null, customers:348,  color:"#2980b9" },
+    { name:"Theerata",  total:13221859, txn:null, customers:348,  color:"#7c9dc0" },
     { name:"ธชนัย",    total:12032206, txn:null, customers:347,  color:"#70AD47" },
-    { name:"ศุภิสรา",  total:7634816,  txn:null, customers:28,   color:"#e74c3c" },
-    { name:"Jutamat",   total:5135503,  txn:null, customers:1064, color:"#27ae60" },
-    { name:"นิโลบล",   total:416245,   txn:null, customers:8,    color:"#8e44ad" },
+    { name:"ศุภิสรา",  total:7634816,  txn:null, customers:28,   color:"#e58079" },
+    { name:"Jutamat",   total:5135503,  txn:null, customers:1064, color:"#8dc57e" },
+    { name:"นิโลบล",   total:416245,   txn:null, customers:8,    color:"#a888c4" },
   ],
   bu2025: [
-    { bu:"BU1 — Cafe & Beverage",      total:11268487, pct:19.99, color:"#27ae60" },
-    { bu:"BU2 — Restaurant & Food",     total:1074666,  pct:1.91,  color:"#e67e22" },
-    { bu:"BU3 — Corporate & B2B",       total:7530943,  pct:13.36, color:"#2980b9" },
-    { bu:"BU4 — Hotel & Resort",        total:1385647,  pct:2.46,  color:"#8e44ad" },
-    { bu:"BU5 — Agent & Distributor",   total:1404000,  pct:2.49,  color:"#f39c12" },
+    { bu:"BU1 — Cafe & Beverage",      total:11268487, pct:19.99, color:"#8dc57e" },
+    { bu:"BU2 — Restaurant & Food",     total:1074666,  pct:1.91,  color:"#e69a68" },
+    { bu:"BU3 — Corporate & B2B",       total:7530943,  pct:13.36, color:"#7c9dc0" },
+    { bu:"BU4 — Hotel & Resort",        total:1385647,  pct:2.46,  color:"#a888c4" },
+    { bu:"BU5 — Agent & Distributor",   total:1404000,  pct:2.49,  color:"#e8b95a" },
     { bu:"BU7 — อื่นๆ",                total:33706717, pct:59.79, color:"#bdc3c7" },
   ],
   channels2025: [
@@ -3343,10 +3354,10 @@ function buildSalesAnalysis() {
   charts.saYearChart = new Chart(document.getElementById('saYearChart'), {
     type:'bar', data:{ labels:d.yearly.map(y=>String(y.year)),
       datasets:[{label:'ยอดขายสุทธิ',data:d.yearly.map(y=>y.total/1e6),
-        backgroundColor:['#2980b9','#27ae60','#e74c3c','#e67e22'],borderRadius:6}]},
+        backgroundColor:['#7c9dc0','#8dc57e','#e58079','#e69a68'],borderRadius:6}]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`฿${c.raw.toFixed(2)}M`}}},
-      scales:{y:{ticks:{callback:v=>`฿${v.toFixed(0)}M`},grid:{color:'#f0f2f5'}},x:{grid:{display:false}}}}
+      scales:{y:{ticks:{callback:v=>`฿${v.toFixed(0)}M`},grid:{color:'#f5efe8'}},x:{grid:{display:false}}}}
   });
   destroyChart('saMonthChart');
   charts.saMonthChart = new Chart(document.getElementById('saMonthChart'), {
@@ -3358,7 +3369,7 @@ function buildSalesAnalysis() {
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:'top',labels:{font:{size:11}}},
         tooltip:{callbacks:{label:c=>`${c.dataset.label}: ฿${c.raw.toFixed(2)}M`}}},
-      scales:{y:{ticks:{callback:v=>`฿${v.toFixed(1)}M`},grid:{color:'#f0f2f5'}},x:{grid:{display:false}}}}
+      scales:{y:{ticks:{callback:v=>`฿${v.toFixed(1)}M`},grid:{color:'#f5efe8'}},x:{grid:{display:false}}}}
   });
   destroyChart('saSpChart');
   charts.saSpChart = new Chart(document.getElementById('saSpChart'), {
@@ -3389,7 +3400,7 @@ function buildSalesAnalysis() {
   });
   document.getElementById('saBuBody').innerHTML = d.bu2025.map(b => {
     const pri=b.pct>20?'🔴 หลัก':b.pct>10?'🟡 สำคัญ':b.pct>2?'🟢 ศักยภาพ':'⚪ เล็กน้อย';
-    const bar=`<div style="background:#f0f2f5;border-radius:3px;height:6px;margin-top:3px"><div style="background:${b.color};width:${Math.min(b.pct,100)}%;height:6px;border-radius:3px"></div></div>`;
+    const bar=`<div style="background:#f5efe8;border-radius:3px;height:6px;margin-top:3px"><div style="background:${b.color};width:${Math.min(b.pct,100)}%;height:6px;border-radius:3px"></div></div>`;
     return `<tr><td><span style="width:10px;height:10px;background:${b.color};border-radius:2px;display:inline-block;margin-right:6px"></span>${b.bu}</td>
       <td style="text-align:right;font-weight:700">฿${(b.total/1e6).toFixed(2)}M</td>
       <td style="text-align:right">${b.pct.toFixed(1)}%${bar}</td><td style="text-align:center">${pri}</td></tr>`;
@@ -3398,10 +3409,10 @@ function buildSalesAnalysis() {
   charts.saChChart = new Chart(document.getElementById('saChChart'), {
     type:'bar', data:{labels:d.channels2025.map(c=>c.ch),
       datasets:[{label:'ยอดขาย',data:d.channels2025.map(c=>c.total/1e6),
-        backgroundColor:['#1e3a5f','#2980b9','#e67e22','#27ae60','#bdc3c7'],borderRadius:5}]},
+        backgroundColor:['#6b8ba8','#7c9dc0','#e69a68','#8dc57e','#bdc3c7'],borderRadius:5}]},
     options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`฿${c.raw.toFixed(2)}M (${d.channels2025[c.dataIndex].pct}%)`}}},
-      scales:{x:{ticks:{callback:v=>`฿${v.toFixed(0)}M`},grid:{color:'#f0f2f5'}},y:{grid:{display:false}}}}
+      scales:{x:{ticks:{callback:v=>`฿${v.toFixed(0)}M`},grid:{color:'#f5efe8'}},y:{grid:{display:false}}}}
   });
   const r=d.retention;
   const loyalSorted = [...loyalCustomers].sort((a,b)=>(b.y23+b.y24+b.y25)-(a.y23+a.y24+a.y25));
@@ -3421,7 +3432,7 @@ function buildSalesAnalysis() {
         <div style="font-size:26px;font-weight:800;color:${color}">${val}</div>
         <div style="font-size:11px;color:var(--muted)">${sub}</div>
       </div>
-      <div id="ret-${id}" style="display:none;border-top:1px solid #f0f2f5;padding:12px 14px;background:#fafbfc;max-height:260px;overflow-y:auto;font-size:12px">
+      <div id="ret-${id}" style="display:none;border-top:1px solid #f5efe8;padding:12px 14px;background:#faf6f1;max-height:260px;overflow-y:auto;font-size:12px">
         ${detailHtml}
       </div>
     </div>`;
@@ -3431,7 +3442,7 @@ function buildSalesAnalysis() {
     <div style="background:#e8f4fd;border-radius:6px;padding:8px 10px;margin-bottom:6px">📌 กลยุทธ์: ลูกค้าที่ไม่กลับมา 1,979 ราย ควรเป็น target Win-back ปี 2026</div>`;
 
   const detail2425 = `<div style="color:var(--muted);margin-bottom:8px">ลูกค้าปี 2024 ทั้งหมด <strong>2,773 ราย</strong> → ซื้อซ้ำปี 2025 <strong style="color:var(--warning)">272 ราย (10%)</strong></div>
-    <div style="background:#fff8e1;border-radius:6px;padding:8px 10px;margin-bottom:6px">⚠️ ลูกค้าซื้อซ้ำลดลง 596→272 (−54%) — จุดวิกฤตที่ต้องแก้ไขด่วน</div>
+    <div style="background:#faf1e0;border-radius:6px;padding:8px 10px;margin-bottom:6px">⚠️ ลูกค้าซื้อซ้ำลดลง 596→272 (−54%) — จุดวิกฤตที่ต้องแก้ไขด่วน</div>
     <div style="color:var(--muted)">ลูกค้าหายไป 2,501 ราย คิดเป็นยอดประมาณ ฿14.9M</div>`;
 
   const detail2526 = `<div style="color:var(--muted);margin-bottom:8px">ลูกค้าปี 2025 → มีออเดอร์ใน 2026 (ม.ค.–16 มี.ค.) <strong style="color:var(--danger)">119 ราย</strong></div>
@@ -3446,25 +3457,25 @@ function buildSalesAnalysis() {
         <th style="padding:5px 8px;text-align:right;font-size:11px;color:var(--muted)">2024</th>
         <th style="padding:5px 8px;text-align:right;font-size:11px;color:var(--muted)">2025</th>
       </tr></thead>
-      <tbody>${loyalSorted.map(c=>`<tr style="border-bottom:1px solid #f0f2f5">
+      <tbody>${loyalSorted.map(c=>`<tr style="border-bottom:1px solid #f5efe8">
         <td style="padding:5px 8px;font-weight:600">${c.name}</td>
-        <td style="padding:5px 8px;text-align:right;color:#2980b9">฿${(c.y23/1e3).toFixed(0)}K</td>
-        <td style="padding:5px 8px;text-align:right;color:#27ae60">฿${(c.y24/1e3).toFixed(0)}K</td>
+        <td style="padding:5px 8px;text-align:right;color:#7c9dc0">฿${(c.y23/1e3).toFixed(0)}K</td>
+        <td style="padding:5px 8px;text-align:right;color:#8dc57e">฿${(c.y24/1e3).toFixed(0)}K</td>
         <td style="padding:5px 8px;text-align:right;color:${c.y25>=c.y24?'var(--success)':'var(--danger)'}">฿${(c.y25/1e3).toFixed(0)}K</td>
       </tr>`).join('')}</tbody>
     </table>`;
 
-  const detail4yr = `<div style="color:var(--muted);margin-bottom:8px">ลูกค้า <strong>VIP 4 ปี</strong> (2023+2024+2025+2026) — กลุ่มที่มีความภักดีสูงสุด <strong style="color:#8e44ad">41 ราย</strong></div>
+  const detail4yr = `<div style="color:var(--muted);margin-bottom:8px">ลูกค้า <strong>VIP 4 ปี</strong> (2023+2024+2025+2026) — กลุ่มที่มีความภักดีสูงสุด <strong style="color:#a888c4">41 ราย</strong></div>
     <table style="width:100%;border-collapse:collapse">
       <thead><tr style="background:#f5eef8">
         <th style="padding:5px 8px;text-align:left;font-size:11px;color:var(--muted)">#</th>
         <th style="padding:5px 8px;text-align:left;font-size:11px;color:var(--muted)">ชื่อลูกค้า</th>
         <th style="padding:5px 8px;text-align:right;font-size:11px;color:var(--muted)">ยอดสะสม</th>
       </tr></thead>
-      <tbody>${vip4List.map((c,i)=>`<tr style="border-bottom:1px solid #f0f2f5">
-        <td style="padding:5px 8px;text-align:center;font-weight:800;color:#8e44ad">${i+1}</td>
+      <tbody>${vip4List.map((c,i)=>`<tr style="border-bottom:1px solid #f5efe8">
+        <td style="padding:5px 8px;text-align:center;font-weight:800;color:#a888c4">${i+1}</td>
         <td style="padding:5px 8px;font-weight:600">${c.name}</td>
-        <td style="padding:5px 8px;text-align:right;color:#8e44ad;font-weight:700">฿${(c.total/1e6).toFixed(2)}M</td>
+        <td style="padding:5px 8px;text-align:right;color:#a888c4;font-weight:700">฿${(c.total/1e6).toFixed(2)}M</td>
       </tr>`).join('')}
       <tr style="background:#f5eef8;font-size:11px;color:var(--muted)">
         <td colspan="3" style="padding:6px 8px;text-align:center">* แสดงเฉพาะ Top customers — ยังมี VIP 4 ปีอีก ${41-vip4List.length} ราย</td>
@@ -3477,14 +3488,14 @@ function buildSalesAnalysis() {
       ${retCard('r2','2024→2025',r.r2425,'retention '+(r.r2425/r.r2324*100).toFixed(0)+'%','var(--warning)',detail2425)}
       ${retCard('r3','2025→2026',r.r2526,'retention '+(r.r2526/r.r2425*100).toFixed(0)+'%','var(--danger)',detail2526)}
       ${retCard('r4','3 ปีต่อเนื่อง',r.y3,'ลูกค้า','var(--success)',detail3yr)}
-      ${retCard('r5','VIP 4 ปี',r.y4,'ลูกค้า','#8e44ad',detail4yr)}
+      ${retCard('r5','VIP 4 ปี',r.y4,'ลูกค้า','#a888c4',detail4yr)}
     </div>
-    <div style="margin-top:10px;padding:10px 14px;background:#fff8e1;border-radius:8px;border-left:3px solid var(--warning);font-size:12px;color:#7f6003">
+    <div style="margin-top:10px;padding:10px 14px;background:#faf1e0;border-radius:8px;border-left:3px solid var(--warning);font-size:12px;color:#7f6003">
       ⚠️ ลูกค้าซื้อซ้ำลดลง 596 → 272 ราย (−54%) ระหว่าง 2024→2025 ควรทำ Win-back Campaign
     </div>`;
   document.getElementById('saTopBody').innerHTML = d.topCustomers.map((c,i) => {
     const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
-    const lc=c.ly>=4?'#f39c12':c.ly>=3?'var(--success)':'var(--primary)';
+    const lc=c.ly>=4?'#e8b95a':c.ly>=3?'var(--success)':'var(--primary)';
     const lb=c.ly>=4?'🌟 VIP 4 ปี':c.ly>=3?'💚 3 ปี':'🔵 2 ปี';
     return `<tr><td style="text-align:center;font-weight:800">${medal}</td><td><strong>${c.name}</strong></td>
       <td style="text-align:right;font-weight:700;color:var(--primary)">฿${(c.total/1e6).toFixed(2)}M</td>
@@ -3494,7 +3505,7 @@ function buildSalesAnalysis() {
   } catch(e) {
     salesBuilt = false;
     document.getElementById('saKpiCards').innerHTML =
-      `<div style="background:#fdecea;border:1px solid #e74c3c;border-radius:8px;padding:16px;color:#c0392b;width:100%">
+      `<div style="background:#fdecea;border:1px solid #e58079;border-radius:8px;padding:16px;color:#d16b62;width:100%">
         <strong>&#10060; Error loading Sales Analysis:</strong><br>
         <code style="font-size:12px">${e.message}</code>
       </div>`;
@@ -3654,7 +3665,7 @@ function buildAnalysis2026() {
   const topSPIdx = spTotal.indexOf(Math.max(...spTotal));
   document.getElementById('a26SpCards').innerHTML = spNames.map((n,i)=>{
     const pct = (spTotal[i]/grandTotal*100).toFixed(1);
-    const colors = ['#2980b9','#27ae60','#8e44ad','#e67e22','#e74c3c','#16a085','#f39c12'];
+    const colors = ['#7c9dc0','#8dc57e','#a888c4','#e69a68','#e58079','#8dc9b7','#e8b95a'];
     const isTop = i===topSPIdx;
     return `<div onclick="showSP2026Modal(${i})" style="background:white;border-radius:10px;padding:14px 18px;box-shadow:var(--shadow);
             border-left:4px solid ${colors[i]};min-width:150px;flex:1;position:relative;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s"
@@ -3665,7 +3676,7 @@ function buildAnalysis2026() {
       <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:0.5px;margin-bottom:6px">${n}</div>
       <div style="font-size:20px;font-weight:800;color:${colors[i]}">฿${(spTotal[i]/1e6).toFixed(2)}M</div>
       <div style="font-size:11px;color:var(--muted);margin-top:4px">${pct}% ของยอดรวม</div>
-      <div style="margin-top:6px;background:#f0f2f5;border-radius:3px;height:5px;overflow:hidden">
+      <div style="margin-top:6px;background:#f5efe8;border-radius:3px;height:5px;overflow:hidden">
         <div style="background:${colors[i]};height:100%;width:${pct}%;border-radius:3px"></div>
       </div>
     </div>`;
@@ -3697,25 +3708,25 @@ function buildAnalysis2026() {
             <td style="text-align:right">${s.j?'฿'+Math.round(s.j/1000)+'K':'–'}</td>
             <td style="text-align:right">${s.f?'฿'+Math.round(s.f/1000)+'K':'–'}</td>
             <td style="text-align:right">${s.m?'฿'+Math.round(s.m/1000)+'K':'–'}</td>
-            <td style="text-align:right;color:#9b59b6">${s.a?'฿'+Math.round(s.a/1000)+'K':'–'}</td>
-            <td style="text-align:right;color:#e74c3c">${s.my?'฿'+Math.round(s.my/1000)+'K':'–'}</td>
-            <td style="text-align:right;color:#27ae60">${s.ju?'฿'+Math.round(s.ju/1000)+'K':'–'}</td>
-            <td style="text-align:right;color:#e67e22">${s.jl?'฿'+Math.round(s.jl/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:#b89ecf">${s.a?'฿'+Math.round(s.a/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:#e58079">${s.my?'฿'+Math.round(s.my/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:#8dc57e">${s.ju?'฿'+Math.round(s.ju/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:#e69a68">${s.jl?'฿'+Math.round(s.jl/1000)+'K':'–'}</td>
             <td style="text-align:right;font-weight:700;color:var(--primary)">฿${(s.t/1e6).toFixed(2)}M</td>
             <td style="text-align:right">
-              <span style="background:#ebf5fb;color:#2980b9;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">${pct}%</span>
+              <span style="background:#e3ecf5;color:#7c9dc0;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">${pct}%</span>
             </td>
           </tr>`;
         }).join('')}
-        <tr style="background:#f8f9fa;font-weight:800">
+        <tr style="background:#faf6f1;font-weight:800">
           <td>รวม</td>
           <td style="text-align:right">฿${Math.round(spJan.reduce((a,b)=>a+b,0)/1000)}K</td>
           <td style="text-align:right">฿${Math.round(spFeb.reduce((a,b)=>a+b,0)/1000)}K</td>
           <td style="text-align:right">฿${Math.round(spMar.reduce((a,b)=>a+b,0)/1000)}K</td>
-          <td style="text-align:right;color:#9b59b6">฿${Math.round(spApr.reduce((a,b)=>a+b,0)/1000)}K</td>
-          <td style="text-align:right;color:#e74c3c">฿${Math.round(spMay.reduce((a,b)=>a+b,0)/1000)}K</td>
-          <td style="text-align:right;color:#27ae60">฿${Math.round(spJun.reduce((a,b)=>a+b,0)/1000)}K</td>
-          <td style="text-align:right;color:#e67e22">฿${Math.round(spJul.reduce((a,b)=>a+b,0)/1000)}K</td>
+          <td style="text-align:right;color:#b89ecf">฿${Math.round(spApr.reduce((a,b)=>a+b,0)/1000)}K</td>
+          <td style="text-align:right;color:#e58079">฿${Math.round(spMay.reduce((a,b)=>a+b,0)/1000)}K</td>
+          <td style="text-align:right;color:#8dc57e">฿${Math.round(spJun.reduce((a,b)=>a+b,0)/1000)}K</td>
+          <td style="text-align:right;color:#e69a68">฿${Math.round(spJul.reduce((a,b)=>a+b,0)/1000)}K</td>
           <td style="text-align:right;color:var(--primary)">฿${(grandTotal/1e6).toFixed(2)}M</td>
           <td style="text-align:right">100%</td>
         </tr>
@@ -3730,13 +3741,13 @@ function buildAnalysis2026() {
     data:{
       labels: spNames,
       datasets:[
-        {label:'ม.ค.',data:spJan.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#2980b9cc',borderRadius:3},
-        {label:'ก.พ.',data:spFeb.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#27ae60cc',borderRadius:3},
-        {label:'มี.ค.',data:spMar.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#e67e22cc',borderRadius:3},
-        {label:'เม.ย.',data:spApr.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#9b59b6cc',borderRadius:3},
-        {label:'พ.ค.',data:spMay.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#e74c3ccc',borderRadius:3},
-        {label:'มิ.ย. (ปิดเดือน)',data:spJun.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#16a085cc',borderRadius:3},
-        {label:'ก.ค. MTD (20/7)',data:spJul.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#f39c12cc',borderRadius:3},
+        {label:'ม.ค.',data:spJan.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#7c9dc0cc',borderRadius:3},
+        {label:'ก.พ.',data:spFeb.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#8dc57ecc',borderRadius:3},
+        {label:'มี.ค.',data:spMar.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#e69a68cc',borderRadius:3},
+        {label:'เม.ย.',data:spApr.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#b89ecfcc',borderRadius:3},
+        {label:'พ.ค.',data:spMay.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#e58079cc',borderRadius:3},
+        {label:'มิ.ย. (ปิดเดือน)',data:spJun.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#8dc9b7cc',borderRadius:3},
+        {label:'ก.ค. MTD (20/7)',data:spJul.map(v=>+(v/1e6).toFixed(3)),backgroundColor:'#e8b95acc',borderRadius:3},
       ]
     },
     options:{
@@ -3752,23 +3763,23 @@ function buildAnalysis2026() {
   const augForecastIncVat = Math.round(drtPendingJul * 1.07);
   const julMtdTotal = 2814207;
   document.getElementById('a26ForecastCards').innerHTML = `
-    <div style="flex:1;min-width:180px;background:linear-gradient(135deg,#1e3a5f,#2980b9);color:white;border-radius:12px;padding:18px 22px;text-align:center">
+    <div style="flex:1;min-width:180px;background:linear-gradient(135deg,#6b8ba8,#7c9dc0);color:white;border-radius:12px;padding:18px 22px;text-align:center">
       <div style="font-size:11px;opacity:.8;letter-spacing:.5px;margin-bottom:6px">📌 DRT PENDING (ก.ค. MTD 23/7)</div>
       <div style="font-size:26px;font-weight:800">฿${(drtPendingJul/1e6).toFixed(2)}M</div>
       <div style="font-size:11px;opacity:.8;margin-top:4px">pretax | ~35 ออเดอร์ confirmed</div>
     </div>
-    <div style="flex:1;min-width:180px;background:linear-gradient(135deg,#27ae60,#1abc9c);color:white;border-radius:12px;padding:18px 22px;text-align:center">
+    <div style="flex:1;min-width:180px;background:linear-gradient(135deg,#8dc57e,#a0d9c7);color:white;border-radius:12px;padding:18px 22px;text-align:center">
       <div style="font-size:11px;opacity:.8;letter-spacing:.5px;margin-bottom:6px">🎯 FORECAST ส.ค. (incl VAT)</div>
       <div style="font-size:26px;font-weight:800">฿${(augForecastIncVat/1e6).toFixed(2)}M</div>
       <div style="font-size:11px;opacity:.8;margin-top:4px">confirmed minimum จาก DRT pending ก.ค. MTD</div>
     </div>
-    <div style="flex:1;min-width:180px;background:#fff;border-radius:12px;padding:18px 22px;border:2px solid #e67e22;text-align:center">
+    <div style="flex:1;min-width:180px;background:#fff;border-radius:12px;padding:18px 22px;border:2px solid #e69a68;text-align:center">
       <div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">📊 DRT/Total Ratio ก.ค.</div>
-      <div style="font-size:26px;font-weight:800;color:#e67e22">${(drtPendingJul/julMtdTotal*100).toFixed(1)}%</div>
+      <div style="font-size:26px;font-weight:800;color:#e69a68">${(drtPendingJul/julMtdTotal*100).toFixed(1)}%</div>
       <div style="font-size:11px;color:var(--muted);margin-top:4px">฿537K / ฿2.81M pretax (สูง = pipeline แข็ง)</div>
     </div>
-    <div style="flex:1;min-width:220px;background:#fff8e1;border-radius:12px;padding:18px 22px;border-left:4px solid #f39c12">
-      <div style="font-size:12px;font-weight:700;color:#e67e22;margin-bottom:6px">💡 วิธีอ่านค่า DRT</div>
+    <div style="flex:1;min-width:220px;background:#faf1e0;border-radius:12px;padding:18px 22px;border-left:4px solid #e8b95a">
+      <div style="font-size:12px;font-weight:700;color:#e69a68;margin-bottom:6px">💡 วิธีอ่านค่า DRT</div>
       <div style="font-size:11px;color:var(--text);line-height:1.7">
         DRT = ใบรับมัดจำ ลูกค้าจ่ายเงินจองไว้แล้ว<br>
         สถานะ <strong>"รอหักมัดจำ"</strong> = รอส่งมอบสินค้า<br>
@@ -3783,10 +3794,10 @@ function buildAnalysis2026() {
     data:{
       labels:['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.*'],
       datasets:[
-        {label:'RT (ใบเสร็จ)',data:[1,2,3,4,5,6,7].map(m=>+(docTypeSummary[m].RT/1e6).toFixed(3)),backgroundColor:'#2980b9cc',borderRadius:3},
-        {label:'IVT (ใบแจ้งหนี้)',data:[1,2,3,4,5,6,7].map(m=>+(docTypeSummary[m].IVT/1e6).toFixed(3)),backgroundColor:'#27ae60cc',borderRadius:3},
-        {label:'DRT หักแล้ว',data:[1,2,3,4,5,6,7].map(m=>+(docTypeSummary[m].DRT_done/1e6).toFixed(3)),backgroundColor:'#f39c12cc',borderRadius:3},
-        {label:'DRT pending → forecast',data:[1,2,3,4,5,6,7].map(m=>+(docTypeSummary[m].DRT_pending/1e6).toFixed(3)),backgroundColor:'#e74c3ccc',borderRadius:3},
+        {label:'RT (ใบเสร็จ)',data:[1,2,3,4,5,6,7].map(m=>+(docTypeSummary[m].RT/1e6).toFixed(3)),backgroundColor:'#7c9dc0cc',borderRadius:3},
+        {label:'IVT (ใบแจ้งหนี้)',data:[1,2,3,4,5,6,7].map(m=>+(docTypeSummary[m].IVT/1e6).toFixed(3)),backgroundColor:'#8dc57ecc',borderRadius:3},
+        {label:'DRT หักแล้ว',data:[1,2,3,4,5,6,7].map(m=>+(docTypeSummary[m].DRT_done/1e6).toFixed(3)),backgroundColor:'#e8b95acc',borderRadius:3},
+        {label:'DRT pending → forecast',data:[1,2,3,4,5,6,7].map(m=>+(docTypeSummary[m].DRT_pending/1e6).toFixed(3)),backgroundColor:'#e58079cc',borderRadius:3},
       ]
     },
     options:{
@@ -3813,13 +3824,13 @@ function buildAnalysis2026() {
       <tbody>
         ${forecastList.map(([name,pre])=>`<tr>
           <td>${name}</td>
-          <td style="text-align:right;font-weight:700;color:#e74c3c">฿${pre.toLocaleString()}</td>
+          <td style="text-align:right;font-weight:700;color:#e58079">฿${pre.toLocaleString()}</td>
           <td style="text-align:right;color:var(--muted)">฿${Math.round(pre*1.07).toLocaleString()}</td>
         </tr>`).join('')}
-        <tr style="background:#fff8e1;font-weight:800">
+        <tr style="background:#faf1e0;font-weight:800">
           <td>รวม Forecast ส.ค.</td>
-          <td style="text-align:right;color:#e74c3c">฿${drtPendingJul.toLocaleString()}</td>
-          <td style="text-align:right;color:#e67e22">฿${augForecastIncVat.toLocaleString()}</td>
+          <td style="text-align:right;color:#e58079">฿${drtPendingJul.toLocaleString()}</td>
+          <td style="text-align:right;color:#e69a68">฿${augForecastIncVat.toLocaleString()}</td>
         </tr>
       </tbody>
     </table>
@@ -3827,7 +3838,7 @@ function buildAnalysis2026() {
 
   // ── TOP CUSTOMERS TABLE (clickable) ──────────────────────
   const segOf = c => c.months.length>=4?'VIP':c.months.length>=3?'Regular':c.months.length===2?'ลูกค้าประจำ':'ใหม่';
-  const segColorMap = {VIP:'#8e44ad',Regular:'#27ae60',ลูกค้าประจำ:'#e67e22',ใหม่:'#2980b9'};
+  const segColorMap = {VIP:'#a888c4',Regular:'#8dc57e',ลูกค้าประจำ:'#e69a68',ใหม่:'#7c9dc0'};
   const segIconMap  = {VIP:'👑',Regular:'⭐',ลูกค้าประจำ:'🔄',ใหม่:'🆕'};
 
   document.getElementById('a26CustTable').innerHTML = `
@@ -3856,15 +3867,15 @@ function buildAnalysis2026() {
             <td style="text-align:center;font-weight:800">${medal}</td>
             <td><strong>${c.name}</strong><span style="font-size:10px;color:var(--muted);margin-left:6px">${txnTotal} ออเดอร์</span></td>
             <td style="text-align:right;font-weight:700;color:var(--primary)">฿${c.total.toLocaleString()}</td>
-            <td style="text-align:right;color:${c.jan?'#2980b9':'#ccc'}">${c.jan?'฿'+Math.round(c.jan/1000)+'K':'–'}</td>
-            <td style="text-align:right;color:${c.feb?'#27ae60':'#ccc'}">${c.feb?'฿'+Math.round(c.feb/1000)+'K':'–'}</td>
-            <td style="text-align:right;color:${c.mar?'#e67e22':'#ccc'}">${c.mar?'฿'+Math.round(c.mar/1000)+'K':'–'}</td>
-            <td style="text-align:right;color:${c.apr?'#9b59b6':'#ccc'}">${c.apr?'฿'+Math.round(c.apr/1000)+'K':'–'}</td>
-            <td style="text-align:right;color:${c.may?'#e74c3c':'#ccc'}">${c.may?'฿'+Math.round(c.may/1000)+'K':'–'}</td>
-            <td style="text-align:right;color:${c.jun?'#16a085':'#ccc'}">${c.jun?'฿'+Math.round(c.jun/1000)+'K':'–'}</td>
-            <td style="text-align:right;color:${c.jul?'#f39c12':'#ccc'}">${c.jul?'฿'+Math.round(c.jul/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:${c.jan?'#7c9dc0':'#ccc'}">${c.jan?'฿'+Math.round(c.jan/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:${c.feb?'#8dc57e':'#ccc'}">${c.feb?'฿'+Math.round(c.feb/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:${c.mar?'#e69a68':'#ccc'}">${c.mar?'฿'+Math.round(c.mar/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:${c.apr?'#b89ecf':'#ccc'}">${c.apr?'฿'+Math.round(c.apr/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:${c.may?'#e58079':'#ccc'}">${c.may?'฿'+Math.round(c.may/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:${c.jun?'#8dc9b7':'#ccc'}">${c.jun?'฿'+Math.round(c.jun/1000)+'K':'–'}</td>
+            <td style="text-align:right;color:${c.jul?'#e8b95a':'#ccc'}">${c.jul?'฿'+Math.round(c.jul/1000)+'K':'–'}</td>
             <td style="text-align:center"><span style="background:${sc}20;color:${sc};padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">${si} ${seg}</span></td>
-            <td style="text-align:center">${drtTotal?`<span style="background:#fdecea;color:#e74c3c;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">฿${Math.round(drtTotal/1000)}K</span>`:'<span style="color:#ccc">–</span>'}</td>
+            <td style="text-align:center">${drtTotal?`<span style="background:#fdecea;color:#e58079;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">฿${Math.round(drtTotal/1000)}K</span>`:'<span style="color:#ccc">–</span>'}</td>
           </tr>`;
         }).join('')}
       </tbody>
@@ -3880,7 +3891,7 @@ function buildAnalysis2026() {
       datasets:[{
         label:'จำนวนลูกค้า',
         data:freqData.map(d=>d.count),
-        backgroundColor:freqData.map((_,i)=>i===0?'#2980b9bb':i===1?'#27ae60bb':i===2?'#e67e22bb':'#bdc3c7bb'),
+        backgroundColor:freqData.map((_,i)=>i===0?'#7c9dc0bb':i===1?'#8dc57ebb':i===2?'#e69a68bb':'#bdc3c7bb'),
         borderRadius:6,
       }]
     },
@@ -3898,7 +3909,7 @@ function buildAnalysis2026() {
     type:'doughnut',
     data:{
       labels:['VIP (3 เดือน)','Regular (2 เดือน)','ลูกค้าใหม่ (1 เดือน)'],
-      datasets:[{data:[7,91,478],backgroundColor:['#8e44ad','#27ae60','#2980b9'],borderWidth:2,borderColor:'#fff'}]
+      datasets:[{data:[7,91,478],backgroundColor:['#a888c4','#8dc57e','#7c9dc0'],borderWidth:2,borderColor:'#fff'}]
     },
     options:{
       responsive:true,maintainAspectRatio:false,cutout:'60%',
@@ -3910,26 +3921,26 @@ function buildAnalysis2026() {
   // ── SEGMENT STATS CARDS ───────────────────────────────────
   document.getElementById('a26SegCards').innerHTML = `
     <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:16px">
-      <div onclick="showSegModal('VIP')" style="flex:1;min-width:160px;background:#f5eef8;border-radius:10px;padding:16px 20px;border-left:4px solid #8e44ad;text-align:center;cursor:pointer;transition:box-shadow 0.15s,transform 0.15s" onmouseover="this.style.boxShadow='0 4px 16px rgba(142,68,173,0.25)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-        <div style="font-size:28px;font-weight:800;color:#8e44ad">7</div>
+      <div onclick="showSegModal('VIP')" style="flex:1;min-width:160px;background:#f5eef8;border-radius:10px;padding:16px 20px;border-left:4px solid #a888c4;text-align:center;cursor:pointer;transition:box-shadow 0.15s,transform 0.15s" onmouseover="this.style.boxShadow='0 4px 16px rgba(142,68,173,0.25)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
+        <div style="font-size:28px;font-weight:800;color:#a888c4">7</div>
         <div style="font-weight:700;font-size:13px;margin:4px 0">👑 VIP (ซื้อทุกเดือน)</div>
         <div style="font-size:11px;color:var(--muted)">ซื้อต่อเนื่องหลายเดือน (ฐาน ม.ค.–เม.ย.)</div>
-        <div style="font-size:10px;color:#8e44ad;margin-top:6px;font-weight:600">คลิกดูรายชื่อ →</div>
+        <div style="font-size:10px;color:#a888c4;margin-top:6px;font-weight:600">คลิกดูรายชื่อ →</div>
       </div>
-      <div onclick="showSegModal('Regular')" style="flex:1;min-width:160px;background:#eafaf1;border-radius:10px;padding:16px 20px;border-left:4px solid #27ae60;text-align:center;cursor:pointer;transition:box-shadow 0.15s,transform 0.15s" onmouseover="this.style.boxShadow='0 4px 16px rgba(39,174,96,0.25)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-        <div style="font-size:28px;font-weight:800;color:#27ae60">91</div>
+      <div onclick="showSegModal('Regular')" style="flex:1;min-width:160px;background:#eafaf1;border-radius:10px;padding:16px 20px;border-left:4px solid #8dc57e;text-align:center;cursor:pointer;transition:box-shadow 0.15s,transform 0.15s" onmouseover="this.style.boxShadow='0 4px 16px rgba(39,174,96,0.25)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
+        <div style="font-size:28px;font-weight:800;color:#8dc57e">91</div>
         <div style="font-weight:700;font-size:13px;margin:4px 0">⭐ Regular (2 เดือน)</div>
         <div style="font-size:11px;color:var(--muted)">ซื้อ 2 ใน 3 เดือน</div>
-        <div style="font-size:10px;color:#27ae60;margin-top:6px;font-weight:600">คลิกดูรายชื่อ →</div>
+        <div style="font-size:10px;color:#8dc57e;margin-top:6px;font-weight:600">คลิกดูรายชื่อ →</div>
       </div>
-      <div onclick="showSegModal('ใหม่')" style="flex:1;min-width:160px;background:#ebf5fb;border-radius:10px;padding:16px 20px;border-left:4px solid #2980b9;text-align:center;cursor:pointer;transition:box-shadow 0.15s,transform 0.15s" onmouseover="this.style.boxShadow='0 4px 16px rgba(41,128,185,0.25)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-        <div style="font-size:28px;font-weight:800;color:#2980b9">478</div>
+      <div onclick="showSegModal('ใหม่')" style="flex:1;min-width:160px;background:#e3ecf5;border-radius:10px;padding:16px 20px;border-left:4px solid #7c9dc0;text-align:center;cursor:pointer;transition:box-shadow 0.15s,transform 0.15s" onmouseover="this.style.boxShadow='0 4px 16px rgba(41,128,185,0.25)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
+        <div style="font-size:28px;font-weight:800;color:#7c9dc0">478</div>
         <div style="font-weight:700;font-size:13px;margin:4px 0">🆕 ใหม่/ครั้งเดียว</div>
         <div style="font-size:11px;color:var(--muted)">ซื้อเพียง 1 เดือน</div>
-        <div style="font-size:10px;color:#2980b9;margin-top:6px;font-weight:600">คลิกดูรายชื่อ →</div>
+        <div style="font-size:10px;color:#7c9dc0;margin-top:6px;font-weight:600">คลิกดูรายชื่อ →</div>
       </div>
-      <div style="flex:1;min-width:160px;background:#fef9e7;border-radius:10px;padding:16px 20px;border-left:4px solid #f39c12;text-align:center">
-        <div style="font-size:28px;font-weight:800;color:#f39c12">576</div>
+      <div style="flex:1;min-width:160px;background:#fef9e7;border-radius:10px;padding:16px 20px;border-left:4px solid #e8b95a;text-align:center">
+        <div style="font-size:28px;font-weight:800;color:#e8b95a">576</div>
         <div style="font-weight:700;font-size:13px;margin:4px 0">👥 ลูกค้าทั้งหมด</div>
         <div style="font-size:11px;color:var(--muted)">Unique ม.ค.–เม.ย. · พ.ค. +232 ราย</div>
       </div>
@@ -3947,7 +3958,7 @@ function showCust2026Modal(idx) {
   function bar(v,color,lbl) {
     const pct = (v/maxVal*100).toFixed(0);
     return `<div style="font-size:12px;font-weight:700;color:${color}">${lbl}</div>` +
-      (v ? `<div style="background:#f0f2f5;border-radius:4px;height:20px;overflow:hidden;margin-top:4px">
+      (v ? `<div style="background:#f5efe8;border-radius:4px;height:20px;overflow:hidden;margin-top:4px">
       <div style="background:${color};height:100%;width:${pct}%;border-radius:4px;display:flex;align-items:center;padding-left:6px">
         <span style="color:white;font-size:10px;font-weight:700">฿${(v/1000).toFixed(0)}K</span>
       </div></div>` : `<div style="color:#ccc;font-size:12px;padding:4px 0">ไม่มีข้อมูล</div>`);
@@ -3957,33 +3968,33 @@ function showCust2026Modal(idx) {
   document.getElementById('modalTabs').innerHTML = '';
   document.getElementById('modalBody').innerHTML = `
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
-      <div style="background:#ebf5fb;border-radius:10px;padding:14px;text-align:center">
+      <div style="background:#e3ecf5;border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:10px;color:var(--muted);margin-bottom:4px">ยอดรวม (pretax)</div>
-        <div style="font-size:22px;font-weight:800;color:#2980b9">฿${(c.total/1000).toFixed(0)}K</div>
+        <div style="font-size:22px;font-weight:800;color:#7c9dc0">฿${(c.total/1000).toFixed(0)}K</div>
       </div>
       <div style="background:#eafaf1;border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:10px;color:var(--muted);margin-bottom:4px">จำนวนออเดอร์</div>
-        <div style="font-size:22px;font-weight:800;color:#27ae60">${txnTotal} ครั้ง</div>
+        <div style="font-size:22px;font-weight:800;color:#8dc57e">${txnTotal} ครั้ง</div>
       </div>
-      <div style="background:${drtTotal?'#fdecea':'#f8f9fa'};border-radius:10px;padding:14px;text-align:center">
+      <div style="background:${drtTotal?'#fdecea':'#faf6f1'};border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:10px;color:var(--muted);margin-bottom:4px">DRT pending (พ.ค.)</div>
-        <div style="font-size:22px;font-weight:800;color:${drtTotal?'#e74c3c':'#ccc'}">${drtTotal?'฿'+(drtTotal/1000).toFixed(0)+'K':'–'}</div>
+        <div style="font-size:22px;font-weight:800;color:${drtTotal?'#e58079':'#ccc'}">${drtTotal?'฿'+(drtTotal/1000).toFixed(0)+'K':'–'}</div>
       </div>
     </div>
 
     <div style="margin-bottom:16px">
       <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px">📅 ยอดซื้อรายเดือน (RT+IVT pretax)</div>
       <div style="display:grid;grid-template-columns:1fr;gap:6px">
-        ${bar(c.jan,'#2980b9','ม.ค.')}
-        ${bar(c.feb,'#27ae60','ก.พ.')}
-        ${bar(c.mar,'#e67e22','มี.ค.')}
-        ${bar(c.apr||0,'#9b59b6','เม.ย.')}
+        ${bar(c.jan,'#7c9dc0','ม.ค.')}
+        ${bar(c.feb,'#8dc57e','ก.พ.')}
+        ${bar(c.mar,'#e69a68','มี.ค.')}
+        ${bar(c.apr||0,'#b89ecf','เม.ย.')}
       </div>
       <div style="font-size:10px;color:var(--muted);margin-top:6px">ม.ค.–เม.ย. = เต็มเดือน | ก่อน VAT</div>
     </div>
 
-    ${drtTotal ? `<div style="background:#fff8e1;border-left:4px solid #e74c3c;border-radius:6px;padding:12px 16px;font-size:12px">
-      <strong style="color:#e74c3c">📌 DRT Pending → Forecast พ.ค.</strong><br>
+    ${drtTotal ? `<div style="background:#faf1e0;border-left:4px solid #e58079;border-radius:6px;padding:12px 16px;font-size:12px">
+      <strong style="color:#e58079">📌 DRT Pending → Forecast พ.ค.</strong><br>
       <span style="color:var(--text)">
         ${c.drt4?`เม.ย.: ฿${c.drt4.toLocaleString()} `:''}
         ${c.drt3&&!c.drt4?`มี.ค.: ฿${c.drt3.toLocaleString()} `:''}
@@ -3992,20 +4003,20 @@ function showCust2026Modal(idx) {
     </div>` : ''}
 
     <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
-      <div style="background:#f8f9fa;border-radius:8px;padding:10px 14px">
+      <div style="background:#faf6f1;border-radius:8px;padding:10px 14px">
         <strong>ม.ค.:</strong> ${c.txn1||0} ออเดอร์ ${c.jan?'| ฿'+c.jan.toLocaleString():'| –'}
       </div>
-      <div style="background:#f8f9fa;border-radius:8px;padding:10px 14px">
+      <div style="background:#faf6f1;border-radius:8px;padding:10px 14px">
         <strong>ก.พ.:</strong> ${c.txn2||0} ออเดอร์ ${c.feb?'| ฿'+c.feb.toLocaleString():'| –'}
       </div>
-      <div style="background:#f8f9fa;border-radius:8px;padding:10px 14px">
+      <div style="background:#faf6f1;border-radius:8px;padding:10px 14px">
         <strong>มี.ค.:</strong> ${c.txn3||0} ออเดอร์ ${c.mar?'| ฿'+c.mar.toLocaleString():'| –'}
       </div>
-      <div style="background:${(c.apr||0)>0?'#f5eef8':'#f8f9fa'};border-radius:8px;padding:10px 14px">
+      <div style="background:${(c.apr||0)>0?'#f5eef8':'#faf6f1'};border-radius:8px;padding:10px 14px">
         <strong>เม.ย.:</strong> ${c.txn4||0} ออเดอร์ ${c.apr?'| ฿'+c.apr.toLocaleString():'| –'}
       </div>
     </div>
-    <div style="margin-top:8px;background:#f8f9fa;border-radius:8px;padding:10px 14px;font-size:12px">
+    <div style="margin-top:8px;background:#faf6f1;border-radius:8px;padding:10px 14px;font-size:12px">
       <strong>กลุ่ม:</strong> ${seg}
     </div>`;
   document.getElementById('drillModal').classList.add('open');
@@ -4014,8 +4025,8 @@ function showCust2026Modal(idx) {
 /* ── SEGMENT DRILL-DOWN MODAL ──────────────────────────── */
 function showSegModal(segType) {
   const segLabel = segType==='VIP'?'👑 VIP (ซื้อ 4 เดือน)':segType==='Regular'?'⭐ Regular (3 เดือน)':segType==='ลูกค้าประจำ'?'🔄 ลูกค้าประจำ (2 เดือน)':'🆕 ใหม่/ครั้งเดียว';
-  const segColor = segType==='VIP'?'#8e44ad':segType==='Regular'?'#27ae60':segType==='ลูกค้าประจำ'?'#e67e22':'#2980b9';
-  const segBg    = segType==='VIP'?'#f5eef8':segType==='Regular'?'#eafaf1':segType==='ลูกค้าประจำ'?'#fef5e7':'#ebf5fb';
+  const segColor = segType==='VIP'?'#a888c4':segType==='Regular'?'#8dc57e':segType==='ลูกค้าประจำ'?'#e69a68':'#7c9dc0';
+  const segBg    = segType==='VIP'?'#f5eef8':segType==='Regular'?'#eafaf1':segType==='ลูกค้าประจำ'?'#fef5e7':'#e3ecf5';
 
   const filtered = cust2026.filter(c => {
     const s = c.months.length>=4?'VIP':c.months.length>=3?'Regular':c.months.length===2?'ลูกค้าประจำ':'ใหม่';
@@ -4029,7 +4040,7 @@ function showSegModal(segType) {
   const rows = filtered.map((c,i) => {
     const idx = cust2026.indexOf(c);
     const hasJan = c.jan>0, hasFeb = c.feb>0, hasMar = c.mar>0, hasApr = (c.apr||0)>0;
-    const dots = `${hasJan?'<span style="color:#2980b9" title="ม.ค.">●</span>':'<span style="color:#ddd">●</span>'}${hasFeb?'<span style="color:#27ae60" title="ก.พ.">●</span>':'<span style="color:#ddd">●</span>'}${hasMar?'<span style="color:#e67e22" title="มี.ค.">●</span>':'<span style="color:#ddd">●</span>'}${hasApr?'<span style="color:#9b59b6" title="เม.ย.">●</span>':'<span style="color:#ddd">●</span>'}`;
+    const dots = `${hasJan?'<span style="color:#7c9dc0" title="ม.ค.">●</span>':'<span style="color:#ddd">●</span>'}${hasFeb?'<span style="color:#8dc57e" title="ก.พ.">●</span>':'<span style="color:#ddd">●</span>'}${hasMar?'<span style="color:#e69a68" title="มี.ค.">●</span>':'<span style="color:#ddd">●</span>'}${hasApr?'<span style="color:#b89ecf" title="เม.ย.">●</span>':'<span style="color:#ddd">●</span>'}`;
     return `<tr onclick="closeModal();setTimeout(()=>showCust2026Modal(${idx}),220)"
                style="cursor:pointer;transition:background 0.1s"
                onmouseover="this.style.background='${segBg}'" onmouseout="this.style.background=''">
@@ -4051,22 +4062,22 @@ function showSegModal(segType) {
         <div style="font-size:26px;font-weight:800;color:${segColor}">${filtered.length}</div>
         <div style="font-size:10px;color:var(--muted)">ราย</div>
       </div>
-      <div style="background:#ebf5fb;border-radius:10px;padding:14px;text-align:center">
+      <div style="background:#e3ecf5;border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:10px;color:var(--muted);margin-bottom:4px">ยอดรวม</div>
-        <div style="font-size:22px;font-weight:800;color:#2980b9">฿${(totalSales/1000).toFixed(0)}K</div>
+        <div style="font-size:22px;font-weight:800;color:#7c9dc0">฿${(totalSales/1000).toFixed(0)}K</div>
       </div>
       <div style="background:#eafaf1;border-radius:10px;padding:14px;text-align:center">
         <div style="font-size:10px;color:var(--muted);margin-bottom:4px">ออเดอร์รวม</div>
-        <div style="font-size:22px;font-weight:800;color:#27ae60">${totalTxn} ครั้ง</div>
+        <div style="font-size:22px;font-weight:800;color:#8dc57e">${totalTxn} ครั้ง</div>
       </div>
     </div>
     <div style="font-size:11px;color:var(--muted);margin-bottom:8px">
-      ● <span style="color:#2980b9">ม.ค.</span>  ● <span style="color:#27ae60">ก.พ.</span>  ● <span style="color:#e67e22">มี.ค.</span>  &nbsp;|&nbsp; คลิกแถวเพื่อดูรายละเอียดลูกค้า
+      ● <span style="color:#7c9dc0">ม.ค.</span>  ● <span style="color:#8dc57e">ก.พ.</span>  ● <span style="color:#e69a68">มี.ค.</span>  &nbsp;|&nbsp; คลิกแถวเพื่อดูรายละเอียดลูกค้า
     </div>
     <div style="overflow:auto;max-height:420px;border-radius:8px;border:1px solid #eee">
       <table style="width:100%;border-collapse:collapse">
         <thead>
-          <tr style="background:#f8f9fa;position:sticky;top:0">
+          <tr style="background:#faf6f1;position:sticky;top:0">
             <th style="padding:8px 10px;font-size:11px;color:var(--muted);font-weight:600;text-align:center">#</th>
             <th style="padding:8px 10px;font-size:11px;color:var(--muted);font-weight:600;text-align:left">ชื่อลูกค้า</th>
             <th style="padding:8px 10px;font-size:11px;color:var(--muted);font-weight:600;text-align:center">เดือนที่ซื้อ</th>
@@ -4087,36 +4098,36 @@ function showSP2026Modal(idx) {
   const spF = [1383488,1266227,1050785,1006588,321766,59529,147468];
   const spM = [1157314,1781232,1202144,1078580,674974,0,167254];
   const spA = [1604917,1255469,1282389,2081539,491197,72800,130323]; // เม.ย. เต็มเดือน ก่อน VAT
-  const colors=['#2980b9','#27ae60','#8e44ad','#e67e22','#e74c3c','#16a085','#f39c12'];
+  const colors=['#7c9dc0','#8dc57e','#a888c4','#e69a68','#e58079','#8dc9b7','#e8b95a'];
   const n=spN[idx]; const j=spJ[idx]; const f=spF[idx]; const m=spM[idx]; const a=spA[idx];
   const tot=j+f+m+a;
   const grandT=spN.reduce((_,__,i)=>_+spJ[i]+spF[i]+spM[i]+spA[i],0);
 
   // MoM trend (เทียบ มี.ค. vs ก.พ.)
   const trend = (m>f&&(c.apr||0)>m)?'📈 เติบโตต่อเนื่อง':(c.apr||0)>m?'🔼 ฟื้นตัว เม.ย.':(c.apr||0)>0&&(c.apr||0)<m?'🔽 ลดลง เม.ย.':'➡️ ทรงตัว';
-  const trendColor=(m>f)?'#27ae60':'#e74c3c';
+  const trendColor=(m>f)?'#8dc57e':'#e58079';
 
   document.getElementById('modalTitle').innerHTML=`🏆 ${n} <span style="font-size:13px;color:var(--muted);font-weight:400">Performance 2026 YTD</span>`;
   document.getElementById('modalTabs').innerHTML='';
   document.getElementById('modalBody').innerHTML=`
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px">
-      <div style="background:#ebf5fb;border-radius:10px;padding:10px;text-align:center">
+      <div style="background:#e3ecf5;border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:10px;color:var(--muted)">ม.ค. 2026</div>
-        <div style="font-size:16px;font-weight:800;color:#2980b9">${j?'฿'+(j/1e6).toFixed(2)+'M':'–'}</div>
+        <div style="font-size:16px;font-weight:800;color:#7c9dc0">${j?'฿'+(j/1e6).toFixed(2)+'M':'–'}</div>
       </div>
       <div style="background:#eafaf1;border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:10px;color:var(--muted)">ก.พ. 2026</div>
-        <div style="font-size:16px;font-weight:800;color:#27ae60">${f?'฿'+(f/1e6).toFixed(2)+'M':'–'}</div>
+        <div style="font-size:16px;font-weight:800;color:#8dc57e">${f?'฿'+(f/1e6).toFixed(2)+'M':'–'}</div>
       </div>
       <div style="background:#fef5ec;border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:10px;color:var(--muted)">มี.ค.</div>
-        <div style="font-size:16px;font-weight:800;color:#e67e22">${m?'฿'+(m/1e6).toFixed(2)+'M':'–'}</div>
+        <div style="font-size:16px;font-weight:800;color:#e69a68">${m?'฿'+(m/1e6).toFixed(2)+'M':'–'}</div>
       </div>
       <div style="background:#f5eef8;border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:10px;color:var(--muted)">เม.ย.*</div>
-        <div style="font-size:16px;font-weight:800;color:#9b59b6">${a?'฿'+(a/1e6).toFixed(2)+'M':'–'}</div>
+        <div style="font-size:16px;font-weight:800;color:#b89ecf">${a?'฿'+(a/1e6).toFixed(2)+'M':'–'}</div>
       </div>
-      <div style="background:#f8f9fa;border-radius:10px;padding:10px;text-align:center">
+      <div style="background:#faf6f1;border-radius:10px;padding:10px;text-align:center">
         <div style="font-size:10px;color:var(--muted)">รวม YTD</div>
         <div style="font-size:16px;font-weight:800;color:${colors[idx]}">฿${(tot/1e6).toFixed(2)}M</div>
       </div>
@@ -4124,24 +4135,24 @@ function showSP2026Modal(idx) {
 
     <div style="margin-bottom:16px">
       <div style="display:grid;grid-template-columns:60px 1fr;gap:8px;align-items:center">
-        <div style="font-size:12px;font-weight:700;color:#2980b9">ม.ค.</div>
-        <div style="background:#f0f2f5;border-radius:4px;height:22px;overflow:hidden">
-          <div style="background:#2980b9;height:100%;width:${j?Math.round(j/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
+        <div style="font-size:12px;font-weight:700;color:#7c9dc0">ม.ค.</div>
+        <div style="background:#f5efe8;border-radius:4px;height:22px;overflow:hidden">
+          <div style="background:#7c9dc0;height:100%;width:${j?Math.round(j/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
             ${j?`<span style="color:white;font-size:11px;font-weight:700">฿${(j/1e6).toFixed(2)}M</span>`:''}
           </div></div>
-        <div style="font-size:12px;font-weight:700;color:#27ae60">ก.พ.</div>
-        <div style="background:#f0f2f5;border-radius:4px;height:22px;overflow:hidden">
-          <div style="background:#27ae60;height:100%;width:${f?Math.round(f/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
+        <div style="font-size:12px;font-weight:700;color:#8dc57e">ก.พ.</div>
+        <div style="background:#f5efe8;border-radius:4px;height:22px;overflow:hidden">
+          <div style="background:#8dc57e;height:100%;width:${f?Math.round(f/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
             ${f?`<span style="color:white;font-size:11px;font-weight:700">฿${(f/1e6).toFixed(2)}M</span>`:''}
           </div></div>
-        <div style="font-size:12px;font-weight:700;color:#e67e22">มี.ค.</div>
-        <div style="background:#f0f2f5;border-radius:4px;height:22px;overflow:hidden">
-          <div style="background:#e67e22;height:100%;width:${m?Math.round(m/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
+        <div style="font-size:12px;font-weight:700;color:#e69a68">มี.ค.</div>
+        <div style="background:#f5efe8;border-radius:4px;height:22px;overflow:hidden">
+          <div style="background:#e69a68;height:100%;width:${m?Math.round(m/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
             ${m?`<span style="color:white;font-size:11px;font-weight:700">฿${(m/1e6).toFixed(2)}M</span>`:''}
           </div></div>
-        <div style="font-size:12px;font-weight:700;color:#9b59b6">เม.ย.*</div>
-        <div style="background:#f0f2f5;border-radius:4px;height:22px;overflow:hidden">
-          <div style="background:#9b59b6;height:100%;width:${a?Math.round(a/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
+        <div style="font-size:12px;font-weight:700;color:#b89ecf">เม.ย.*</div>
+        <div style="background:#f5efe8;border-radius:4px;height:22px;overflow:hidden">
+          <div style="background:#b89ecf;height:100%;width:${a?Math.round(a/Math.max(j,f,m)*100):0}%;border-radius:4px;display:flex;align-items:center;padding-left:8px">
             ${a?`<span style="color:white;font-size:11px;font-weight:700">฿${(a/1e6).toFixed(2)}M</span>`:''}
           </div></div>
       </div>
@@ -4149,16 +4160,16 @@ function showSP2026Modal(idx) {
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px">
-      <div style="background:#f8f9fa;border-radius:8px;padding:12px">
+      <div style="background:#faf6f1;border-radius:8px;padding:12px">
         <strong>% สัดส่วนทีม:</strong> ${(tot/grandT*100).toFixed(1)}%
       </div>
       <div style="background:${trendColor}15;border-radius:8px;padding:12px">
         <strong>Trend:</strong> <span style="color:${trendColor}">${trend}</span>
       </div>
-      <div style="background:#f8f9fa;border-radius:8px;padding:12px">
+      <div style="background:#faf6f1;border-radius:8px;padding:12px">
         <strong>เฉลี่ย/เดือน (4 เดือนครบ):</strong> ฿${((j+f+m+(c.apr||0))/4/1e6).toFixed(2)}M
       </div>
-      <div style="background:#f8f9fa;border-radius:8px;padding:12px">
+      <div style="background:#faf6f1;border-radius:8px;padding:12px">
         <strong>Rank ทีม:</strong> #${[...spN.map((_,i)=>spJ[i]+spF[i]+spM[i]+spA[i])].sort((a,b)=>b-a).indexOf(tot)+1} จาก ${spN.length}
       </div>
     </div>`;
