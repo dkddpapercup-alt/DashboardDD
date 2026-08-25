@@ -386,10 +386,10 @@
           <div style="background:#ebf5fb;border-left:4px solid #2980b9;border-radius:0 8px 8px 0;padding:14px 18px">
             <h4 style="color:#2980b9;margin-bottom:8px;font-size:13px">1️⃣ Revenue & Growth</h4>
             <ul style="font-size:12px;line-height:1.75;padding-left:16px;color:#4a4a5e">
-              <li>YTD ฿37.19M = <strong>+13.0% YoY</strong> (vs ฿32.91M)</li>
-              <li>เดือนแรง: <strong>เม.ย. ฿7.03M · มี.ค. ฿6.07M · พ.ค. ฿5.87M</strong></li>
-              <li>เดือนอ่อน: <strong>ก.ค. ฿3.52M (-31.6% YoY)</strong> ⚠️</li>
-              <li>Run rate → ปีนี้ประมาณ <strong>฿63-66M</strong> (+8-13%)</li>
+              <li>YTD ฿42.65M (ม.ค.–ก.ค. + ส.ค. MTD 25/8) = <strong>+16.4% YoY</strong> (vs ฿36.65M)</li>
+              <li>เดือนแรง: <strong>เม.ย. ฿7.03M · มี.ค. ฿6.07M · พ.ค. ฿5.87M · ส.ค. MTD ฿5.45M 🚀</strong></li>
+              <li>เดือนอ่อน: <strong>ก.ค. ฿3.53M (-31.3% YoY)</strong> ⚠️</li>
+              <li>Run rate → ปีนี้ประมาณ <strong>฿65-68M</strong> (+11-15%) ✅ เกินเป้า ScA ฿62.6M</li>
             </ul>
           </div>
           <div style="background:#fef9e7;border-left:4px solid #e67e22;border-radius:0 8px 8px 0;padding:14px 18px">
@@ -424,7 +424,7 @@
             <ul style="font-size:12px;line-height:1.75;padding-left:16px;color:#4a4a5e">
               <li>Fixed cost = <strong>฿1.01M/เดือน</strong> (Sal+Int+Car+Deprec)</li>
               <li>BE Rev = ฿1.01M / (1-0.687) = <strong>฿3.22M/เดือน</strong></li>
-              <li>ก.ค. ฿3.52M เหนือ BE เพียง <strong>9%</strong> = safety margin บาง ⚠️</li>
+              <li>ก.ค. ฿3.53M เหนือ BE เพียง <strong>10%</strong> = safety margin บาง ⚠️ · ส.ค. MTD ฿5.45M เหนือ BE <strong>69%</strong> ✅</li>
               <li>ต้องรักษา Rev ≥ ฿3.5M/เดือน เสมอ</li>
             </ul>
           </div>
@@ -687,8 +687,8 @@
     </div>
     <div style="background:linear-gradient(135deg,#7b3f00,#e67e22);color:white;border-radius:12px;padding:14px 16px;text-align:center;">
       <div style="font-size:10px;opacity:.8;letter-spacing:.5px;margin-bottom:4px;">RUN RATE (annualized)</div>
-      <div style="font-size:22px;font-weight:800;">฿63.75M</div>
-      <div style="font-size:11px;opacity:.85;margin-top:3px;">+1.8% เกิน ScA ✅ (ระวัง ก.ค. -31% YoY)</div>
+      <div style="font-size:22px;font-weight:800;">฿65.4M</div>
+      <div style="font-size:11px;opacity:.85;margin-top:3px;">+4.5% เกิน ScA ✅ (ส.ค. MTD ฟื้นแรง +34% YoY)</div>
     </div>
   </div>
   <div style="background:white;border:1.5px solid #e0e0e0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center;font-size:12px;">
@@ -706,9 +706,9 @@
   <!-- 2026 YTD KPI (Jan-Jul) -->
   <div class="kpi-row">
     <div class="kpi-card dark">
-      <div class="kpi-label">ยอดขาย ม.ค.–ก.ค. 2026 ✅</div>
-      <div class="kpi-value" style="color:#2c3e50">฿37.19M</div>
-      <div class="kpi-sub">ม.ค. ฿4.60M | ก.พ. ฿4.87M | มี.ค. ฿6.07M | เม.ย. ฿7.03M 🎉 | พ.ค. ฿5.87M | มิ.ย. ฿5.23M | ก.ค. ฿3.52M ⚠️</div>
+      <div class="kpi-label">ยอดขาย ม.ค.–ก.ค. + ส.ค. MTD (25/8) ✅</div>
+      <div class="kpi-value" style="color:#2c3e50">฿42.65M</div>
+      <div class="kpi-sub">ม.ค. ฿4.60M | ก.พ. ฿4.87M | มี.ค. ฿6.07M | เม.ย. ฿7.03M 🎉 | พ.ค. ฿5.87M | มิ.ย. ฿5.23M | ก.ค. ฿3.53M ⚠️ | ส.ค. MTD ฿5.45M 🚀</div>
       <div class="kpi-icon">💰</div>
     </div>
     <div class="kpi-card orange">
@@ -1579,7 +1579,7 @@ const expDetail2026 = {
 };
 
 // ===== 2026 YTD DATA — ยึดจาก Google Sheet เป็นหลัก (อัพเดต realtime) =====
-let rev2026    = [4598077, 4874871, 6069955, 7030084, 5871292, 5226506, 3515753, 3745419];  // ม.ค.–ก.ค. ปิดเดือน ✅ + ส.ค. MTD ถึง 17/8 (Peak ส.ค.)
+let rev2026    = [4598077, 4874871, 6069955, 7030084, 5871292, 5226506, 3532575, 5445485];  // ม.ค.–ก.ค. ปิดเดือน ✅ + ส.ค. MTD ถึง 25/8 (Peak ส.ค.)
 const cogs2026   = [3072168, 3208708, 4975543, 4134687, 3862421, 4174331, 2112528]; // ม.ค.–ก.ค. ครบ ✅ จาก คชจ.-2026 ม.ค.-ก.ค. tab (verified 2x)
 const sal2026    = [679459, 679440, 755487, 751821, 810181, 750906, 741964]; // ม.ค.–ก.ค. (530101+530104) ✅
 const opex2026   = [441868, 274078, 427762, 557810, 625651, 400245, 304941]; // ม.ค.–ก.ค. (510+520+530admin+540) ✅
