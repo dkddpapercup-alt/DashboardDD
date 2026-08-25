@@ -1194,6 +1194,143 @@
       ⚠️ <strong>ต้อง watch:</strong> ธชนัย ยอดลด 4 เดือนติด (เม.ย. ฿1.34M → ก.ค. ฿717K → ส.ค. MTD ฿628K) · จุฑามาศ ส.ค. MTD ต่ำผิดปกติ ฿161K
     </div>
   </div>
+
+  <!-- ── TOP 10 CUSTOMERS PER SP · YOY 2025 vs 2026 ── -->
+  <div class="card" style="margin-top:16px;border-left:3px solid #e69a68">
+    <div class="card-header">
+      <h3>🎯 Top 10 ลูกค้าของแต่ละพนักงานขาย — YoY 2025 vs 2026</h3>
+      <span class="card-subtitle">ก่อน VAT · 2025 (ปีเต็ม) vs 2026 YTD (ม.ค.–ส.ค. 25/8) · Retention/Churn analysis · <em>2023/2024 ยังไม่มีในระบบ</em></span>
+    </div>
+    <div class="card-body">
+      <div id="spTopCustBtns" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+        <button class="sp-btn active" data-sp="ศุภิสรา" onclick="showSpTop10(this,'ศุภิสรา')" style="padding:8px 16px;border:1.5px solid #8dc9b7;background:#8dc9b7;color:white;border-radius:20px;cursor:pointer;font-weight:700">🥇 ศุภิสรา</button>
+        <button class="sp-btn" data-sp="ธีรตา" onclick="showSpTop10(this,'ธีรตา')" style="padding:8px 16px;border:1.5px solid #8dc9b7;background:white;color:#4a8a54;border-radius:20px;cursor:pointer;font-weight:700">🥈 ธีรตา</button>
+        <button class="sp-btn" data-sp="ปุณณภา" onclick="showSpTop10(this,'ปุณณภา')" style="padding:8px 16px;border:1.5px solid #8dc9b7;background:white;color:#4a8a54;border-radius:20px;cursor:pointer;font-weight:700">🥉 ปุณณภา</button>
+        <button class="sp-btn" data-sp="ธชนัย" onclick="showSpTop10(this,'ธชนัย')" style="padding:8px 16px;border:1.5px solid #8dc9b7;background:white;color:#4a8a54;border-radius:20px;cursor:pointer;font-weight:700">4️⃣ ธชนัย</button>
+        <button class="sp-btn" data-sp="จุฑามาศ" onclick="showSpTop10(this,'จุฑามาศ')" style="padding:8px 16px;border:1.5px solid #8dc9b7;background:white;color:#4a8a54;border-radius:20px;cursor:pointer;font-weight:700">5️⃣ จุฑามาศ</button>
+      </div>
+      <div id="spTop10Content"></div>
+    </div>
+  </div>
+
+  <script>
+    const SP_TOP10 = {
+      'ศุภิสรา': {
+        y2025: [['บริษัท Bigtree จำกัด',3400450],['ACE TECHNOLOGY CO.,LTD.',437383],['บริษัท ซุปเปอร์ เทอร์เทิล จำกัด (มหาชน)',371780],['บริษัท เลเล่ ลัลล่า ริช จำกัด',253150],['บริษัท ชีสอีทเทอรี่ จำกัด',188000],['บริษัท เจ้าพระยาสยาม (1975) จำกัด',95000],['บริษัท บอททอมเลส 2020 จำกัด',93560],['Foodbank Corporation Company Limited',53100],['ร้านซีเคเบเกอรี่อินดี้',43925],['บริษัท บุญทรี ซุปเปอร์มาร์ท จำกัด',42500]],
+        y2026: [['บริษัท Big tree trading จำกัด',5315565],['บริษัท Bigtree จำกัด',4108700],['บริษัท ACE TECHNOLOGY จำกัด',936000],['บริษัท ซุปเปอร์ เทอร์เทิล จำกัด (มหาชน)',467730],['บริษัท เจ้าพระยาสยาม (1975) จำกัด',195000],['บริษัท บอททอมเลส 2020 จำกัด',108716],['บริษัท เลเล่ ลัลล่า ริช จำกัด',94130],['บริษัท บุญทรี ซุปเปอร์มาร์ท จำกัด',70250],['นางสาว ยุพาพรรณ เทวปฏิคม',51525],['คุณ ธนาภรณ์ พงศ์สุวรรณ',31028]]
+      },
+      'ธีรตา': {
+        y2025: [['บริษัท แพชชั่น เรสเตอรองท์ กรุ๊ป จำกัด',985190],['บริษัท บีวายดี ออโต้ (ประเทศไทย) จำกัด',462650],['บริษัท อีเทอร์นิตี้ แกรนด์ โลจิสติคส์ จำกัด (มหาชน)',423710],['บริษัท ดอยช้าง แฟรนไชส์ แมเนจเม้นต์ จำกัด',264000],['บริษัท เวนดิ้ง เซอร์วิสเซส จำกัด (00001)',214132],['บริษัท มิตรสัมพันธ์การพิมพ์ จำกัด',208250],['บริษัท อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ จำกัด',194140],['SINOUK CAFÉ GOURMET LAO',179533],['บริษัท สกายเรสเตอรองท์ จำกัด',177012],['บริษัท ทู ธันเดอร์ คอฟฟี่ โรสเตอร์ส จำกัด',173300]],
+        y2026: [['บริษัท สยาม แฟรนไชส์ ธุรกิจ จำกัด',946089],['บริษัท แพชชั่น เรสเตอรองท์ กรุ๊ป จำกัด',869055],['บริษัท เวนดิ้ง เซอร์วิสเซส จำกัด',707538],['บริษัท อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ จำกัด',304500],['บริษัท โลจิสติ๊ด คอนแทรค โลจิสติคส์ (ประเทศไทย) จำกัด (มหาชน)',289575],['บริษัท ทู ธันเดอร์ คอฟฟี่ โรสเตอร์ส จำกัด',227850],['บริษัท สกายเรสเตอรองท์ จำกัด',214125],['บริษัท โนมิมาโช จำกัด',213835],['บริษัท นมสดพระนคร จำกัด',188900],['SINOUK CAFÉ GOURMET LAO',156641]]
+      },
+      'ปุณณภา': {
+        y2025: [['บริษัท แพ็คเวิร์คส์ จำกัด',2150618],['บริษัท ดัฟฟ์ ดีไซน์ เฮ้าส์ จำกัด',646020],['บริษัท จีพีซีเอ็ม กรุ๊ป จำกัด',488000],['บริษัท เซ็นทรัลพัฒนา จำกัด (มหาชน) (00008)',464125],['บริษัท ทีพี โปรเจค จำกัด',323500],['บริษัท แอล แอนด์ เอช โฮเทล แมเนจเมนท์ จำกัด',318780],['บริษัท บีเวล ฟูดมอลล์ จำกัด',317500],['บริษัท ซีพีเอ็น พัทยา จำกัด',275915],['บริษัท เซ็นทรัลพัฒนา จำกัด (มหาชน) (00024)',258050],['บริษัท สวนลุม พร็อพเพอร์ตี้ จำกัด',233508]],
+        y2026: [['บริษัท เซ็นทรัลพัฒนา จำกัด (มหาชน)',1933768],['บริษัท แพ็คเวิร์คส์ จำกัด',1321343],['บริษัท ทีพี โปรเจค จำกัด',596400],['บริษัท ดัฟฟ์ ดีไซน์ เฮ้าส์ จำกัด',587570],['บริษัท จีพีซีเอ็ม กรุ๊ป จำกัด',527700],['บริษัท บีบ๊อกซ์ ปริ้นติ้ง อินเตอร์เนชั่นแนล จำกัด',415500],['บริษัท ซีพีเอ็น พัทยา จำกัด',373273],['บริษัท บีเวล ฟูดมอลล์ จำกัด',329200],['บริษัท สวนลุม พร็อพเพอร์ตี้ จำกัด',313645],['บริษัท เวิลด์ ฟูด เซ็นเตอร์ จำกัด',290800]]
+      },
+      'ธชนัย': {
+        y2025: [['บริษัท โนส ที (ประเทศไทย) จำกัด',765773],['บริษัท โน มอร์ สโนว์ จำกัด',252871],['บริษัท กอล์ฟเขาใหญ่ จำกัด',240100],['บริษัท แฟมิลี่สุกี้ จำกัด',146400],['การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย',135075],['ภูเตง',125794],['บริษัท เจพี สปา แอนด์ เดคคอร์ จำกัด',118800],['บริษัท ลารี่เดีย จำกัด',117460],['บริษัท พีพี ลุกซ์ จำกัด',113839],['บริษัท เดอะ ครัสตี้ จำกัด',113650]],
+        y2026: [['บริษัท โนส ที (ประเทศไทย) จำกัด',834950],['Juice bomb',253040],['การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย',233000],['บริษัท ยามาโมริ เทรดดิ้ง จำกัด',194000],['บริษัท โน มอร์ สโนว์ จำกัด',193352],['บริษัท เจพี สปา แอนด์ เดคคอร์ จำกัด',182810],['นางสาว อภิรัตน์ ทยานุกูล',170222],['ร้านอรษา',155200],['บริษัท แฟมิลี่สุกี้ จำกัด',148068],['เตี่ย',116300]]
+      },
+      'จุฑามาศ': {
+        y2025: [['Shopee',516513],['บริษัท บรรจงลวก จำกัด',191520],['บริษัท เก้าหนึ่ง มาร์เก็ตติ้งเซอร์วิส จำกัด',166911],['บริษัท เออร์เบิน รีสอร์ท โฮเต็ล จำกัด',89015],['บริษัท ผลิตภัณฑ์กระดาษไทย จำกัด',77000],['คุณลัดดาวัลย์ ชุติมาพาณิชย์',75625],['บริษัท แฮปปี้ ฟู้ด อินเตอร์คิทเช่น จำกัด',75515],['บริษัท เอสเอ็นพี 24 จำกัด',70000],['บริษัท เจเอ็นซีดี จำกัด',66309],['บริษัท มาย ฟุกุ มัทชะ จำกัด',61250]],
+        y2026: [['บริษัท บรรจงลวก จำกัด',219840],['บริษัท เก้าหนึ่ง มาร์เก็ตติ้งเซอร์วิส จำกัด',200350],['บริษัท แฮปปี้ ฟู้ด อินเตอร์คิทเช่น จำกัด',190360],['บริษัท เอ็น บี บี กรุ๊ป จำกัด',129950],['ห้างหุ้นส่วนจำกัด ขนมแม่ กรุ๊ป',85450],['คุณ ลัดดาวัลย์ ชุติมาพาณิชย์',81360],['บริษัท โอเจอาร์ จำกัด',74120],['บริษัท วันทูทูว์ จำกัด',71440],['บริษัท เออร์เบิน รีสอร์ท โฮเต็ล จำกัด',70400],['บริษัท ดูนาเน จำกัด',69860]]
+      }
+    };
+
+    // Fuzzy normalize name to detect same customer across years despite branch code differences
+    function normCustName(s){
+      return s.toLowerCase()
+        .replace(/บริษัท|จำกัด|\(มหาชน\)|\(0+\d+\)|co\.,?\s*ltd\.?|company limited|จำกัด|คุณ|นาย|นางสาว/g,'')
+        .replace(/\s+/g,'').trim();
+    }
+
+    function showSpTop10(btn, sp){
+      // Update button styles
+      document.querySelectorAll('#spTopCustBtns .sp-btn').forEach(b=>{
+        b.style.background='white'; b.style.color='#4a8a54';
+      });
+      btn.style.background='#8dc9b7'; btn.style.color='white';
+
+      const data = SP_TOP10[sp];
+      const set25 = new Set(data.y2025.map(([n])=>normCustName(n)));
+      const set26 = new Set(data.y2026.map(([n])=>normCustName(n)));
+      const retained = [...set25].filter(n=>set26.has(n)).length;
+      const churn = [...set25].filter(n=>!set26.has(n)).length;
+      const newCust = [...set26].filter(n=>!set25.has(n)).length;
+      const tot25 = data.y2025.reduce((s,[,v])=>s+v,0);
+      const tot26 = data.y2026.reduce((s,[,v])=>s+v,0);
+      const growth = ((tot26-tot25)/tot25*100).toFixed(1);
+
+      const row = (r25, r26) => {
+        let c1='—', v1=0, c2='—', v2=0;
+        if(r25){[c1,v1]=r25;}
+        if(r26){[c2,v2]=r26;}
+        const in26 = r25 && set26.has(normCustName(r25[0]));
+        const in25 = r26 && set25.has(normCustName(r26[0]));
+        const badge25 = r25 ? (in26 ? '<span style="color:#4a8a54;font-weight:700;font-size:10px">🟢 คงเหลือ</span>' : '<span style="color:#e58079;font-weight:700;font-size:10px">🔴 หาย</span>') : '';
+        const badge26 = r26 ? (in25 ? '<span style="color:#4a8a54;font-weight:700;font-size:10px">🟢 เดิม</span>' : '<span style="color:#e69a68;font-weight:700;font-size:10px">🟠 ใหม่</span>') : '';
+        return `<tr>
+          <td style="text-align:left;font-size:12px">${c1}${badge25?'<br>'+badge25:''}</td>
+          <td style="text-align:right;font-weight:700">${v1?'฿'+v1.toLocaleString():'–'}</td>
+          <td style="text-align:left;font-size:12px">${c2}${badge26?'<br>'+badge26:''}</td>
+          <td style="text-align:right;font-weight:700;background:#eaf4e2">${v2?'฿'+v2.toLocaleString():'–'}</td>
+        </tr>`;
+      };
+      const rows = [];
+      for(let i=0;i<10;i++){
+        rows.push(row(data.y2025[i], data.y2026[i]));
+      }
+
+      const html = `
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
+          <div style="background:#f5efe8;padding:10px 14px;border-radius:8px;text-align:center">
+            <div style="font-size:10px;color:#888">Top 10 · 2025</div>
+            <div style="font-size:18px;font-weight:800;color:#2c3e50">฿${(tot25/1e6).toFixed(2)}M</div>
+          </div>
+          <div style="background:#eaf4e2;padding:10px 14px;border-radius:8px;text-align:center">
+            <div style="font-size:10px;color:#888">Top 10 · 2026 YTD</div>
+            <div style="font-size:18px;font-weight:800;color:#4a8a54">฿${(tot26/1e6).toFixed(2)}M ${growth>=0?'↗':'↘'} ${growth>0?'+':''}${growth}%</div>
+          </div>
+          <div style="background:#f2f8ee;padding:10px 14px;border-radius:8px;text-align:center">
+            <div style="font-size:10px;color:#888">Retention (Top10)</div>
+            <div style="font-size:18px;font-weight:800;color:#4a8a54">${retained}/10 🟢</div>
+          </div>
+          <div style="background:#f9e2df;padding:10px 14px;border-radius:8px;text-align:center">
+            <div style="font-size:10px;color:#888">Churn 🔴 · New 🟠</div>
+            <div style="font-size:18px;font-weight:800;color:#8a4a44">${churn} · ${newCust}</div>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="data-table" style="min-width:750px">
+            <thead>
+              <tr style="background:#f5efe8">
+                <th colspan="2" style="text-align:center;background:#e8e8e8">📅 ปี 2025 (Full Year)</th>
+                <th colspan="2" style="text-align:center;background:#eaf4e2">📅 ปี 2026 YTD (ม.ค.–ส.ค. 25/8)</th>
+              </tr>
+              <tr style="background:#f5efe8">
+                <th style="text-align:left">ลูกค้า</th><th style="text-align:right">ยอด</th>
+                <th style="text-align:left;background:#eaf4e2">ลูกค้า</th><th style="text-align:right;background:#eaf4e2">ยอด</th>
+              </tr>
+            </thead>
+            <tbody>${rows.join('')}</tbody>
+          </table>
+        </div>
+        <div style="margin-top:12px;padding:10px 14px;background:#f2f8ee;border-radius:8px;font-size:11px;color:#4a8a54;line-height:1.7">
+          🟢 <strong>คงเหลือ/เดิม</strong> = อยู่ทั้ง 2 ปี · 🔴 <strong>หาย</strong> = อยู่ 2025 ไม่มี 2026 · 🟠 <strong>ใหม่</strong> = ไม่มี 2025 มาใน 2026<br>
+          ⚠️ Match ชื่อลูกค้าแบบ fuzzy (ตัดคำนำหน้า/สาขา) — บางบริษัทที่เปลี่ยนชื่อจริงหรือมี ID ต่างกันอาจถูกนับซ้ำ
+        </div>
+      `;
+      document.getElementById('spTop10Content').innerHTML = html;
+    }
+    // Initial render
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded',()=>{
+        const b=document.querySelector('#spTopCustBtns .sp-btn'); if(b) showSpTop10(b,'ศุภิสรา');
+      });
+    } else {
+      const b=document.querySelector('#spTopCustBtns .sp-btn'); if(b) showSpTop10(b,'ศุภิสรา');
+    }
+  </script>
 </div>
 
 <!-- ============================== TAB: FORECAST ============================== -->
