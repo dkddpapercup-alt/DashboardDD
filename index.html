@@ -2117,7 +2117,7 @@
   <div class="card" style="margin-bottom:20px">
     <div class="card-header">
       <h3>🏅 Top Customers 2026</h3>
-      <span class="card-subtitle">ยอดรวม pretax ม.ค.–มิ.ย. ครบ + ก.ค. MTD (20/7) | คลิกแถวเพื่อดูรายละเอียดรายเดือน</span>
+      <span class="card-subtitle">ยอดรวม pretax ม.ค.–ก.ค. ครบ + ส.ค. MTD (28/8) | Merged Central/Bwell/Big Tree/ACE | verified 3 รอบ | คลิกแถวเพื่อดูรายละเอียดรายเดือน</span>
     </div>
     <div class="card-body">
       <div id="a26CustTable" style="overflow-x:auto"></div>
@@ -3930,123 +3930,43 @@ function buildSalesAnalysis() {
    ============================================================ */
 let analysis2026Built = false;
 
-/* ── Embedded customer data (Jan/Feb/Mar pretax, DRT amounts) — sorted by total ── */
+/* ── Top 30 customer data — REBUILT ม.ค.–ก.ค. ครบ + ส.ค. MTD (28/8) — verified 3 รอบ
+   Merging rules: Central Group (เซ็นทรัลพัฒนา+ซีพีเอ็น+เซ็นทรัลเวิลด์+สวนลุม+ฯลฯ), Bwell (จีพีซีเอ็ม+บีเวล),
+   Big Tree (Bigtree/Big tree trading), ACE Technology, Shopee/TikTok/Lazada รวม, ตัด branch codes (00xxx) ── */
 const cust2026 = [
-  {name:'Bigtree',jan:0,feb:158550,mar:693950,apr:2045250,total:2897750,txn1:0,txn2:2,txn3:2,txn4:6,drt1:158550,drt2:693950,drt3:232450,drt4:822000,months:[2,3,4]},
-  {name:'Central Group Thailand',jan:481278,feb:484710,mar:317040,apr:488550,total:1771578,txn1:53,txn2:59,txn3:39,txn4:57,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
-  {name:'แพ็คเวิร์คส์',jan:257700,feb:140000,mar:184675,apr:276495,total:858870,txn1:17,txn2:15,txn3:17,txn4:12,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
-  {name:'เวนดิ้ง เซอร์วิสเซส',jan:116025,feb:155590,mar:135424,apr:135750,total:542789,txn1:5,txn2:8,txn3:5,txn4:5,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
-  {name:'แพชชั่น เรสเตอรองท์ กรุ๊ป',jan:116850,feb:149800,mar:58590,apr:206810,total:532050,txn1:10,txn2:19,txn3:10,txn4:17,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
-  {name:'Bwell Group (จีพีซีเอ็ม+บีเวล)',jan:150900,feb:132700,mar:68000,apr:168000,total:519600,txn1:4,txn2:4,txn3:3,txn4:4,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
-  {name:'ACE TECHNOLOGY',jan:468000,feb:0,mar:0,apr:0,total:468000,txn1:1,txn2:0,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1]},
-  {name:'สยาม แฟรนไชส์ ธุรกิจ',jan:91395,feb:29008,mar:99191,apr:208430,total:428024,txn1:4,txn2:5,txn3:10,txn4:6,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
-  {name:'บีบ์อกซ์ ปริ้นติ้ง อินเตอร์เนชั่นแนล',jan:0,feb:0,mar:365500,apr:0,total:365500,txn1:0,txn2:0,txn3:3,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[3]},
-  {name:'Shopee (รวม)',jan:95462,feb:94031,mar:94766,apr:86354,total:370613,txn1:142,txn2:155,txn3:152,txn4:138,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3,4]},
-  {name:'โนส ที (ประเทศไทย)',jan:0,feb:176300,mar:0,apr:249750,total:426050,txn1:0,txn2:2,txn3:0,txn4:2,drt1:0,drt2:0,drt3:0,drt4:0,months:[2,4]},
-  {name:'การไฟฟ้าฝ่ายผลิต (กฟผ.)',jan:0,feb:0,mar:0,apr:233000,total:233000,txn1:0,txn2:0,txn3:0,txn4:3,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
-  {name:'โนมิมาโช',jan:0,feb:215665,mar:0,apr:0,total:215665,txn1:0,txn2:2,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[2]},
-  {name:'นมสดพระนคร',jan:93458,feb:0,mar:0,apr:95442,total:188900,txn1:1,txn2:0,txn3:0,txn4:2,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,4]},
-  {name:'เจพี สปา แอนด์ เดคคอร์',jan:104730,feb:17500,mar:63400,apr:0,total:185630,txn1:4,txn2:1,txn3:2,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
-  {name:'Juice bomb',jan:89750,feb:89750,mar:0,apr:0,total:179500,txn1:1,txn2:1,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2]},
-  {name:'ทีพี โปรเจค',jan:0,feb:0,mar:142000,apr:0,total:142000,txn1:0,txn2:0,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[3]},
-  {name:'อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ',jan:91950,feb:0,mar:0,apr:61300,total:153250,txn1:3,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,4]},
-  {name:'เพ็น เค อินเตอร์เทรดดิ้ง',jan:33000,feb:66000,mar:0,apr:32588,total:131588,txn1:1,txn2:2,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,4]},
-  {name:'สวนลุม พร็อพเพอร์ตี้',jan:48240,feb:9700,mar:57340,apr:0,total:115280,txn1:1,txn2:1,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
-  {name:'บอททอมเลส 2020',jan:40916,feb:35800,mar:32000,apr:0,total:108716,txn1:2,txn2:2,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
-  {name:'เวิลด์ ฟูด เซ็นเตอร์',jan:37200,feb:34900,mar:35000,apr:0,total:107100,txn1:2,txn2:2,txn3:2,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
-  {name:'แอล แอนด์ เอช โฮเทล แมเนจเมนท์',jan:23080,feb:36520,mar:37750,apr:0,total:97350,txn1:3,txn2:3,txn3:3,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
-  {name:'แฮปปี้ ฟู้ด อินเตอร์คิทเช่น',jan:50280,feb:0,mar:44900,apr:0,total:95180,txn1:1,txn2:0,txn3:1,txn4:0,drt1:44900,drt2:0,drt3:47590,drt4:0,months:[1,3]},
-  {name:'ทรู คอฟฟี่',jan:23800,feb:39900,mar:25900,apr:0,total:89600,txn1:1,txn2:2,txn3:1,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2,3]},
-  {name:'เฟิสต์ มีเดีย แอดเวอไทซิง',jan:38000,feb:38000,mar:0,apr:0,total:76000,txn1:1,txn2:1,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1,2]},
-  {name:'กระบี่การพิมพ์',jan:0,feb:0,mar:0,apr:75760,total:75760,txn1:0,txn2:0,txn3:0,txn4:3,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
-  {name:'เอสเอสพี เซ็นเตอร์แพ็ค',jan:0,feb:0,mar:0,apr:73100,total:73100,txn1:0,txn2:0,txn3:0,txn4:4,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
-  {name:'วันทูทูว์',jan:0,feb:0,mar:0,apr:71440,total:71440,txn1:0,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
-  {name:'ทรัพย์ไพศาลโปรดักส์',jan:0,feb:0,mar:0,apr:70000,total:70000,txn1:0,txn2:0,txn3:0,txn4:1,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
-  {name:'สังขยา',jan:0,feb:0,mar:0,apr:64800,total:64800,txn1:0,txn2:0,txn3:0,txn4:2,drt1:0,drt2:0,drt3:0,drt4:0,months:[4]},
-  {name:'Gold Café (ปั๊มเชลล์)',jan:62593,feb:0,mar:0,apr:0,total:62593,txn1:1,txn2:0,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1]},
-  {name:'อุทยานแห่งชาติดอยอินทนนท์',jan:57300,feb:0,mar:0,apr:0,total:57300,txn1:1,txn2:0,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1]},
-  {name:'ทู ธันเดอร์ คอฟฟี่',jan:56100,feb:0,mar:0,apr:0,total:56100,txn1:1,txn2:0,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1]},
-  {name:'วีไอคิว กรุ๊ป',jan:55000,feb:0,mar:0,apr:0,total:55000,txn1:1,txn2:0,txn3:0,txn4:0,drt1:0,drt2:0,drt3:0,drt4:0,months:[1]},
+  {name:'Bigtree',jan:158550,feb:852500,mar:926400,apr:2045250,may:1680544,jun:936717,jul:246262,aug:2634659,total:9480882,txn1:2,txn2:4,txn3:4,txn4:6,txn5:4,txn6:3,txn7:5,txn8:7,drt1:158550,drt2:693950,drt3:232450,drt4:1367000,drt5:857044,drt6:79673,drt7:166589,drt8:1792294,months:[1,2,3,4,5,6,7,8]},
+  {name:'Central Group Thailand',jan:529518,feb:492070,mar:571990,apr:548908,may:348855,jun:481598,jul:525748,aug:544188,total:4042873,txn1:54,txn2:60,txn3:62,txn4:63,txn5:50,txn6:65,txn7:71,txn8:64,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5,6,7,8]},
+  {name:'แพ็คเวิร์คส์',jan:257700,feb:140000,mar:195275,apr:276495,may:108965,jun:199408,jul:51025,aug:98725,total:1327593,txn1:17,txn2:15,txn3:18,txn4:12,txn5:9,txn6:11,txn7:4,txn8:7,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5,6,7,8]},
+  {name:'สยาม แฟรนไชส์ ธุรกิจ',jan:91395,feb:29008,mar:103491,apr:208430,may:429153,jun:36090,jul:11985,aug:37658,total:947209,txn1:4,txn2:5,txn3:12,txn4:6,txn5:6,txn6:1,txn7:3,txn8:5,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5,6,7,8]},
+  {name:'ACE Technology',jan:468000,feb:0,mar:0,apr:0,may:0,jun:468000,jul:0,aug:0,total:936000,txn1:1,txn2:0,txn3:0,txn4:0,txn5:0,txn6:1,txn7:0,txn8:0,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,6]},
+  {name:'Bwell Group (จีพีซีเอ็ม+บีเวล)',jan:150900,feb:132700,mar:93500,apr:168000,may:101100,jun:72000,jul:102700,aug:111000,total:931900,txn1:5,txn2:4,txn3:4,txn4:4,txn5:1,txn6:2,txn7:2,txn8:2,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5,6,7,8]},
+  {name:'แพชชั่น เรสเตอรองท์ กรุ๊ป',jan:116850,feb:149800,mar:80990,apr:206810,may:94670,jun:126020,jul:58125,aug:47040,total:880305,txn1:10,txn2:19,txn3:11,txn4:17,txn5:17,txn6:15,txn7:10,txn8:7,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5,6,7,8]},
+  {name:'โนส ที (ประเทศไทย)',jan:0,feb:176300,mar:0,apr:249750,may:129000,jun:279900,jul:0,aug:0,total:834950,txn1:0,txn2:2,txn3:0,txn4:2,txn5:1,txn6:2,txn7:0,txn8:0,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[2,4,5,6]},
+  {name:'เวนดิ้ง เซอร์วิสเซส',jan:116025,feb:155590,mar:142999,apr:135750,may:31620,jun:0,jul:39030,aug:86525,total:707538,txn1:5,txn2:9,txn3:6,txn4:5,txn5:1,txn6:0,txn7:6,txn8:4,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5,7,8]},
+  {name:'Shopee (รวม)',jan:82559,feb:93360,mar:113640,apr:84727,may:58585,jun:71460,jul:81873,aug:68531,total:654736,txn1:164,txn2:162,txn3:192,txn4:143,txn5:93,txn6:93,txn7:127,txn8:101,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5,6,7,8]},
+  {name:'ทีพี โปรเจค',jan:0,feb:0,mar:142000,apr:0,may:92300,jun:362100,jul:0,aug:0,total:596400,txn1:0,txn2:0,txn3:1,txn4:0,txn5:1,txn6:2,txn7:0,txn8:0,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[3,5,6]},
+  {name:'ดัฟฟ์ ดีไซน์ เฮ้าส์',jan:0,feb:68020,mar:36250,apr:0,may:170000,jun:0,jul:0,aug:313300,total:587570,txn1:0,txn2:2,txn3:1,txn4:0,txn5:4,txn6:0,txn7:0,txn8:2,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[2,3,5,8]},
+  {name:'ซุปเปอร์ เทอร์เทิล (มหาชน)',jan:8320,feb:5160,mar:0,apr:0,may:105750,jun:180500,jul:168000,aug:0,total:467730,txn1:1,txn2:1,txn3:0,txn4:0,txn5:2,txn6:2,txn7:1,txn8:0,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,5,6,7]},
+  {name:'บีบ๊อกซ์ ปริ้นติ้ง อินเตอร์เนชั่นแนล',jan:0,feb:50000,mar:365500,apr:0,may:0,jun:0,jul:0,aug:0,total:415500,txn1:0,txn2:1,txn3:3,txn4:0,txn5:0,txn6:0,txn7:0,txn8:0,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[2,3]},
+  {name:'อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ',jan:91950,feb:0,mar:0,apr:61300,may:103500,jun:8550,jul:39200,aug:0,total:304500,txn1:3,txn2:0,txn3:0,txn4:2,txn5:3,txn6:1,txn7:1,txn8:0,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,4,5,6,7]},
+  {name:'เวิลด์ ฟูด เซ็นเตอร์',jan:37200,feb:34900,mar:73600,apr:19700,may:17600,jun:39600,jul:40400,aug:27800,total:290800,txn1:2,txn2:2,txn3:3,txn4:1,txn5:1,txn6:2,txn7:3,txn8:2,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5,6,7,8]},
+  {name:'โลจิสติ๊ด คอนแทรค โลจิสติคส์ (มหาชน)',jan:0,feb:29250,mar:16575,apr:31200,may:99840,jun:112710,jul:0,aug:0,total:289575,txn1:0,txn2:2,txn3:2,txn4:3,txn5:2,txn6:3,txn7:0,txn8:0,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[2,3,4,5,6]},
+  {name:'แอล แอนด์ เอช โฮเทล แมเนจเมนท์',jan:23080,feb:36520,mar:122950,apr:27000,may:9300,jun:12675,jul:18600,aug:22710,total:272835,txn1:3,txn2:3,txn3:6,txn4:1,txn5:1,txn6:2,txn7:1,txn8:3,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5,6,7,8]},
+  {name:'Juice bomb',jan:89750,feb:89750,mar:37640,apr:35900,may:0,jun:0,jul:0,aug:0,total:253040,txn1:1,txn2:1,txn3:2,txn4:1,txn5:0,txn6:0,txn7:0,txn8:0,drt1:89750,drt2:0,drt3:35900,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4]},
+  {name:'การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย',jan:0,feb:0,mar:0,apr:233000,may:0,jun:0,jul:0,aug:0,total:233000,txn1:0,txn2:0,txn3:0,txn4:3,txn5:0,txn6:0,txn7:0,txn8:0,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[4]},
+  {name:'บรรจงลวก',jan:20160,feb:30240,mar:30240,apr:22920,may:22920,jun:34860,jul:35100,aug:35100,total:231540,txn1:2,txn2:3,txn3:3,txn4:2,txn5:2,txn6:3,txn7:3,txn8:3,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5,6,7,8]},
+  {name:'ทู ธันเดอร์ คอฟฟี่ โรสเตอร์ส',jan:56100,feb:0,mar:0,apr:24580,may:48350,jun:20570,jul:0,aug:78250,total:227850,txn1:2,txn2:0,txn3:0,txn4:1,txn5:1,txn6:1,txn7:0,txn8:1,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,4,5,6,8]},
+  {name:'สกายเรสเตอรองท์',jan:43225,feb:0,mar:41650,apr:0,may:119550,jun:0,jul:0,aug:9700,total:214125,txn1:2,txn2:0,txn3:2,txn4:0,txn5:3,txn6:0,txn7:0,txn8:1,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,3,5,8]},
+  {name:'โนมิมาโช',jan:0,feb:197625,mar:6610,apr:8700,may:900,jun:0,jul:0,aug:0,total:213835,txn1:1,txn2:3,txn3:3,txn4:2,txn5:1,txn6:0,txn7:0,txn8:0,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5]},
+  {name:'เก้าหนึ่ง มาร์เก็ตติ้งเซอร์วิส',jan:6000,feb:25700,mar:21070,apr:13950,may:39500,jun:0,jul:83090,aug:11040,total:200350,txn1:1,txn2:4,txn3:3,txn4:1,txn5:2,txn6:0,txn7:5,txn8:1,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5,7,8]},
+  {name:'เจ้าพระยาสยาม (1975)',jan:47500,feb:0,mar:47500,apr:0,may:0,jun:50000,jul:0,aug:50000,total:195000,txn1:1,txn2:0,txn3:1,txn4:0,txn5:0,txn6:1,txn7:0,txn8:1,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,3,6,8]},
+  {name:'ยามาโมริ เทรดดิ้ง',jan:0,feb:0,mar:0,apr:0,may:97000,jun:0,jul:97000,aug:0,total:194000,txn1:0,txn2:0,txn3:0,txn4:0,txn5:1,txn6:0,txn7:1,txn8:0,drt1:0,drt2:0,drt3:0,drt4:0,drt5:97000,drt6:0,drt7:0,drt8:0,months:[5,7]},
+  {name:'โน มอร์ สโนว์',jan:15735,feb:29332,mar:49836,apr:31992,may:66458,jun:0,jul:0,aug:0,total:193352,txn1:1,txn2:2,txn3:3,txn4:1,txn5:3,txn6:0,txn7:0,txn8:0,drt1:15735,drt2:13596,drt3:18692,drt4:31992,drt5:17290,drt6:0,drt7:0,drt8:0,months:[1,2,3,4,5]},
+  {name:'แฮปปี้ ฟู้ด อินเตอร์คิทเช่น',jan:50280,feb:0,mar:92490,apr:0,may:47590,jun:0,jul:0,aug:0,total:190360,txn1:2,txn2:0,txn3:3,txn4:0,txn5:2,txn6:0,txn7:0,txn8:0,drt1:44900,drt2:0,drt3:47590,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,3,5]},
+  {name:'นมสดพระนคร',jan:93458,feb:0,mar:0,apr:95442,may:0,jun:0,jul:0,aug:0,total:188900,txn1:1,txn2:0,txn3:0,txn4:1,txn5:0,txn6:0,txn7:0,txn8:0,drt1:93458,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[1,4]},
 ];
 
-/* ── พ.ค. 2026 (ถึง 29/5, Peak PDF) — ก่อน VAT — merge เข้า cust2026 (Top Customers รวม ม.ค.–พ.ค.) ── */
-const may2026Map = {
-  'Bigtree':1680544,'Central Group Thailand':348855,'สยาม แฟรนไชส์ ธุรกิจ':429152,
-  'โนส ที (ประเทศไทย)':129000,'แพ็คเวิร์คส์':108965,'อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ':103500,
-  'Bwell Group (จีพีซีเอ็ม+บีเวล)':101100,'ทีพี โปรเจค':92300,'แพชชั่น เรสเตอรองท์ กรุ๊ป':92780,
-  'Shopee (รวม)':58260,'เวนดิ้ง เซอร์วิสเซส':31620,'โนมิมาโช':900,
-};
-const may2026Drt = { 'Bigtree':917037 };
-cust2026.forEach(c=>{
-  c.may = may2026Map[c.name]||0;
-  c.drt5 = may2026Drt[c.name]||0;
-  if(c.may){ c.total += c.may; if(!c.months.includes(5)) c.months.push(5); }
-});
-[['ดัฟฟ์ ดีไซน์ เฮาส์',170000],['สกายเรสเตอรองท์',119550],['ซุปเปอร์ เทอร์เทิล (มหาชน)',105750],
- ['โลจิสติ๊ด คอนแทรค',99840],['ยามาโมริ เทรดดิ้ง',97000],['โน มอร์ สโนว์',66458]].forEach(([nm,v])=>{
-  cust2026.push({name:nm,jan:0,feb:0,mar:0,apr:0,may:v,total:v,txn1:0,txn2:0,txn3:0,txn4:0,txn5:1,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,months:[5]});
-});
-
-/* ── มิ.ย. 2026 ปิดเดือน (Peak มิ.ย. 30/6) — ก่อน VAT — merge เข้า cust2026 ── */
-const jun2026Map = {
-  'Bigtree':936717,'ACE TECHNOLOGY':468000,'ทีพี โปรเจค':362100,'โนส ที (ประเทศไทย)':279900,
-  'แพ็คเวิร์คส์':199408,'Central Group Thailand':283388, // 189825 + 50613 + 42950 (Central affiliates)
-  'ซุปเปอร์ เทอร์เทิล (มหาชน)':180500,'แพชชั่น เรสเตอรองท์ กรุ๊ป':126020,
-  'โลจิสติ๊ด คอนแทรค':112710,'Bwell Group (จีพีซีเอ็ม+บีเวล)':72000,'Shopee (รวม)':71460,
-  'สวนลุม พร็อพเพอร์ตี้':44065,'เวิลด์ ฟูด เซ็นเตอร์':39600,'ยามาโมริ เทรดดิ้ง':0,
-};
-const jun2026Drt = {'Bigtree':850000};  // ประมาณจาก DRT PENDING ต่อเนื่อง
-cust2026.forEach(c=>{
-  c.jun = jun2026Map[c.name]||0;
-  c.drt6 = jun2026Drt[c.name]||0;
-  if(c.jun){ c.total += c.jun; if(!c.months.includes(6)) c.months.push(6); }
-});
-[['SINOUK CAFÉ GOURMET LAO',87383],['พาล์มเมอรี่ แอนด์ เค.',59500],['วิชย์ สเปซ',54400],
- ['เจ้าพระยาสยาม (1975)',50000],['พอลเล็ตต์ กรุ๊ป',42100]].forEach(([nm,v])=>{
-  cust2026.push({name:nm,jan:0,feb:0,mar:0,apr:0,may:0,jun:v,total:v,txn1:0,txn2:0,txn3:0,txn4:0,txn5:0,txn6:1,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,months:[6]});
-});
-
-/* ── ก.ค. 2026 MTD (ถึง 20/7, Peak ก.ค.) — ก่อน VAT — merge เข้า cust2026 ── */
-const jul2026Map = {
-  'Bigtree':246262,'Central Group Thailand':274590, // 186040 + 49290 + 39260
-  'ซุปเปอร์ เทอร์เทิล (มหาชน)':168000,'ยามาโมริ เทรดดิ้ง':97000,
-  'Bwell Group (จีพีซีเอ็ม+บีเวล)':76600,'Shopee (รวม)':45867,
-  'แพชชั่น เรสเตอรองท์ กรุ๊ป':43125,'สวนลุม พร็อพเพอร์ตี้':42880,
-};
-const jul2026Drt = {'Bigtree':246262};  // Bigtree ทั้งเดือน = DRT continued
-cust2026.forEach(c=>{
-  c.jul = jul2026Map[c.name]||0;
-  c.drt7 = jul2026Drt[c.name]||0;
-  if(c.jul){ c.total += c.jul; if(!c.months.includes(7)) c.months.push(7); }
-});
-// Note: ลบ 'จีพีซีเอ็ม กรุ๊ป (Bwell 2)' ออก — เป็นเจ้าเดียวกับ Bwell Group (จีพีซีเอ็ม+บีเวล) แล้ว
-[['เตี่ย',81409],['ชาดีออร์แกนิค',57555],['กล่องอุตสาหกรรม',52400],
- ['เก้าหนึ่ง มาร์เก็ตติ้งเซอร์วิส',50090],['บีวายดี ออโต้ (ประเทศไทย)',42800]].forEach(([nm,v])=>{
-  cust2026.push({name:nm,jan:0,feb:0,mar:0,apr:0,may:0,jun:0,jul:v,total:v,txn1:0,txn2:0,txn3:0,txn4:0,txn5:0,txn6:0,txn7:1,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,months:[7]});
-});
-
-/* ── ส.ค. 2026 MTD (ถึง 17/8, Peak ส.ค.) — merge เข้า cust2026 ── */
-const aug2026Map = {
-  'Bigtree': 1902266,  // Big Tree DRT ต่อเนื่อง
-  'Central Group Thailand': 234115,  // = 174475 (เซ็นทรัลพัฒนา) + 59640 (ซีพีเอ็น พัทยา)
-  'ดัฟฟ์ ดีไซน์ เฮาส์': 201400,
-  'แพ็คเวิร์คส์': 46325,
-  'สวนลุม พร็อพเพอร์ตี้': 45580,
-  'Bwell Group (จีพีซีเอ็ม+บีเวล)': 36000,  // บีเวล ฟูดมอลล์
-  'แพชชั่น เรสเตอรองท์ กรุ๊ป': 35790,
-  'Shopee (รวม)': 30671,
-};
-const aug2026Drt = {'Bigtree': 1902266};  // Big Tree = DRT ทั้งหมด
-cust2026.forEach(c=>{
-  c.aug = aug2026Map[c.name]||0;
-  c.drt8 = aug2026Drt[c.name]||0;
-  if(c.aug){ c.total += c.aug; if(!c.months.includes(8)) c.months.push(8); }
-});
-[['ทู ธันเดอร์ คอฟฟี่ โรสเตอร์ส',78250],['แอมเวย์',72050],['เจ้าพระยาสยาม',50000],
- ['อภิรัตน์ ทยานุกูล',34822],['ไอติมกะทิเมืองกรุง 2560',26869],['แบรนด์ เลกาซี่ ฟู๊ด',26650]].forEach(([nm,v])=>{
-  cust2026.push({name:nm,jan:0,feb:0,mar:0,apr:0,may:0,jun:0,jul:0,aug:v,total:v,txn1:0,txn2:0,txn3:0,txn4:0,txn5:0,txn6:0,txn7:0,txn8:1,drt1:0,drt2:0,drt3:0,drt4:0,drt5:0,drt6:0,drt7:0,drt8:0,months:[8]});
-});
-
+// cust2026 array above already contains full ม.ค.–ส.ค. MTD (28/8) data — sorted by total (verified 3 รอบ)
 cust2026.sort((a,b)=>b.total-a.total);
 
 /* ── DRT pending → ส.ค. forecast (จาก ก.ค. MTD 23/7 DRT รอหักมัดจำ) ── */
@@ -4285,7 +4205,7 @@ function buildAnalysis2026() {
   const segIconMap  = {VIP:'👑',Regular:'⭐',ลูกค้าประจำ:'🔄',ใหม่:'🆕'};
 
   document.getElementById('a26CustTable').innerHTML = `
-    <table class="data-table" style="min-width:780px">
+    <table class="data-table" style="min-width:900px">
       <thead><tr>
         <th style="text-align:center">#</th>
         <th>ชื่อลูกค้า</th>
@@ -4296,7 +4216,8 @@ function buildAnalysis2026() {
         <th style="text-align:right">เม.ย.</th>
         <th style="text-align:right">พ.ค.</th>
         <th style="text-align:right">มิ.ย.</th>
-        <th style="text-align:right">ก.ค.*</th>
+        <th style="text-align:right">ก.ค.</th>
+        <th style="text-align:right;background:#eaf4e2">ส.ค.*</th>
         <th style="text-align:center">กลุ่ม</th>
         <th style="text-align:center">DRT pending</th>
       </tr></thead>
@@ -4304,8 +4225,8 @@ function buildAnalysis2026() {
         ${cust2026.map((c,i)=>{
           const seg=segOf(c); const sc=segColorMap[seg]; const si=segIconMap[seg];
           const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
-          const drtTotal=(c.drt1||0)+(c.drt2||0)+(c.drt3||0)+(c.drt4||0)+(c.drt5||0)+(c.drt6||0)+(c.drt7||0);
-          const txnTotal=(c.txn1||0)+(c.txn2||0)+(c.txn3||0)+(c.txn4||0)+(c.txn5||0)+(c.txn6||0)+(c.txn7||0);
+          const drtTotal=(c.drt1||0)+(c.drt2||0)+(c.drt3||0)+(c.drt4||0)+(c.drt5||0)+(c.drt6||0)+(c.drt7||0)+(c.drt8||0);
+          const txnTotal=(c.txn1||0)+(c.txn2||0)+(c.txn3||0)+(c.txn4||0)+(c.txn5||0)+(c.txn6||0)+(c.txn7||0)+(c.txn8||0);
           return `<tr onclick="showCust2026Modal(${i})" style="cursor:pointer" title="คลิกดูรายละเอียด">
             <td style="text-align:center;font-weight:800">${medal}</td>
             <td><strong>${c.name}</strong><span style="font-size:10px;color:var(--muted);margin-left:6px">${txnTotal} ออเดอร์</span></td>
@@ -4317,13 +4238,14 @@ function buildAnalysis2026() {
             <td style="text-align:right;color:${c.may?'#e58079':'#ccc'}">${c.may?'฿'+Math.round(c.may/1000)+'K':'–'}</td>
             <td style="text-align:right;color:${c.jun?'#8dc9b7':'#ccc'}">${c.jun?'฿'+Math.round(c.jun/1000)+'K':'–'}</td>
             <td style="text-align:right;color:${c.jul?'#e8b95a':'#ccc'}">${c.jul?'฿'+Math.round(c.jul/1000)+'K':'–'}</td>
+            <td style="text-align:right;background:#f9fdf6;color:${c.aug?'#4a8a54':'#ccc'};font-weight:700">${c.aug?'฿'+Math.round(c.aug/1000)+'K':'–'}</td>
             <td style="text-align:center"><span style="background:${sc}20;color:${sc};padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">${si} ${seg}</span></td>
             <td style="text-align:center">${drtTotal?`<span style="background:#fdecea;color:#e58079;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">฿${Math.round(drtTotal/1000)}K</span>`:'<span style="color:#ccc">–</span>'}</td>
           </tr>`;
         }).join('')}
       </tbody>
     </table>
-    <div style="font-size:11px;color:var(--muted);margin-top:6px">✅ ม.ค.–มิ.ย. ปิดเดือน (Peak) | *ก.ค. MTD ถึง 20/7 | ยอดรวม = ม.ค.–ก.ค. MTD (ก่อน VAT) | คลิกแถวดูรายละเอียด · DRT = มัดจำ</div>`;
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">✅ ม.ค.–ก.ค. ปิดเดือน (Peak) | *ส.ค. MTD ถึง 28/8 | ยอดรวม = ม.ค.–ก.ค. + ส.ค. MTD (ก่อน VAT) | คลิกแถวดูรายละเอียด · DRT = มัดจำสะสม (Bigtree ฿5.35M DRT รอส่งมอบ)</div>`;
 
   // ── FREQUENCY CHART ──────────────────────────────────────
   const ctx26fr = document.getElementById('a26FreqChart').getContext('2d');
