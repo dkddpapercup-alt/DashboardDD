@@ -694,7 +694,7 @@
   <div style="background:white;border:1.5px solid #e0e0e0;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center;font-size:12px;">
     <div><div style="font-size:16px;">🟢</div><div style="font-weight:700;color:#333">Revenue</div><div style="color:#27ae60;font-size:11px;">เกินเป้า ScA</div></div>
     <div><div style="font-size:16px;">🟡</div><div style="font-weight:700;color:#333">GP Margin</div><div style="color:#e67e22;font-size:11px;">31.3% (เป้า 40%)</div></div>
-    <div><div style="font-size:16px;">🟡</div><div style="font-weight:700;color:#333">Inventory</div><div style="color:#e69a68;font-size:11px;">DIO 40 วัน (ดีขึ้น)</div></div>
+    <div><div style="font-size:16px;">🟡</div><div style="font-weight:700;color:#333">Inventory</div><div style="color:#e69a68;font-size:11px;">DIO 43 วัน (สูงกว่าเป้า 30)</div></div>
     <div><div style="font-size:16px;">🟡</div><div style="font-weight:700;color:#333">CCC</div><div style="color:#e67e22;font-size:11px;">+13.3 วัน</div></div>
     <div><div style="font-size:16px;">🟡</div><div style="font-weight:700;color:#333">AP Outstanding</div><div style="color:#e67e22;font-size:11px;">฿11M / 49.2 วัน</div></div>
   </div>
@@ -1130,7 +1130,7 @@
     <div class="card">
       <div class="card-header">
         <h3>🔴 Top 10 สต็อกไม่มียอดขาย (Cash Locked)</h3>
-        <span class="card-subtitle">609 รายการ | มูลค่ารวม ฿4,122,155 | ⚠️ วัตถุดิบกระดาษกอง ฿1.99M</span>
+        <span class="card-subtitle">849 รายการ | มูลค่ารวม ฿4,300,086 (82.7% ของสต๊อก) | ⚠️ Dead-stock ≥฿100K = 3 SKU / ฿500K</span>
       </div>
       <div class="card-body" style="padding:0;overflow-x:auto;">
         <table class="data-table">
@@ -1146,7 +1146,7 @@
     <div class="card">
       <div class="card-header">
         <h3>🗂️ สต็อกแยกตามประเภทสินค้า</h3>
-        <span class="card-subtitle">9 กลุ่ม | มูลค่ารวม ฿7,477,114 | 6 เม.ย. 2569</span>
+        <span class="card-subtitle">11 กลุ่ม | มูลค่ารวม ฿5,201,849 | ณ 5 ส.ค. 2569</span>
       </div>
       <div class="card-body"><canvas id="invTypeChart"></canvas></div>
     </div>
@@ -1163,6 +1163,66 @@
           </thead>
           <tbody id="invTypeBody"></tbody>
         </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🚨 STOCK CONCERNS & RECOMMENDATIONS -->
+  <div class="card" style="margin-top:16px;border-left:4px solid #e58079">
+    <div class="card-header">
+      <h3>🚨 สต๊อกสินค้า — จุดที่ควร Concern + คำแนะนำ</h3>
+      <span class="card-subtitle">วิเคราะห์จากรายงาน Peak 05/08/2026 · verified 3 รอบ · ข้อมูลอายุ ~30 วัน (ควรอัพเดตใหม่)</span>
+    </div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
+        <div style="background:#fdedec;padding:14px;border-radius:8px;border-left:4px solid #e58079;text-align:center">
+          <div style="font-size:11px;color:#888">DIO (Days Inventory Outstanding)</div>
+          <div style="font-size:22px;font-weight:800;color:#e58079">42.8 วัน</div>
+          <div style="font-size:11px;color:#8a4a44">เป้า ≤30 วัน · เกินเป้า 43%</div>
+        </div>
+        <div style="background:#fdedec;padding:14px;border-radius:8px;border-left:4px solid #e58079;text-align:center">
+          <div style="font-size:11px;color:#888">Slow-Moving Stock</div>
+          <div style="font-size:22px;font-weight:800;color:#e58079">฿4.30M</div>
+          <div style="font-size:11px;color:#8a4a44">82.7% ของสต๊อก · 849 SKU</div>
+        </div>
+        <div style="background:#fef9e7;padding:14px;border-radius:8px;border-left:4px solid #e69a68;text-align:center">
+          <div style="font-size:11px;color:#888">Dead-Stock Candidate (≥฿100K)</div>
+          <div style="font-size:22px;font-weight:800;color:#c17133">฿500K</div>
+          <div style="font-size:11px;color:#8a4a44">3 SKU · เสี่ยงต้อง write-off</div>
+        </div>
+        <div style="background:#eafaf1;padding:14px;border-radius:8px;border-left:4px solid #27ae60;text-align:center">
+          <div style="font-size:11px;color:#888">Fast Movers (GM% 5 วัน)</div>
+          <div style="font-size:22px;font-weight:800;color:#27ae60">56.4%</div>
+          <div style="font-size:11px;color:#4a8a54">58 SKU · ขาย ฿413K/5วัน</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="background:#fdedec;border-left:4px solid #e74c3c;border-radius:0 8px 8px 0;padding:16px 20px">
+          <h4 style="color:#c0392b;margin-bottom:10px;font-size:14px">🚨 5 จุดควร Concern มากที่สุด</h4>
+          <ol style="font-size:12px;line-height:1.9;padding-left:20px;color:#4a4a5e;margin:0">
+            <li><strong>Slow-Moving 82.7% ของสต๊อก</strong> — 849 SKU มีสต๊อกแต่ไม่ขายใน 5 วันแรก ส.ค. = เงินจม ฿4.30M</li>
+            <li><strong>3 SKU Dead-Stock ฿500K</strong> — หลอด San Chen ฿204K · สายคาด San Chen ฿177K · แก้ว PE SW8oz ฿119K → เก็บนานเกินไป</li>
+            <li><strong>Print-on-order เก่า</strong> — โลโก้ Grande Centre Point / WAKE UP COFFEE / Central RSD / PAULETTE = ~฿250K → ลูกค้าอาจไม่รับซื้อต่อ</li>
+            <li><strong>DIO 42.8 วัน สูงกว่าเป้า 30 วัน</strong> — เกินเป้า 43% → เงินจมเกินจำเป็น ~฿1.5M</li>
+            <li><strong>ข้อมูลอายุ ~30 วัน</strong> — Report 5/8, วันนี้ 4/9 → ตัวเลขจริงอาจแย่/ดีขึ้น (แนะนำดึงใหม่)</li>
+          </ol>
+        </div>
+        <div style="background:#eafaf1;border-left:4px solid #27ae60;border-radius:0 8px 8px 0;padding:16px 20px">
+          <h4 style="color:#1e8449;margin-bottom:10px;font-size:14px">✅ คำแนะนำ 6 ข้อ (Action Items)</h4>
+          <ol style="font-size:12px;line-height:1.9;padding-left:20px;color:#4a4a5e;margin:0">
+            <li><strong>ติดต่อ San Chen (฿380K)</strong> — 2 SKU (หลอด+สายคาด) ไม่เคลื่อนไหว → เจรจาส่งเก็บของ หรือ ขายราคาต้นทุน</li>
+            <li><strong>Clearance Sale โลโก้เก่า</strong> — Central RSD, WAKE UP, PAULETTE → ปล่อยราคาลด 20-30% ก่อนโลโก้หมดอายุใช้งาน</li>
+            <li><strong>ตั้ง Aging Report</strong> — จำแนกสต๊อกอายุ (0-30/31-60/61-90/90+) เพื่อเจอ dead stock เร็วขึ้น</li>
+            <li><strong>ตั้งเกณฑ์ Auto-alert</strong> — SKU ที่ไม่ขาย 3 เดือน → เตือนอัตโนมัติ (ปัจจุบัน 82.7% เป็นสถิติที่ยอมรับไม่ได้)</li>
+            <li><strong>ลด Print-on-order MOQ</strong> — งานพิมพ์เสี่ยง dead stock → ตั้ง MOQ ตามความสามารถขายจริง (ดูจาก 6 เดือนย้อนหลัง)</li>
+            <li><strong>ตั้งเป้า DIO ลดเหลือ 30 วัน</strong> — ปลดปล่อย working capital ~฿1.5M ในสิ้นปี → ลด OD ได้ทันที = ประหยัดดอกเบี้ย ฿10K/เดือน</li>
+          </ol>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;padding:12px 16px;background:#fef9e7;border-radius:8px;font-size:12px;color:#8a6d3b;border-left:4px solid #e69a68">
+        💡 <strong>Insight สำคัญ:</strong> Fast-mover 58 SKU (17.3% ของ SKU) สร้างยอดขาย ฿413K/5วัน (GM 56.4%) — <strong>focus ที่ SKU กลุ่มนี้จะได้กำไรมากกว่า</strong> พยายามลดต้นทุนเก็บ slow-mover ที่กินเงิน ฿4.30M
       </div>
     </div>
   </div>
@@ -1852,7 +1912,7 @@ const CF_DATA = {
   },
   dso: 16.2,   // AR ยังไม่อัพเดต — ใช้ค่า 8 มี.ค. 2569
   dpo: 49.2,   // อัพเดต: AP ฿7.79M / COGS มี.ค. ฿4.75M × 30 วัน
-  dio: 40.7,   // อัพเดต: สต็อก ฿5.20M (5/8/26) / COGS avg 2026 (H1 ~฿23.4M / 6 = 3.9M/mo) × 30 วัน = 40 วัน
+  dio: 42.8,   // อัพเดต: สต็อก ฿5.20M (5/8/26) / COGS avg 2026 ม.ค.-ก.ค. (25.54M / 7 = 3.65M/mo) × 30 วัน = 42.8 วัน (verified 3 รอบ)
   revFeb: 6069955,   // มี.ค. 2569 (actual)
   cogsFeb: 4975543,  // COGS มี.ค. 2569 (คชจ. tab)
   inventoryTotal: 5201849,
@@ -2552,7 +2612,7 @@ function buildCashFlowTab() {
     { label:'CCC — Cash Conversion Cycle', value:ccc.toFixed(1)+' วัน',
       sub:cccIcon+' '+cccSub, color:cccColor, icon:'⚡' },
     { label:'สต็อกสินค้า (DIO — Days Inventory Outstanding)', value:'฿'+fmt(Math.round(d.inventoryTotal)),
-      sub:'DIO '+d.dio+' วัน | '+d.inventoryDate+' | ⚠️ 74.8% Slow-Moving', color:'red', icon:'📦' },
+      sub:'DIO '+d.dio+' วัน | '+d.inventoryDate+' | ⚠️ 82.7% Slow-Moving (฿4.30M เงินจม)', color:'red', icon:'📦' },
   ];
   document.getElementById('cfKpiRow').innerHTML = kpis.map(k=>`
     <div class="kpi-card ${k.color}">
