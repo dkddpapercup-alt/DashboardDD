@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DD Paper Cup – Marketplace Report 2026</title>
+<style>
+  :root{
+    --primary:#7c9dc0; --primary-dark:#5a7fa3; --accent:#f5b183; --border:#ede8e3;
+    --text:#4a4a5e; --muted:#9a9aa8; --card-bg:#ffffff; --shadow:0 2px 12px rgba(124,157,192,0.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI','Sarabun','Noto Sans Thai',Arial,sans-serif;background:#f5efe8;color:var(--text);font-size:14px}
+  .header{background:#d4b5c7;color:#3a4a5c;padding:20px 32px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 16px rgba(124,157,192,0.15);gap:12px}
+  .header-left h1{font-size:22px;font-weight:700;letter-spacing:.5px;color:#2d3e4f}
+  .header-left p{font-size:12px;opacity:.75;margin-top:3px;color:#4a5a6c}
+  .header-right{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .nav-link{background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.7);color:#3a4a5c;padding:7px 14px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap}
+  .nav-link:hover{background:rgba(255,255,255,0.85)}
+  .tabs{background:rgba(255,255,255,0.75);padding:0 32px;border-bottom:2px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none}
+  .tab-btn{padding:14px 20px;font-size:13px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;font-family:inherit}
+  .tab-btn:hover{color:var(--primary-dark)}
+  .tab-btn.active{color:var(--primary-dark);border-bottom-color:var(--accent)}
+  .tab-btn .soon{font-size:10px;font-weight:700;background:#f7d488;color:#6b5210;border-radius:10px;padding:1px 7px;margin-left:4px}
+  .tab-content{display:none}
+  .tab-content.active{display:block}
+
+  /* ===== Marketplace report body (scoped) ===== */
+  .mp{
+    --surface:#ffffff; --surface-2:#faf7f3; --ink:#2d3e4f; --ink-2:#5b5b6e; --line:#ede8e3;
+    --s1:#5a7fa3; --s2:#6fae6a; --s3:#e0ae4c; --s4:#e89660; --s5:#e58079; --s6:#9f83b6;
+    --good:#4f9a49; --warn:#d9a53e; --serious:#e0864f; --crit:#d16b62;
+    --new:#e7eef6; --new-ink:#46698d;
+    max-width:1120px;margin:0 auto;padding-block:24px 64px;padding-inline:24px;color:var(--ink);line-height:1.6;font-size:15px
+  }
+  .mp .mp-title{font-size:20px;font-weight:800}
+  .mp .sub{color:var(--ink-2);font-size:14px}
+  .mp nav.jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .mp nav.jump a{font-size:13px;font-weight:700;color:var(--ink-2);text-decoration:none;border:1px solid var(--line);background:var(--surface);padding:4px 12px;border-radius:20px}
+  .mp nav.jump a:hover{color:var(--s1);border-color:var(--s1)}
+  .mp section{margin-top:36px}
+  .mp .part{margin-top:52px;padding-top:22px;border-top:2px solid var(--line)}
+  .mp .part-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .mp .part-h h2.big{font-size:23px}
+  .mp .pill{font-size:11.5px;font-weight:800;padding:2px 10px;border-radius:20px;background:var(--new);color:var(--new-ink)}
+  .mp h2{font-size:19px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:10px;color:var(--ink)}
+  .mp h2 .dot{width:9px;height:20px;border-radius:3px;background:var(--s1);flex:none}
+  .mp .sec-note{color:var(--ink-2);font-size:14px;margin-bottom:16px;max-width:80ch}
+  .mp .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .mp .kpi{background:var(--surface);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+  .mp .kpi .lab{font-size:12.5px;color:var(--ink-2);font-weight:600}
+  .mp .kpi .val{font-size:25px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums}
+  .mp .kpi .val small{font-size:14px;font-weight:600;color:var(--muted)}
+  .mp .kpi .chg{font-size:12.5px;font-weight:700;margin-top:2px}
+  .mp .up{color:var(--good)} .mp .down{color:var(--crit)}
+  .mp .card{background:var(--surface);border-radius:12px;padding:22px;box-shadow:var(--shadow);margin:0;overflow:visible}
+  .mp .scroll{overflow-x:auto}
+  .mp .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .mp .ct{font-size:15px;font-weight:700;margin-bottom:2px}
+  .mp .cs{font-size:13px;color:var(--ink-2);margin-bottom:14px}
+  .mp .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2);margin-top:12px}
+  .mp .legend span{display:inline-flex;align-items:center;gap:6px}
+  .mp .sw{width:11px;height:11px;border-radius:3px;display:inline-block;flex:none}
+  .mp .sw.dash{background:transparent!important;border:1.5px dashed var(--s1)}
+  .mp svg{display:block;width:100%;height:auto;overflow:visible}
+  .mp .axlab{fill:var(--muted);font-size:11px}
+  .mp .vlab{fill:var(--ink);font-size:11px;font-weight:700}
+  .mp .grid-l{stroke:var(--line);stroke-width:1}
+  .mp table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+  .mp table.tbl th,.mp table.tbl td{text-align:right;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  .mp table.tbl th:first-child,.mp table.tbl td:first-child{text-align:left}
+  .mp table.tbl th{color:var(--ink-2);font-weight:700;font-size:12.5px;white-space:nowrap;background:#f6f0ea}
+  .mp table.tbl tbody tr:hover{background:var(--surface-2)}
+  .mp table.tbl td.rk{color:var(--muted);width:28px}
+  .mp .prodbar{height:9px;border-radius:5px;background:var(--s1);display:inline-block;vertical-align:middle}
+  .mp .insight{background:var(--surface);border-left:4px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+  .mp .insight h3{font-size:15.5px;font-weight:800;margin-bottom:5px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .mp .insight p{font-size:14px;color:var(--ink-2)}
+  .mp .insight .tag{font-size:11px;font-weight:800;padding:2px 8px;border-radius:20px;color:#fff}
+  .mp .ins-list{display:grid;gap:12px}
+  .mp .rec{background:var(--surface-2);border:1px dashed #d9cfc4;border-radius:12px;padding:14px 16px;font-size:14px;color:var(--ink-2)}
+  .mp .rec b{color:var(--ink)}
+  .mp .caveat{font-size:13px;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-top:14px}
+  .mp .foot{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+
+  .soon-box{max-width:760px;margin:40px auto;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:28px 30px;color:#2d3e4f;line-height:1.7}
+  .soon-box h2{font-size:21px;margin-bottom:6px}
+  .soon-box p{color:#5b5b6e;font-size:14.5px}
+  .soon-box ul{margin:12px 0 0 20px;color:#5b5b6e;font-size:14px}
+  .soon-box .pill{display:inline-block;font-size:11.5px;font-weight:800;padding:2px 10px;border-radius:20px;background:#f7d488;color:#6b5210;margin-bottom:10px}
+
+  @media(max-width:900px){
+    .header{flex-direction:column;align-items:flex-start;padding:16px 20px}
+    .header-right{justify-content:flex-start}
+    .tabs{padding:0 12px}
+    .mp{padding-inline:16px}
+    .mp .kpis{grid-template-columns:repeat(2,1fr)}
+    .mp .grid2{grid-template-columns:1fr}
+  }
+  @media(max-width:600px){
+    .header-left h1{font-size:17px}
+    .tab-btn{padding:10px 12px;font-size:12px}
+    .mp .card{padding:16px}
+    .mp .kpi .val{font-size:21px}
+    .soon-box{margin:20px 16px;padding:20px}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>🛒 DD Paper Cup – Marketplace Report</h1>
+    <p>ยอดขายบน Marketplace แยกตามแพลตฟอร์ม | Shopee · Makro</p>
+  </div>
+  <div class="header-right">
+    <a href="index.html" class="nav-link">📈 Sales Dashboard →</a>
+    <a href="finance_dashboard.html" class="nav-link">💰 Finance Dashboard →</a>
+  </div>
+</div>
+
+<div class="tabs" role="tablist">
+  <button class="tab-btn active" data-tab="shopee" role="tab">🟠 Shopee</button>
+  <button class="tab-btn" data-tab="makro" role="tab">🔴 Makro <span class="soon">ต.ค. 2026</span></button>
+</div>
+
+<div class="tab-content active" id="tab-shopee">
+<div class="mp">
+<div class="mp-intro"><div class="mp-title">Shopee · ร้านแก้ว/ถ้วยกระดาษ DD Paper Cup</div><div class="sub">มกราคม–23 กันยายน 2026 · อัปเดตล่าสุด 24 ก.ย. 2026</div><nav class="jump" aria-label="ไปยังหัวข้อ">
+    <a href="#trend">เทรนด์ ม.ค.–ก.ย.</a>
+    <a href="#augsep">อัปเดต ส.ค.–ก.ย.</a>
+    <a href="#h1">ครึ่งปีแรก (ม.ค.–มิ.ย.)</a>
+  </nav></div>
+
+<!-- ================= TREND Jan–Sep ================= -->
+<section id="trend" style="margin-top:26px">
+  <h2><span class="dot"></span>ยอดขายรายเดือน ม.ค.–ก.ย.</h2>
+  <div class="sec-note">หลังชะลอช่วง พ.ค.–มิ.ย. ยอดขายกลับขึ้นมาในเดือน ส.ค. (฿187,445) และ ก.ย. กำลังวิ่งในอัตราที่ดีกว่า ส.ค. ถ้ารักษาระดับนี้ได้ทั้งเดือนจะได้ราว ฿203,000 ใกล้เคียงเดือนพีคมีนาคม</div>
+  <div class="card">
+    <div class="ct">ยอดขายทั้งหมด vs. ยืนยันแล้ว (บาท)</div>
+    <div class="cs">ก.ค. ยังไม่มีไฟล์ข้อมูล · ก.ย. เป็นยอดถึงวันที่ 23 (กรอบเส้นประ = คาดการณ์ทั้งเดือนตามอัตราต่อวัน)</div>
+    <div class="scroll"><div id="chartTrend" style="min-width:560px"></div></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--s1)"></i>ยอดสั่งซื้อทั้งหมด</span>
+      <span><i class="sw" style="background:var(--s2)"></i>ยอดยืนยันแล้ว</span>
+      <span><i class="sw dash"></i>คาดการณ์ ก.ย. ทั้งเดือน (฿203k)</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= AUG–SEP UPDATE ================= -->
+<div class="part" id="augsep">
+  <div class="part-h"><h2 class="big">อัปเดต สิงหาคม–กันยายน 2026</h2><span class="pill">ข้อมูลใหม่</span></div>
+  <div class="sec-note" style="margin-top:4px">จากรายงานภาพรวมร้าน (stats) 1–31 ส.ค. และ 1–23 ก.ย. 2026</div>
+
+  <section style="margin-top:16px">
+    <div class="kpis" id="kpis2"></div>
+  </section>
+
+  <section>
+    <h2><span class="dot" style="background:var(--s1)"></span>ส.ค. เทียบ ก.ย. (คิดเป็นต่อวัน)</h2>
+    <div class="sec-note">ก.ย. มีข้อมูลแค่ 23 วัน จึงเทียบกันด้วยค่าเฉลี่ยต่อวัน ยอดขาย ออเดอร์ และผู้เข้าชมร้านต่อวันของ ก.ย. สูงกว่า ส.ค. ทั้งหมด</div>
+    <div class="card scroll"><div id="cmpTbl" style="min-width:520px"></div></div>
+  </section>
+
+  <section>
+    <h2><span class="dot" style="background:var(--s3)"></span>ยอดขายรายวัน 1 ส.ค.–23 ก.ย.</h2>
+    <div class="sec-note">ยอดต่อวันขึ้นลงแรงมาก ตั้งแต่ ฿0 ถึง ฿19,413 ยอดขายยังพึ่งออเดอร์ก้อนใหญ่ไม่กี่ออเดอร์ต่อสัปดาห์</div>
+    <div class="card">
+      <div class="scroll"><div id="chartDaily" style="min-width:620px"></div></div>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--s1)"></i>สิงหาคม</span>
+        <span><i class="sw" style="background:var(--s4)"></i>กันยายน</span>
+        <span>เส้นแนวนอน = ค่าเฉลี่ยต่อวันของแต่ละเดือน</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="dot" style="background:var(--s2)"></span>ลูกค้ามาจากช่องทางไหน</h2>
+    <div class="sec-note">“อื่น ๆ” เป็นช่องทางใหญ่สุดและปิดการขายได้ดีที่สุด (อัตราซื้อ 17–18%) น่าจะเป็นลูกค้าที่เข้ามาจากลิงก์ตรง เช่น LINE ส่วนหน้าแนะนำโตขึ้นชัดใน ก.ย.</div>
+    <div class="card">
+      <div class="ct">สัดส่วนยอดขายตามที่มาของการเข้าชม (หน้ารายละเอียดสินค้า)</div>
+      <div class="cs">ยอดจาก Live และวิดีโอของร้านเองยังเป็น 0 ทั้งสองเดือน</div>
+      <div class="scroll"><div id="chartSrc" style="min-width:520px"></div></div>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--s1)"></i>สิงหาคม</span>
+        <span><i class="sw" style="background:var(--s4)"></i>กันยายน (1–23)</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="dot" style="background:var(--s6)"></span>โฆษณา Shopee Ads และพาร์ทเนอร์</h2>
+    <div class="sec-note">ROAS ดีทั้งสองเดือน แต่ยอดจากโฆษณาเป็นแค่ 6–7% ของยอดร้าน แบบตั้งราคาอัตโนมัติทำผลได้ดีกว่าแบบกำหนด ROAS เองทั้งสองเดือน</div>
+    <div class="grid2">
+      <div class="card scroll"><div class="ct">Shopee Ads</div><div class="cs">ค่าโฆษณา · ยอดขายจากโฆษณา · ROAS</div><div id="adsTbl" style="min-width:380px"></div></div>
+      <div class="card scroll"><div class="ct">ช่องทางเสริม</div><div class="cs">ยอดขายจากพาร์ทเนอร์ (วิดีโอ affiliate), Live และวิดีโอของร้าน</div><div id="partTbl" style="min-width:320px"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="dot" style="background:var(--s2)"></span>สินค้าขายดี 5 อันดับ</h2>
+    <div class="sec-note">ฝากระดาษ PLA ปาก 90mm ขึ้นเป็นอันดับ 1 ทั้งสองเดือน (ราว ฿30k/เดือน) ส่วนแก้วกระดาษสองชั้น 8oz (ของร้อน) กลับเข้า Top 5 ใน ก.ย. ตามฤดูกาล</div>
+    <div class="grid2">
+      <div class="card scroll"><div class="ct">สิงหาคม</div><div class="cs">ยอดจากหน้ารายละเอียดสินค้า ฿181,234</div><div id="topAug" style="min-width:340px"></div></div>
+      <div class="card scroll"><div class="ct">กันยายน (1–23)</div><div class="cs">ยอดจากหน้ารายละเอียดสินค้า ฿153,338</div><div id="topSep" style="min-width:340px"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="dot"></span>ข้อค้นพบ ส.ค.–ก.ย. &amp; สิ่งที่ควรทำ</h2>
+    <div class="ins-list" id="insights2"></div>
+    <div class="caveat"><b>หมายเหตุการเทียบข้อมูล:</b> ไฟล์ ส.ค.–ก.ย. เป็นรายงานภาพรวมร้าน ส่วนครึ่งปีแรกใช้ชีต “สินค้าขายดี” ยอดขาย ออเดอร์ และ AOV เทียบกันได้ แต่ “ผู้เข้าชม” และ “conversion” นับคนละแบบ (ภาพรวมร้านนับผู้เข้าชมร้านไม่ซ้ำ ส่วนครึ่งปีแรกนับยอดเข้าชมหน้าสินค้า) จึงไม่ได้นำมาเทียบกันตรง ๆ</div>
+  </section>
+</div>
+
+<!-- ================= H1 (original report) ================= -->
+<div class="part" id="h1">
+  <div class="part-h"><h2 class="big">ครึ่งปีแรก: มกราคม–มิถุนายน 2026</h2></div>
+  <div class="sec-note" style="margin-top:4px">จากชีต “สินค้าขายดี” 6 ไฟล์ (01–06.xlsx)</div>
+
+<section style="margin-top:16px">
+  <div class="kpis" id="kpis"></div>
+  <div class="sec-note" style="margin-top:10px">* “ยอดขาย” ในส่วนนี้อ้างอิงคอลัมน์ <b>ยอดขาย (ที่มีการสั่งซื้อทั้งหมด)</b>; ตัวเลข “ยืนยันแล้ว” คือหลังหักออเดอร์ที่ถูกยกเลิก/ไม่สำเร็จ</div>
+</section>
+
+<section>
+  <h2><span class="dot" style="background:var(--s4)"></span>สัญญาณสำคัญ: ทราฟฟิกร่วง แต่มูลค่าต่อออเดอร์พุ่ง</h2>
+  <div class="sec-note">คนเข้าชมและจำนวนออเดอร์ลดลงต่อเนื่อง แต่ยอดขายเฉลี่ยต่อออเดอร์ (AOV) เพิ่มขึ้น 67% ธุรกิจถูกพยุงด้วยออเดอร์ก้อนใหญ่ขึ้น (ขายส่ง)</div>
+  <div class="grid2">
+    <div class="card"><div class="ct">การเข้าชมสินค้า (visits) / เดือน</div><div class="cs">↓ 118,950 → 80,996 (−32%)</div><div id="chartVisits"></div></div>
+    <div class="card"><div class="ct">ยอดขายเฉลี่ยต่อออเดอร์ — AOV (บาท)</div><div class="cs">↑ 609 → 1,016 (+67%)</div><div id="chartAov"></div></div>
+    <div class="card"><div class="ct">จำนวนออเดอร์ / เดือน</div><div class="cs">↓ 266 → 137 (−48%)</div><div id="chartOrders"></div></div>
+    <div class="card"><div class="ct">อัตราการเปลี่ยนเป็นยอดขาย — Conversion (%)</div><div class="cs">↓ 0.224% → 0.169% · ต่ำและมีแนวโน้มลดลง</div><div id="chartCr"></div></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="dot" style="background:var(--s3)"></span>เส้นทางลูกค้า (Funnel) รวมครึ่งปี</h2>
+  <div class="sec-note">จุดรั่วใหญ่ที่สุดอยู่ระหว่าง “คลิก → ใส่ตะกร้า → สั่งซื้อ” เข้าชม 607,323 ครั้ง เหลือเป็นออเดอร์เพียง 1,316</div>
+  <div class="card scroll"><div id="chartFunnel" style="min-width:560px"></div></div>
+</section>
+
+<section>
+  <h2><span class="dot" style="background:var(--s2)"></span>สินค้าขายดี 10 อันดับ (รวมครึ่งปี)</h2>
+  <div class="sec-note">สินค้ากระจุกตัวสูง เพียง 25 รายการแรกสร้างยอด 80% ของทั้งร้าน (จาก ~99 SKU ที่มียอดจริง)</div>
+  <div class="card scroll"><div id="topProds" style="min-width:480px"></div></div>
+</section>
+
+<section>
+  <h2><span class="dot" style="background:var(--s6)"></span>ดาวรุ่ง &amp; สินค้าร่วง (ไตรมาส 2 เทียบไตรมาส 1)</h2>
+  <div class="sec-note">ชัดเจนตามฤดูกาล: กลุ่ม “ถ้วยไอศกรีม” โตรับหน้าร้อน · กลุ่ม “แก้วกระดาษสองชั้น (ของร้อน)” หดตัว</div>
+  <div class="grid2">
+    <div class="card scroll"><div class="ct" style="color:var(--good)">▲ โตขึ้น</div><div id="riseTbl" style="min-width:340px"></div></div>
+    <div class="card scroll"><div class="ct" style="color:var(--crit)">▼ ลดลง</div><div id="fallTbl" style="min-width:340px"></div></div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="dot" style="background:var(--s5)"></span>โครงสร้างยอดขายตามกลุ่มสินค้า</h2>
+  <div class="sec-note">สองกลุ่มหลัก (แก้วกระดาษร้อน + ถ้วย/แก้วไอศกรีม) รวมกัน ~95% ของยอดทั้งร้าน</div>
+  <div class="card"><div id="catChart"></div></div>
+</section>
+
+<section>
+  <h2><span class="dot"></span>ข้อค้นพบครึ่งปีแรก &amp; ข้อเสนอแนะ</h2>
+  <div class="ins-list" id="insights"></div>
+</section>
+</div>
+
+<div class="foot">
+  ครึ่งปีแรก: ไฟล์ 01–06.xlsx (Shopee Business Insights, ชีต “สินค้าขายดี” นับเฉพาะแถวสินค้าหลัก). ยอดขายรวมครึ่งปี ฿981,403 (ยืนยันแล้ว ฿948,699).<br>
+  ส.ค.–ก.ย.: stats.20260801-20260831.xlsx และ stats.20260901-20260923.xlsx (ภาพรวมร้าน: ทั้งหมด / ยืนยันแล้ว / ที่มาของการเข้าชม / รายการสินค้า). ยังไม่มีข้อมูลเดือนกรกฎาคม.
+</div>
+</div>
+
+
+</div>
+
+<div class="tab-content" id="tab-makro">
+  <div class="soon-box">
+    <span class="pill">เริ่มเดือนตุลาคม 2026</span>
+    <h2>Makro — รอข้อมูลเดือนแรก</h2>
+    <p>หน้านี้เตรียมไว้สำหรับรายงานยอดขายบน Makro เมื่อได้ไฟล์ข้อมูลเดือนแรกแล้ว จะใส่หัวข้อชุดเดียวกับ Shopee เพื่อให้เทียบกันได้:</p>
+    <ul>
+      <li>ยอดขาย ออเดอร์ และยอดเฉลี่ยต่อออเดอร์ รายเดือน/รายวัน</li>
+      <li>สินค้าขายดี และสินค้าที่ไม่เคลื่อนไหว</li>
+      <li>ยอดยกเลิก/คืนสินค้า และค่าธรรมเนียมแพลตฟอร์ม</li>
+      <li>เทียบ Shopee vs Makro</li>
+    </ul>
+  </div>
+</div>
+<script>
+const F=n=>n.toLocaleString('en-US',{maximumFractionDigits:0});
+const NS='http://www.w3.org/2000/svg';
+function svg(w,h){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox',`0 0 ${w} ${h}`);s.setAttribute('width',w);s.setAttribute('height',h);return s;}
+function el(p,t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;}
+const fillv=v=>`fill:var(${v})`;
+
+/* ================= Trend Jan–Sep ================= */
+(function(){
+  const M=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.*'];
+  const all=[161996,150769,219664,176258,133574,139142,null,187445,155860];
+  const conf=[158146,146882,212415,162869,130381,138006,null,180990,154720];
+  const proj=203296;
+  const W=980,H=310,pl=64,pr=16,pt=20,pb=40,iw=W-pl-pr,ih=H-pt-pb;
+  const max=240000;const s=svg(W,H);
+  for(let i=0;i<=4;i++){const y=pt+ih-ih*i/4;el(s,'line',{x1:pl,x2:W-pr,y1:y,y2:y,class:'grid-l'});
+    el(s,'text',{x:pl-8,y:y+4,'text-anchor':'end',class:'axlab'}).textContent=F(max*i/4);}
+  const bw=iw/M.length,bar=24,gap=5;
+  M.forEach((m,i)=>{const cx=pl+bw*i+bw/2;
+    el(s,'text',{x:cx,y:H-14,'text-anchor':'middle',class:'axlab'}).textContent=m;
+    if(all[i]==null){el(s,'text',{x:cx,y:pt+ih-10,'text-anchor':'middle',class:'axlab'}).textContent='ไม่มีข้อมูล';return;}
+    if(i===8){const hp=proj/max*ih;
+      el(s,'rect',{x:cx-bar-gap/2,y:pt+ih-hp,width:bar,height:hp,rx:4,style:'fill:none;stroke:var(--s1);stroke-width:1.5;stroke-dasharray:4 3'});
+      el(s,'text',{x:cx-bar/2-gap/2,y:pt+ih-hp-6,'text-anchor':'middle',class:'axlab'}).textContent='~203k';}
+    const h1=all[i]/max*ih,h2=conf[i]/max*ih;
+    el(s,'rect',{x:cx-bar-gap/2,y:pt+ih-h1,width:bar,height:h1,rx:4,style:fillv('--s1')});
+    el(s,'rect',{x:cx+gap/2,y:pt+ih-h2,width:bar,height:h2,rx:4,style:fillv('--s2')});
+    if(i!==8)el(s,'text',{x:cx-bar/2-gap/2,y:pt+ih-h1-6,'text-anchor':'middle',class:'vlab'}).textContent=F(all[i]/1000)+'k';
+    else el(s,'text',{x:cx-bar/2-gap/2,y:pt+ih-h1+14,'text-anchor':'middle',style:'fill:#fff;font-size:10.5px;font-weight:700'}).textContent=F(all[i]/1000)+'k';
+  });
+  document.getElementById('chartTrend').appendChild(s);
+})();
+
+/* ================= Aug–Sep ================= */
+const A={days:31,sales:187445,conf:180990,orders:165,aov:1136,buyers:123,newb:66,ret:57,repeat:17.89,visitors:1967,clicks:4052,cancel:18793,cancelN:18,ads:3000,adsSales:13701,partner:6211};
+const S={days:23,sales:155860,conf:154720,orders:151,aov:1032,buyers:118,newb:61,ret:57,repeat:21.19,visitors:1702,clicks:3091,cancel:9662,cancelN:12,ads:1189,adsSales:9479,partner:2522};
+
+const kpis2=[
+  {lab:'ยอดขาย ส.ค.',val:'฿187,445',chg:'สูงกว่าทุกเดือนใน H1 ยกเว้น มี.ค.',cls:'up'},
+  {lab:'ยอดขาย ก.ย. (1–23)',val:'฿155,860',chg:'คาดทั้งเดือน ~฿203k ▲',cls:'up'},
+  {lab:'ยอดขายต่อวัน ก.ย.',val:'฿6,777',chg:'+12% จาก ส.ค. (฿6,047)',cls:'up'},
+  {lab:'ออเดอร์ต่อวัน ก.ย.',val:'6.6',chg:'+23% จาก ส.ค. (5.3)',cls:'up'},
+  {lab:'ยอดเฉลี่ย/ออเดอร์ (AOV)',val:'฿1,032',chg:'ส.ค. ฿1,136 · ยังเกิน ฿1,000',cls:''},
+  {lab:'อัตรากลับมาซื้อซ้ำ',val:'21.2%',chg:'ส.ค. 17.9% ▲',cls:'up'},
+  {lab:'ROAS โฆษณา ก.ย.',val:'8.0',chg:'ส.ค. 4.6 · งบลดเหลือ ฿1,189',cls:'up'},
+  {lab:'ยอดยกเลิก ส.ค.',val:'฿18,793',chg:'18 ออเดอร์ · ~10% ของยอด ▲',cls:'down'},
+];
+
+const pd=(o,k)=>o[k]/o.days;
+(function(){
+  const rows=[
+    ['ยอดขายทั้งหมด',v=>'฿'+F(v.sales),v=>'฿'+F(pd(v,'sales')),'sales'],
+    ['ยอดยืนยันแล้ว',v=>'฿'+F(v.conf),v=>'฿'+F(pd(v,'conf')),'conf'],
+    ['คำสั่งซื้อ',v=>F(v.orders),v=>pd(v,'orders').toFixed(1),'orders'],
+    ['ผู้เข้าชมร้าน (ไม่ซ้ำ)',v=>F(v.visitors),v=>pd(v,'visitors').toFixed(0),'visitors'],
+    ['จำนวนคลิก',v=>F(v.clicks),v=>pd(v,'clicks').toFixed(0),'clicks'],
+    ['ผู้ซื้อ (ใหม่ / เดิม)',v=>`${v.buyers} (${v.newb} / ${v.ret})`,v=>pd(v,'buyers').toFixed(1),'buyers'],
+    ['ยอดยกเลิก (ออเดอร์)',v=>`฿${F(v.cancel)} (${v.cancelN})`,v=>'฿'+F(pd(v,'cancel')),'cancel'],
+  ];
+  let h='<table class="tbl"><thead><tr><th>ตัวชี้วัด</th><th>ส.ค. รวม</th><th>ก.ย. รวม (23 วัน)</th><th>ส.ค. /วัน</th><th>ก.ย. /วัน</th><th>เปลี่ยนแปลง/วัน</th></tr></thead><tbody>';
+  rows.forEach(r=>{const ch=(pd(S,r[3])/pd(A,r[3])-1)*100;const good=r[3]==='cancel'?ch<0:ch>0;
+    h+=`<tr><td>${r[0]}</td><td>${r[1](A)}</td><td>${r[1](S)}</td><td>${r[2](A)}</td><td>${r[2](S)}</td><td style="font-weight:700;color:var(${good?'--good':'--crit'})">${ch>0?'+':''}${ch.toFixed(0)}%</td></tr>`;});
+  document.getElementById('cmpTbl').innerHTML=h+'</tbody></table>';
+})();
+
+(function(){
+  const a=[1607,7485,19413,11368,6107,1353,0,6447,9351,6800,5707,932,3858,0,4667,9528,8419,5329,1020,9051,5966,4029,1545,5478,8629,3980,10813,1843,4389,18053,4278];
+  const b=[7548,7046,1779,1124,1755,8403,10485,3663,17416,4082,14485,2690,2993,6463,12906,4307,10450,165,4810,984,12014,9330,10962];
+  const d=a.concat(b);const W=980,H=240,pl=52,pr=10,pt=14,pb=34,iw=W-pl-pr,ih=H-pt-pb;const max=20000;const s=svg(W,H);
+  for(let i=0;i<=4;i++){const y=pt+ih-ih*i/4;el(s,'line',{x1:pl,x2:W-pr,y1:y,y2:y,class:'grid-l'});
+    el(s,'text',{x:pl-8,y:y+4,'text-anchor':'end',class:'axlab'}).textContent=F(max*i/4/1000)+'k';}
+  const bw=iw/d.length;
+  d.forEach((v,i)=>{const h=v/max*ih;const aug=i<a.length;
+    el(s,'rect',{x:pl+bw*i+1,y:pt+ih-h,width:Math.max(bw-2,1),height:h,rx:2,style:fillv(aug?'--s1':'--s4')});
+    const day=aug?i+1:i-a.length+1;
+    if(day===1||day%5===0)el(s,'text',{x:pl+bw*i+bw/2,y:H-16,'text-anchor':'middle',class:'axlab'}).textContent=day;});
+  el(s,'text',{x:pl+bw*15.5,y:H-2,'text-anchor':'middle',class:'axlab'}).textContent='สิงหาคม';
+  el(s,'text',{x:pl+bw*(a.length+11.5),y:H-2,'text-anchor':'middle',class:'axlab'}).textContent='กันยายน';
+  [[0,a.length,6047,'--s1'],[a.length,d.length,6777,'--s4']].forEach(([x0,x1,avg,c])=>{const y=pt+ih-avg/max*ih;
+    el(s,'line',{x1:pl+bw*x0,x2:pl+bw*x1,y1:y,y2:y,style:`stroke:var(${c});stroke-width:1.5;stroke-dasharray:5 4`});
+    el(s,'text',{x:pl+bw*x1-4,y:y-5,'text-anchor':'end',class:'vlab'}).textContent='เฉลี่ย ฿'+F(avg);});
+  document.getElementById('chartDaily').appendChild(s);
+})();
+
+(function(){
+  const src=[['อื่น ๆ (ลิงก์ตรง ฯลฯ)',24.33,33.08],['ร้านค้า',25.49,18.38],['แนะนำ',12.11,18.72],['การค้นหา',12.56,13.34],
+    ['การซื้อของฉัน (ซื้อซ้ำ)',12.03,11.72],['แชท',8.13,1.80],['รถเข็น',5.35,2.62],['โปรโมชั่น',0,0.34]];
+  const W=980,rowH=40,H=src.length*rowH+8,lx=200,max=40;const iw=W-lx-70;const s=svg(W,H);
+  src.forEach((r,i)=>{const y=i*rowH+4;
+    el(s,'text',{x:lx-10,y:y+20,'text-anchor':'end',class:'vlab',style:'font-size:12.5px'}).textContent=r[0];
+    [[r[1],'--s1',0],[r[2],'--s4',16]].forEach(([v,c,off])=>{const w=Math.max(v/max*iw,1.5);
+      el(s,'rect',{x:lx,y:y+off,width:w,height:13,rx:3,style:fillv(c)});
+      el(s,'text',{x:lx+w+6,y:y+off+11,class:'axlab',style:'font-weight:700'}).textContent=v.toFixed(1)+'%';});
+  });
+  document.getElementById('chartSrc').appendChild(s);
+})();
+
+(function(){
+  document.getElementById('adsTbl').innerHTML=`<table class="tbl"><thead><tr><th>แคมเปญ</th><th>ส.ค.</th><th>ก.ย. (1–23)</th></tr></thead><tbody>
+    <tr><td>ตั้งราคาอัตโนมัติ</td><td>฿2,265 → ฿11,688<br><b>ROAS 5.2</b></td><td>฿450 → ฿4,906<br><b>ROAS 10.9</b></td></tr>
+    <tr><td>กำหนด ROAS เอง</td><td>฿735 → ฿2,013<br><b>ROAS 2.7</b></td><td>฿739 → ฿4,573<br><b>ROAS 6.2</b></td></tr>
+    <tr><td><b>รวม</b></td><td><b>฿3,000 → ฿13,701</b><br>ROAS 4.6 · 7.3% ของยอดร้าน</td><td><b>฿1,189 → ฿9,479</b><br>ROAS 8.0 · 6.1% ของยอดร้าน</td></tr>
+  </tbody></table>`;
+  document.getElementById('partTbl').innerHTML=`<table class="tbl"><thead><tr><th>ช่องทาง</th><th>ส.ค.</th><th>ก.ย. (1–23)</th></tr></thead><tbody>
+    <tr><td>วิดีโอพาร์ทเนอร์</td><td>฿6,211<br><span style="color:var(--muted)">11 ออเดอร์</span></td><td>฿2,522<br><span style="color:var(--muted)">2 ออเดอร์</span></td></tr>
+    <tr><td>Live ของร้าน</td><td>฿0</td><td>฿0</td></tr>
+    <tr><td>วิดีโอของร้าน</td><td>฿0</td><td>฿0</td></tr>
+  </tbody></table>`;
+})();
+
+function topTbl(id,rows,tot){
+  const max=rows[0][1];let h='<table class="tbl"><thead><tr><th></th><th>สินค้า</th><th>ยอดขาย</th><th>สัดส่วน</th></tr></thead><tbody>';
+  rows.forEach((r,i)=>{h+=`<tr><td class="rk">${i+1}</td><td style="text-align:left">${r[0]}</td><td style="white-space:nowrap"><span class="prodbar" style="width:${Math.round(r[1]/max*60)}px"></span> ฿${F(r[1])}</td><td>${(r[1]/tot*100).toFixed(1)}%</td></tr>`;});
+  document.getElementById(id).innerHTML=h+'</tbody></table>';
+}
+topTbl('topAug',[['ฝากระดาษ PLA ปิดแก้ว ปาก 90mm [200/500/1,000]',30949],['ถ้วยไอศกรีม 4oz + ฝาพลาสติก [600/1,000ชุด]',23134],
+  ['ถ้วยไอศกรีมหลากสี 4oz [500/1,500]',18861],['ถ้วยไอศกรีมขาว 5oz + ฝาช้อน [500/700ชุด]',10224],['ชุดฝาไอศกรีม 4oz พร้อมช้อน [200/600]',9283]],181234);
+topTbl('topSep',[['ฝากระดาษ PLA ปิดแก้ว ปาก 90mm [200/500/1,000]',27515],['ถ้วยไอศกรีม 4oz + ฝาพลาสติก [600/1,000ชุด]',13389],
+  ['แก้วกระดาษสองชั้น 8oz ไม่รวมฝา [250/500]',12001],['ถ้วยไอศกรีมขาว 5oz + ฝาช้อน [500/700ชุด]',11925],['ถ้วยไอศกรีม 4oz + ฝา [50/100ชุด]',8263]],153338);
+
+const INS2=[
+  {c:'--good',tag:'ฟื้นตัว',t:'ยอดขายกลับขึ้นมา และออเดอร์หยุดร่วงแล้ว',
+   p:'ส.ค. ทำได้ ฿187k สูงกว่า มิ.ย. (฿139k) 35% และ ก.ย. ขายต่อวันดีกว่า ส.ค. อีก 12% ออเดอร์ต่อวันเพิ่ม 23% ต่างจากครึ่งปีแรกที่ออเดอร์ลดลงทุกเดือน'},
+  {c:'--s1',tag:'สินค้าใหม่ที่มาแรง',t:'ฝา PLA ปาก 90mm เป็นอันดับ 1 ทั้งสองเดือน',
+   p:'ทำยอดราว ฿30k ต่อเดือน (17–18% ของยอดหน้าสินค้า) ทั้งที่ไม่ติด 10 อันดับในครึ่งปีแรก AOV สูงราว ฿2,200–2,400 และอัตราซื้อ 8–10% ควรดูแลสต็อกให้พอและใช้เป็นสินค้าหลักในโฆษณา'},
+  {c:'--warn',tag:'ฤดูกาล',t:'แก้วของร้อนกลับมา ถ้วยไอศกรีมเริ่มลด',
+   p:'แก้วกระดาษสองชั้น 8oz กลับเข้า Top 5 ใน ก.ย. (฿12k) ขณะที่ถ้วยไอศกรีม 4oz + ฝาพลาสติกลดจาก ฿23k เหลือ ฿13k ควรเตรียมสต็อกและโฆษณากลุ่มแก้วของร้อนสำหรับ ต.ค.–ธ.ค.'},
+  {c:'--s6',tag:'โอกาส',t:'โฆษณาได้ ROAS ดีแต่ใช้งบน้อยมาก',
+   p:'ก.ย. ใช้งบแค่ ฿1,189 ได้ยอด ฿9,479 (ROAS 8.0) แบบตั้งราคาอัตโนมัติได้ ROAS 10.9 ลองเพิ่มงบเป็นขั้น ๆ ในแคมเปญอัตโนมัติ โดยเน้นฝา PLA และแก้วของร้อน'},
+  {c:'--s2',tag:'จุดแข็ง',t:'ลูกค้าเดิมและลิงก์ตรงคือฐานยอดขาย',
+   p:'ผู้ซื้อเกือบครึ่งเป็นลูกค้าเดิม (57 คนทั้งสองเดือน) อัตรากลับมาซื้อซ้ำขึ้นเป็น 21% และช่องทาง “อื่น ๆ” ที่ปิดการขายได้ 17–18% เป็นแหล่งยอดขายใหญ่สุด ควรหาให้ชัดว่ามาจากลิงก์ไหน แล้วขยายช่องทางนั้น'},
+  {c:'--crit',tag:'ตรวจสอบ',t:'ยอดยกเลิก ส.ค. สูงราว 10%',
+   p:'ช่อง “ยอดขายที่ยกเลิก” ส.ค. อยู่ที่ ฿18,793 (18 ออเดอร์) และ ก.ย. ฿9,662 (12 ออเดอร์) แต่ถ้าคิดแบบครึ่งปีแรก (ยอดทั้งหมดลบยอดยืนยัน) จะได้แค่ 3.4% และ 0.7% อาจเพราะ Shopee นับตามวันที่ยกเลิก ควรเปิดดูรายการออเดอร์ที่ยกเลิกใน ส.ค. ว่ามีออเดอร์ใหญ่หรือไม่'},
+];
+const REC2=`<div class="rec"><b>สิ่งที่ควรทำต่อ:</b> ①เพิ่มงบโฆษณาแบบตั้งราคาอัตโนมัติทีละขั้น ②เตรียมสต็อกฝา PLA 90mm และแก้วของร้อนสำหรับปลายปี ③หาให้ชัดว่าช่อง “อื่น ๆ” มาจากลิงก์ไหน ④เปิดดูออเดอร์ที่ยกเลิกใน ส.ค. ⑤ลองทำวิดีโอ/Live ของร้านเอง ซึ่งยังเป็นศูนย์</div>`;
+
+/* ================= H1 (original) ================= */
+const months=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.'];
+const D={visits:[118950,101062,136326,95442,74547,80996],aov:[609,560,752,839,941,1016],orders:[266,269,292,210,142,137],cr:[0.224,0.266,0.214,0.220,0.190,0.169]};
+const kpis=[
+  {lab:'ยอดขายรวม H1 (ทั้งหมด)',val:'฿981,403',chg:'ยืนยันแล้ว ฿948,699 (96.7%)',cls:''},
+  {lab:'ออเดอร์รวม / ชิ้นที่ขายได้',val:'1,316',sm:' ออเดอร์',chg:'1,483 ชิ้น · เฉลี่ย 1.13 ชิ้น/ออเดอร์',cls:''},
+  {lab:'ยอดขายเฉลี่ย/ออเดอร์ (H1)',val:'฿746',chg:'มิ.ย. แตะ ฿1,016 ▲',cls:'up'},
+  {lab:'อัตรายกเลิก (มูลค่า)',val:'3.3%',chg:'พุ่งสูงสุด เม.ย. 7.6% ▲',cls:'down'},
+  {lab:'ผู้เข้าชมรวม (visits)',val:'607,323',chg:'แนวโน้มลดลง −32% ครึ่งปี',cls:'down'},
+  {lab:'Conversion เฉลี่ย',val:'0.22%',chg:'ต่ำ · ลดเหลือ 0.17% (มิ.ย.)',cls:'down'},
+  {lab:'เดือนยอดสูงสุด',val:'มี.ค.',chg:'฿219,664 (+45.7% จาก ก.พ.)',cls:'up'},
+  {lab:'SKU ที่มียอดขายจริง',val:'~99',chg:'จาก ~285 · Top25 = 80%',cls:''},
+];
+const kpiHtml=a=>a.map(k=>`<div class="kpi"><div class="lab">${k.lab}</div><div class="val">${k.val}${k.sm?`<small>${k.sm}</small>`:''}</div><div class="chg ${k.cls}">${k.chg}</div></div>`).join('');
+document.getElementById('kpis2').innerHTML=kpiHtml(kpis2);
+document.getElementById('kpis').innerHTML=kpiHtml(kpis);
+
+function lineChart(id,data,cv,fmt){
+  const W=470,H=210,P={pl:52,pr:16,pt:18,pb:30};const iw=W-P.pl-P.pr,ih=H-P.pt-P.pb;
+  const mn=Math.min(...data),mx=Math.max(...data);const lo=mn-(mx-mn)*0.25,hi=mx+(mx-mn)*0.2;const s=svg(W,H);
+  for(let i=0;i<=3;i++){const y=P.pt+ih-ih*i/3;el(s,'line',{x1:P.pl,x2:W-P.pr,y1:y,y2:y,class:'grid-l'});
+    el(s,'text',{x:P.pl-8,y:y+4,'text-anchor':'end',class:'axlab'}).textContent=fmt(lo+(hi-lo)*i/3);}
+  const X=i=>P.pl+iw*i/(data.length-1),Y=v=>P.pt+ih-(v-lo)/(hi-lo)*ih;
+  let d='';data.forEach((v,i)=>d+=(i?'L':'M')+X(i)+' '+Y(v)+' ');
+  el(s,'path',{d:d+`L${X(data.length-1)} ${P.pt+ih} L${X(0)} ${P.pt+ih} Z`,style:`fill:var(${cv});fill-opacity:.12`});
+  el(s,'path',{d:d.trim(),style:`fill:none;stroke:var(${cv});stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round`});
+  data.forEach((v,i)=>{el(s,'circle',{cx:X(i),cy:Y(v),r:4,style:`fill:var(${cv});stroke:var(--surface);stroke-width:2`});
+    el(s,'text',{x:X(i),y:Y(v)-10,'text-anchor':'middle',class:'vlab'}).textContent=fmt(v);
+    el(s,'text',{x:X(i),y:H-10,'text-anchor':'middle',class:'axlab'}).textContent=months[i];});
+  document.getElementById(id).appendChild(s);
+}
+lineChart('chartVisits',D.visits,'--s4',v=>F(v/1000)+'k');
+lineChart('chartAov',D.aov,'--s2',v=>'฿'+F(v));
+lineChart('chartOrders',D.orders,'--s1',v=>F(v));
+lineChart('chartCr',D.cr,'--s5',v=>v.toFixed(2)+'%');
+
+(function(){
+  const steps=[['เข้าชมสินค้า',607323,'--s1'],['คลิกเข้าชม',26257,'--s2'],['ใส่ตะกร้า (ชิ้น)',4512,'--s3'],['ออเดอร์',1316,'--s4']];
+  const W=980,rowH=54,H=steps.length*rowH+10;const s=svg(W,H);const maxv=steps[0][1],barMax=W-360;
+  steps.forEach((st,i)=>{const y=i*rowH+8;const w=Math.max(barMax*st[1]/maxv,3);
+    el(s,'rect',{x:150,y:y,width:w,height:34,rx:6,style:fillv(st[2])});
+    el(s,'text',{x:140,y:y+22,'text-anchor':'end',class:'vlab',style:'font-size:13px'}).textContent=st[0];
+    el(s,'text',{x:150+w+10,y:y+22,class:'vlab',style:'font-size:13px'}).textContent=F(st[1]);
+    if(i>0){const conv=st[1]/steps[i-1][1]*100;
+      el(s,'text',{x:150+w+80,y:y+22,class:'axlab'}).textContent='('+conv.toFixed(conv<1?2:1)+'% จากขั้นก่อน)';}});
+  document.getElementById('chartFunnel').appendChild(s);
+})();
+
+(function(){
+  const P=[['ถ้วยไอศกรีมสีขาว 5oz [500/700ชุด]',114584,'6/6'],['ถ้วยไอศกรีม 4oz (พร้อมฝาพลาสติก)',68481,'5/6'],
+    ['แก้วกระดาษสองชั้น 8oz (ไม่รวมฝา)',63725,'6/6'],['แก้วกระดาษสองชั้น 8oz [200 ชุด]',55217,'6/6'],
+    ['ถ้วยไอศกรีมกระดาษ หลากสี 4oz [500/1,500]',51252,'6/6'],['ถ้วยไอศกรีม 4oz (พร้อมชุดฝากระดาษ)',48549,'6/6'],
+    ['ชุดฝาไอศกรีม 4 oz. พร้อมช้อน',43747,'6/6'],['ถ้วยไอศครีมสีขาว 5oz (พร้อมฝา)',37931,'6/6'],
+    ['ฝาเรียบ ปิดแก้วกระดาษ ปาก 90 MM',36370,'6/6'],['แก้วกระดาษเย็น SW (เงา) 16oz',29062,'6/6']];
+  const max=P[0][1];let h='<table class="tbl"><thead><tr><th>สินค้า</th><th>เดือนที่ขาย</th><th>ยอดรวม H1</th><th>สัดส่วน</th></tr></thead><tbody>';
+  P.forEach(p=>{h+=`<tr><td>${p[0]}</td><td style="color:var(--muted)">${p[2]}</td><td style="white-space:nowrap"><span class="prodbar" style="width:${Math.round(p[1]/max*120)}px"></span> ฿${F(p[1])}</td><td>${(p[1]/981403*100).toFixed(1)}%</td></tr>`;});
+  document.getElementById('topProds').innerHTML=h+'</tbody></table>';
+})();
+
+function moverTbl(id,rows,cv){
+  let h='<table class="tbl"><thead><tr><th>สินค้า</th><th>Q1→Q2</th><th>เปลี่ยนแปลง</th></tr></thead><tbody>';
+  rows.forEach(r=>{h+=`<tr><td>${r[0]}</td><td style="color:var(--muted);white-space:nowrap">${F(r[1])}→${F(r[2])}</td><td style="color:var(${cv});font-weight:700">${r[3]>0?'+':''}${F(r[3])}</td></tr>`;});
+  document.getElementById(id).innerHTML=h+'</tbody></table>';
+}
+moverTbl('riseTbl',[['ถ้วยไอศกรีม 4oz (พร้อมชุดฝากระดาษ)',11095,37454,26359],['ถ้วยไอศกรีมหลากสี 4oz [500/1,500]',15679,35573,19894],
+  ['ถ้วยไอศกรีมสีขาว 5oz [500/700ชุด]',48788,65796,17008],['ถ้วยไอศกรีม 4oz (พร้อมฝาพลาสติก)',26128,42353,16225],['ถ้วยไอศกรีม 4oz [50/100ชุด]',9682,14505,4823]],'--good');
+moverTbl('fallTbl',[['แก้วกระดาษสองชั้น 8oz (ไม่รวมฝา)',46075,17650,-28425],['แก้วกระดาษสองชั้น 8oz [200 ชุด]',33937,21280,-12657],
+  ['แก้วพลาสติก PET 16oz (เลิกขาย?)',10038,0,-10038],['แก้วกระดาษสองชั้น 8oz [100 ชุด]',15236,5754,-9482],['ฝายกดื่มปิดแก้ว ปาก 90mm',12788,5150,-7638]],'--crit');
+
+(function(){
+  const C=[['แก้วกระดาษ (ของร้อน)',474892,'--s1'],['ถ้วย/แก้วไอศกรีม (ของเย็น)',462303,'--s2'],['ช้อน/หลอด/อื่นๆ',20354,'--s3'],['ฝาแยกขาย',14744,'--s4'],['เบ็ดเตล็ด',9110,'--s6']];
+  const tot=C.reduce((a,c)=>a+c[1],0);const W=980,H=46;const s=svg(W,H);let x=0;
+  C.forEach((c,i)=>{const w=c[1]/tot*W;
+    el(s,'rect',{x:x+(i?1:0),y:8,width:Math.max(w-1,1),height:30,rx:i===0||i===C.length-1?4:0,style:fillv(c[2])});
+    if(w>80)el(s,'text',{x:x+w/2,y:28,'text-anchor':'middle',style:'fill:#fff;font-size:12px;font-weight:700'}).textContent=(c[1]/tot*100).toFixed(0)+'%';
+    x+=w;});
+  const box=document.getElementById('catChart');box.appendChild(s);
+  let h='<div class="legend" style="margin-top:14px">';
+  C.forEach(c=>h+=`<span><i class="sw" style="background:var(${c[2]})"></i>${c[0]} — ฿${F(c[1])} (${(c[1]/tot*100).toFixed(1)}%)</span>`);
+  box.insertAdjacentHTML('beforeend',h+'</div>');
+})();
+
+const INS=[
+  {c:'--crit',tag:'ต้องระวัง',t:'ทราฟฟิกและออเดอร์ลดลงต่อเนื่อง',
+   p:'ผู้เข้าชมลดจาก 118,950 (ม.ค.) เหลือ 80,996 (มิ.ย.) และออเดอร์ลดจาก 266 เหลือ 137 (−48%) ยอดขายที่ยังทรงตัวได้มาจากออเดอร์ก้อนใหญ่ขึ้น ไม่ใช่จำนวนลูกค้าที่เพิ่ม เป็นฐานที่เปราะบางถ้าลูกค้ารายใหญ่หายไป'},
+  {c:'--good',tag:'จุดแข็ง',t:'มูลค่าต่อออเดอร์ (AOV) พุ่งขึ้น 67%',
+   p:'AOV เพิ่มจาก 609 เป็น 1,016 บาท สะท้อนสัดส่วนลูกค้าซื้อส่ง/ซื้อจำนวนมากที่โตขึ้น ควรต่อยอดด้วยแพ็กใหญ่และเงื่อนไขราคาส่ง'},
+  {c:'--warn',tag:'โอกาส',t:'Conversion ต่ำมาก (~0.2%) และยังลดลง',
+   p:'คนเข้าชมเยอะแต่ปิดการขายได้น้อยกว่า 2 ใน 1,000 คน จุดรั่วอยู่ช่วง คลิก → ใส่ตะกร้า → จ่ายเงิน ปรับรูปหน้าปก ราคา รีวิว และตัวเลือกสินค้าให้ชัด จะเพิ่มยอดได้โดยไม่ต้องเพิ่มทราฟฟิก'},
+  {c:'--s1',tag:'ฤดูกาล',t:'สินค้าไอศกรีมโตรับหน้าร้อน แก้วของร้อนหด',
+   p:'Q2 กลุ่มถ้วยไอศกรีม 4oz โตแรง (+26k, +20k, +16k) ขณะที่แก้วกระดาษสองชั้น 8oz (ของร้อน) ร่วง −28k/−13k ควรสต็อกและดันโฆษณากลุ่มไอศกรีมช่วง เม.ย.–ก.ย. และเตรียมกลุ่มของร้อนสำหรับปลายปี'},
+  {c:'--serious',tag:'ตรวจสอบ',t:'อัตรายกเลิกพุ่งในเดือนเมษายน 7.6%',
+   p:'ปกติมูลค่าที่ถูกยกเลิกอยู่ ~2–3% แต่เดือน เม.ย. สูงถึง 7.6% ควรตรวจสาเหตุ (ของหมด ปัญหาจัดส่งช่วงสงกรานต์ หรือออเดอร์ก้อนใหญ่ที่ถูกยกเลิก)'},
+  {c:'--s6',tag:'โอกาสใหญ่',t:'โฆษณาแทบไม่ได้ใช้ / สินค้าใหม่ยังไม่ติด',
+   p:'แต่ละเดือนบูสต์โฆษณาเพียง 1 สินค้า และบางเดือนสินค้าที่บูสต์มีคนเข้าชมแต่ยอดขาย 0 สินค้าใหม่ที่เปิดตัวก็ยังยอด 0 ควรวางแผนโฆษณาและคอนเทนต์เปิดตัวสินค้าใหม่อย่างจริงจัง'},
+];
+const REC=`<div class="rec"><b>สิ่งที่ควรทำต่อ (H1):</b> ①เร่งฟื้นทราฟฟิกด้วยโฆษณา Shopee + คอนเทนต์ ②ยกเครื่องหน้าสินค้า Top-25 (รูป/ราคา/รีวิว/ตัวเลือก) ③ต่อยอด AOV ด้วยแพ็กส่ง/ส่วนลดขั้นบันได ④ตรวจต้นเหตุการยกเลิกเดือน เม.ย. ⑤วางระบบเปิดตัวสินค้าใหม่ให้มีโฆษณา+รีวิวตั้งแต่วันแรก</div>`;
+const insHtml=a=>a.map(i=>`<div class="insight" style="border-left-color:var(${i.c})"><h3><span class="tag" style="background:var(${i.c});color:${i.c==='--warn'?'#111':'#fff'}">${i.tag}</span>${i.t}</h3><p>${i.p}</p></div>`).join('');
+document.getElementById('insights2').innerHTML=insHtml(INS2)+REC2;
+document.getElementById('insights').innerHTML=insHtml(INS)+REC;
+
+document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab-btn').forEach(x=>x.classList.toggle('active',x===b));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.toggle('active',t.id==='tab-'+b.dataset.tab));
+}));
+</script>
+
+</body>
+</html>
