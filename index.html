@@ -1393,7 +1393,7 @@
           <div style="margin-top:6px;font-size:10px;color:#666">
             2025 มี ${active25} เดือนที่ซื้อ (จาก 7 เดือน H2) · 2026 YTD มี ${active26} เดือน (จาก 8 เดือน)
             ${active25>0 && active26>0 ? ` · <strong style="color:#4a8a54">🟢 ลูกค้าซื้อต่อเนื่อง</strong>` : ''}
-            ${active25>0 && active26===0 ? ` · <strong style="color:#e58079">🔴 หายไปใน 2026</strong>` : ''}
+            ${active25>0 && active26===0 ? ` · <strong style="color:#e58079">🔴 ไม่พบการซื้อใน 2026 (เช็คกับ Peak)</strong>` : ''}
             ${active25===0 && active26>0 ? ` · <strong style="color:#e69a68">🟠 ลูกค้าใหม่ในปี 2026</strong>` : ''}
           </div>
         </div>
@@ -1428,8 +1428,8 @@
         if(r26){[c2,v2]=r26;}
         const in26 = r25 && set26.has(normCustName(r25[0]));
         const in25 = r26 && set25.has(normCustName(r26[0]));
-        const badge25 = r25 ? (in26 ? '<span style="color:#4a8a54;font-weight:700;font-size:10px">🟢 คงเหลือ</span>' : '<span style="color:#e58079;font-weight:700;font-size:10px">🔴 หาย</span>') : '';
-        const badge26 = r26 ? (in25 ? '<span style="color:#4a8a54;font-weight:700;font-size:10px">🟢 เดิม</span>' : '<span style="color:#e69a68;font-weight:700;font-size:10px">🟠 ใหม่</span>') : '';
+        const badge25 = r25 ? (in26 ? '<span style="color:#4a8a54;font-weight:700;font-size:10px">🟢 ติด Top10 ทั้ง 2 ปี</span>' : '<span style="color:#e69a68;font-weight:700;font-size:10px">⬇️ หลุด Top10 ปี 2026</span>') : '';
+        const badge26 = r26 ? (in25 ? '<span style="color:#4a8a54;font-weight:700;font-size:10px">🟢 ติด Top10 ทั้ง 2 ปี</span>' : '<span style="color:#e69a68;font-weight:700;font-size:10px">🆕 เพิ่งเข้า Top10</span>') : '';
         const clk25 = r25 ? `onclick="toggleHeatmap('hm-${sp}-25-${idx}')" style="cursor:pointer;user-select:none"` : '';
         const clk26 = r26 ? `onclick="toggleHeatmap('hm-${sp}-26-${idx}')" style="cursor:pointer;user-select:none"` : '';
         const hm25 = r25 ? `<tr id="hm-${sp}-25-${idx}" style="display:none"><td colspan="4">${renderHeatmap(sp, r25[0])}</td></tr>` : '';
@@ -1461,7 +1461,7 @@
             <div style="font-size:18px;font-weight:800;color:#4a8a54">${retained}/10 🟢</div>
           </div>
           <div style="background:#f9e2df;padding:10px 14px;border-radius:8px;text-align:center">
-            <div style="font-size:10px;color:#888">Churn 🔴 · New 🟠</div>
+            <div style="font-size:10px;color:#888">หลุด Top10 ⬇️ · เพิ่งเข้า 🆕</div>
             <div style="font-size:18px;font-weight:800;color:#8a4a44">${churn} · ${newCust}</div>
           </div>
         </div>
@@ -1481,7 +1481,7 @@
           </table>
         </div>
         <div style="margin-top:12px;padding:10px 14px;background:#f2f8ee;border-radius:8px;font-size:11px;color:#4a8a54;line-height:1.7">
-          🟢 <strong>คงเหลือ/เดิม</strong> = อยู่ทั้ง 2 ปี · 🔴 <strong>หาย</strong> = อยู่ 2025 ไม่มี 2026 · 🟠 <strong>ใหม่</strong> = ไม่มี 2025 มาใน 2026<br>
+          🟢 <strong>ติด Top10 ทั้ง 2 ปี</strong> · ⬇️ <strong>หลุด Top10 ปี 2026</strong> (อาจยังซื้ออยู่แต่ยอดลดลงไม่ติดอันดับ · ตรวจที่ Peak) · 🆕 <strong>เพิ่งเข้า Top10</strong> ปี 2026<br>
           🔍 <strong>คลิกชื่อลูกค้า</strong> เพื่อดู pattern การซื้อรายเดือน (heatmap 2025 vs 2026)<br>
           ⚠️ Match ชื่อลูกค้าแบบ fuzzy · <strong>2025 มีข้อมูลแค่ มิ.ย.–ธ.ค. (H2)</strong> เท่านั้น (ระบบเริ่มบันทึกกลางปี) — 2026 มี ม.ค.–ส.ค. MTD
         </div>
