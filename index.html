@@ -241,7 +241,7 @@
     <a href="marketplace.html" class="nav-link" style="background:#e67e22;color:white;padding:6px 14px;border-radius:20px;text-decoration:none;font-weight:700;margin-left:8px">🛒 Marketplace Report</a>
     <div>
       <strong>ข้อมูล: ม.ค. 2023 – พ.ค. 2026</strong>
-      <span>🟢 2026 Actual: ม.ค.–พ.ค. ครบ + มิ.ย. MTD &nbsp;|&nbsp; <span id="live-data-stamp" style="color:#8dc57e;font-size:11px;">⏳ กำลังดึงข้อมูลล่าสุด...</span></span>
+      <span>🟢 2026 Actual: ม.ค.–ก.ย. ครบ + ต.ค. MTD (9/10) &nbsp;|&nbsp; <span id="live-data-stamp" style="color:#8dc57e;font-size:11px;">⏳ กำลังดึงข้อมูลล่าสุด...</span></span>
     </div>
   </div>
 </div>
@@ -711,8 +711,8 @@
   <div style="margin-top:24px;margin-bottom:20px;">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
       <div style="font-size:18px;font-weight:800;color:#4a5a6c;">📋 Executive Scorecard</div>
-      <div style="background:#eaf4e2;color:#2e7d32;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;">YTD ม.ค.–พ.ค. ครบ + มิ.ย. MTD 2026</div>
-      <div style="background:#faf1e0;color:#c99a5a;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;">อัพเดต มิ.ย. 2569 (พ.ค. ปิดเดือน + มิ.ย. MTD)</div>
+      <div style="background:#eaf4e2;color:#2e7d32;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;">YTD ม.ค.–ก.ย. ครบ + ต.ค. MTD 2026</div>
+      <div style="background:#faf1e0;color:#c99a5a;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;">อัพเดต 10 ต.ค. 2569 (ก.ย. ปิดเดือน + ต.ค. MTD 9/10)</div>
     </div>
 
     <!-- Row 1: Revenue -->
@@ -1643,7 +1643,7 @@
 <div class="tab-content" id="tab-progress2026">
   <div style="margin: 24px 0 16px; display:flex; align-items:center; gap:12px;">
     <h2 style="font-size:18px;">🟢 2026 Progress – Actual vs Forecast</h2>
-    <span class="badge badge-green" style="font-size:12px; padding:5px 14px;">อัพเดต: มิ.ย. 2026 | ม.ค.–พ.ค. ครบ + มิ.ย. MTD ✅</span>
+    <span class="badge badge-green" style="font-size:12px; padding:5px 14px;">อัพเดต: 10 ต.ค. 2026 | ม.ค.–ก.ย. ครบ + ต.ค. MTD (9/10) ✅</span>
   </div>
 
   <!-- KPI CARDS — updated with Scenario A/B -->
@@ -2400,8 +2400,8 @@ charts.annualTrend = new Chart(document.getElementById('annualTrendChart'), {
         order: 2,
       },
       {
-        label: '🟢 Actual 2026 YTD (ม.ค.–พ.ค. + มิ.ย. MTD)',
-        data: [null, null, null, 31.815],
+        label: '🟢 Actual 2026 YTD (ม.ค.–ก.ย. + ต.ค. MTD 9/10)',
+        data: [null, null, null, 49.790],
         backgroundColor: '#8dc9b7',
         borderRadius: 6,
         order: 1,
@@ -2554,7 +2554,7 @@ function buildMonthlyTable() {
     <td style="color:#8dc57e">${fmt(totals[1])}</td>
     <td style="color:#e58079">${fmt(totals[2])}</td>
     <td style="color:#e69a68">${fmt(totals[3])}</td>
-    <td style="color:#8dc9b7">${fmt(totals[4])} <span style="font-weight:400;color:#999;font-size:10px">(6 ด., มิ.ย. MTD)</span></td>
+    <td style="color:#8dc9b7">${fmt(totals[4])} <span style="font-weight:400;color:#999;font-size:10px">(ม.ค.–ก.ย. + ต.ค. MTD)</span></td>
   </tr>`;
 }
 // buildMonthlyTable() ถูกเรียกหลัง actual2026 ถูกประกาศ (กัน TDZ)
