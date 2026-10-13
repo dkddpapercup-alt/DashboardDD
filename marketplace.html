@@ -111,7 +111,7 @@
 <div class="header">
   <div class="header-left">
     <h1>🛒 DD Paper Cup – Marketplace Report</h1>
-    <p>ยอดขายบน Marketplace แยกตามแพลตฟอร์ม | Shopee · Makro</p>
+    <p>ยอดขายบน Marketplace แยกตามแพลตฟอร์ม | Shopee · Makro · Lazada</p>
   </div>
   <div class="header-right">
     <a href="index.html" class="nav-link">📈 Sales Dashboard →</a>
@@ -122,6 +122,7 @@
 <div class="tabs" role="tablist">
   <button class="tab-btn active" data-tab="shopee" role="tab">🟠 Shopee</button>
   <button class="tab-btn" data-tab="makro" role="tab">🔴 Makro <span class="soon">ต.ค. 2026</span></button>
+  <button class="tab-btn" data-tab="lazada" role="tab">🟣 Lazada <span class="soon">ต.ค. 2026</span></button>
 </div>
 
 <div class="tab-content active" id="tab-shopee">
@@ -289,6 +290,90 @@
       <li>ยอดยกเลิก/คืนสินค้า และค่าธรรมเนียมแพลตฟอร์ม</li>
       <li>เทียบ Shopee vs Makro</li>
     </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ LAZADA TAB ═══════════════════════════ -->
+<div class="tab-content" id="tab-lazada" style="display:none">
+  <div class="mp-intro">
+    <div class="mp-title">🟣 Lazada · ร้าน DD Paper Cup</div>
+    <div class="sub">ตั้งแต่ 1 ตุลาคม 2026 · อัปเดตล่าสุด 12 ต.ค. 2026 · เริ่มขายเดือนแรก 🆕</div>
+  </div>
+
+  <!-- KPI cards -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0">
+    <div style="background:#f4ecf7;padding:16px;border-radius:12px;border-left:4px solid #8e44ad;text-align:center">
+      <div style="font-size:11px;color:#888">ยอดขาย (ต.ค. 1-12)</div>
+      <div style="font-size:24px;font-weight:800;color:#8e44ad">฿834</div>
+      <div style="font-size:11px;color:#8a4a44">paidPrice (unitPrice ฿759)</div>
+    </div>
+    <div style="background:#f4ecf7;padding:16px;border-radius:12px;border-left:4px solid #8e44ad;text-align:center">
+      <div style="font-size:11px;color:#888">คำสั่งซื้อ</div>
+      <div style="font-size:24px;font-weight:800;color:#8e44ad">1</div>
+      <div style="font-size:11px;color:#8a4a44">confirmed · delivered 3/10</div>
+    </div>
+    <div style="background:#f4ecf7;padding:16px;border-radius:12px;border-left:4px solid #8e44ad;text-align:center">
+      <div style="font-size:11px;color:#888">AOV</div>
+      <div style="font-size:24px;font-weight:800;color:#8e44ad">฿834</div>
+      <div style="font-size:11px;color:#8a4a44">ยอดเฉลี่ยต่อออเดอร์</div>
+    </div>
+    <div style="background:#fdedec;padding:16px;border-radius:12px;border-left:4px solid #e74c3c;text-align:center">
+      <div style="font-size:11px;color:#888">อัตรา</div>
+      <div style="font-size:24px;font-weight:800;color:#c0392b">0.09/วัน</div>
+      <div style="font-size:11px;color:#8a4a44">1 order / 11 วัน ⚠️</div>
+    </div>
+  </div>
+
+  <!-- Order details -->
+  <h2 style="margin-top:24px"><span class="dot" style="background:#8e44ad"></span>รายละเอียดคำสั่งซื้อ</h2>
+  <div style="background:white;border:1px solid #e0e0e0;border-radius:12px;overflow-x:auto;margin:12px 0">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="background:#f5efe8">
+          <th style="padding:10px;text-align:left">วันที่สั่ง</th>
+          <th style="padding:10px;text-align:left">วันที่ส่งถึง</th>
+          <th style="padding:10px;text-align:left">สินค้า</th>
+          <th style="padding:10px;text-align:left">ลูกค้า</th>
+          <th style="padding:10px;text-align:right">unitPrice</th>
+          <th style="padding:10px;text-align:right">paidPrice</th>
+          <th style="padding:10px;text-align:center">สถานะ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-top:1px solid #eee">
+          <td style="padding:10px">01 ต.ค. 2026 19:02</td>
+          <td style="padding:10px">03 ต.ค. 2026</td>
+          <td style="padding:10px">ฝากระดาษ PLA ปิดแก้วกระดาษ ปาก 90mm (200ชิ้น)</td>
+          <td style="padding:10px">Fhyz Sangmao</td>
+          <td style="padding:10px;text-align:right">฿759</td>
+          <td style="padding:10px;text-align:right;font-weight:700">฿834</td>
+          <td style="padding:10px;text-align:center"><span style="background:#eafaf1;color:#27ae60;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">✅ confirmed</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Alert box -->
+  <div style="background:#fef9e7;border-left:4px solid #e69a68;padding:16px 20px;border-radius:0 8px 8px 0;margin:16px 0">
+    <h4 style="color:#c17133;margin-bottom:8px;font-size:14px">⚠️ ร้าน Lazada ยังเงียบ — ต้องกระตุ้นด่วน</h4>
+    <ul style="font-size:12px;line-height:1.8;padding-left:20px;color:#4a4a5e;margin:0">
+      <li><strong>ยอด 11 วันแรก = ฿834 (1 ออเดอร์)</strong> — ต่ำกว่า Shopee 50 เท่า และต่ำกว่า Makro 5 เท่า</li>
+      <li>ต้องเริ่ม Lazada campaign + voucher เรียก traffic</li>
+      <li>เช็ค SEO/title/รูปสินค้าให้ค้นหาเจอง่าย</li>
+      <li>Live/Shopee Feed-equivalent บน Lazada</li>
+    </ul>
+  </div>
+
+  <!-- Recommendations -->
+  <h2 style="margin-top:24px"><span class="dot" style="background:#8e44ad"></span>สิ่งที่ควรทำต่อ</h2>
+  <div style="background:#eafaf1;border-left:4px solid #27ae60;padding:16px 20px;border-radius:0 8px 8px 0;margin:12px 0">
+    <ol style="font-size:13px;line-height:1.9;padding-left:20px;color:#4a4a5e;margin:0">
+      <li><strong>Lazada Sponsored Products</strong> — ลอง ฿100-200/วัน สินค้า Top 3 ของ Shopee</li>
+      <li><strong>Flash Sale/Voucher</strong> — ตั้ง Lazada voucher ลด ฿50 ขั้นต่ำ ฿500</li>
+      <li><strong>Repeat Customer</strong> — Fhyz Sangmao เป็นลูกค้าคนแรก ส่ง thank-you + voucher ซื้อซ้ำ</li>
+      <li><strong>Cross-list สินค้าหลัก</strong> — list สินค้า Top 25 ของ Shopee เข้า Lazada ให้ครบ</li>
+      <li><strong>ขอข้อมูลรายสัปดาห์</strong> — upload weekly ให้ Claude update dashboard</li>
+    </ol>
   </div>
 </div>
 <script>
