@@ -983,7 +983,7 @@
   <div class="card">
     <div class="card-header">
       <h3>📋 รายละเอียดสินเชื่อทั้งหมด</h3>
-      <span class="card-subtitle">ข้อมูล ณ กุมภาพันธ์ 2569 (Feb 2026)</span>
+      <span class="card-subtitle">SME Bank + เช่าซื้อรถ ณ ต.ค. 2569 · สัญญาอื่น ณ ก.พ. 2569 (รอยอดล่าสุด)</span>
     </div>
     <div class="card-body" style="padding:0;overflow-x:auto;">
       <table class="data-table">
@@ -1975,6 +1975,7 @@ const HEADCOUNT = {
 const SALES_COUNT = 6;  // พนักงานฝ่ายการขาย (มี.ค. 2026)
 
 // ==================== DEBT & BREAK-EVEN DATA ====================
+// asOf = [ปี, เดือน index 0-11] ของยอดคงเหลือ · ไม่ระบุ = ก.พ. 2026
 const loans = [
   { name:'ออมสิน PN',                  bank:'ออมสิน', type:'PN', credit:4400000,  balance:4400000,  payment:0      },
   { name:'ออมสิน ตึกโรงงาน',           bank:'ออมสิน', type:'TL', credit:7400000,  balance:5139297,  payment:94500  },
@@ -1983,7 +1984,10 @@ const loans = [
   { name:'ออมสิน ไม่มีหลักประกัน (2)', bank:'ออมสิน', type:'TL', credit:3000000,  balance:2086461,  payment:36000  },
   { name:'SCB ไม่มีหลักประกัน',        bank:'SCB',    type:'TL', credit:6000000,  balance:3125391,  payment:133900 },
   { name:'KTB ซื้อบอย',               bank:'KTB',    type:'TL', credit:1584000,  balance:1300988,  payment:13700  },
-  { name:'SME BANK NEW',               bank:'SMEBANK',type:'TL', credit:4500000,  balance:2926233,  payment:42000  },
+  { name:'SME BANK (1) · 213104',       bank:'SMEBANK',type:'TL', credit:4500000,  balance:2590099,  payment:42000, asOf:[2026,9] },  // ยอด ณ ต.ค. 69 (PAM แจ้ง 26/10) ≈ 61.66 งวด
+  { name:'SME BANK (2) · 213105',       bank:'SMEBANK',type:'TL', credit:null,     balance:1383286,  payment:46500, asOf:[2026,9] },  // ยอด ณ ต.ค. 69 (PAM แจ้ง 26/10) ≈ 29.74 งวด · ยังไม่ทราบวงเงิน
+  { name:'เช่าซื้อ KIA · 530116',        bank:'เช่าซื้อรถ',type:'HP', credit:2160000,  balance:1152000,  payment:36000, asOf:[2026,9], term:60 },  // เหลือ 32/60 งวด
+  { name:'เช่าซื้อ Camry · 212205',      bank:'เช่าซื้อรถ',type:'HP', credit:1407696,  balance:117308,   payment:29327, asOf:[2026,9], term:48 },  // เหลือ 4/48 งวด
   { name:'TTB OD บ้านค้ำประกัน',      bank:'TTB',    type:'OD', credit:10300000, balance:8000000,  payment:55000  },
 ];
 
@@ -2995,7 +2999,7 @@ function buildProductivityTab() {
 // ==================== DEBT & BREAK-EVEN CHARTS ====================
 function buildDebtTab() {
   const totalBalance  = loans.reduce((s, l) => s + l.balance, 0);
-  const totalCredit   = loans.reduce((s, l) => s + l.credit, 0);
+  const totalCredit   = loans.reduce((s, l) => s + (l.credit || l.balance), 0);
   const totalPayment  = loans.reduce((s, l) => s + l.payment, 0);
   const totalFixed    = Object.values(BE_FIXED).reduce((a, b) => a + b, 0);
   const grossMargin   = 1 - BE_VAR_RATIO;
@@ -3007,7 +3011,7 @@ function buildDebtTab() {
   // ── KPI Row ──
   const kpis = [
     { label:'หนี้รวมคงเหลือ', value:'฿'+fmt(totalBalance), sub:'จาก วงเงินกู้ทั้งหมด ฿'+fmt(totalCredit), color:'red', icon:'🏦' },
-    { label:'ผ่อนชำระรวม/เดือน', value:'฿'+fmt(totalPayment), sub:'รวม TL + OD (ไม่รวม PN)', color:'orange', icon:'💸' },
+    { label:'ผ่อนชำระรวม/เดือน', value:'฿'+fmt(totalPayment), sub:'รวม TL + เช่าซื้อรถ + OD (ไม่รวม PN)', color:'orange', icon:'💸' },
     { label:'Break-even Revenue', value:'฿'+fmt(breakEvenRev), sub:'ยอดขายต่ำสุดที่ไม่ขาดทุน/เดือน', color:'blue', icon:'⚖️' },
     { label:'Safety Buffer', value:'+'+safetyPct+'%', sub:'฿'+fmt(safetyBuf)+' เหนือ Break-even (avg 2026)', color:'green', icon:'🛡️' },
   ];
@@ -3056,7 +3060,7 @@ function buildDebtTab() {
   const bankTotals = {};
   loans.forEach(l => { bankTotals[l.bank] = (bankTotals[l.bank] || 0) + l.balance; });
   const bankNames = Object.keys(bankTotals);
-  const bankColors = { 'ออมสิน':'#8e44ad', SCB:'#2980b9', KTB:'#27ae60', SMEBANK:'#e67e22', TTB:'#e74c3c' };
+  const bankColors = { 'ออมสิน':'#8e44ad', SCB:'#2980b9', KTB:'#27ae60', SMEBANK:'#e67e22', TTB:'#e74c3c', 'เช่าซื้อรถ':'#16a085' };
   charts.debtBankChart = new Chart(document.getElementById('debtBankChart'), {
     type: 'doughnut',
     data: {
@@ -3071,19 +3075,20 @@ function buildDebtTab() {
   });
 
   // ── Payoff Timeline (horizontal bar) ──
-  const tlLoans = loans.filter(l => l.type === 'TL' && l.payment > 0);
+  const tlLoans = loans.filter(l => (l.type === 'TL' || l.type === 'HP') && l.payment > 0);
   const now = new Date(2026, 1); // Feb 2026
   let timelineHtml = '<div style="display:flex;flex-direction:column;gap:10px;padding:8px 0;">';
   const maxMonths = Math.max(...tlLoans.map(l => Math.ceil(l.balance / l.payment)));
   tlLoans.forEach(l => {
     const months = Math.ceil(l.balance / l.payment);
-    const payoffDate = new Date(now.getFullYear(), now.getMonth() + months);
+    const base = l.asOf ? new Date(l.asOf[0], l.asOf[1]) : now;
+    const payoffDate = new Date(base.getFullYear(), base.getMonth() + months);
     const yr = payoffDate.getFullYear(), mo = payoffDate.getMonth() + 1;
     const thMonths = ['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
     const dateStr = thMonths[mo] + ' ' + (yr + 543);
     const barW = Math.min(months / maxMonths * 100, 100).toFixed(1);
     const urgency = months <= 12 ? '#27ae60' : months <= 36 ? '#f39c12' : '#e74c3c';
-    const paidPct = ((1 - l.balance / l.credit) * 100).toFixed(0);
+    const paidPct = l.credit ? ((1 - l.balance / l.credit) * 100).toFixed(0) : '?';
     timelineHtml += `
       <div style="display:flex;align-items:center;gap:10px;">
         <div style="width:200px;font-size:12px;font-weight:600;color:#2c3e50;flex-shrink:0;line-height:1.3">${l.name}<br><span style="font-size:10px;font-weight:400;color:#95a5a6">${l.bank} | ผ่อนไปแล้ว ${paidPct}%</span></div>
@@ -3104,22 +3109,21 @@ function buildDebtTab() {
   // ── Loan Table ──
   let html = '';
   loans.forEach(l => {
-    const paid = l.credit - l.balance;
-    const paidPct = (paid / l.credit * 100).toFixed(1);
+    const paidPct = l.credit ? ((l.credit - l.balance) / l.credit * 100).toFixed(1) : null;
     const months = l.payment > 0 ? Math.ceil(l.balance / l.payment) : '—';
-    const typeColor = l.type === 'TL' ? '#3498db' : l.type === 'OD' ? '#e74c3c' : '#9b59b6';
+    const typeColor = l.type === 'TL' ? '#3498db' : l.type === 'HP' ? '#16a085' : l.type === 'OD' ? '#e74c3c' : '#9b59b6';
     const statusIcon = l.type === 'OD' || l.type === 'PN' ? '⚠️ Revolving' : months <= 24 ? '🟢 ใกล้หมด' : months <= 48 ? '🟡 ปานกลาง' : '🔴 ระยะยาว';
     html += `<tr>
-      <td style="font-size:13px;font-weight:600">${l.name}</td>
+      <td style="font-size:13px;font-weight:600">${l.name}<br><span style="font-size:10px;font-weight:400;color:#95a5a6">ยอด ณ ${l.asOf ? 'ต.ค. 2569' : 'ก.พ. 2569'}</span></td>
       <td><span class="pill" style="background:#f0f0f0;color:#555">${l.bank}</span></td>
       <td><span class="pill" style="background:${typeColor}22;color:${typeColor}">${l.type}</span></td>
-      <td class="text-right">฿${fmt(l.credit)}</td>
+      <td class="text-right">${l.credit ? '฿'+fmt(l.credit) : '<span style="color:#ccc">ไม่ทราบ</span>'}</td>
       <td class="text-right" style="font-weight:700;color:#e74c3c">฿${fmt(l.balance)}</td>
       <td class="text-right">
         <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
-          <span style="font-size:11px;color:#7f8c8d">${paidPct}%</span>
+          <span style="font-size:11px;color:#7f8c8d">${paidPct===null?'—':paidPct+'%'}</span>
           <div style="width:60px;background:#f0f2f5;border-radius:4px;height:6px;overflow:hidden">
-            <div style="width:${paidPct}%;height:100%;background:#27ae60;border-radius:4px"></div>
+            <div style="width:${paidPct||0}%;height:100%;background:#27ae60;border-radius:4px"></div>
           </div>
         </div>
       </td>
