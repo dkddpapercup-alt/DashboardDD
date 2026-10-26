@@ -1984,10 +1984,10 @@ const loans = [
   { name:'ออมสิน ไม่มีหลักประกัน (2)', bank:'ออมสิน', type:'TL', credit:3000000,  balance:2086461,  payment:36000  },
   { name:'SCB ไม่มีหลักประกัน',        bank:'SCB',    type:'TL', credit:6000000,  balance:3125391,  payment:133900 },
   { name:'KTB ซื้อบอย',               bank:'KTB',    type:'TL', credit:1584000,  balance:1300988,  payment:13700  },
-  { name:'SME BANK (1) · 213104',       bank:'SMEBANK',type:'TL', credit:4500000,  balance:2590099,  payment:42000, asOf:[2026,9] },  // ยอด ณ ต.ค. 69 (PAM แจ้ง 26/10) ≈ 61.66 งวด
-  { name:'SME BANK (2) · 213105',       bank:'SMEBANK',type:'TL', credit:null,     balance:1383286,  payment:46500, asOf:[2026,9] },  // ยอด ณ ต.ค. 69 (PAM แจ้ง 26/10) ≈ 29.74 งวด · ยังไม่ทราบวงเงิน
-  { name:'เช่าซื้อ KIA · 530116',        bank:'เช่าซื้อรถ',type:'HP', credit:2160000,  balance:1152000,  payment:36000, asOf:[2026,9], term:60 },  // เหลือ 32/60 งวด
-  { name:'เช่าซื้อ Camry · 212205',      bank:'เช่าซื้อรถ',type:'HP', credit:1407696,  balance:117308,   payment:29327, asOf:[2026,9], term:48 },  // เหลือ 4/48 งวด
+  { name:'SME BANK (1) เพิ่มศักยภาพ SM · 213104', bank:'SMEBANK',type:'TL', credit:4500000, balance:2590099, payment:42000, rate:2.00, asOf:[2026,9] },  // สัญญา 4100068111 · ใบแจ้งหนี้ DB2026100800027 (ครบกำหนด 22/10/69) · โครงการ "คุณสู้ เราช่วย" 3 ปี
+  { name:'SME BANK (2) TOPUP 2569 · 213105', bank:'SMEBANK',type:'TL', credit:1600000, balance:1383286, payment:46500, rate:2.50, asOf:[2026,9] },  // สัญญา 4100991680 · ใบแจ้งหนี้ DB2026100800683 (ครบกำหนด 22/10/69) · โครงการ "คุณสู้ เราช่วย"
+  { name:'เช่า KIA (KLeasing) · 530116',     bank:'เช่าซื้อรถ',type:'HP', credit:2853195, balance:1845195, payment:36000, remaining:32, balloon:693195, asOf:[2026,9] },  // สัญญา 6010294438 · จ่ายงวด 28/60 แล้ว 5/10/69 · ค่าเช่าคงเหลือ 1,845,195 รวมมูลค่าซาก (32×36,000 = 1,152,000 + ซาก 693,195) · หัก ณ ที่จ่าย 5%
+  { name:'เช่าซื้อ Camry (Toyota Leasing) · 212205', bank:'เช่าซื้อรถ',type:'HP', credit:1407696, balance:117308, payment:29327, remaining:4, asOf:[2026,9] },  // สัญญา A10753834 · จ่ายงวด 44/48 แล้ว 5/10/69 (27,408.41 + VAT 1,918.59)
   { name:'TTB OD บ้านค้ำประกัน',      bank:'TTB',    type:'OD', credit:10300000, balance:8000000,  payment:55000  },
 ];
 
@@ -3078,9 +3078,10 @@ function buildDebtTab() {
   const tlLoans = loans.filter(l => (l.type === 'TL' || l.type === 'HP') && l.payment > 0);
   const now = new Date(2026, 1); // Feb 2026
   let timelineHtml = '<div style="display:flex;flex-direction:column;gap:10px;padding:8px 0;">';
-  const maxMonths = Math.max(...tlLoans.map(l => Math.ceil(l.balance / l.payment)));
+  const loanMonths = l => l.remaining || Math.ceil(l.balance / l.payment);
+  const maxMonths = Math.max(...tlLoans.map(loanMonths));
   tlLoans.forEach(l => {
-    const months = Math.ceil(l.balance / l.payment);
+    const months = loanMonths(l);
     const base = l.asOf ? new Date(l.asOf[0], l.asOf[1]) : now;
     const payoffDate = new Date(base.getFullYear(), base.getMonth() + months);
     const yr = payoffDate.getFullYear(), mo = payoffDate.getMonth() + 1;
@@ -3091,7 +3092,7 @@ function buildDebtTab() {
     const paidPct = l.credit ? ((1 - l.balance / l.credit) * 100).toFixed(0) : '?';
     timelineHtml += `
       <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:200px;font-size:12px;font-weight:600;color:#2c3e50;flex-shrink:0;line-height:1.3">${l.name}<br><span style="font-size:10px;font-weight:400;color:#95a5a6">${l.bank} | ผ่อนไปแล้ว ${paidPct}%</span></div>
+        <div style="width:200px;font-size:12px;font-weight:600;color:#2c3e50;flex-shrink:0;line-height:1.3">${l.name}<br><span style="font-size:10px;font-weight:400;color:#95a5a6">${l.bank} | ผ่อนไปแล้ว ${paidPct}%${l.rate ? ' | ดอกเบี้ย '+l.rate+'%' : ''}${l.balloon ? ' | + ซาก ฿'+fmt(l.balloon)+' งวดสุดท้าย' : ''}</span></div>
         <div style="flex:1;background:#f0f2f5;border-radius:20px;height:22px;overflow:hidden;min-width:120px;">
           <div style="width:${barW}%;height:100%;background:${urgency}55;border-radius:20px;display:flex;align-items:center;padding-left:8px;">
             <span style="font-size:10px;font-weight:700;color:${urgency};white-space:nowrap">${months} เดือน</span>
@@ -3110,11 +3111,11 @@ function buildDebtTab() {
   let html = '';
   loans.forEach(l => {
     const paidPct = l.credit ? ((l.credit - l.balance) / l.credit * 100).toFixed(1) : null;
-    const months = l.payment > 0 ? Math.ceil(l.balance / l.payment) : '—';
+    const months = l.payment > 0 ? (l.remaining || Math.ceil(l.balance / l.payment)) : '—';
     const typeColor = l.type === 'TL' ? '#3498db' : l.type === 'HP' ? '#16a085' : l.type === 'OD' ? '#e74c3c' : '#9b59b6';
     const statusIcon = l.type === 'OD' || l.type === 'PN' ? '⚠️ Revolving' : months <= 24 ? '🟢 ใกล้หมด' : months <= 48 ? '🟡 ปานกลาง' : '🔴 ระยะยาว';
     html += `<tr>
-      <td style="font-size:13px;font-weight:600">${l.name}<br><span style="font-size:10px;font-weight:400;color:#95a5a6">ยอด ณ ${l.asOf ? 'ต.ค. 2569' : 'ก.พ. 2569'}</span></td>
+      <td style="font-size:13px;font-weight:600">${l.name}<br><span style="font-size:10px;font-weight:400;color:#95a5a6">ยอด ณ ${l.asOf ? 'ต.ค. 2569' : 'ก.พ. 2569'}${l.rate ? ' · ดอกเบี้ย '+l.rate+'%' : ''}${l.balloon ? ' · รวมมูลค่าซาก ฿'+fmt(l.balloon) : ''}</span></td>
       <td><span class="pill" style="background:#f0f0f0;color:#555">${l.bank}</span></td>
       <td><span class="pill" style="background:${typeColor}22;color:${typeColor}">${l.type}</span></td>
       <td class="text-right">${l.credit ? '฿'+fmt(l.credit) : '<span style="color:#ccc">ไม่ทราบ</span>'}</td>
