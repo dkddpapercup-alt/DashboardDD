@@ -2146,14 +2146,14 @@
       <div id="a26SpCards" style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px"></div>
 
       <!-- Chart + Table -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-        <div>
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px">
+        <div style="min-width:0">
           <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px;">Stacked Bar — ยอดแต่ละเดือน</div>
           <div style="height:260px"><canvas id="a26SpChart"></canvas></div>
         </div>
-        <div>
-          <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px;">ตารางสรุป (฿K = พัน)</div>
-          <div id="a26SpTable" style="overflow-x:auto"></div>
+        <div style="min-width:0">
+          <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:10px;">ตารางสรุป (฿K = พัน) · เลื่อนซ้าย-ขวาเพื่อดูทุกเดือน →</div>
+          <div id="a26SpTable" style="overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;border:1px solid #eee;border-radius:8px;"></div>
         </div>
       </div>
     </div>
