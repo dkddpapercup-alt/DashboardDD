@@ -1636,38 +1636,41 @@
 
 <!-- ============================== TAB: 2026 PROGRESS ============================== -->
 <div class="tab-content" id="tab-progress2026">
-  <div style="margin: 24px 0 16px; display:flex; align-items:center; gap:12px;">
-    <h2 style="font-size:18px;">🟢 2026 Progress – Actual vs Forecast</h2>
-    <span class="badge badge-green" style="font-size:12px; padding:5px 14px;">อัพเดต: 26 ต.ค. 2026 | ม.ค.–ก.ย. ครบ + ต.ค. MTD (26/10) ✅</span>
+  <div style="margin: 24px 0 16px; display:flex; align-items:center; gap:12px;flex-wrap:wrap">
+    <h2 style="font-size:18px;">🟢 2026 Progress — มุมมอง Manager / CEO</h2>
+    <span class="badge badge-green" style="font-size:12px; padding:5px 14px;">อัพเดต 5 พ.ย. 2026 · Source: Google Sheet · ScA = 2025 × 1.15</span>
   </div>
 
-  <!-- KPI CARDS — updated with Scenario A/B -->
-  <div class="kpi-row">
-    <div class="kpi-card green">
-      <div class="kpi-label">เมษายน 2026 (ปิดเดือน) 🎉</div>
-      <div class="kpi-value">7.04M</div>
-      <div class="kpi-sub"><span class="up">✅ สูงสุดของปี</span> | vs ScA ฿5.19M <span class="up">▲ +35.6%</span></div>
-      <div class="kpi-icon">📦</div>
-    </div>
-    <div class="kpi-card green">
-      <div class="kpi-label">ตุลาคม 2026 (ปิดเดือนล่าสุด) ✅</div>
-      <div class="kpi-value">5.29M</div>
-      <div class="kpi-sub">vs ก.ย. ฿5.25M <span class="up">▲ +0.75%</span> | 482 บิล · พ.ย. MTD 4/11 ฿546K (66 บิล)</div>
-      <div class="kpi-icon">📈</div>
-    </div>
-    <div class="kpi-card orange">
-      <div class="kpi-label">YTD ม.ค.–ต.ค. ปิดเดือน ✅ + พ.ย. MTD (4/11)</div>
-      <div class="kpi-value">54.52M</div>
-      <div class="kpi-sub"><span class="up">↗ Run Rate ฿64.8M/ปี</span> | 87.1% ของ ScA | ต.ค. ปิด ฿5.29M · พ.ย. MTD ฿546K</div>
-      <div class="kpi-icon">🎯</div>
-    </div>
-    <div class="kpi-card blue">
-      <div class="kpi-label">เป้าที่ต้องทำอีก (พ.ย. ที่เหลือ + ธ.ค.)</div>
-      <div class="kpi-value">8.08M</div>
-      <div class="kpi-sub">ScA ฿62.6M – YTD ฿54.52M = ฿8.08M | เฉลี่ย ~฿4.04M/เดือน (1.87 เดือนที่เหลือ)</div>
-      <div class="kpi-icon">📅</div>
+  <!-- MONTH PICKER -->
+  <div class="card" style="margin-bottom:16px;padding:14px 18px;background:linear-gradient(90deg,#faf1e0,#f5efe8);border-left:4px solid #c99a5a">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="font-weight:800;color:#4a5a6c;font-size:14px">📅 เลือกเดือนเจาะลึก:</div>
+      <select id="progressMonthSelect" onchange="renderProgressMonth(parseInt(this.value))" style="padding:8px 14px;font-size:14px;border:1.5px solid #c99a5a;border-radius:8px;background:white;font-weight:700;color:#4a5a6c;cursor:pointer">
+        <option value="1">มกราคม 2026</option>
+        <option value="2">กุมภาพันธ์ 2026</option>
+        <option value="3">มีนาคม 2026</option>
+        <option value="4">เมษายน 2026 🏆 peak</option>
+        <option value="5">พฤษภาคม 2026</option>
+        <option value="6">มิถุนายน 2026</option>
+        <option value="7">กรกฎาคม 2026</option>
+        <option value="8">สิงหาคม 2026</option>
+        <option value="9">กันยายน 2026</option>
+        <option value="10">ตุลาคม 2026</option>
+        <option value="11" selected>พฤศจิกายน 2026 (MTD 4/11)</option>
+      </select>
+      <div style="font-size:12px;color:#888">คลิกเดือนเพื่อดู KPI + Top SP + Gap to Target</div>
     </div>
   </div>
+
+  <!-- SELECTED MONTH KPI (dynamic) -->
+  <div class="kpi-row" id="progressMonthKpi"></div>
+
+  <!-- CEO SCORECARD -->
+  <div style="margin-top:20px;margin-bottom:10px;display:flex;align-items:center;gap:10px">
+    <div style="font-size:16px;font-weight:800;color:#4a5a6c">👔 CEO Scorecard</div>
+    <div style="font-size:11px;color:#888">สถานะธุรกิจมุม Executive · อัพเดต 5 พ.ย. 2026</div>
+  </div>
+  <div class="kpi-row" id="ceoScorecard"></div>
 
   <!-- ACTUAL vs FORECAST CHART -->
   <div class="card">
@@ -1711,329 +1714,174 @@
     </div>
   </div>
 
-  <!-- TOP CUSTOMERS JAN-FEB -->
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-header"><h3>🏅 Top Customers – มกราคม 2026</h3></div>
-      <div class="card-body" style="padding:0;">
-        <table class="data-table">
-          <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอดขาย (฿)</th></tr></thead>
-          <tbody>
-            <tr><td class="rank">1</td><td>ACE TECHNOLOGY CO.,LTD.</td><td style="font-weight:700">฿468,000</td></tr>
-            <tr><td class="rank">2</td><td>บ. เซ็นทรัลพัฒนา (มหาชน)</td><td style="font-weight:700">฿343,596</td></tr>
-            <tr><td class="rank">3</td><td>บ. แพ็คเวิร์คส์</td><td style="font-weight:700">฿275,739</td></tr>
-            <tr><td class="rank">4</td><td>บ. Bigtree</td><td style="font-weight:700">฿169,649</td></tr>
-            <tr><td class="rank">5</td><td>บ. จีพีซีเอ็ม กรุ๊ป</td><td style="font-weight:700">฿138,351</td></tr>
-            <tr><td class="rank">6</td><td>บ. แพชชั่น เรสเตอรองท์</td><td style="font-weight:700">฿125,030</td></tr>
-            <tr><td class="rank">7</td><td>บ. เวนดิ้ง เซอร์วิสเซส</td><td style="font-weight:700">฿124,147</td></tr>
-            <tr><td class="rank">8</td><td>บ. เจพี สปา แอนด์ เดคคอร์</td><td style="font-weight:700">฿109,044</td></tr>
-            <tr><td class="rank">9</td><td>ลูกค้า Shopee</td><td style="font-weight:700">฿102,945</td></tr>
-            <tr><td class="rank">10</td><td>บ. นมสดพระนคร</td><td style="font-weight:700">฿100,000</td></tr>
-          </tbody>
-        </table>
-      </div>
+  <!-- SALES TEAM ACTION PANEL (dynamic from Google Sheet) -->
+  <div class="card" style="margin-top:16px">
+    <div class="card-header">
+      <h3>🏃 Sales Team Action Panel</h3>
+      <span class="card-subtitle" id="salesTeamSubtitle">source: Google Sheet · เลือกเดือนด้านบนเพื่อกรองยอด</span>
     </div>
-    <div class="card">
-      <div class="card-header"><h3>🏅 Top Customers – กุมภาพันธ์ 2026</h3></div>
-      <div class="card-body" style="padding:0;">
-        <table class="data-table">
-          <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอดขาย (฿)</th></tr></thead>
-          <tbody>
-            <tr><td class="rank">1</td><td>บ. Bigtree <span class="badge badge-red">🔥 Top</span></td><td style="font-weight:700;color:#e58079">฿912,175</td></tr>
-            <tr><td class="rank">2</td><td>บ. เซ็นทรัลพัฒนา (มหาชน)</td><td style="font-weight:700">฿246,154</td></tr>
-            <tr><td class="rank">3</td><td>บ. โนมิมาโช</td><td style="font-weight:700">฿230,762</td></tr>
-            <tr><td class="rank">4</td><td>บ. โนส ที (ประเทศไทย)</td><td style="font-weight:700">฿188,641</td></tr>
-            <tr><td class="rank">5</td><td>บ. เวนดิ้ง เซอร์วิสเซส</td><td style="font-weight:700">฿166,481</td></tr>
-            <tr><td class="rank">6</td><td>บ. แพชชั่น เรสเตอรองท์</td><td style="font-weight:700">฿160,286</td></tr>
-            <tr><td class="rank">7</td><td>บ. แพ็คเวิร์คส์</td><td style="font-weight:700">฿149,800</td></tr>
-            <tr><td class="rank">8</td><td>ลูกค้า Shopee</td><td style="font-weight:700">฿103,320</td></tr>
-            <tr><td class="rank">9</td><td>บ. จีพีซีเอ็ม กรุ๊ป</td><td style="font-weight:700">฿96,407</td></tr>
-            <tr><td class="rank">10</td><td>Juice bomb</td><td style="font-weight:700">฿96,033</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- TOP CUSTOMERS MARCH + APRIL -->
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-header"><h3>🏅 Top Customers – มีนาคม 2026</h3></div>
-      <div class="card-body" style="padding:0;">
-        <table class="data-table">
-          <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอดขาย (฿)</th></tr></thead>
-          <tbody>
-            <tr><td class="rank">1</td><td>บ. Bigtree จำกัด</td><td style="font-weight:700;color:#e58079">฿693,950</td></tr>
-            <tr><td class="rank">2</td><td>บ. บีบ็อกซ์ ปริ้นติ้ง อินเตอร์เนชั่นแนล จำกัด</td><td style="font-weight:700">฿365,500</td></tr>
-            <tr><td class="rank">3</td><td>Central Group (รวม) <span class="badge badge-blue">🏢</span></td><td style="font-weight:700;color:#7c9dc0">฿317,040</td></tr>
-            <tr><td class="rank">4</td><td>บ. แพ็คเวิร์คส์ จำกัด</td><td style="font-weight:700">฿184,675</td></tr>
-            <tr><td class="rank">5</td><td>บ. ทีพี โปรเจค จำกัด</td><td style="font-weight:700">฿142,000</td></tr>
-            <tr><td class="rank">6</td><td>บ. เวนดิ้ง เซอร์วิสเซส จำกัด</td><td style="font-weight:700">฿135,424</td></tr>
-            <tr><td class="rank">7</td><td>บ. สยาม แฟรนไชส์ ธุรกิจ จำกัด</td><td style="font-weight:700">฿99,191</td></tr>
-            <tr><td class="rank">8</td><td>ลูกค้า Shopee (รวม)</td><td style="font-weight:700">฿94,766</td></tr>
-            <tr><td class="rank">9</td><td>บ. บีเวล ฟู้ดมอลล์ จำกัด</td><td style="font-weight:700">฿68,000</td></tr>
-            <tr><td class="rank">10</td><td>บ. ซี-สแควร์ ฟู้ด แอนด์ คอนเฟคชั่นเนอรี่</td><td style="font-weight:700">฿66,250</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h3>🏅 Top Customers – เมษายน 2026 🎉</h3><span class="card-subtitle">ยอดสูงสุดรายเดือนของปี</span></div>
-      <div class="card-body" style="padding:0;">
-        <table class="data-table">
-          <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอดขาย (฿)</th><th>%</th></tr></thead>
-          <tbody>
-            <tr><td class="rank">1</td><td>บ. Bigtree จำกัด <span class="badge badge-red">🔥 29.7%</span></td><td style="font-weight:700;color:#e58079">฿2,045,250</td><td style="color:#e58079;font-weight:700">29.7%</td></tr>
-            <tr><td class="rank">2</td><td>Central Group (รวม) <span class="badge badge-blue">🏢</span></td><td style="font-weight:700;color:#7c9dc0">฿488,550</td><td style="color:#7f8c8d">7.1%</td></tr>
-            <tr><td class="rank">3</td><td>บ. แพ็คเวิร์คส์ จำกัด</td><td style="font-weight:700">฿276,495</td><td style="color:#7f8c8d">4.0%</td></tr>
-            <tr><td class="rank">4</td><td>บ. โนส ที (ประเทศไทย) จำกัด ✅</td><td style="font-weight:700">฿249,750</td><td style="color:#7f8c8d">3.6%</td></tr>
-            <tr><td class="rank">5</td><td>การไฟฟ้าฝ่ายผลิต (กฟผ.) ✅</td><td style="font-weight:700">฿233,000</td><td style="color:#7f8c8d">3.4%</td></tr>
-            <tr><td class="rank">6</td><td>บ. สยาม แฟรนไชส์ ธุรกิจ จำกัด</td><td style="font-weight:700">฿208,430</td><td style="color:#7f8c8d">3.0%</td></tr>
-            <tr><td class="rank">7</td><td>บ. แพชชั่น เรสเตอรองท์ กรุ๊ป</td><td style="font-weight:700">฿206,810</td><td style="color:#7f8c8d">3.0%</td></tr>
-            <tr><td class="rank">8</td><td>Bwell Group (จีพีซีเอ็ม+บีเวล)</td><td style="font-weight:700">฿168,000</td><td style="color:#7f8c8d">2.4%</td></tr>
-            <tr><td class="rank">9</td><td>บ. เวนดิ้ง เซอร์วิสเซส จำกัด</td><td style="font-weight:700">฿135,750</td><td style="color:#7f8c8d">2.0%</td></tr>
-            <tr><td class="rank">10</td><td>บ. นมสดพระนคร จำกัด</td><td style="font-weight:700">฿95,442</td><td style="color:#7f8c8d">1.4%</td></tr>
-          </tbody>
-        </table>
-        <div style="padding:10px 12px;font-size:11px;color:#7f8c8d;border-top:1px solid #f5efe8">✅ = Win-back สำเร็จ | ⚠️ Bigtree 29.7% — concentration risk สูง</div>
-      </div>
-    </div>
-  </div>
-  <!-- MAY 2026 (MTD) SUMMARY -->
-  <div class="grid-2" style="margin-top:0;">
-    <div class="card">
-      <div class="card-header"><h3>🏅 ทีมขาย — พฤษภาคม 2026 (ปิดเดือน final)</h3><span class="card-subtitle">ก่อน VAT</span></div>
-      <div class="card-body" style="padding:0;">
-        <table class="data-table">
-          <thead><tr><th>#</th><th>พนักงานขาย</th><th>ยอดขาย (฿)</th><th>%</th></tr></thead>
-          <tbody>
-            <tr><td class="rank">1</td><td>ศุภิสรา <span class="badge badge-red">🔥 #1</span></td><td style="font-weight:700;color:#e58079">฿1,835,273</td><td style="color:#7f8c8d">31.3%</td></tr>
-            <tr><td class="rank">2</td><td>ธีรตา</td><td style="font-weight:700;color:#7c9dc0">฿1,539,483</td><td style="color:#7f8c8d">26.2%</td></tr>
-            <tr><td class="rank">3</td><td>ธชนัย</td><td style="font-weight:700">฿976,810</td><td style="color:#7f8c8d">16.6%</td></tr>
-            <tr><td class="rank">4</td><td>ปุณณภา</td><td style="font-weight:700">฿968,164</td><td style="color:#7f8c8d">16.5%</td></tr>
-            <tr><td class="rank">5</td><td>จุฑามาศ <span style="color:#7f8c8d;font-size:11px">(รวม Shopee)</span></td><td style="font-weight:700">฿551,561</td><td style="color:#7f8c8d">9.4%</td></tr>
-            <tr style="font-weight:700;background:#f0f7ff"><td></td><td><strong>รวม พ.ค. (final)</strong></td><td style="color:#7c9dc0"><strong>฿5,871,292</strong></td><td>100%</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h3>📊 พฤษภาคม 2026 — สรุปตามประเภทเอกสาร <span style="font-size:11px;color:#7f8c8d;font-weight:400">(ณ 29/5; ปิดเดือน ฿5.87M)</span></h3></div>
-      <div class="card-body" style="padding:12px 16px;">
-        <table class="data-table">
-          <thead><tr><th>ประเภท</th><th>ก่อน VAT (฿)</th><th>รวม VAT (฿)</th></tr></thead>
-          <tbody>
-            <tr><td>IVT ใบส่งของ/ใบกำกับ</td><td>3,150,708</td><td style="font-weight:700">3,371,258</td></tr>
-            <tr><td>RT ขายสด</td><td>1,323,671</td><td style="font-weight:700">1,416,531</td></tr>
-            <tr><td>RT Shopee</td><td>95,581</td><td style="font-weight:700">102,435</td></tr>
-            <tr><td>DRT มัดจำ <span style="color:#8dc57e;font-size:11px">▲ จาก ฿0.42M</span></td><td>1,288,731</td><td style="font-weight:700">1,378,943</td></tr>
-            <tr><td style="color:#e58079">CNT ใบลดหนี้</td><td style="color:#e58079">−1,949</td><td style="color:#e58079;font-weight:700">−2,164</td></tr>
-            <tr style="font-weight:700;background:#f2f8ee"><td><strong>รวม พ.ค. (ณ 29/5 · ปิดเดือนจริง 5,871,292)</strong></td><td><strong>5,856,742</strong></td><td style="color:#8dc57e"><strong>6,267,002</strong></td></tr>
-          </tbody>
-        </table>
-        <div style="margin-top:10px;padding:8px 10px;background:#f2f8ee;border-radius:6px;font-size:11px;color:#2e7d32;">✅ ครบจาก Peak พ.ค. (PDF) ณ 29/5 — 254 รายธุรกรรม | Top Customers ดูด้านล่าง</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- KAROKUL — JULY DOC TYPE (FINAL) -->
-  <div class="card" style="margin-top:14px;border-left:3px solid #e58079;">
-    <div class="card-header"><h3>📊 กรกฎาคม 2026 — สรุปตามประเภทเอกสาร <span style="font-size:11px;color:#e58079;font-weight:700">(ปิดเดือน final ✅)</span></h3></div>
-    <div class="card-body" style="padding:12px 16px;">
+    <div class="card-body" style="padding:0">
       <table class="data-table">
-        <thead><tr><th>ประเภท</th><th>ก่อน VAT (฿)</th><th>VAT (฿)</th><th>รวม VAT (฿)</th><th>จำนวน</th></tr></thead>
-        <tbody>
-          <tr><td>IVT ใบส่งของ/ใบกำกับ</td><td>1,726,848</td><td>120,879</td><td style="font-weight:700">1,847,728</td><td>149</td></tr>
-          <tr><td>RT ขายสด</td><td>1,130,162</td><td>79,111</td><td style="font-weight:700">1,209,273</td><td>290</td></tr>
-          <tr><td>DRT มัดจำ</td><td>766,508</td><td>53,656</td><td style="font-weight:700">820,163</td><td>45</td></tr>
-          <tr><td>อื่นๆ (misc)</td><td>190</td><td>13</td><td style="font-weight:700">204</td><td>1</td></tr>
-          <tr><td style="color:#e58079">CNT ใบลดหนี้ <span style="font-size:10px">(Bigtree refund)</span></td><td style="color:#e58079">−91,133</td><td style="color:#e58079">−6,379</td><td style="color:#e58079;font-weight:700">−97,513</td><td>5</td></tr>
-          <tr style="font-weight:700;background:#f9e2df"><td><strong>รวม ก.ค. 2026 (ปิดเดือน ✅)</strong></td><td><strong>3,532,575</strong></td><td><strong>247,280</strong></td><td style="color:#e58079"><strong>3,779,855</strong></td><td><strong>490</strong></td></tr>
-        </tbody>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>พนักงานขาย</th>
+            <th style="text-align:right">ยอดเดือน <span id="spSelectedMonthLabel">พ.ย.</span></th>
+            <th style="text-align:right">เฉลี่ย ม.ค.–ต.ค.</th>
+            <th style="text-align:right">vs เฉลี่ย</th>
+            <th style="text-align:right">YTD 2026</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody id="salesTeamActionTable"></tbody>
       </table>
-      <div style="margin-top:10px;padding:8px 10px;background:#f9e2df;border-radius:6px;font-size:11px;color:#8a4a44;">
-        ⚠️ <strong>ก.ค. ปิดเดือน ฿3.53M = -31.3% YoY</strong> vs ก.ค. 2025 ฿5.14M | IVT 48.9% · RT 32.0% · DRT 21.7% | Top sellers: Punnapha ฿931K · Teerata ฿824K · Tachanai ฿717K · Supisara ฿492K · Jutamat ฿406K<br>💡 <strong>ส.ค. แรงต่อเนื่อง</strong>: MTD 31/8 ปิดเดือน ✅ = ฿6.14M แล้ว (ศุภิสรา ปิดดีล Big Tree DRT ฿2.58M)
-      </div>
     </div>
   </div>
 
-  <!-- AUGUST MTD DOC TYPE -->
-  <div class="card" style="margin-top:14px;border-left:3px solid #8dc57e;">
-    <div class="card-header"><h3>📊 สิงหาคม 2026 — สรุปตามประเภทเอกสาร <span style="font-size:11px;color:#7cb877;font-weight:700">(ปิดเดือน 31/8 ✅)</span></h3></div>
-    <div class="card-body" style="padding:12px 16px;">
-      <table class="data-table">
-        <thead><tr><th>ประเภท</th><th>ก่อน VAT (฿)</th><th>VAT (฿)</th><th>รวม VAT (฿)</th><th>จำนวน</th></tr></thead>
-        <tbody>
-          <tr><td>IVT ใบส่งของ/ใบกำกับ <span style="color:#7cb877;font-weight:700">🚀</span></td><td>2,772,393</td><td>194,068</td><td style="font-weight:700">2,966,461</td><td>158</td></tr>
-          <tr><td>DRT มัดจำ <span style="color:#7cb877;font-weight:700">🚀</span></td><td>2,285,437</td><td>159,981</td><td style="font-weight:700">2,445,417</td><td>49</td></tr>
-          <tr><td>RT ขายสด</td><td>1,094,311</td><td>76,602</td><td style="font-weight:700">1,170,913</td><td>257</td></tr>
-          <tr><td>อื่นๆ (misc)</td><td>4,821</td><td>337</td><td style="font-weight:700">5,328</td><td>3</td></tr>
-          <tr><td style="color:#e58079">CNT ใบลดหนี้</td><td style="color:#e58079">−16,087</td><td style="color:#e58079">−1,126</td><td style="color:#e58079;font-weight:700">−17,383</td><td>7</td></tr>
-          <tr style="font-weight:700;background:#eaf4e2"><td><strong>รวม ส.ค. 2026 ปิดเดือน ✅</strong></td><td><strong>6,140,874</strong></td><td><strong>429,762</strong></td><td style="color:#8dc57e"><strong>6,570,637</strong></td><td><strong>474</strong></td></tr>
-        </tbody>
-      </table>
-      <div style="margin-top:10px;padding:8px 10px;background:#eaf4e2;border-radius:6px;font-size:11px;color:#4a8a54;">
-        🚀 <strong>ส.ค. ปิดเดือน ฿6.14M = +22.4% YoY</strong> ✨ vs ส.ค.2025 ฿5.02M · <strong>Best August in company history</strong> | IVT 45.1% · DRT 37.2% · RT 17.8% | Top sellers: <strong>ศุภิสรา ฿2.73M</strong> · Punnapha ฿1.28M · Teerata ฿926K · Tachanai ฿889K · Jutamat ฿181K
-      </div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:14px;border-left:3px solid #7c9dc0;">
-    <div class="card-header"><h3>📊 กันยายน 2026 — สรุปตามประเภทเอกสาร <span style="font-size:11px;color:#7c9dc0;font-weight:700">(ปิดเดือน 30/9 ✅)</span></h3></div>
-    <div class="card-body" style="padding:12px 16px;">
-      <table class="data-table">
-        <thead><tr><th>ประเภท</th><th>ก่อน VAT (฿)</th><th>VAT (฿)</th><th>รวม VAT (฿)</th><th>จำนวน</th></tr></thead>
-        <tbody><tr><td>IVT ใบส่งของ/ใบกำกับ</td><td>703,171</td><td>49,222</td><td style="font-weight:700">752,393</td><td>60</td></tr><tr><td>DRT มัดจำ</td><td>77,734</td><td>5,441</td><td style="font-weight:700">83,175</td><td>10</td></tr><tr><td>RT ขายสด</td><td>578,109</td><td>40,468</td><td style="font-weight:700">618,577</td><td>115</td></tr><tr><td>อื่นๆ (misc)</td><td>2,565</td><td>180</td><td style="font-weight:700">2,745</td><td>3</td></tr><tr><td style="color:#e58079">CNT ใบลดหนี้</td><td style="color:#e58079">−2,565</td><td style="color:#e58079">−180</td><td style="color:#e58079;font-weight:700">−2,745</td><td>3</td></tr><tr style="font-weight:700;background:#faf1e0"><td><strong>รวม ตุลาคม 2026 MTD</strong></td><td><strong>1,359,014</strong></td><td><strong>95,131</strong></td><td style="color:#e69a68"><strong>1,454,145</strong></td><td>191</td></tr></tbody>
-      </table>
-      <div style="margin-top:10px;padding:8px 10px;background:#e3ecf5;border-radius:6px;font-size:11px;color:#4a5a6c;">ก.ย. ปิดเดือน ฿5.24M ≈ +6.6% YoY (ก.ย. 2025 ≈ ฿4.92M ก่อน VAT*) · IVT 64.5% · DRT 12.5% · RT 23.4% | Top: Bigtree ฿1.45M · Central ฿404K · โนส ที ฿170K <span style='color:#999'>(*2025 ÷1.07 จากยอดรวม VAT)</span></div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:14px;border-left:3px solid #e69a68;">
-    <div class="card-header"><h3>📊 ตุลาคม 2026 MTD — สรุปตามประเภทเอกสาร <span style="font-size:11px;color:#e69a68;font-weight:700">(ถึง 26/10 · ตารางยังเป็น 12/10)</span></h3></div>
-    <div class="card-body" style="padding:12px 16px;">
-      <table class="data-table">
-        <thead><tr><th>ประเภท</th><th>ก่อน VAT (฿)</th><th>VAT (฿)</th><th>รวม VAT (฿)</th><th>จำนวน</th></tr></thead>
-        <tbody><tr><td>IVT ใบส่งของ/ใบกำกับ</td><td>672,031</td><td>47,042</td><td style="font-weight:700">719,073</td><td>55</td></tr><tr><td>DRT มัดจำ</td><td>68,884</td><td>4,822</td><td style="font-weight:700">73,706</td><td>8</td></tr><tr><td>RT ขายสด</td><td>450,823</td><td>31,558</td><td style="font-weight:700">482,381</td><td>96</td></tr><tr><td>อื่นๆ (misc)</td><td>1,883</td><td>132</td><td style="font-weight:700">2,015</td><td>2</td></tr><tr><td style="color:#e58079">CNT ใบลดหนี้</td><td style="color:#e58079">−1,883</td><td style="color:#e58079">−132</td><td style="color:#e58079;font-weight:700">−2,015</td><td>2</td></tr><tr style="font-weight:700;background:#faf1e0"><td><strong>รวม ตุลาคม 2026 MTD</strong></td><td><strong>1,359,014</strong></td><td><strong>83,422</strong></td><td style="color:#e69a68"><strong>1,275,160</strong></td><td>163</td></tr></tbody>
-      </table>
-      <div style="margin-top:10px;padding:8px 10px;background:#eaf4e2;border-radius:6px;font-size:11px;color:#4a5a6c;">✅ <strong>ต.ค. 2026 ปิดเดือน ฿5.29M</strong> (482 บิล · +0.75% vs ก.ย.) · พ.ย. MTD 4/11 ฿546K (66 บิล, 4 วัน) · ⚠️ ตารางประเภทเอกสาร (IVT/RT/DRT) ยังเป็นข้อมูลถึง 12/10 — รอ refresh</div>
-    </div>
-  </div>
-
-  <!-- TOP CUSTOMERS JUN–OCT 2026 (sync 26/10/2026, ก่อน VAT, Peak-2026) -->
-  <div class="grid-2" style="margin-top:14px;">
-    <div class="card">
-      <div class="card-header"><h3>🏅 Top Customers – ตุลาคม 2026 MTD (ตารางถึง 12/10 · ล่าสุด 26/10: #1 Big Tree ฿1.80M · Central ฿350K)</h3><span class="card-subtitle">ก่อน VAT · % ของยอด ต.ค. MTD</span></div>
-      <div class="card-body" style="padding:0;">
-        <table class="data-table">
-          <thead><tr><th>#</th><th>ลูกค้า (merged) · พนักงาน</th><th>ยอดขาย (฿)</th><th>%</th></tr></thead>
-          <tbody><tr><td class="rank">1</td><td>Central Group Thailand <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿224,030</td><td style="color:#7f8c8d">16.5%</td></tr><tr><td class="rank">2</td><td>ม่วนขนาด <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿71,500</td><td style="color:#7f8c8d">5.3%</td></tr><tr><td class="rank">3</td><td>แอมเวย์ (ประเทศไทย) <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿65,700</td><td style="color:#7f8c8d">4.8%</td></tr><tr><td class="rank">4</td><td>SINOUK CAFÉ GOURMET LAO <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿51,065</td><td style="color:#7f8c8d">3.8%</td></tr><tr><td class="rank">5</td><td>ทีพี โปรเจค <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿47,400</td><td style="color:#7f8c8d">3.5%</td></tr><tr><td class="rank">6</td><td>เจพี สปา แอนด์ เดคคอร์ <span style="font-size:10px;color:#999">· ธชนัย</span></td><td style="font-weight:700">฿43,750</td><td style="color:#7f8c8d">3.2%</td></tr><tr><td class="rank">7</td><td>เดอะ คอมมูนร์ <span style="font-size:10px;color:#999">· ธชนัย</span></td><td style="font-weight:700">฿40,386</td><td style="color:#7f8c8d">3.0%</td></tr><tr><td class="rank">8</td><td>เวิลด์ ฟูด เซ็นเตอร์ <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿37,700</td><td style="color:#7f8c8d">2.8%</td></tr><tr><td class="rank">9</td><td>แพ็คเวิร์คส์ <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿34,200</td><td style="color:#7f8c8d">2.5%</td></tr><tr><td class="rank">10</td><td>นางสาว ปภัสสร แต้ไพบูลย์ <span style="font-size:10px;color:#999">· จุฑามาศ</span></td><td style="font-weight:700">฿33,940</td><td style="color:#7f8c8d">2.5%</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h3>🏅 Top Customers – กันยายน 2026</h3><span class="card-subtitle">ก่อน VAT · ปิดเดือน</span></div>
-      <div class="card-body" style="padding:0;">
-        <table class="data-table">
-          <thead><tr><th>#</th><th>ลูกค้า (merged) · พนักงาน</th><th>ยอดขาย (฿)</th><th>%</th></tr></thead>
-          <tbody><tr><td class="rank">1</td><td>Bigtree <span style="font-size:10px;color:#999">· ศุภิสรา</span></td><td style="font-weight:700;color:#e58079">฿1,445,724</td><td style="color:#7f8c8d">27.6%</td></tr><tr><td class="rank">2</td><td>Central Group Thailand <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿404,498</td><td style="color:#7f8c8d">7.7%</td></tr><tr><td class="rank">3</td><td>โนส ที (ประเทศไทย) <span style="font-size:10px;color:#999">· ธชนัย</span></td><td style="font-weight:700">฿169,694</td><td style="color:#7f8c8d">3.2%</td></tr><tr><td class="rank">4</td><td>แพ็คเวิร์คส์ <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿152,513</td><td style="color:#7f8c8d">2.9%</td></tr><tr><td class="rank">5</td><td>Bwell Group (จีพีซีเอ็ม+บีเวล) <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿151,900</td><td style="color:#7f8c8d">2.9%</td></tr><tr><td class="rank">6</td><td>เวนดิ้ง เซอร์วิสเซส <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿139,400</td><td style="color:#7f8c8d">2.7%</td></tr><tr><td class="rank">7</td><td>Shopee (รวม) <span style="font-size:10px;color:#999">· Shopee</span></td><td style="font-weight:700">฿97,940</td><td style="color:#7f8c8d">1.9%</td></tr><tr><td class="rank">8</td><td>แอมเวย์ (ประเทศไทย) <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿88,850</td><td style="color:#7f8c8d">1.7%</td></tr><tr><td class="rank">9</td><td>แอล แอนด์ เอช โฮเทล แมเนจเมนท์ <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿84,300</td><td style="color:#7f8c8d">1.6%</td></tr><tr><td class="rank">10</td><td>บอททอมเลส 2020 <span style="font-size:10px;color:#999">· ศุภิสรา</span></td><td style="font-weight:700">฿83,700</td><td style="color:#7f8c8d">1.6%</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div class="grid-2" style="margin-top:0;">
-    <div class="card">
-      <div class="card-header"><h3>🏅 Top Customers – สิงหาคม 2026</h3><span class="card-subtitle">ก่อน VAT · ปิดเดือน</span></div>
-      <div class="card-body" style="padding:0;">
-        <table class="data-table">
-          <thead><tr><th>#</th><th>ลูกค้า (merged) · พนักงาน</th><th>ยอดขาย (฿)</th><th>%</th></tr></thead>
-          <tbody><tr><td class="rank">1</td><td>Bigtree <span style="font-size:10px;color:#999">· ศุภิสรา</span></td><td style="font-weight:700;color:#e58079">฿2,634,659</td><td style="color:#7f8c8d">42.9%</td></tr><tr><td class="rank">2</td><td>Central Group Thailand <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿570,928</td><td style="color:#7f8c8d">9.3%</td></tr><tr><td class="rank">3</td><td>ดัฟฟ์ ดีไซน์ เฮ้าส์ <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿313,300</td><td style="color:#7f8c8d">5.1%</td></tr><tr><td class="rank">4</td><td>Bwell Group (จีพีซีเอ็ม+บีเวล) <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿111,000</td><td style="color:#7f8c8d">1.8%</td></tr><tr><td class="rank">5</td><td>แพ็คเวิร์คส์ <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿108,675</td><td style="color:#7f8c8d">1.8%</td></tr><tr><td class="rank">6</td><td>เวนดิ้ง เซอร์วิสเซส <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿86,525</td><td style="color:#7f8c8d">1.4%</td></tr><tr><td class="rank">7</td><td>Shopee (รวม) <span style="font-size:10px;color:#999">· Shopee</span></td><td style="font-weight:700">฿84,291</td><td style="color:#7f8c8d">1.4%</td></tr><tr><td class="rank">8</td><td>ทู ธันเดอร์ คอฟฟี่ โรสเตอร์ส <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿78,250</td><td style="color:#7f8c8d">1.3%</td></tr><tr><td class="rank">9</td><td>แอมเวย์ (ประเทศไทย) <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿75,650</td><td style="color:#7f8c8d">1.2%</td></tr><tr><td class="rank">10</td><td>กินดื่ม <span style="font-size:10px;color:#999">· ธชนัย</span></td><td style="font-weight:700">฿66,900</td><td style="color:#7f8c8d">1.1%</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h3>🏅 Top Customers – กรกฎาคม 2026</h3><span class="card-subtitle">ก่อน VAT · ปิดเดือน</span></div>
-      <div class="card-body" style="padding:0;">
-        <table class="data-table">
-          <thead><tr><th>#</th><th>ลูกค้า (merged) · พนักงาน</th><th>ยอดขาย (฿)</th><th>%</th></tr></thead>
-          <tbody><tr><td class="rank">1</td><td>Central Group Thailand <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿525,748</td><td style="color:#7f8c8d">14.9%</td></tr><tr><td class="rank">2</td><td>Bigtree <span style="font-size:10px;color:#999">· ศุภิสรา</span></td><td style="font-weight:700">฿246,262</td><td style="color:#7f8c8d">7.0%</td></tr><tr><td class="rank">3</td><td>ซุปเปอร์ เทอร์เทิล (มหาชน) <span style="font-size:10px;color:#999">· ศุภิสรา</span></td><td style="font-weight:700">฿168,000</td><td style="color:#7f8c8d">4.8%</td></tr><tr><td class="rank">4</td><td>Bwell Group (จีพีซีเอ็ม+บีเวล) <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿102,700</td><td style="color:#7f8c8d">2.9%</td></tr><tr><td class="rank">5</td><td>ยามาโมริ เทรดดิ้ง <span style="font-size:10px;color:#999">· ธชนัย</span></td><td style="font-weight:700">฿97,000</td><td style="color:#7f8c8d">2.7%</td></tr><tr><td class="rank">6</td><td>กล่องอุตสาหกรรม <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿92,825</td><td style="color:#7f8c8d">2.6%</td></tr><tr><td class="rank">7</td><td>เก้าหนึ่ง มาร์เก็ตติ้งเซอร์วิส <span style="font-size:10px;color:#999">· จุฑามาศ</span></td><td style="font-weight:700">฿83,090</td><td style="color:#7f8c8d">2.4%</td></tr><tr><td class="rank">8</td><td>Shopee (รวม) <span style="font-size:10px;color:#999">· Shopee</span></td><td style="font-weight:700">฿82,510</td><td style="color:#7f8c8d">2.3%</td></tr><tr><td class="rank">9</td><td>เตี่ย <span style="font-size:10px;color:#999">· ธชนัย</span></td><td style="font-weight:700">฿81,409</td><td style="color:#7f8c8d">2.3%</td></tr><tr><td class="rank">10</td><td>แพชชั่น เรสเตอรองท์ กรุ๊ป <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿58,125</td><td style="color:#7f8c8d">1.6%</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div class="grid-2" style="margin-top:0;">
-    <div class="card">
-      <div class="card-header"><h3>🏅 Top Customers – มิถุนายน 2026</h3><span class="card-subtitle">ก่อน VAT · ปิดเดือน</span></div>
-      <div class="card-body" style="padding:0;">
-        <table class="data-table">
-          <thead><tr><th>#</th><th>ลูกค้า (merged) · พนักงาน</th><th>ยอดขาย (฿)</th><th>%</th></tr></thead>
-          <tbody><tr><td class="rank">1</td><td>Bigtree <span style="font-size:10px;color:#999">· ศุภิสรา</span></td><td style="font-weight:700">฿936,717</td><td style="color:#7f8c8d">17.9%</td></tr><tr><td class="rank">2</td><td>Central Group Thailand <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿481,598</td><td style="color:#7f8c8d">9.2%</td></tr><tr><td class="rank">3</td><td>ACE Technology <span style="font-size:10px;color:#999">· ศุภิสรา</span></td><td style="font-weight:700">฿468,000</td><td style="color:#7f8c8d">9.0%</td></tr><tr><td class="rank">4</td><td>ทีพี โปรเจค <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿362,100</td><td style="color:#7f8c8d">6.9%</td></tr><tr><td class="rank">5</td><td>โนส ที (ประเทศไทย) <span style="font-size:10px;color:#999">· ธชนัย</span></td><td style="font-weight:700">฿279,900</td><td style="color:#7f8c8d">5.4%</td></tr><tr><td class="rank">6</td><td>แพ็คเวิร์คส์ <span style="font-size:10px;color:#999">· ปุณณภา</span></td><td style="font-weight:700">฿199,408</td><td style="color:#7f8c8d">3.8%</td></tr><tr><td class="rank">7</td><td>ซุปเปอร์ เทอร์เทิล (มหาชน) <span style="font-size:10px;color:#999">· ศุภิสรา</span></td><td style="font-weight:700">฿180,500</td><td style="color:#7f8c8d">3.5%</td></tr><tr><td class="rank">8</td><td>แพชชั่น เรสเตอรองท์ กรุ๊ป <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿126,020</td><td style="color:#7f8c8d">2.4%</td></tr><tr><td class="rank">9</td><td>โลจิสติ๊ด คอนแทรค โลจิสติคส์ (ประเทศไทย) (มหาชน) <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿112,710</td><td style="color:#7f8c8d">2.2%</td></tr><tr><td class="rank">10</td><td>SINOUK CAFÉ GOURMET LAO <span style="font-size:10px;color:#999">· ธีรตา</span></td><td style="font-weight:700">฿87,383</td><td style="color:#7f8c8d">1.7%</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- TOP CUSTOMERS MAY -->
-  <div class="grid-2" style="margin-top:0;">
-    <div class="card">
-      <div class="card-header"><h3>🏅 Top Customers – พฤษภาคม 2026 (29/5)</h3><span class="card-subtitle">ก่อน VAT</span></div>
-      <div class="card-body" style="padding:0;">
-        <table class="data-table">
-          <thead><tr><th>#</th><th>ลูกค้า</th><th>ยอดขาย (฿)</th><th>%</th></tr></thead>
-          <tbody>
-            <tr><td class="rank">1</td><td>Big Tree (รวม 2 ชื่อ) <span class="badge badge-red">🔥</span></td><td style="font-weight:700;color:#e58079">฿1,680,544</td><td style="color:#e58079;font-weight:700">28.7%</td></tr>
-            <tr><td class="rank">2</td><td>บ. สยาม แฟรนไชส์ ธุรกิจ</td><td style="font-weight:700">฿429,152</td><td style="color:#7f8c8d">7.3%</td></tr>
-            <tr><td class="rank">3</td><td>บ. เซ็นทรัลพัฒนา (มหาชน)</td><td style="font-weight:700">฿170,040</td><td style="color:#7f8c8d">2.9%</td></tr>
-            <tr><td class="rank">4</td><td>บ. ดัฟฟ์ ดีไซน์ เฮาส์</td><td style="font-weight:700">฿170,000</td><td style="color:#7f8c8d">2.9%</td></tr>
-            <tr><td class="rank">5</td><td>บ. โนส ที (ประเทศไทย)</td><td style="font-weight:700">฿129,000</td><td style="color:#7f8c8d">2.2%</td></tr>
-            <tr><td class="rank">6</td><td>บ. สกายเรสเตอรองท์</td><td style="font-weight:700">฿119,550</td><td style="color:#7f8c8d">2.0%</td></tr>
-            <tr><td class="rank">7</td><td>บ. แพ็คเวิร์คส์</td><td style="font-weight:700">฿108,965</td><td style="color:#7f8c8d">1.9%</td></tr>
-            <tr><td class="rank">8</td><td>บ. ซุปเปอร์ เทอร์เทิล (มหาชน)</td><td style="font-weight:700">฿105,750</td><td style="color:#7f8c8d">1.8%</td></tr>
-            <tr><td class="rank">9</td><td>บ. อัลไพน์ กอล์ฟ แอนด์ สปอร์ตคลับ</td><td style="font-weight:700">฿103,500</td><td style="color:#7f8c8d">1.8%</td></tr>
-            <tr><td class="rank">10</td><td>บ. จีพีซีเอ็ม กรุ๊ป</td><td style="font-weight:700">฿101,100</td><td style="color:#7f8c8d">1.7%</td></tr>
-          </tbody>
-        </table>
-        <div style="padding:10px 12px;font-size:11px;color:#7f8c8d;border-top:1px solid #f5efe8">⚠️ Big Tree 28.7% ของเดือน (ส่วนใหญ่เป็นมัดจำ ฿917K วันที่ 28/5) — concentration risk สูง</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h3>💡 ไฮไลต์ พ.ค. 2026 (29/5)</h3></div>
-      <div class="card-body" style="padding:14px 16px;font-size:13px;line-height:1.8;">
-        <strong style="color:#e58079">ศุภิสรา ขึ้น #1 ของเดือน ฿1.84M</strong> — ปิดดีล Big Tree มัดจำก้อนใหญ่ ฿917K (28/5)<br/>
-        <strong>ธีรตา #2 ฿1.54M</strong> ฟอร์มสม่ำเสมอ | ปุณณภา ฿0.97M · ธชนัย ฿0.96M สูสีกัน<br/>
-        <strong>โครงสร้างยอด:</strong> IVT ฿3.15M (54%) · ขายสด+Shopee ฿1.42M (24%) · มัดจำ DRT ฿1.29M (22%)<br/>
-        <span style="color:#e58079"><strong>⚠️ กระจุกตัว:</strong> Big Tree 28.7% — ถ้าตัดออก ยอด พ.ค. เหลือ ~฿4.18M ควรเร่งกระจายฐานลูกค้า</span>
-      </div>
-    </div>
-  </div>
-  <!-- DocType April -->
-  <div class="grid-2" style="margin-top:0;">
-    <div class="card">
-      <div class="card-header"><h3>📊 มีนาคม 2026 — สรุปตามประเภทเอกสาร</h3></div>
-      <div class="card-body" style="padding:12px 16px;">
-        <table class="data-table">
-          <thead><tr><th>ประเภท</th><th>ก่อน VAT (฿)</th><th>รวม VAT (฿)</th></tr></thead>
-          <tbody>
-            <tr><td>IVT ใบส่งของ/ใบกำกับ</td><td>2,701,001</td><td style="font-weight:700">2,890,071</td></tr>
-            <tr><td>RT ขายสด + Shopee</td><td>1,387,051</td><td style="font-weight:700">1,484,145</td></tr>
-            <tr style="font-weight:700;background:#f0f7ff"><td><strong>รวม มี.ค.</strong></td><td><strong>4,088,052</strong></td><td style="color:#7c9dc0"><strong>4,374,216</strong></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h3>📊 เมษายน 2026 🎉 — สรุปตามประเภทเอกสาร</h3></div>
-      <div class="card-body" style="padding:12px 16px;">
-        <table class="data-table">
-          <thead><tr><th>ประเภท</th><th>ก่อน VAT (฿)</th><th>รวม VAT (฿)</th></tr></thead>
-          <tbody>
-            <tr><td>IVT ใบส่งของ/ใบกำกับ</td><td>3,613,981</td><td style="font-weight:700">3,866,960</td></tr>
-            <tr><td>RT ขายสด + Shopee</td><td>1,300,951</td><td style="font-weight:700">1,392,018</td></tr>
-            <tr><td>DRT หักมัดจำแล้ว</td><td>606,795</td><td style="font-weight:700">649,271</td></tr>
-            <tr><td style="color:#e58079">CNT ใบลดหนี้</td><td style="color:#e58079">−1,658</td><td style="color:#e58079;font-weight:700">−1,773</td></tr>
-            <tr style="font-weight:700;background:#f2f8ee"><td><strong>รวม เม.ย. 🎉</strong></td><td><strong>6,520,069</strong></td><td style="color:#8dc57e"><strong>7,906,476</strong></td></tr>
-          </tbody>
-        </table>
-        <div style="margin-top:10px;padding:10px;background:#f2f8ee;border-radius:8px;font-size:13px;">
-          <strong>🎉 เม.ย. vs ScA ฿5.19M: +132.5%</strong> | vs มี.ค. ฿6.06M: <strong style="color:#8dc57e">+13.6% MoM</strong><br/>
-          vs เม.ย. 2025 ฿4.81M: <strong style="color:#8dc57e">+43.0% YoY</strong> | DRT pending พ.ค.: ฿1.36M (Bigtree ฿822K)
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- INSIGHT BOX 2026 -->
-  <div class="insight-box">
-    <h4>💡 2026 Insights — ม.ค.–ต.ค. ครบ ✅ + พ.ย. MTD 4/11 (อัปเดต 5/11/2026)</h4>
-    <ul>
-      <li><strong>YTD ฿54.52M = 87.1% ของ ScA ฿62.6M</strong> | 10 เดือน ฿53.97M ≈ +17% YoY (2025 ม.ค.–ต.ค. ≈ ฿46.1M ก่อน VAT) | Run Rate ~฿64.8M/ปี ✅ | เหลืออีก ฿8.08M ≈ ฿4.04M/เดือน</li>
-      <li><strong>รายเดือน:</strong> เม.ย. ฿7.04M สูงสุด · ส.ค. ฿6.23M · มี.ค. ฿6.05M · ต.ค. ฿5.29M ✅ · ก.ย. ฿5.25M · ก.ค. ฿3.53M ต่ำสุด</li>
-      <li><strong>พ.ย. MTD 4/11 ฿546K</strong> (66 บิล, 4 วัน) → pace ~฿137K/วัน → projected เต็มเดือน ~฿4.1M (ScA พ.ย. ~฿5.5M)</li>
-      <li><strong>YTD รายคน:</strong> ศุภิสรา #1 ฿13.18M · ปุณณภา #2 ฿11.38M · ธีรตา #3 ฿11.29M · ธชนัย ฿8.97M · จุฑามาศ ฿3.41M</li>
-      <li><strong>⚠️ กระจุกตัว Bigtree ฿10.93M = 21.9% ของ YTD</strong> · DRT Bigtree รอส่งมอบ ฿5.01M · Central Group ฿4.68M (9.4%) สม่ำเสมอทุกเดือน</li>
-    </ul>
-  </div>
 </div>
+
+<!-- =========== Progress 2026 — Dynamic Data & Renderers =========== -->
+<script>
+// ScA = 2025 รายเดือน × 1.15 (per CEO definition)
+const sales2025Monthly = [5340694, 5269849, 3882755, 4812425, 4283557, 4186835, 5138709, 5015114, 5263403, 5543165, 4800238, 4874483];
+const scaMonthly = sales2025Monthly.map(v => Math.round(v * 1.15));
+const scaTotal = scaMonthly.reduce((a,b)=>a+b,0);
+
+// Sales 2026 (from Google Sheet "peak 2026")
+const sales2026Monthly = [4590117, 4896724, 6051915, 7043204, 5871292, 5222540, 3532575, 6231612, 5247516, 5286925, 546186];
+const monthNames = ['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const monthFullNames = ['','มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
+// SP breakdown 2026 (from Google Sheet "peak 2026" · pre-VAT · 11 months)
+const spMonthly2026 = {
+  'ศุภิสรา':  [796365,940736,1077268,2081539,1835273,1635217,491869,2728045,1593732,1966243,105000],
+  'ธีรตา':    [1406179,1296793,1136695,1661117,1539483,1061689,849162,917438,1146065,1049728,164754],
+  'ปุณณภา':   [1076609,1181050,1781232,1255469,968164,1333526,931296,1281967,1144280,818859,259583],
+  'ธชนัย':    [813467,982042,1161034,1339760,974235,849111,716684,983160,874308,944058,166284],
+  'จุฑามาศ':  [306408,300716,692640,502197,456167,204008,405996,184810,240427,324770,107882],
+  'นิโลบล':   [55000,55635,0,72800,0,35000,12430,12320,13980,0,0],
+  'ด้วงกมล':  [0,0,0,0,0,0,0,0,59900,0,8600],
+  'Shopee':   [134587,133641,154299,128697,94716,103466,123845,122981,172306,172005,28602],
+  'Makro':    [0,0,0,0,0,0,0,0,2520,7143,4586],
+  'Lazada':   [1501,0,0,0,0,0,0,0,0,779,0],
+};
+
+// CEO Scorecard data (ยังเป็น snapshot แบบ manual · update ได้ตอนมีข้อมูลใหม่)
+const ceoData = {
+  cashRunway: { months: 3.2, cash: 1250000, burnMonthly: 390000, note: 'ประมาณ · ขอ confirm cash balance จาก Peak' },
+  arAging:    { total: 4190000, current: 3650000, overdue: 540000, note: 'ณ 10/10/2026 · 224 บิล · ขอ refresh' },
+  burnVsLY:   { thisYTD: 5983088 + 6055819 + 1513869 + 360000, lyYTD: null, note: 'YTD 10mo คชจ. (ex COGS) ฿13.91M · เทียบ 2025 ต้องรอข้อมูล' },
+  concentration: { topCustomer: 'Big Tree', pct: 21.9, amount: 10930000, note: 'YTD ฿10.93M · ความเสี่ยงระดับสูง (>20%)' },
+};
+
+function thaiAbbrev(v){ return v>=1e6 ? '฿'+(v/1e6).toFixed(2)+'M' : '฿'+(v/1e3).toFixed(0)+'K'; }
+
+function renderProgressMonth(m){
+  const idx = m - 1;
+  const isMtd = (m === 11);
+  const rev = sales2026Monthly[idx] || 0;
+  const sca = scaMonthly[idx];
+  const prev = sales2025Monthly[idx];
+  const scaPct = sca ? ((rev/sca)*100).toFixed(1) : '0';
+  const scaGap = sca - rev;
+  const yoyDiff = rev - prev;
+  const yoyPct = prev ? ((yoyDiff/prev)*100).toFixed(1) : '0';
+  const yoyColor = yoyDiff > 0 ? '#5a9d50' : '#c86050';
+  const scaColor = rev >= sca ? '#5a9d50' : (rev >= sca*0.9 ? '#e69a68' : '#c86050');
+  const scaStatus = rev >= sca ? '✅ เกินเป้า' : (rev >= sca*0.9 ? '🟡 ใกล้เป้า' : '🔴 ต่ำกว่าเป้า');
+  // Top SP for selected month
+  const spRanked = Object.entries(spMonthly2026).map(([n,a]) => [n, a[idx]||0]).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const topSP = spRanked[0];
+  const topSPPct = rev ? ((topSP[1]/rev)*100).toFixed(1) : '0';
+
+  document.getElementById('progressMonthKpi').innerHTML = `
+    <div class="kpi-card" style="border-left:4px solid ${scaColor}">
+      <div class="kpi-label">${monthFullNames[m]} 2026 ${isMtd?'(MTD 4/11)':'(ปิดเดือน)'}</div>
+      <div class="kpi-value" style="color:${scaColor}">${thaiAbbrev(rev)}</div>
+      <div class="kpi-sub">vs ScA ${thaiAbbrev(sca)} → <strong>${scaPct}%</strong> ${scaStatus}</div>
+      <div class="kpi-icon">📈</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid ${yoyColor}">
+      <div class="kpi-label">YoY — ${monthNames[m]} 2026 vs 2025</div>
+      <div class="kpi-value" style="color:${yoyColor}">${yoyDiff>0?'▲ +':'▼ '}${yoyPct}%</div>
+      <div class="kpi-sub">2025: ${thaiAbbrev(prev)} → 2026: ${thaiAbbrev(rev)} (${yoyDiff>0?'+':''}${thaiAbbrev(Math.abs(yoyDiff)).replace('฿','')})</div>
+      <div class="kpi-icon">${yoyDiff>0?'📊':'⚠️'}</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #8dc9b7">
+      <div class="kpi-label">🥇 Top SP — ${monthNames[m]}</div>
+      <div class="kpi-value" style="font-size:18px">${topSP[0]}</div>
+      <div class="kpi-sub"><strong>${thaiAbbrev(topSP[1])}</strong> (${topSPPct}% ของเดือน) · #2 ${spRanked[1]?spRanked[1][0]:'-'} ${spRanked[1]?thaiAbbrev(spRanked[1][1]):''}</div>
+      <div class="kpi-icon">🏆</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid ${scaGap<=0?'#5a9d50':'#e69a68'}">
+      <div class="kpi-label">Gap vs ScA (${monthNames[m]})</div>
+      <div class="kpi-value" style="color:${scaGap<=0?'#5a9d50':'#e69a68'}">${scaGap<=0?'+':'−'}${thaiAbbrev(Math.abs(scaGap))}</div>
+      <div class="kpi-sub">${scaGap<=0?'เกินเป้าไปแล้ว · ส่วนเกิน '+thaiAbbrev(-scaGap):'ยังเหลืออีก '+thaiAbbrev(scaGap)+' ที่ต้องปิด'}</div>
+      <div class="kpi-icon">🎯</div>
+    </div>
+  `;
+
+  // Sales Team Action Panel — filter for selected month
+  document.getElementById('spSelectedMonthLabel').textContent = monthNames[m];
+  const spRows = Object.entries(spMonthly2026).map(([name, arr]) => {
+    const monthVal = arr[idx] || 0;
+    const avg10 = arr.slice(0,10).reduce((s,v)=>s+v,0)/10;
+    const ytd = arr.slice(0,11).reduce((s,v)=>s+v,0);
+    return {name, monthVal, avg10, ytd};
+  }).sort((a,b)=>b.ytd-a.ytd);
+  document.getElementById('salesTeamActionTable').innerHTML = spRows.map((sp,i) => {
+    const vsAvg = sp.avg10>0 ? ((sp.monthVal-sp.avg10)/sp.avg10)*100 : 0;
+    const vsAvgColor = vsAvg >= -10 ? '#5a9d50' : (vsAvg >= -40 ? '#e69a68' : '#c86050');
+    const status = isMtd ? '⏱️ MTD' : (sp.monthVal >= sp.avg10*0.9 ? '🟢 OK' : (sp.monthVal >= sp.avg10*0.6 ? '🟡 Watch' : '🔴 Alert'));
+    return `<tr>
+      <td>${i+1}</td>
+      <td><strong>${sp.name}</strong></td>
+      <td style="text-align:right;font-weight:700">${thaiAbbrev(sp.monthVal)}</td>
+      <td style="text-align:right;color:#888">${thaiAbbrev(sp.avg10)}</td>
+      <td style="text-align:right;color:${vsAvgColor};font-weight:700">${vsAvg>=0?'+':''}${vsAvg.toFixed(0)}%</td>
+      <td style="text-align:right">${thaiAbbrev(sp.ytd)}</td>
+      <td>${status}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderCeoScorecard(){
+  const d = ceoData;
+  document.getElementById('ceoScorecard').innerHTML = `
+    <div class="kpi-card" style="border-left:4px solid #7c9dc0">
+      <div class="kpi-label">💵 Cash Runway</div>
+      <div class="kpi-value" style="color:#7c9dc0">${d.cashRunway.months.toFixed(1)} เดือน</div>
+      <div class="kpi-sub">Cash ${thaiAbbrev(d.cashRunway.cash)} / Burn ${thaiAbbrev(d.cashRunway.burnMonthly)}/เดือน · <em style="color:#aaa">${d.cashRunway.note}</em></div>
+      <div class="kpi-icon">💵</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #e69a68">
+      <div class="kpi-label">🧾 AR Aging (Collection Health)</div>
+      <div class="kpi-value" style="color:#e69a68">${thaiAbbrev(d.arAging.total)}</div>
+      <div class="kpi-sub">Current ${thaiAbbrev(d.arAging.current)} (${(d.arAging.current/d.arAging.total*100).toFixed(0)}%) · Overdue ${thaiAbbrev(d.arAging.overdue)} (${(d.arAging.overdue/d.arAging.total*100).toFixed(0)}%) ⚠️</div>
+      <div class="kpi-icon">🧾</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #a888c4">
+      <div class="kpi-label">🔥 Burn Rate YTD (ex COGS)</div>
+      <div class="kpi-value" style="color:#a888c4">${thaiAbbrev(d.burnVsLY.thisYTD)}</div>
+      <div class="kpi-sub">SAL+OpEx+Int+Car (10mo) · ~${thaiAbbrev(d.burnVsLY.thisYTD/10)}/เดือน · <em style="color:#aaa">${d.burnVsLY.note}</em></div>
+      <div class="kpi-icon">🔥</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #c86050">
+      <div class="kpi-label">🎯 Customer Concentration</div>
+      <div class="kpi-value" style="color:#c86050">${d.concentration.pct}%</div>
+      <div class="kpi-sub"><strong>${d.concentration.topCustomer}</strong> ${thaiAbbrev(d.concentration.amount)} YTD · ${d.concentration.note}</div>
+      <div class="kpi-icon">🎯</div>
+    </div>
+  `;
+}
+
+// Init on load
+window.addEventListener('DOMContentLoaded', () => {
+  renderProgressMonth(11);  // พ.ย. MTD default
+  renderCeoScorecard();
+});
+</script>
+
 
 <!-- ============================== TAB: CHURN (ลูกค้าที่หายไป) ============================== -->
 <!-- ============================== TAB: SALES ANALYSIS ============================== -->
