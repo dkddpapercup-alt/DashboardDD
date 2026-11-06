@@ -749,8 +749,8 @@
       </div>
       <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #e69a68;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;color:#888;letter-spacing:.5px;margin-bottom:4px;">AR / AP OUTSTANDING</div>
-        <div style="font-size:20px;font-weight:800;color:#e69a68;">฿4.19M / ฿7.79M</div>
-        <div style="font-size:11px;color:#888;margin-top:3px;">AR ณ 10/10 (224 บิล, เกินกำหนด ฿45K) · AP ณ 17/4 (รออัปเดต)</div>
+        <div style="font-size:20px;font-weight:800;color:#5a9d50;">฿2.99M / ฿7.79M</div>
+        <div style="font-size:11px;color:#888;margin-top:3px;">AR ณ 5/11 (201 บิล · 93% Current 🟢 · เกินกำหนด ฿206K) · AP ณ 17/4 (รออัปเดต)</div>
       </div>
       <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #a888c4;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;color:#888;letter-spacing:.5px;margin-bottom:4px;">CUSTOMER CONCENTRATION</div>
@@ -1769,7 +1769,7 @@ const spMonthly2026 = {
 // CEO Scorecard data (ยังเป็น snapshot แบบ manual · update ได้ตอนมีข้อมูลใหม่)
 const ceoData = {
   cashRunway: { months: 3.2, cash: 1250000, burnMonthly: 390000, note: 'ประมาณ · ขอ confirm cash balance จาก Peak' },
-  arAging:    { total: 4190000, current: 3650000, overdue: 540000, note: 'ณ 10/10/2026 · 224 บิล · ขอ refresh' },
+  arAging:    { total: 2990565, current: 2784681, overdue: 205884, b1_30: 152818, b31_60: 31522, b61_90: 0, b90plus: 21544, bills: 201, note: 'ณ 5/11/2026 · Google Sheet · 93.1% Current 🟢' },
   burnVsLY:   { thisYTD: 5983088 + 6055819 + 1513869 + 360000, lyYTD: null, note: 'YTD 10mo คชจ. (ex COGS) ฿13.91M · เทียบ 2025 ต้องรอข้อมูล' },
   concentration: { topCustomer: 'Big Tree', pct: 21.9, amount: 10930000, note: 'YTD ฿10.93M · ความเสี่ยงระดับสูง (>20%)' },
 };
@@ -1854,10 +1854,10 @@ function renderCeoScorecard(){
       <div class="kpi-sub">Cash ${thaiAbbrev(d.cashRunway.cash)} / Burn ${thaiAbbrev(d.cashRunway.burnMonthly)}/เดือน · <em style="color:#aaa">${d.cashRunway.note}</em></div>
       <div class="kpi-icon">💵</div>
     </div>
-    <div class="kpi-card" style="border-left:4px solid #e69a68">
+    <div class="kpi-card" style="border-left:4px solid #5a9d50">
       <div class="kpi-label">🧾 AR Aging (Collection Health)</div>
-      <div class="kpi-value" style="color:#e69a68">${thaiAbbrev(d.arAging.total)}</div>
-      <div class="kpi-sub">Current ${thaiAbbrev(d.arAging.current)} (${(d.arAging.current/d.arAging.total*100).toFixed(0)}%) · Overdue ${thaiAbbrev(d.arAging.overdue)} (${(d.arAging.overdue/d.arAging.total*100).toFixed(0)}%) ⚠️</div>
+      <div class="kpi-value" style="color:#5a9d50">${thaiAbbrev(d.arAging.total)}</div>
+      <div class="kpi-sub">🟢 Current ${(d.arAging.current/d.arAging.total*100).toFixed(1)}% · 🟡 1-30d ${thaiAbbrev(d.arAging.b1_30)} · 🟠 31-60d ${thaiAbbrev(d.arAging.b31_60)} · ⚫ >90d ${thaiAbbrev(d.arAging.b90plus)} · ${d.arAging.bills} บิล</div>
       <div class="kpi-icon">🧾</div>
     </div>
     <div class="kpi-card" style="border-left:4px solid #a888c4">
