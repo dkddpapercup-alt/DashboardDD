@@ -1,6 +1,35 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+<!-- 🔐 DD Paper Cup Dashboard · Password Gate (SHA-256) -->
+<script>
+(function(){
+  const PWHASH = "1ae8da6fb1586aefd16d0ccfc5bd135d015b68645902c074b450a68c6fff1425";
+  const SKEY  = "ddpc_auth_v1";
+  if (sessionStorage.getItem(SKEY) === "ok") return;
+  document.documentElement.style.visibility = "hidden";
+  async function sha256(s){const b=new TextEncoder().encode(s);const h=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+  function showGate(){
+    document.documentElement.style.visibility="visible";
+    const o = document.createElement('div');
+    o.id='ddpc-gate';
+    o.style.cssText='position:fixed;inset:0;background:linear-gradient(135deg,#faf1e0,#f5efe8);z-index:999999;display:flex;align-items:center;justify-content:center;font-family:-apple-system,"Segoe UI",sans-serif';
+    o.innerHTML=`<div style="background:white;padding:40px 48px;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.15);max-width:400px;width:90%;text-align:center"><div style="font-size:48px;margin-bottom:8px">🔐</div><div style="font-size:20px;font-weight:800;color:#4a5a6c;margin-bottom:4px">DD Paper Cup</div><div style="font-size:13px;color:#888;margin-bottom:24px">Private Dashboard · Confidential</div><input id="ddpc-pw" type="password" placeholder="รหัสผ่าน" autofocus style="width:100%;padding:12px 16px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:15px;outline:none;box-sizing:border-box;margin-bottom:12px"/><button id="ddpc-go" style="width:100%;padding:12px;background:#c99a5a;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer">เข้าสู่ Dashboard</button><div id="ddpc-err" style="color:#c86050;font-size:12px;margin-top:10px;min-height:16px"></div><div style="margin-top:20px;font-size:11px;color:#aaa;line-height:1.5">ห้ามเผยแพร่ข้อมูลภายในให้บุคคลภายนอก<br>Unauthorized access is prohibited</div></div>`;
+    document.body.appendChild(o);
+    document.body.style.overflow='hidden';
+    const inp=document.getElementById('ddpc-pw'),btn=document.getElementById('ddpc-go'),err=document.getElementById('ddpc-err');
+    async function tryLogin(){
+      const h=await sha256(inp.value);
+      if(h===PWHASH){sessionStorage.setItem(SKEY,"ok");o.remove();document.body.style.overflow='';}
+      else{err.textContent='รหัสผ่านไม่ถูกต้อง · ลองอีกครั้ง';inp.value='';inp.focus();}
+    }
+    btn.onclick=tryLogin;
+    inp.onkeydown=e=>{if(e.key==='Enter')tryLogin();};
+  }
+  if(document.readyState!=='loading')showGate();
+  else document.addEventListener('DOMContentLoaded',showGate);
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DD Paper Cup – Marketplace Report 2026</title>
