@@ -749,8 +749,8 @@
       </div>
       <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #e69a68;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;color:#888;letter-spacing:.5px;margin-bottom:4px;">AR / AP OUTSTANDING</div>
-        <div style="font-size:20px;font-weight:800;color:#5a9d50;">฿2.99M / ฿7.79M</div>
-        <div style="font-size:11px;color:#888;margin-top:3px;">AR ณ 5/11 (201 บิล · 93% Current 🟢 · เกินกำหนด ฿206K) · AP ณ 17/4 (รออัปเดต)</div>
+        <div style="font-size:20px;font-weight:800;color:#5a9d50;">฿2.99M / ฿7.11M</div>
+        <div style="font-size:11px;color:#888;margin-top:3px;">AR ณ 5/11 (201 บิล · 93% Current 🟢) · AP ณ 7/11 (64 บิล · 85% Future 🟢 · ไม่รวม PN loan ฿4.4M)</div>
       </div>
       <div style="background:white;border:1.5px solid #e0e0e0;border-left:4px solid #a888c4;border-radius:12px;padding:14px 16px;">
         <div style="font-size:10px;color:#888;letter-spacing:.5px;margin-bottom:4px;">CUSTOMER CONCENTRATION</div>
@@ -1769,7 +1769,8 @@ const spMonthly2026 = {
 // CEO Scorecard data (ยังเป็น snapshot แบบ manual · update ได้ตอนมีข้อมูลใหม่)
 const ceoData = {
   cashRunway: { months: 3.2, cash: 1250000, burnMonthly: 390000, note: 'ประมาณ · ขอ confirm cash balance จาก Peak' },
-  arAging:    { total: 2990565, current: 2784681, overdue: 205884, b1_30: 152818, b31_60: 31522, b61_90: 0, b90plus: 21544, bills: 201, note: 'ณ 5/11/2026 · Google Sheet · 93.1% Current 🟢' },
+  arAging:    { total: 2990565, current: 2784681, overdue: 205884, b1_30: 152818, b31_60: 31522, b61_90: 0, b90plus: 21544, bills: 201, note: 'ณ 5/11/2026 · 93.1% Current 🟢' },
+  apAging:    { total: 7114461, future: 6914053, b1_30: 61410, b31_60: 138998, b90plus: 0, bills: 64, topVendor: 'ซี.พี. ฿3.53M', note: 'ณ 7/11/2026 · Google Sheet ซื้อ 2026 · 85% Future 🟢 (ไม่รวม PN loan ฿4.4M)' },
   burnVsLY:   { thisYTD: 5983088 + 6055819 + 1513869 + 360000, lyYTD: null, note: 'YTD 10mo คชจ. (ex COGS) ฿13.91M · เทียบ 2025 ต้องรอข้อมูล' },
   concentration: { topCustomer: 'Big Tree', pct: 21.9, amount: 10930000, note: 'YTD ฿10.93M · ความเสี่ยงระดับสูง (>20%)' },
 };
@@ -1855,10 +1856,16 @@ function renderCeoScorecard(){
       <div class="kpi-icon">💵</div>
     </div>
     <div class="kpi-card" style="border-left:4px solid #5a9d50">
-      <div class="kpi-label">🧾 AR Aging (Collection Health)</div>
+      <div class="kpi-label">🧾 AR Aging (ลูกค้าติด)</div>
       <div class="kpi-value" style="color:#5a9d50">${thaiAbbrev(d.arAging.total)}</div>
       <div class="kpi-sub">🟢 Current ${(d.arAging.current/d.arAging.total*100).toFixed(1)}% · 🟡 1-30d ${thaiAbbrev(d.arAging.b1_30)} · 🟠 31-60d ${thaiAbbrev(d.arAging.b31_60)} · ⚫ >90d ${thaiAbbrev(d.arAging.b90plus)} · ${d.arAging.bills} บิล</div>
       <div class="kpi-icon">🧾</div>
+    </div>
+    <div class="kpi-card" style="border-left:4px solid #e69a68">
+      <div class="kpi-label">💳 AP Aging (ติดเจ้าหนี้)</div>
+      <div class="kpi-value" style="color:#e69a68">${thaiAbbrev(d.apAging.total)}</div>
+      <div class="kpi-sub">🟢 Future ${(d.apAging.future/d.apAging.total*100).toFixed(1)}% · 🟡 1-30d ${thaiAbbrev(d.apAging.b1_30)} · 🟠 31-60d ${thaiAbbrev(d.apAging.b31_60)} · ${d.apAging.bills} บิล · Top: ${d.apAging.topVendor}</div>
+      <div class="kpi-icon">💳</div>
     </div>
     <div class="kpi-card" style="border-left:4px solid #a888c4">
       <div class="kpi-label">🔥 Burn Rate YTD (ex COGS)</div>
