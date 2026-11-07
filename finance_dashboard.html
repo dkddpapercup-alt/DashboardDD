@@ -318,14 +318,14 @@
       </div>
       <div class="kpi-card red">
         <div class="kpi-label">Interest + Car (P&L)</div>
-        <div class="kpi-value" style="color:#e74c3c">฿1.75M</div>
-        <div class="kpi-sub">ดอกเบี้ย ฿1.39M (9 เดือน · avg ฿154K) + ค่ารถ ฿360K · ⚠️ ต.ค. ดอกเบี้ย ยังไม่ลง</div>
+        <div class="kpi-value" style="color:#e74c3c">฿1.80M</div>
+        <div class="kpi-sub">ดอกเบี้ย ฿1.44M (ต.ค. ฿55K · TMB OD เท่านั้น) + ค่ารถ ฿360K · อาจต้องบวก loan อื่น</div>
         <div class="kpi-icon">💳</div>
       </div>
       <div class="kpi-card green">
         <div class="kpi-label">Net Profit ม.ค.–ต.ค. ✅</div>
-        <div class="kpi-value" style="color:#27ae60">฿4.50M</div>
-        <div class="kpi-sub">NM 8.3% | avg ฿450K/เดือน | 6/10 เดือนกำไร · 4/10 ขาดทุน (มี.ค./มิ.ย./ก.ค./ก.ย.) · ต.ค. ฿1.83M* (NM 34.5% · ⚠️ COGS/int ไม่ครบ) · ส.ค. ฿1.91M 🚀</div>
+        <div class="kpi-value" style="color:#27ae60">฿4.44M</div>
+        <div class="kpi-sub">NM 8.2% | avg ฿444K/เดือน | 6/10 เดือนกำไร · 4/10 ขาดทุน (มี.ค./มิ.ย./ก.ค./ก.ย.) · ต.ค. ฿1.77M* (NM 33.5% · ⚠️ COGS ไม่ครบ) · ส.ค. ฿1.91M 🚀</div>
         <div class="kpi-icon">🎯</div>
       </div>
     </div>
@@ -1653,7 +1653,7 @@ let rev2026    = [4590117, 4896724, 6051915, 7043204, 5871292, 5222540, 3532575,
 const cogs2026   = [3167369, 3310183, 5147342, 4187024, 4032723, 4350927, 2313983, 2971964, 4197022, 2268073]; // ม.ค.–ก.ย. Google Sheet · ต.ค. Peak TB (7/11 refresh · ยังเก็บไม่ครบ ปกติ ~4M)
 const sal2026    = [698268, 645726, 730685, 703250, 681165, 705734, 717537, 718516, 707605, 712832];  // ม.ค.–ก.ย. Google Sheet · ต.ค. Peak TB ✅ (base ฿642K + SS/OT/สวัสดิการ)
 const opex2026   = [383731, 306197, 338553, 511318, 742484, 669880, 440006, 455981, 468537, 443397]; // ม.ค.–ก.ย. Google Sheet · ต.ค. Peak TB (520+5302-5309+540)
-const int2026    = [167353, 145644, 235759, 143858, 84988, 204543, 185738, 139682, 78798, 0];    // ม.ค.–ก.ย. Google Sheet · ต.ค. ยังไม่ลงใน Peak (ปกติ ~140K)
+const int2026    = [167353, 145644, 235759, 143858, 84988, 204543, 185738, 139682, 78798, 55354];    // ม.ค.–ก.ย. Google Sheet · ต.ค. TMB OD statement (฿55,354 · อาจต้องบวกดอกเบี้ย loan อื่น)
 const car2026x   = [36000, 36000, 36000, 36000, 36000, 36000, 36000, 36000, 36000, 36000]; // ม.ค.–ต.ค. 530116 ค่ารถ (คงที่)
 // derived: ใช้ null เมื่อข้อมูลค่าใช้จ่ายยังไม่ครบ — Chart.js จะ skip เดือนนั้นเอง
 const gp2026     = rev2026.map((r,i) => cogs2026[i] > 0 ? r - cogs2026[i] : null);
