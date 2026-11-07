@@ -1956,7 +1956,7 @@ const CF_DATA = {
       { name: 'กระดาษเคลือบ PE 2ด้าน (C2HB) หนา230แกรม 750*595mm', value: 32185 },
       { name: 'แก้วกระดาษ DW 8oz. สีแดง DD ไม่พิมพ์ลาย', value: 31581 },
     ],
-  od: { balance: 8000000, rate: 0.07, monthlyInterest: 46667, netProfitMonthly: 157076 },
+  od: { balance: 7481666, rate: 0.078, monthlyInterest: 55354, netProfitMonthly: 157076 },
 };
 
 // ==================== PRODUCTIVITY DATA ====================
@@ -1990,7 +1990,7 @@ const loans = [
   { name:'SME BANK (2) TOPUP 2569 · 213105', bank:'SMEBANK',type:'TL', credit:1600000, balance:1383286, payment:46500, rate:2.50, asOf:[2026,9] },  // สัญญา 4100991680 · ใบแจ้งหนี้ DB2026100800683 (ครบกำหนด 22/10/69) · โครงการ "คุณสู้ เราช่วย"
   { name:'เช่า KIA (KLeasing) · 530116',     bank:'เช่าซื้อรถ',type:'HP', credit:2853195, balance:1845195, payment:36000, remaining:32, balloon:693195, asOf:[2026,9] },  // สัญญา 6010294438 · จ่ายงวด 28/60 แล้ว 5/10/69 · ค่าเช่าคงเหลือ 1,845,195 รวมมูลค่าซาก (32×36,000 = 1,152,000 + ซาก 693,195) · หัก ณ ที่จ่าย 5%
   { name:'เช่าซื้อ Camry (Toyota Leasing) · 212205', bank:'เช่าซื้อรถ',type:'HP', credit:1407696, balance:117308, payment:29327, remaining:4, asOf:[2026,9] },  // สัญญา A10753834 · จ่ายงวด 44/48 แล้ว 5/10/69 (27,408.41 + VAT 1,918.59)
-  { name:'TTB OD บ้านค้ำประกัน',      bank:'TTB',    type:'OD', credit:10300000, balance:8000000,  payment:55000  },
+  { name:'TTB OD บ้านค้ำประกัน',      bank:'TTB',    type:'OD', credit:10300000, balance:7481666, payment:55354, asOf:[2026,10] },  // ยอด ณ 31/10/2026 จาก statement · ลดลงจาก -9.53M → -7.48M (ลด ฿2.05M) · ดอกเบี้ย ต.ค. ฿55,354
 ];
 
 // Break-even parameters (ม.ค.–ก.ย. 2026 actual — คชจ.-2026 ม.ค.-ก.ย. tab, sync 10/10/2026)
