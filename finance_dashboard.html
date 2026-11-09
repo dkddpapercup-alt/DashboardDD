@@ -3135,7 +3135,7 @@ function buildDebtTab() {
   });
   // Add OD & PN note
   timelineHtml += `<div style="margin-top:8px;padding:10px 14px;background:#fff8e1;border-radius:8px;font-size:11px;color:#7f8c8d;">
-    ⚠️ <strong>OD TTB ฿8M</strong> และ <strong>PN ออมสิน ฿4.4M</strong> ไม่มีตารางผ่อนชำระอัตโนมัติ — ต้องวางแผนชำระคืนเองหรือ rollover ตามเงื่อนไข</div>`;
+    ⚠️ <strong>OD TTB ฿${fmt(loans.find(x=>x.type==="OD").balance)}</strong> และ <strong>PN ออมสิน ฿4.4M</strong> ไม่มีตารางผ่อนชำระอัตโนมัติ — ต้องวางแผนชำระคืนเองหรือ rollover ตามเงื่อนไข</div>`;
   timelineHtml += '</div>';
   document.getElementById('payoffTimeline').innerHTML = timelineHtml;
 
@@ -3147,7 +3147,7 @@ function buildDebtTab() {
     const typeColor = l.type === 'TL' ? '#3498db' : l.type === 'HP' ? '#16a085' : l.type === 'OD' ? '#e74c3c' : '#9b59b6';
     const statusIcon = l.type === 'OD' || l.type === 'PN' ? '⚠️ Revolving' : months <= 24 ? '🟢 ใกล้หมด' : months <= 48 ? '🟡 ปานกลาง' : '🔴 ระยะยาว';
     html += `<tr>
-      <td style="font-size:13px;font-weight:600">${l.name}<br><span style="font-size:10px;font-weight:400;color:#95a5a6">ยอด ณ ${l.asOf ? 'ต.ค. 2569' : 'ก.พ. 2569'}${l.rate ? ' · ดอกเบี้ย '+l.rate+'%' : ''}${l.balloon ? ' · รวมมูลค่าซาก ฿'+fmt(l.balloon) : ''}</span></td>
+      <td style="font-size:13px;font-weight:600">${l.name}<br><span style="font-size:10px;font-weight:400;color:#95a5a6">ยอด ณ ${l.asOf ? ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][l.asOf[1]]+' '+(l.asOf[0]+543) : 'ก.พ. 2569'}${l.rate ? ' · ดอกเบี้ย '+l.rate+'%' : ''}${l.balloon ? ' · รวมมูลค่าซาก ฿'+fmt(l.balloon) : ''}</span></td>
       <td><span class="pill" style="background:#f0f0f0;color:#555">${l.bank}</span></td>
       <td><span class="pill" style="background:${typeColor}22;color:${typeColor}">${l.type}</span></td>
       <td class="text-right">${l.credit ? '฿'+fmt(l.credit) : '<span style="color:#ccc">ไม่ทราบ</span>'}</td>
