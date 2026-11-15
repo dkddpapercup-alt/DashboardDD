@@ -4,8 +4,8 @@
 <!-- 🔐 DD Paper Cup Dashboard · Password Gate (SHA-256) -->
 <script>
 (function(){
-  const PWHASH = "1ae8da6fb1586aefd16d0ccfc5bd135d015b68645902c074b450a68c6fff1425";
-  const SKEY  = "ddpc_auth_v1";
+  const PWHASH = "c6fb26c2732bb2c076ba8c49c72700550015070d25b9343b6dc5d549002d05e1";
+  const SKEY  = "ddpc_auth_v2";
   if (sessionStorage.getItem(SKEY) === "ok") return;
   document.documentElement.style.visibility = "hidden";
   async function sha256(s){const b=new TextEncoder().encode(s);const h=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('');}
