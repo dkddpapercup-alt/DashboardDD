@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<!-- 🔐 Password Gate -->
+<script>
+(function(){
+  const PWHASH = "1ae8da6fb1586aefd16d0ccfc5bd135d015b68645902c074b450a68c6fff1425";
+  const SKEY  = "ddpc_auth_v1";
+  if (sessionStorage.getItem(SKEY) === "ok") return;
+  document.documentElement.style.visibility = "hidden";
+  async function sha256(s){const b=new TextEncoder().encode(s);const h=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+  function showGate(){
+    document.documentElement.style.visibility="visible";
+    const o=document.createElement('div');o.id='ddpc-gate';
+    o.style.cssText='position:fixed;inset:0;background:linear-gradient(135deg,#faf1e0,#f5efe8);z-index:999999;display:flex;align-items:center;justify-content:center;font-family:-apple-system,"Segoe UI",sans-serif';
+    o.innerHTML=`<div style="background:white;padding:40px 48px;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.15);max-width:400px;width:90%;text-align:center"><div style="font-size:48px;margin-bottom:8px">🔐</div><div style="font-size:20px;font-weight:800;color:#4a5a6c;margin-bottom:4px">DD Paper Cup</div><div style="font-size:13px;color:#888;margin-bottom:24px">Private Dashboard · Confidential</div><input id="ddpc-pw" type="password" placeholder="รหัสผ่าน" autofocus style="width:100%;padding:12px 16px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:15px;outline:none;box-sizing:border-box;margin-bottom:12px"/><button id="ddpc-go" style="width:100%;padding:12px;background:#c99a5a;color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer">เข้าสู่ Dashboard</button><div id="ddpc-err" style="color:#c86050;font-size:12px;margin-top:10px;min-height:16px"></div><div style="margin-top:20px;font-size:11px;color:#aaa;line-height:1.5">ห้ามเผยแพร่ข้อมูลภายในให้บุคคลภายนอก<br>Unauthorized access is prohibited</div></div>`;
+    document.body.appendChild(o);document.body.style.overflow='hidden';
+    const inp=document.getElementById('ddpc-pw'),btn=document.getElementById('ddpc-go'),err=document.getElementById('ddpc-err');
+    async function tryLogin(){const h=await sha256(inp.value);if(h===PWHASH){sessionStorage.setItem(SKEY,"ok");o.remove();document.body.style.overflow='';}else{err.textContent='รหัสผ่านไม่ถูกต้อง · ลองอีกครั้ง';inp.value='';inp.focus();}}
+    btn.onclick=tryLogin;inp.onkeydown=e=>{if(e.key==='Enter')tryLogin();};
+  }
+  if(document.readyState!=='loading')showGate();else document.addEventListener('DOMContentLoaded',showGate);
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DD Paper Cup — Cash Flow Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body{font-family:-apple-system,"Segoe UI","Prompt",sans-serif;background:#f5efe8;color:#333;margin:0;padding:0}
+  .container{max-width:1400px;margin:0 auto;padding:16px 24px}
+  .header{background:linear-gradient(135deg,#c99a5a,#b8865c);color:white;padding:20px 28px;border-radius:14px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .header h1{margin:0;font-size:22px;font-weight:800}
+  .header .sub{font-size:13px;opacity:.9;margin-top:4px}
+  .nav-btns{display:flex;gap:8px}
+  .nav-btns a{background:rgba(255,255,255,.2);color:white;padding:8px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600}
+  .nav-btns a:hover{background:rgba(255,255,255,.3)}
+  .alert{background:#fff4e6;border-left:5px solid #e74c3c;padding:16px 20px;border-radius:10px;margin-bottom:20px}
+  .alert.red{background:#fde4e4;border-color:#c0392b}
+  .alert h3{margin:0 0 6px;font-size:16px;color:#c0392b}
+  .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:20px}
+  .kpi{background:white;border-radius:12px;padding:16px 18px;box-shadow:0 2px 6px rgba(0,0,0,.05);border-left:4px solid #7c9dc0;position:relative}
+  .kpi.red{border-color:#e74c3c}
+  .kpi.orange{border-color:#e69a68}
+  .kpi.green{border-color:#5a9d50}
+  .kpi.blue{border-color:#7c9dc0}
+  .kpi .label{font-size:11px;color:#888;letter-spacing:.3px;margin-bottom:4px;font-weight:700;text-transform:uppercase}
+  .kpi .value{font-size:22px;font-weight:800;color:#2c3e50;margin-bottom:4px}
+  .kpi .value.red{color:#c0392b}
+  .kpi .value.green{color:#27ae60}
+  .kpi .sub{font-size:11px;color:#888;line-height:1.5}
+  .card{background:white;border-radius:12px;padding:20px;box-shadow:0 2px 6px rgba(0,0,0,.05);margin-bottom:20px}
+  .card h3{margin:0 0 14px;font-size:15px;color:#4a5a6c;font-weight:800}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{background:#f8f1e8;color:#4a5a6c;padding:8px;text-align:left;font-weight:700;border-bottom:2px solid #e0cfbb}
+  td{padding:7px 8px;border-bottom:1px solid #f0f0f0}
+  tr:hover{background:#faf6f1}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .neg{color:#c0392b;font-weight:700}
+  .pos{color:#27ae60;font-weight:700}
+  .zero{color:#bbb}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:900px){.grid-2{grid-template-columns:1fr}}
+  .pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+  .pill.pw{background:#eaf4e2;color:#2d7a2d}
+  .pill.mid{background:#faf1e0;color:#c99a5a}
+  .pill.danger{background:#fde4e4;color:#c0392b}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1>💰 Cash Flow Dashboard — มุมผู้บริหาร</h1>
+      <div class="sub">แผนรับ-จ่ายรายวัน · 14 พ.ย. 2569 – 23 ม.ค. 2570 · อัปเดต 15/11/69</div>
+    </div>
+    <div class="nav-btns">
+      <a href="index.html">📊 Sales</a>
+      <a href="finance_dashboard.html">💵 Finance</a>
+      <a href="marketplace.html">🛒 Marketplace</a>
+    </div>
+  </div>
+
+  <div id="alertBox"></div>
+
+  <div class="kpi-row" id="kpiRow"></div>
+
+  <div class="card">
+    <h3>📈 ยอดคงเหลือรายวัน (Daily Balance · 71 วัน)</h3>
+    <div style="height:360px"><canvas id="balChart"></canvas></div>
+    <div style="font-size:11px;color:#888;margin-top:8px">
+      🟢 เส้น 0 = จุดเริ่มติดลบ · 🔴 แถบแดง = ช่วงเงินขาดเกิน OD · ยอดยกมา = ฿2.33M (เงินฝาก + OD เหลือ) · ยอดต่ำสุด = <strong style="color:#c0392b">−฿3.96M (20/1/70)</strong>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>💸 Top 10 วันจ่ายหนัก</h3>
+      <table><thead><tr><th>วันที่</th><th class="num">จ่าย</th><th class="num">คงเหลือ</th></tr></thead><tbody id="topOutTbody"></tbody></table>
+    </div>
+    <div class="card">
+      <h3>💰 Top 10 วันรับมาก</h3>
+      <table><thead><tr><th>วันที่</th><th class="num">รับ</th><th>หมายเหตุ</th></tr></thead><tbody id="topInTbody"></tbody></table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📅 ตารางรายวันทั้งหมด · คลิกชื่อคอลัมน์เพื่อดู breakdown</h3>
+    <div style="overflow-x:auto;max-height:600px;overflow-y:auto">
+      <table id="dailyTable">
+        <thead>
+          <tr>
+            <th>วันที่</th>
+            <th class="num">รับ</th>
+            <th class="num">จ่าย</th>
+            <th class="num">คงเหลือ</th>
+            <th>สถานะ</th>
+            <th>หมายเหตุ</th>
+          </tr>
+        </thead>
+        <tbody id="dailyTbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🏢 สัดส่วนรายจ่ายทั้ง 71 วัน</h3>
+    <div style="height:280px"><canvas id="pieChart"></canvas></div>
+  </div>
+
+  <div class="card" style="background:#f5eef8;border-left:5px solid #a888c4">
+    <h3>💡 ที่ยังไม่รวมในแผน · ต้องเติมเพื่อแม่นขึ้น</h3>
+    <ul style="margin:0;padding-left:20px;font-size:13px;line-height:1.8;color:#4a5a6c">
+      <li>ยอดขายใหม่ที่เก็บได้ในช่วง 70 วันนี้ (ตารางมีแค่ลูกหนี้เก่า) → ควร +฿5-8M</li>
+      <li>ค่างวด SME Bank 2 สัญญา + KTB ต่อเดือน (~฿102K/เดือน)</li>
+      <li>ลูกหนี้เก่า ร้านพักร้อน เกาะล้าน ฿7,000</li>
+      <li>ดอกเบี้ย OD + งวด SCB เดือน ม.ค. (ตารางถึงแค่ 23 ม.ค.)</li>
+      <li>ลูกหนี้-เงินให้กู้บุคคลเกี่ยวข้อง ฿12.6M + ดอก ฿5.5M (ทวงคืนได้ = plug ขาดทั้งหมด)</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const CF_DATA = [{"date": "2026-11-14", "bal": 2357100, "in": 25100, "out": 0, "inCredit": 25100, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-11-15", "bal": 2357100, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-11-16", "bal": 2342754, "in": 75007, "out": 89353, "inCredit": 75007, "inOther": 0, "outSupplier": 17339, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 72014, "note": "อื่นๆ 43,014: ประกันสังคม (ต.ค. จ่าย 15/10 = 43,014) | อื่นๆ 29,000: ภาษีหัก ณ ที่จ่าย ภ.ง.ด.1/3/53 (ก.ย.–ต.ค. 27,600–29,366)"}, {"date": "2026-11-17", "bal": 1459708.87, "in": 83875, "out": 966920.13, "inCredit": 83875, "inOther": 0, "outSupplier": 966920.13, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-11-18", "bal": 1501973.87, "in": 42265, "out": 0, "inCredit": 42265, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-11-19", "bal": -402230.23, "in": 61846, "out": 1966050.1, "inCredit": 61846, "inOther": 0, "outSupplier": 1966050.1, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-11-20", "bal": -293968.68, "in": 119261.55, "out": 11000, "inCredit": 119261.55, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 11000, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": "ค่าสาธารนูปโภค 11,000: ค่าไฟ ค่าโทรศัพท์ อินเทอร์เน็ต (เฉลี่ย ก.ย.–ต.ค. ~10,300) | ยอดตามดีลเครดิตรับเงิน 70,507: ลูกหนี้ครบกำหนดเพิ่ม ตามแท็บ ยอดค้างชำระ (ขาย 2024-2026) 15/11"}, {"date": "2026-11-21", "bal": -204088.68, "in": 89880, "out": 0, "inCredit": 89880, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-11-22", "bal": -344088.68, "in": 0, "out": 140000, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 140000, "outOther": 0, "note": ""}, {"date": "2026-11-23", "bal": -344088.68, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-11-24", "bal": -341681.18, "in": 5938.5, "out": 3531, "inCredit": 5938.5, "inOther": 0, "outSupplier": 3531, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-11-25", "bal": 241934.85, "in": 610301.83, "out": 26685.8, "inCredit": 610301.8300000001, "inOther": 0, "outSupplier": 26685.8, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": "ยอดตามดีลเครดิตรับเงิน 96,223: ลูกหนี้ครบกำหนดเพิ่ม ตามแท็บ ยอดค้างชำระ (ขาย 2024-2026) 15/11"}, {"date": "2026-11-26", "bal": 161934.85, "in": 0, "out": 80000, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 80000, "note": "อื่นๆ 80,000: ภาษีมูลค่าเพิ่ม ภ.พ.30 (ต.ค. จ่าย 26/10 = 79,598)"}, {"date": "2026-11-27", "bal": -483174.15, "in": 54891, "out": 700000, "inCredit": 54891, "inOther": 0, "outSupplier": 0, "outSalary": 700000, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-11-28", "bal": -483174.15, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-11-29", "bal": -646154.95, "in": 0, "out": 162980.8, "inCredit": 0, "inOther": 0, "outSupplier": 162980.8, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-11-30", "bal": -737288.7, "in": 213866.25, "out": 305000, "inCredit": 213866.25, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 250000, "outSME": 0, "outKTB": 0, "outOD": 55000, "outSCB": 0, "outOther": 0, "note": "ชำระออมสิน 250,000: โอนไปบัญชีออมสินเพื่อผ่อนเงินกู้ (31/10 = 250,000)"}, {"date": "2026-12-01", "bal": -737288.7, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-02", "bal": -640988.7, "in": 96300, "out": 0, "inCredit": 96300, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-03", "bal": -732562.2, "in": 0, "out": 91573.5, "inCredit": 0, "inOther": 0, "outSupplier": 91573.5, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-04", "bal": -611061.56, "in": 121500.64, "out": 0, "inCredit": 121500.64, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-05", "bal": -564891.06, "in": 46170.5, "out": 0, "inCredit": 46170.5, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-06", "bal": -564891.06, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-07", "bal": -539853.06, "in": 25038, "out": 0, "inCredit": 25038, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-08", "bal": 1284542.07, "in": 1861974.6, "out": 37579.47, "inCredit": 109974.6, "inOther": 1752000, "outSupplier": 37579.47, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": "ยอดรับอื่นๆ 1,752,000: Big tree trading (Treekof) IVT-20261100058/059/060 เปิดบิล 23/11 ครบกำหนด 8/12 ตามแท็บ Treekof-รอส่งของ/เปิดบิล"}, {"date": "2026-12-09", "bal": 1305182.37, "in": 20640.3, "out": 0, "inCredit": 20640.3, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-10", "bal": 1528942.79, "in": 363760.42, "out": 140000, "inCredit": 363760.42, "inOther": 0, "outSupplier": 0, "outSalary": 140000, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": "เงินเดือน 140,000: เงินเดือนงวดวันที่ 10 (10/10 = 119,028 · 11–12/11 = 158,253)"}, {"date": "2026-12-11", "bal": 526680.91, "in": 5500, "out": 1007761.88, "inCredit": 5500, "inOther": 0, "outSupplier": 1007761.88, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-12", "bal": 526680.91, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-13", "bal": 526680.91, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-14", "bal": 473960.41, "in": 16852.5, "out": 69573, "inCredit": 16852.5, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 69573, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": "ค่างวดรถ 69,573: ค่างวดรถ KIA 36,000 + Toyota 4ขศ495 29,327 + 3ฒภ6122 4,246 (ตาม PEAK ก.ย.–ต.ค.) · วันที่ประมาณการ"}, {"date": "2026-12-15", "bal": 578624.81, "in": 176678.4, "out": 72014, "inCredit": 176678.4, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 72014, "note": "อื่นๆ 43,014: ประกันสังคม | อื่นๆ 29,000: ภาษีหัก ณ ที่จ่าย"}, {"date": "2026-12-16", "bal": -533988.68, "in": 89131, "out": 1201744.49, "inCredit": 89131, "inOther": 0, "outSupplier": 1201744.49, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-17", "bal": -534919.58, "in": 0, "out": 930.9, "inCredit": 0, "inOther": 0, "outSupplier": 930.9, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-18", "bal": -534919.58, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-19", "bal": -534919.58, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-20", "bal": -515932.83, "in": 29986.75, "out": 11000, "inCredit": 29986.75, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 11000, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": "ค่าสาธารนูปโภค 11,000: ค่าไฟ ค่าโทรศัพท์ อินเทอร์เน็ต"}, {"date": "2026-12-21", "bal": -349547.83, "in": 166385, "out": 0, "inCredit": 166385, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-22", "bal": -489547.83, "in": 0, "out": 140000, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 140000, "outOther": 0, "note": ""}, {"date": "2026-12-23", "bal": -489547.83, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-24", "bal": -489547.83, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-25", "bal": -202095, "in": 287452.83, "out": 0, "inCredit": 287452.83, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-26", "bal": -282095, "in": 0, "out": 80000, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 80000, "note": "อื่นๆ 80,000: ภาษีมูลค่าเพิ่ม ภ.พ.30"}, {"date": "2026-12-27", "bal": -982095, "in": 0, "out": 700000, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 700000, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-28", "bal": -982095, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-29", "bal": -982095, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2026-12-30", "bal": -1287095, "in": 0, "out": 305000, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 250000, "outSME": 0, "outKTB": 0, "outOD": 55000, "outSCB": 0, "outOther": 0, "note": "ชำระออมสิน 250,000: โอนไปบัญชีออมสินเพื่อผ่อนเงินกู้"}, {"date": "2026-12-31", "bal": -1268744.5, "in": 18350.5, "out": 0, "inCredit": 18350.5, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-01", "bal": -1268744.5, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-02", "bal": -1268744.5, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-03", "bal": -1268744.5, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-04", "bal": -1268744.5, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-05", "bal": -1256894.25, "in": 11850.25, "out": 0, "inCredit": 11850.25, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-06", "bal": -1256894.25, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-07", "bal": -1256894.25, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-08", "bal": -1246943.25, "in": 9951, "out": 0, "inCredit": 9951, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-09", "bal": -1246943.25, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-10", "bal": -1246943.25, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-11", "bal": -1332758.45, "in": 54184.8, "out": 140000, "inCredit": 54184.8, "inOther": 0, "outSupplier": 0, "outSalary": 140000, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": "เงินเดือน 140,000: เงินเดือนงวดวันที่ 10 (10/1 ตรงวันอาทิตย์)"}, {"date": "2027-01-12", "bal": -1332758.45, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-13", "bal": -1332758.45, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-14", "bal": -1402331.45, "in": 0, "out": 69573, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 69573, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": "ค่างวดรถ 69,573: ค่างวดรถ (ประมาณการ)"}, {"date": "2027-01-15", "bal": -1474345.45, "in": 0, "out": 72014, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 72014, "note": "อื่นๆ 43,014: ประกันสังคม | อื่นๆ 29,000: ภาษีหัก ณ ที่จ่าย"}, {"date": "2027-01-16", "bal": -1474345.45, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-17", "bal": -1474345.45, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-18", "bal": -3948172.45, "in": 0, "out": 2473827, "inCredit": 0, "inOther": 0, "outSupplier": 2473827, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-19", "bal": -3948172.45, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-20", "bal": -3959172.45, "in": 0, "out": 11000, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 11000, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": "ค่าสาธารนูปโภค 11,000: ค่าไฟ ค่าโทรศัพท์ อินเทอร์เน็ต"}, {"date": "2027-01-21", "bal": -3959172.45, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-22", "bal": -3959172.45, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}, {"date": "2027-01-23", "bal": -3959172.45, "in": 0, "out": 0, "inCredit": 0, "inOther": 0, "outSupplier": 0, "outSalary": 0, "outUtil": 0, "outCar": 0, "outGSB": 0, "outSME": 0, "outKTB": 0, "outOD": 0, "outSCB": 0, "outOther": 0, "note": ""}];
+
+const fmt = v => v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':Math.round(v).toLocaleString();
+const fmtFull = v => Math.round(v).toLocaleString();
+const dateFmt = d => { const [y,m,dd]=d.split('-'); return `${parseInt(dd)}/${parseInt(m)}`; };
+
+// KPI
+const last = CF_DATA[CF_DATA.length-1];
+const first = CF_DATA[0];
+const minD = CF_DATA.reduce((a,b)=>b.bal<a.bal?b:a);
+const firstNeg = CF_DATA.find(d=>d.bal<0);
+const negDays = CF_DATA.filter(d=>d.bal<0).length;
+const totalIn = CF_DATA.reduce((s,d)=>s+d.in,0);
+const totalOut = CF_DATA.reduce((s,d)=>s+d.out,0);
+
+document.getElementById('kpiRow').innerHTML = `
+  <div class="kpi green">
+    <div class="label">ยอดยกมา · 14/11/69</div>
+    <div class="value">฿${fmt(2332000)}</div>
+    <div class="sub">เงินฝาก + OD TTB เหลือ ฿2.13M</div>
+  </div>
+  <div class="kpi red">
+    <div class="label">วันแรกที่เงินติดลบ</div>
+    <div class="value red">${dateFmt(firstNeg.date)}/69</div>
+    <div class="sub">อีก <strong>${Math.max(0,Math.ceil((new Date(firstNeg.date)-new Date())/(1000*60*60*24)))} วัน</strong> · bal ฿${fmt(firstNeg.bal)} 🚨</div>
+  </div>
+  <div class="kpi red">
+    <div class="label">ยอดต่ำสุดในช่วง</div>
+    <div class="value red">฿${fmt(minD.bal)}</div>
+    <div class="sub">วันที่ ${dateFmt(minD.date)}/70 · เกิน OD ไป ฿${fmt(-minD.bal)}</div>
+  </div>
+  <div class="kpi orange">
+    <div class="label">จำนวนวันติดลบ</div>
+    <div class="value" style="color:#e69a68">${negDays} วัน</div>
+    <div class="sub">จาก 71 วัน (${(negDays/71*100).toFixed(0)}%) · ต้องเติมเงินด่วน</div>
+  </div>
+  <div class="kpi blue">
+    <div class="label">รวมรับ 70 วัน</div>
+    <div class="value">฿${fmt(totalIn)}</div>
+    <div class="sub">ส่วนใหญ่จากลูกหนี้ตามดีลเครดิต · Big Tree 8/12 ฿1.75M</div>
+  </div>
+  <div class="kpi orange">
+    <div class="label">รวมจ่าย 70 วัน</div>
+    <div class="value" style="color:#c0392b">฿${fmt(totalOut)}</div>
+    <div class="sub">Gap = ฿${fmt(totalOut-totalIn-2332000)} (ขาด)</div>
+  </div>
+`;
+
+// Alert
+document.getElementById('alertBox').innerHTML = `
+  <div class="alert red">
+    <h3>🚨 ด่วน — เงินจะติดลบใน ${Math.max(0,Math.ceil((new Date(firstNeg.date)-new Date())/(1000*60*60*24)))} วัน</h3>
+    <div style="font-size:13px;color:#4a5a6c">
+      วันแรกที่เงินไม่พอ = <strong>${dateFmt(firstNeg.date)}/69 (bal −฿${fmt(-firstNeg.bal)})</strong> · 
+      ต้องมีเงินเข้าก่อนวันนี้อย่างน้อย <strong>฿500,000</strong> เพื่อข้าม 19/11 · 
+      ถ้าถึง <strong>20/1/70 ยอดจะเหลือ −฿3.96M</strong> (เกิน OD ไปกว่า ฿3.9M)
+    </div>
+  </div>
+`;
+
+// Chart
+new Chart(document.getElementById('balChart'), {
+  type:'line',
+  data:{
+    labels: CF_DATA.map(d=>dateFmt(d.date)),
+    datasets:[{
+      label:'ยอดคงเหลือ (฿)',
+      data: CF_DATA.map(d=>d.bal),
+      borderColor:'#c99a5a',
+      backgroundColor:(ctx)=>{const v=ctx.p0?.parsed?.y; return v<0?'rgba(192,57,43,.15)':'rgba(39,174,96,.1)';},
+      tension:0.25, fill:true, pointRadius:2, pointHoverRadius:5, borderWidth:2
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>'฿'+fmtFull(ctx.parsed.y)+(CF_DATA[ctx.dataIndex].note?' · '+CF_DATA[ctx.dataIndex].note.substring(0,50):'')}}
+    },
+    scales:{
+      y:{ticks:{callback:v=>'฿'+(v/1e6).toFixed(1)+'M'}, grid:{color:ctx=>ctx.tick.value===0?'#c0392b':'#eee', lineWidth:ctx=>ctx.tick.value===0?2:1}},
+      x:{ticks:{maxRotation:60,minRotation:45,font:{size:10}}}
+    }
+  }
+});
+
+// Top outflow/inflow tables
+const topOut = [...CF_DATA].sort((a,b)=>b.out-a.out).slice(0,10);
+document.getElementById('topOutTbody').innerHTML = topOut.map(d=>`<tr><td>${d.date}</td><td class="num neg">฿${fmtFull(d.out)}</td><td class="num ${d.bal<0?'neg':'pos'}">฿${fmtFull(d.bal)}</td></tr>`).join('');
+
+const topIn = [...CF_DATA].filter(d=>d.in>0).sort((a,b)=>b.in-a.in).slice(0,10);
+document.getElementById('topInTbody').innerHTML = topIn.map(d=>`<tr><td>${d.date}</td><td class="num pos">฿${fmtFull(d.in)}</td><td style="font-size:11px;color:#888">${(d.note||'').substring(0,40)}</td></tr>`).join('');
+
+// Daily table
+document.getElementById('dailyTbody').innerHTML = CF_DATA.map(d=>{
+  const status = d.bal>=500000?'<span class="pill pw">🟢 สบาย</span>':d.bal>=0?'<span class="pill mid">🟡 ตึง</span>':'<span class="pill danger">🔴 เกิน OD</span>';
+  return `<tr>
+    <td>${d.date}</td>
+    <td class="num ${d.in>0?'pos':'zero'}">${d.in>0?'฿'+fmtFull(d.in):'-'}</td>
+    <td class="num ${d.out>0?'neg':'zero'}">${d.out>0?'฿'+fmtFull(d.out):'-'}</td>
+    <td class="num ${d.bal<0?'neg':''}" style="font-weight:700">฿${fmtFull(d.bal)}</td>
+    <td>${status}</td>
+    <td style="font-size:11px;color:#888">${(d.note||'').substring(0,60)}</td>
+  </tr>`;
+}).join('');
+
+// Pie chart - outflow breakdown
+const cat = {Supplier:0, Salary:0, Util:0, Car:0, ออมสิน:0, SME:0, KTB:0, OD:0, SCB:0, อื่นๆ:0};
+CF_DATA.forEach(d=>{
+  cat.Supplier+=d.outSupplier; cat.Salary+=d.outSalary; cat.Util+=d.outUtil;
+  cat.Car+=d.outCar; cat['ออมสิน']+=d.outGSB; cat.SME+=d.outSME; cat.KTB+=d.outKTB;
+  cat.OD+=d.outOD; cat.SCB+=d.outSCB; cat['อื่นๆ']+=d.outOther;
+});
+const labels = Object.keys(cat).filter(k=>cat[k]>0);
+const values = labels.map(k=>cat[k]);
+new Chart(document.getElementById('pieChart'), {
+  type:'doughnut',
+  data:{labels, datasets:[{data:values, backgroundColor:['#e67e22','#9b59b6','#7c9dc0','#5a9d50','#a888c4','#e74c3c','#3498db','#c0392b','#f39c12','#95a5a6']}]},
+  options:{responsive:true,maintainAspectRatio:false, plugins:{legend:{position:'right'}, tooltip:{callbacks:{label:ctx=>ctx.label+': ฿'+fmtFull(ctx.parsed)+' ('+(ctx.parsed/values.reduce((a,b)=>a+b)*100).toFixed(1)+'%)'}}}}
+});
+</script>
+</body>
+</html>
