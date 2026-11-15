@@ -4,8 +4,8 @@
 <!-- 🔐 Password Gate -->
 <script>
 (function(){
-  const PWHASH = "1ae8da6fb1586aefd16d0ccfc5bd135d015b68645902c074b450a68c6fff1425";
-  const SKEY  = "ddpc_auth_v1";
+  const PWHASH = "b834866543b2bf0d52711989f23e37b41a66664a3eb6991c4813bca774d55557";
+  const SKEY  = "ddpc_auth_v2";
   if (sessionStorage.getItem(SKEY) === "ok") return;
   document.documentElement.style.visibility = "hidden";
   async function sha256(s){const b=new TextEncoder().encode(s);const h=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('');}
@@ -126,6 +126,124 @@
   <div class="card">
     <h3>🏢 สัดส่วนรายจ่ายทั้ง 71 วัน</h3>
     <div style="height:280px"><canvas id="pieChart"></canvas></div>
+  </div>
+
+  <!-- 🏦 DEBT & LOAN PAYMENT SCHEDULE -->
+  <div class="card" style="border-left:5px solid #8a6ba5;background:linear-gradient(135deg,#f5eef8,#faf4fc)">
+    <h3>🏦 หนี้สินและค่างวดใน 71 วัน — ที่กระทบ Cashflow</h3>
+    <div style="font-size:11px;color:#888;margin-bottom:14px">
+      จาก Finance Dashboard · 12 สัญญา · อัพเดตล่าสุด 7-14/11/2569 · <a href="finance_dashboard.html" style="color:#8a6ba5;font-weight:700">ดู Debt Detail ครบ →</a>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px">
+      <div style="background:white;padding:14px 16px;border-radius:10px;border-left:3px solid #8a6ba5">
+        <div style="font-size:10px;color:#888;letter-spacing:.3px;font-weight:700;text-transform:uppercase">หนี้คงเหลือรวม</div>
+        <div style="font-size:22px;font-weight:800;color:#8a6ba5;margin-top:4px">฿30.37M</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">12 สัญญา · 6 bank · ลด ฿2.65M ใน 8 เดือน</div>
+      </div>
+      <div style="background:white;padding:14px 16px;border-radius:10px;border-left:3px solid #e67e22">
+        <div style="font-size:10px;color:#888;letter-spacing:.3px;font-weight:700;text-transform:uppercase">ค่างวด/เดือน (TL+HP)</div>
+        <div style="font-size:22px;font-weight:800;color:#e67e22;margin-top:4px">฿499K</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">ไม่รวม OD/PN · +ดอก OD ~฿55K/ด. = ฿554K</div>
+      </div>
+      <div style="background:white;padding:14px 16px;border-radius:10px;border-left:3px solid #c0392b">
+        <div style="font-size:10px;color:#888;letter-spacing:.3px;font-weight:700;text-transform:uppercase">กระทบใน 71 วัน</div>
+        <div style="font-size:22px;font-weight:800;color:#c0392b;margin-top:4px">~฿1.27M</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">2.3 เดือน × ฿554K · 10% ของ cash out</div>
+      </div>
+      <div style="background:white;padding:14px 16px;border-radius:10px;border-left:3px solid #7c9dc0">
+        <div style="font-size:10px;color:#888;letter-spacing:.3px;font-weight:700;text-transform:uppercase">TTB OD เหลือเบิก</div>
+        <div style="font-size:22px;font-weight:800;color:#7c9dc0;margin-top:4px">฿2.82M</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">ใช้ไป ฿7.48M จาก ฿10.3M (72.6%)</div>
+      </div>
+    </div>
+
+    <div style="background:white;padding:12px 16px;border-radius:10px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;color:#4a5a6c;margin-bottom:10px">📅 ตารางครบกำหนดชำระ 71 วัน (14/11/69 – 23/1/70)</div>
+      <div style="overflow-x:auto"><table style="width:100%;font-size:11px">
+        <thead><tr style="background:#f8f1e8">
+          <th style="padding:6px;text-align:left">วันที่</th>
+          <th style="padding:6px;text-align:left">สัญญา</th>
+          <th style="padding:6px;text-align:right">จำนวน</th>
+          <th style="padding:6px;text-align:left">หมายเหตุ</th>
+        </tr></thead>
+        <tbody id="debtScheduleTbody"></tbody>
+      </table></div>
+    </div>
+
+    <div style="background:white;padding:12px 16px;border-radius:10px">
+      <div style="font-size:12px;font-weight:700;color:#4a5a6c;margin-bottom:10px">💰 สัดส่วนหนี้ตามธนาคาร</div>
+      <div style="height:220px"><canvas id="debtByBankChart"></canvas></div>
+    </div>
+
+    <div style="background:#fff8e1;padding:10px 14px;border-radius:8px;margin-top:14px;font-size:11px;color:#8a6d3b;border-left:3px solid #e69a68">
+      ⚠️ <strong>สำคัญ:</strong> ค่างวด ฿554K/เดือน = <strong>~37%</strong> ของ gross profit 10mo avg (฿1.5M/เดือน) · ภาระสูงมาก · ถ้า sales ลด 30% จะไม่พอจ่ายค่างวดแน่นอน · <strong>🎯 ทางออก</strong>: เร่งปิด SME BANK (฿4M · ดอก 2-2.5% · ปิดได้เร็ว) หรือ KTB (฿1.3M · ปิดง่ายสุด) → ลดค่างวดเดือนละ ~฿102K
+    </div>
+  </div>
+
+  <!-- 📘 ACCOUNTING ADJUSTMENT NOTE -->
+  <div class="card" style="border-left:5px solid #7c9dc0;background:#f4f8fb">
+    <h3>📘 หมายเหตุทางบัญชี — "เงินให้กู้บุคคลเกี่ยวข้อง ฿18.1M"</h3>
+    <div style="font-size:13px;color:#4a5a6c;line-height:1.7">
+      ตัวเลข <strong>"ลูกหนี้-เงินให้กู้ยืมบุคคลเกี่ยวข้อง" ฿12.6M + ดอกเบี้ยค้างรับ ฿5.5M</strong> ที่โชว์ใน Peak Trial Balance
+      <strong style="color:#c0392b">ไม่ใช่หนี้จริงที่ทวงคืนได้</strong> — เป็นรายการที่บัญชีลงเกินความเป็นจริง (accounting entry error สะสมจากปีก่อน ๆ)
+      <br><br>
+      <strong>แผนล้างยอด:</strong> ค่อย ๆ หักกลบผ่านการจ่าย <strong>โบนัส + ปรับขึ้นเงินเดือนกรรมการ</strong> → ยอดจะลดลงเรื่อย ๆ จนหมด (ใช้เวลา ~1-2 ปี)
+      <br><br>
+      <strong>🎯 แปลว่า:</strong> ไม่มี cash ซ่อนอยู่ใน "เงินให้กู้" นี้ · ทางออก cashflow ต้องมาจาก <strong>operations จริง</strong> + <strong>ปิดหนี้ bank เร่ง</strong> + <strong>ทวงลูกหนี้การค้า ฿12.6M</strong> (ลูกหนี้จริง · อันนี้เรียกเก็บได้)
+    </div>
+  </div>
+  </div>
+
+  <!-- 📡 LIVE PEAK DATA SECTION -->
+  <div class="card" style="border-left:5px solid #27ae60;background:linear-gradient(135deg,#f0fff4,#e8f5e9)">
+    <h3>📡 Live Peak Data · Actual Cashflow (พ.ย. 2026 MTD)</h3>
+    <div style="font-size:11px;color:#888;margin-bottom:14px">
+      ดึงสด ๆ จาก Peak MCP · หมวดรายรับ (ใบเสร็จรับเงิน RT) + รายจ่าย (บันทึกค่าใช้จ่าย EXP) · อัพเดต <strong>15/11/2569</strong> · เทียบกับแผน Excel ด้านบน
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px">
+      <div style="background:white;padding:14px 16px;border-radius:10px;border-left:3px solid #27ae60">
+        <div style="font-size:10px;color:#888;letter-spacing:.3px;font-weight:700;text-transform:uppercase">💰 รับเข้าจริง (1-15 พ.ย.)</div>
+        <div style="font-size:22px;font-weight:800;color:#27ae60;margin-top:4px">฿1.70M</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">202 ใบเสร็จรับเงิน · เฉลี่ย ฿113K/วัน</div>
+      </div>
+      <div style="background:white;padding:14px 16px;border-radius:10px;border-left:3px solid #e67e22">
+        <div style="font-size:10px;color:#888;letter-spacing:.3px;font-weight:700;text-transform:uppercase">💸 จ่ายจริง (1-15 พ.ย.)</div>
+        <div style="font-size:22px;font-weight:800;color:#e67e22;margin-top:4px">฿1.76M</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">125 บิลค่าใช้จ่าย · เฉลี่ย ฿117K/วัน</div>
+      </div>
+      <div style="background:white;padding:14px 16px;border-radius:10px;border-left:3px solid #c0392b">
+        <div style="font-size:10px;color:#888;letter-spacing:.3px;font-weight:700;text-transform:uppercase">📉 Net Flow MTD</div>
+        <div style="font-size:22px;font-weight:800;color:#c0392b;margin-top:4px">−฿57K</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">จ่ายมากกว่ารับเล็กน้อย · 15 วัน</div>
+      </div>
+      <div style="background:white;padding:14px 16px;border-radius:10px;border-left:3px solid #7c9dc0">
+        <div style="font-size:10px;color:#888;letter-spacing:.3px;font-weight:700;text-transform:uppercase">📊 Projected พ.ย. เต็มเดือน</div>
+        <div style="font-size:22px;font-weight:800;color:#7c9dc0;margin-top:4px">−฿113K</div>
+        <div style="font-size:11px;color:#888;margin-top:3px">ถ้า pace คงที่ · gap ยังไม่ปิด</div>
+      </div>
+    </div>
+
+    <div style="background:white;padding:12px 16px;border-radius:10px;margin-bottom:16px">
+      <div style="font-size:12px;font-weight:700;color:#4a5a6c;margin-bottom:8px">📅 รายวัน IN/OUT (Peak live)</div>
+      <div style="height:220px"><canvas id="peakLiveChart"></canvas></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="background:white;padding:12px 14px;border-radius:10px">
+        <div style="font-size:12px;font-weight:700;color:#27ae60;margin-bottom:8px">🟢 Top 5 วันรับมาก (Peak)</div>
+        <table style="width:100%;font-size:11px"><tbody id="peakTopIn"></tbody></table>
+      </div>
+      <div style="background:white;padding:12px 14px;border-radius:10px">
+        <div style="font-size:12px;font-weight:700;color:#e67e22;margin-bottom:8px">🟠 Top 5 วันจ่ายหนัก (Peak)</div>
+        <table style="width:100%;font-size:11px"><tbody id="peakTopOut"></tbody></table>
+      </div>
+    </div>
+
+    <div style="background:#fff8e1;padding:10px 14px;border-radius:8px;margin-top:14px;font-size:11px;color:#8a6d3b;border-left:3px solid #e69a68">
+      📋 <strong>หมายเหตุ Peak MCP:</strong> รวมเฉพาะ RT (ใบเสร็จรับเงิน) + EXP (บันทึกค่าใช้จ่าย) ที่บันทึกใน Peak แล้ว · ไม่รวม IVT (ใบแจ้งหนี้ค้างชำระ) หรือการโอนตรงระหว่างบัญชี · ตัวเลขอาจต่ำกว่าแผน Excel เพราะยังไม่ได้ post การรับเงินใน Peak ทุกรายการ
+    </div>
   </div>
 
   <div class="card" style="background:#f5eef8;border-left:5px solid #a888c4">
@@ -260,6 +378,66 @@ new Chart(document.getElementById('pieChart'), {
   type:'doughnut',
   data:{labels, datasets:[{data:values, backgroundColor:['#e67e22','#9b59b6','#7c9dc0','#5a9d50','#a888c4','#e74c3c','#3498db','#c0392b','#f39c12','#95a5a6']}]},
   options:{responsive:true,maintainAspectRatio:false, plugins:{legend:{position:'right'}, tooltip:{callbacks:{label:ctx=>ctx.label+': ฿'+fmtFull(ctx.parsed)+' ('+(ctx.parsed/values.reduce((a,b)=>a+b)*100).toFixed(1)+'%)'}}}}
+});
+
+// 📡 Peak Live Chart & Tables
+const PEAK_LIVE = {"asOf":"2026-11-15 (Peak live)","period":"พ.ย. 1-15, 2569","totalIn":1698579,"totalOut":1755278,"netFlow":-56699,"nReceipts":202,"nExpenses":125,"daily":[{"date":"2026-11-01","in":8445,"out":1780},{"date":"2026-11-02","in":149902,"out":310390},{"date":"2026-11-03","in":160986,"out":82271},{"date":"2026-11-04","in":83020,"out":212292},{"date":"2026-11-05","in":58232,"out":62498},{"date":"2026-11-06","in":31569,"out":68279},{"date":"2026-11-07","in":0,"out":10199},{"date":"2026-11-08","in":12415,"out":0},{"date":"2026-11-09","in":217282,"out":40994},{"date":"2026-11-10","in":663176,"out":310835},{"date":"2026-11-11","in":66828,"out":7798},{"date":"2026-11-12","in":85671,"out":523031},{"date":"2026-11-13","in":97158,"out":124912},{"date":"2026-11-14","in":53585,"out":0},{"date":"2026-11-15","in":10309,"out":0}]};
+
+new Chart(document.getElementById('peakLiveChart'), {
+  type:'bar',
+  data:{
+    labels: PEAK_LIVE.daily.map(d=>dateFmt(d.date)),
+    datasets:[
+      {label:'💰 รับ (Receipt)',data:PEAK_LIVE.daily.map(d=>d.in),backgroundColor:'#27ae60cc',borderRadius:3},
+      {label:'💸 จ่าย (Expense)',data:PEAK_LIVE.daily.map(d=>-d.out),backgroundColor:'#e67e22cc',borderRadius:3}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,scales:{y:{stacked:false,ticks:{callback:v=>'฿'+(Math.abs(v)/1e3).toFixed(0)+'K'}},x:{stacked:false,ticks:{font:{size:10}}}},plugins:{tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': ฿'+fmtFull(Math.abs(ctx.parsed.y))}}}}
+});
+
+const pTopIn = [...PEAK_LIVE.daily].sort((a,b)=>b.in-a.in).slice(0,5);
+document.getElementById('peakTopIn').innerHTML = pTopIn.filter(d=>d.in>0).map(d=>`<tr><td>${d.date.slice(5)}</td><td class="num pos">฿${fmtFull(d.in)}</td></tr>`).join('');
+
+const pTopOut = [...PEAK_LIVE.daily].sort((a,b)=>b.out-a.out).slice(0,5);
+document.getElementById('peakTopOut').innerHTML = pTopOut.filter(d=>d.out>0).map(d=>`<tr><td>${d.date.slice(5)}</td><td class="num neg">฿${fmtFull(d.out)}</td></tr>`).join('');
+
+// 🏦 Debt payment schedule for 71 days (14/11/69 - 23/1/70)
+const DEBT_SCHEDULE = [
+  {date:'2026-11-22', loan:'SME BANK (1) + (2)', amt:88500, note:'ค่างวดสินเชื่อ SME 2 สัญญา · auto debit'},
+  {date:'2026-11-25', loan:'SCB + KTB ซื้อบอย', amt:147600, note:'SCB ฿133.9K + KTB ฿13.7K'},
+  {date:'2026-11-30', loan:'ออมสิน 4 สัญญา TL', amt:198400, note:'ตึกโรงงาน 94.5K + 2025 60.9K + ไม่มีหลัก 7+36K'},
+  {date:'2026-11-30', loan:'TTB OD ดอกเบี้ย', amt:55000, note:'ดอก OD ประมาณ (คิด ณ สิ้นเดือน)'},
+  {date:'2026-12-05', loan:'KIA + Toyota (ค่าเช่ารถ)', amt:65300, note:'KIA ฿36K + Camry ฿29.3K (4 งวดเหลือ)'},
+  {date:'2026-12-22', loan:'SME BANK (1) + (2)', amt:88500, note:'ค่างวดสินเชื่อ SME'},
+  {date:'2026-12-25', loan:'SCB + KTB ซื้อบอย', amt:147600, note:'SCB + KTB'},
+  {date:'2026-12-30', loan:'ออมสิน 4 สัญญา TL', amt:198400, note:'4 สัญญา'},
+  {date:'2026-12-31', loan:'TTB OD ดอกเบี้ย', amt:55000, note:'ดอก OD'},
+  {date:'2027-01-05', loan:'KIA + Toyota (ค่าเช่ารถ)', amt:65300, note:'KIA + Camry'},
+  {date:'2027-01-22', loan:'SME BANK (1) + (2)', amt:88500, note:'ค่างวดสินเชื่อ SME'},
+];
+const scheduleTotal = DEBT_SCHEDULE.reduce((s,d)=>s+d.amt,0);
+document.getElementById('debtScheduleTbody').innerHTML = DEBT_SCHEDULE.map(d=>{
+  const dt = new Date(d.date);
+  const td = new Date(); td.setHours(0,0,0,0);
+  const daysUntil = Math.ceil((dt-td)/(1000*60*60*24));
+  const urg = daysUntil<=7?'🔴':daysUntil<=14?'🟡':'🟢';
+  return `<tr><td style="padding:5px 6px">${urg} ${d.date} <span style="color:#aaa">(${daysUntil>0?'อีก '+daysUntil+' วัน':daysUntil===0?'วันนี้':'เลย'})</span></td><td style="padding:5px 6px"><strong>${d.loan}</strong></td><td style="padding:5px 6px;text-align:right;color:#c0392b;font-weight:700">฿${fmtFull(d.amt)}</td><td style="padding:5px 6px;color:#888;font-size:10px">${d.note}</td></tr>`;
+}).join('') + `<tr style="background:#f8f1e8;font-weight:800"><td style="padding:8px 6px" colspan="2">รวม 71 วัน</td><td style="padding:8px 6px;text-align:right;color:#c0392b">฿${fmtFull(scheduleTotal)}</td><td></td></tr>`;
+
+// Debt by bank pie chart
+const DEBT_BY_BANK = {
+  'ออมสิน (5 สัญญา)': 4400000+4508112+2295316+196770+1867104, // 13,267,302
+  'TTB OD': 7481666,
+  'SCB': 2386264,
+  'SME BANK (2 สัญญา)': 2590099+1383286, // 3,973,385
+  'KTB ซื้อบอย': 1300988,
+  'KIA KLeasing': 1845195,
+  'Toyota Camry': 117308,
+};
+new Chart(document.getElementById('debtByBankChart'), {
+  type:'doughnut',
+  data:{labels: Object.keys(DEBT_BY_BANK), datasets:[{data: Object.values(DEBT_BY_BANK), backgroundColor:['#c99a5a','#e74c3c','#8dc9b7','#9b59b6','#e67e22','#5a9d50','#7c9dc0']}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}},tooltip:{callbacks:{label:ctx=>ctx.label+': ฿'+fmtFull(ctx.parsed)+' ('+(ctx.parsed/Object.values(DEBT_BY_BANK).reduce((a,b)=>a+b)*100).toFixed(1)+'%)'}}}}
 });
 </script>
 </body>
